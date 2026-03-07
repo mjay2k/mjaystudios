@@ -11,6 +11,7 @@ export default function CameraRig() {
   const navMode = useAppStore((s) => s.navMode)
   const setCurrentRoom = useAppStore((s) => s.setCurrentRoom)
   const setScrollProgress = useAppStore((s) => s.setScrollProgress)
+  const setPhase = useAppStore((s) => s.setPhase)
   const scroll = useScroll()
   const { camera } = useThree()
   const path = useMemo(() => createCameraPath(), [])
@@ -41,6 +42,11 @@ export default function CameraRig() {
       const offset = scroll.offset
       setScrollProgress(offset)
       setCurrentRoom(getRoomFromProgress(offset))
+
+      // Transition phase based on scroll progress
+      if (offset > 0.05) {
+        setPhase('gallery')
+      }
 
       const point = path.getPointAt(offset)
       camera.position.lerp(point, 0.05)
