@@ -1,3 +1,5 @@
+'use client'
+
 import dynamic from 'next/dynamic'
 import FacadePortfolio from '@/components/facade/FacadePortfolio'
 
