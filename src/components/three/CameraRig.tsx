@@ -19,6 +19,7 @@ export default function CameraRig() {
   const keys = useRef({ w: false, a: false, s: false, d: false })
 
   useEffect(() => {
+    if ('ontouchstart' in window) return // Skip WASD on touch devices
     const onKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase()
       if (key in keys.current) keys.current[key as keyof typeof keys.current] = true
