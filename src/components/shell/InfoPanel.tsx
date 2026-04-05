@@ -6,7 +6,6 @@ import { gsap } from '@/lib/gsap';
 
 export default function InfoPanel() {
   const currentSection = useAppStore((s) => s.currentSection);
-  const activeView = useAppStore((s) => s.activeView);
   const contentRef = useRef<HTMLDivElement>(null);
   const [displayed, setDisplayed] = useState(currentSection);
 

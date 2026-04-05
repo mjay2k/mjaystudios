@@ -16,7 +16,7 @@ export default function LogoReveal({ src, alt }: LogoRevealProps) {
   useEffect(() => {
     if (!containerRef.current || !clipRef.current) return;
 
-    const trigger = gsap.fromTo(
+    gsap.fromTo(
       clipRef.current,
       { clipPath: 'inset(0 0 50% 0)' },
       {

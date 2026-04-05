@@ -64,7 +64,7 @@ export default function EraSection({ config, projects }: EraSectionProps) {
     return () => {
       trigger.kill();
     };
-  }, [config.section, setCurrentSection]);
+  }, [config.section, config.id, setCurrentSection]);
 
   return (
     <section ref={sectionRef} className="relative py-20">

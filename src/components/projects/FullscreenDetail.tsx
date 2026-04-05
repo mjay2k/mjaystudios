@@ -4,23 +4,16 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { gsap } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
-import { getProjectById } from '@/data/projects';
+import { getProjectById, type Project } from '@/data/projects';
 
-export default function FullscreenDetail() {
-  const detailProjectId = useAppStore((s) => s.detailProject);
+function DetailContent({ project }: { project: Project }) {
   const setDetailProject = useAppStore((s) => s.setDetailProject);
   const [activeIndex, setActiveIndex] = useState(0);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const project = detailProjectId ? getProjectById(detailProjectId) : null;
-
   useEffect(() => {
-    setActiveIndex(0);
-  }, [detailProjectId]);
-
-  useEffect(() => {
-    if (!overlayRef.current || !contentRef.current || !project) return;
+    if (!overlayRef.current || !contentRef.current) return;
 
     document.body.style.overflow = 'hidden';
     gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3 });
@@ -29,7 +22,7 @@ export default function FullscreenDetail() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [project]);
+  }, []);
 
   const handleClose = () => {
     if (!overlayRef.current) return;
@@ -39,8 +32,6 @@ export default function FullscreenDetail() {
       onComplete: () => setDetailProject(null),
     });
   };
-
-  if (!project) return null;
 
   const allImages = [
     ...project.images,
@@ -113,4 +104,14 @@ export default function FullscreenDetail() {
       </div>
     </div>
   );
+}
+
+export default function FullscreenDetail() {
+  const detailProjectId = useAppStore((s) => s.detailProject);
+  const project = detailProjectId ? getProjectById(detailProjectId) : null;
+
+  if (!project) return null;
+
+  // Key by project id so state (activeIndex) resets when project changes
+  return <DetailContent key={project.id} project={project} />;
 }
