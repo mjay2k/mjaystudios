@@ -1,15 +1,22 @@
-import type { Metadata } from 'next'
-import './globals.css'
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'MJay Studios — Created to Create',
-  description: 'Portfolio of Matthew Johnson — Designer, Visionary, Builder. Explore an interactive 3D gallery of design, strategy, and AI-powered development.',
-}
+  title: 'MJay Studios — Art Director Portfolio',
+  description:
+    'Portfolio of Matthew Johnson — Art Director, Designer, AI Developer.',
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className="bg-black">{children}</body>
+      <body className="bg-neutral-950 text-neutral-100 antialiased">
+        {children}
+      </body>
     </html>
-  )
+  );
 }

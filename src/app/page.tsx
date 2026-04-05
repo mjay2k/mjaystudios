@@ -1,15 +1,9 @@
-'use client'
-
-import dynamic from 'next/dynamic'
-import GalleryUI from '@/components/ui/GalleryUI'
-
-const Scene = dynamic(() => import('@/components/three/Scene'), { ssr: false })
+'use client';
 
 export default function Home() {
   return (
-    <main>
-      <Scene />
-      <GalleryUI />
+    <main className="min-h-screen flex items-center justify-center">
+      <h1 className="text-4xl font-bold">MJay Studios</h1>
     </main>
-  )
+  );
 }

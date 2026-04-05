@@ -1,5 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-html, body {
+html,
+body {
   overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: auto;
 }
