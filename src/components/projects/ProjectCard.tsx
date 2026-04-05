@@ -42,13 +42,14 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     >
       <div
         ref={imageRef}
-        className="relative aspect-[4/3] overflow-hidden rounded-lg bg-neutral-200"
+        className="relative overflow-hidden rounded-lg bg-neutral-200"
       >
         <Image
           src={project.images[activeIndex]}
           alt={project.title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          width={800}
+          height={600}
+          className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
 
