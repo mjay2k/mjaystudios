@@ -1,0 +1,75 @@
+'use client';
+
+import { useState } from 'react';
+import { useAppStore } from '@/stores/useAppStore';
+import ViewToggle from './ViewToggle';
+
+export default function NavBar() {
+  const setAboutOpen = useAppStore((s) => s.setAboutOpen);
+  const setContactOpen = useAppStore((s) => s.setContactOpen);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <nav className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-neutral-950/60">
+      <span className="text-lg font-bold tracking-tight">MJay Studios</span>
+
+      <div className="hidden items-center gap-6 md:flex">
+        <ViewToggle />
+        <button
+          onClick={() => setAboutOpen(true)}
+          className="text-sm text-white/70 transition-colors hover:text-white"
+        >
+          About
+        </button>
+        <button
+          onClick={() => setContactOpen(true)}
+          className="text-sm text-white/70 transition-colors hover:text-white"
+        >
+          Contact
+        </button>
+      </div>
+
+      <div className="flex items-center gap-4 md:hidden">
+        <ViewToggle />
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="flex h-8 w-8 flex-col items-center justify-center gap-1"
+          aria-label="Menu"
+        >
+          <span
+            className={`h-0.5 w-5 bg-white transition-transform ${menuOpen ? 'translate-y-1.5 rotate-45' : ''}`}
+          />
+          <span
+            className={`h-0.5 w-5 bg-white transition-opacity ${menuOpen ? 'opacity-0' : ''}`}
+          />
+          <span
+            className={`h-0.5 w-5 bg-white transition-transform ${menuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}
+          />
+        </button>
+      </div>
+
+      {menuOpen && (
+        <div className="absolute top-full right-0 left-0 flex flex-col gap-4 bg-neutral-950/95 px-6 py-4 backdrop-blur-md md:hidden">
+          <button
+            onClick={() => {
+              setAboutOpen(true);
+              setMenuOpen(false);
+            }}
+            className="text-left text-sm text-white/70 hover:text-white"
+          >
+            About
+          </button>
+          <button
+            onClick={() => {
+              setContactOpen(true);
+              setMenuOpen(false);
+            }}
+            className="text-left text-sm text-white/70 hover:text-white"
+          >
+            Contact
+          </button>
+        </div>
+      )}
+    </nav>
+  );
+}
