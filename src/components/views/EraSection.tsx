@@ -12,6 +12,7 @@ interface EraConfig {
   title: string;
   accent: string;
   section: Section;
+  bgClass?: string;
 }
 
 interface EraSectionProps {
@@ -31,8 +32,16 @@ export default function EraSection({ config, projects }: EraSectionProps) {
       trigger: sectionRef.current,
       start: 'top 40%',
       end: 'bottom 40%',
-      onEnter: () => setCurrentSection(config.section),
-      onEnterBack: () => setCurrentSection(config.section),
+      onEnter: () => {
+        setCurrentSection(config.section);
+        document.querySelectorAll('.era-bg').forEach((el) => el.classList.remove('active'));
+        document.getElementById(`era-bg-${config.id}`)?.classList.add('active');
+      },
+      onEnterBack: () => {
+        setCurrentSection(config.section);
+        document.querySelectorAll('.era-bg').forEach((el) => el.classList.remove('active'));
+        document.getElementById(`era-bg-${config.id}`)?.classList.add('active');
+      },
     });
 
     if (titleRef.current) {
@@ -59,6 +68,10 @@ export default function EraSection({ config, projects }: EraSectionProps) {
 
   return (
     <section ref={sectionRef} className="relative py-20">
+      <div
+        className={`era-bg ${config.bgClass ?? ''}`}
+        id={`era-bg-${config.id}`}
+      />
       <h2
         ref={titleRef}
         className="mb-12 text-3xl font-bold tracking-tight md:text-5xl"

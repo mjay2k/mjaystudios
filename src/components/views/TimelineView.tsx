@@ -12,6 +12,7 @@ const eras: EraConfig[] = [
     id: 'agency',
     title: 'Agency Life',
     accent: 'text-red-500',
+    bgClass: 'bg-neutral-950',
     section: {
       id: 'agency',
       label: 'Agency Life',
@@ -23,6 +24,7 @@ const eras: EraConfig[] = [
     id: 'berry',
     title: 'Berry Life',
     accent: 'text-blue-500',
+    bgClass: 'bg-neutral-950',
     section: {
       id: 'berry',
       label: 'Berry Life',
@@ -34,6 +36,7 @@ const eras: EraConfig[] = [
     id: 'afterberry',
     title: 'After Berry',
     accent: 'text-orange-500',
+    bgClass: 'bg-neutral-950',
     section: {
       id: 'afterberry',
       label: 'After Berry',
