@@ -1,30 +1,50 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
+import { gsap } from '@/lib/gsap';
+import { useAppStore } from '@/stores/useAppStore';
 import Shell from '@/components/shell/Shell';
+import TimelineView from '@/components/views/TimelineView';
+import CategoryView from '@/components/views/CategoryView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
-const placeholderMarkers: Marker[] = [
-  { id: 'agency', label: 'Agency Life', position: 0.15 },
-  { id: 'berry', label: 'Berry Life', position: 0.45 },
-  { id: 'afterberry', label: 'After Berry', position: 0.75 },
+const timelineMarkers: Marker[] = [
+  { id: 'intro', label: 'Intro', position: 0.05 },
+  { id: 'agency', label: '2010', position: 0.2 },
+  { id: 'berry', label: '2017', position: 0.5 },
+  { id: 'afterberry', label: '2023', position: 0.75 },
+  { id: 'contact', label: 'Contact', position: 0.95 },
+];
+
+const categoryMarkers: Marker[] = [
+  { id: 'advertising', label: 'Ads', position: 0.1 },
+  { id: 'packaging', label: 'Packaging', position: 0.3 },
+  { id: 'environmental', label: 'Booths', position: 0.5 },
+  { id: 'logo', label: 'Logos', position: 0.7 },
+  { id: 'digital', label: 'Digital', position: 0.9 },
 ];
 
 export default function Home() {
+  const activeView = useAppStore((s) => s.activeView);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+    window.scrollTo(0, 0);
+
+    gsap.fromTo(
+      contentRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+    );
+  }, [activeView]);
+
+  const markers = activeView === 'timeline' ? timelineMarkers : categoryMarkers;
+
   return (
-    <Shell markers={placeholderMarkers}>
-      <div className="space-y-96 py-20">
-        <section className="h-screen">
-          <h2 className="text-3xl font-bold">Agency Life</h2>
-          <p className="mt-4 text-white/50">Keller era work goes here</p>
-        </section>
-        <section className="h-screen">
-          <h2 className="text-3xl font-bold">Berry Life</h2>
-          <p className="mt-4 text-white/50">Berry Global work goes here</p>
-        </section>
-        <section className="h-screen">
-          <h2 className="text-3xl font-bold">After Berry</h2>
-          <p className="mt-4 text-white/50">Teaching, AI, apps</p>
-        </section>
+    <Shell markers={markers}>
+      <div ref={contentRef}>
+        {activeView === 'timeline' ? <TimelineView /> : <CategoryView />}
       </div>
     </Shell>
   );
