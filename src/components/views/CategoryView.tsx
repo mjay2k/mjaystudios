@@ -71,12 +71,12 @@ export default function CategoryView() {
 
   return (
     <div>
-      <div className="sticky top-20 z-30 mb-12 flex flex-wrap gap-2 bg-neutral-950/80 py-3 backdrop-blur-sm">
+      <div className="sticky top-20 z-30 mb-12 flex flex-wrap gap-2 bg-neutral-100/80 py-3 backdrop-blur-sm">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => scrollToCategory(cat)}
-            className="rounded-full bg-white/5 px-4 py-1.5 text-xs font-medium text-white/50 transition-colors hover:bg-white/10 hover:text-white"
+            className="rounded-full bg-neutral-900/5 px-4 py-1.5 text-xs font-medium text-neutral-500 transition-colors hover:bg-neutral-900/10 hover:text-neutral-900"
           >
             {categoryLabels[cat] ?? cat}
           </button>

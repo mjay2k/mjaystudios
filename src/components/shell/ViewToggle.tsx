@@ -26,16 +26,16 @@ export default function ViewToggle() {
   return (
     <div
       ref={containerRef}
-      className="relative flex items-center rounded-full bg-white/10 p-1 backdrop-blur-sm"
+      className="relative flex items-center rounded-full bg-neutral-900/10 p-1"
     >
       <div
         ref={pillRef}
-        className="absolute top-1 left-0 h-[calc(100%-8px)] rounded-full bg-white/20"
+        className="absolute top-1 left-0 h-[calc(100%-8px)] rounded-full bg-neutral-900/15"
       />
       <button
         onClick={() => setActiveView('timeline')}
         className={`relative z-10 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide transition-colors ${
-          activeView === 'timeline' ? 'text-white' : 'text-white/50'
+          activeView === 'timeline' ? 'text-neutral-900' : 'text-neutral-400'
         }`}
       >
         Timeline
@@ -43,7 +43,7 @@ export default function ViewToggle() {
       <button
         onClick={() => setActiveView('category')}
         className={`relative z-10 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide transition-colors ${
-          activeView === 'category' ? 'text-white' : 'text-white/50'
+          activeView === 'category' ? 'text-neutral-900' : 'text-neutral-400'
         }`}
       >
         By Type

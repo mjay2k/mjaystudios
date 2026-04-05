@@ -42,7 +42,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       ref={railRef}
       className="fixed top-0 left-0 z-40 hidden h-full w-16 md:block"
     >
-      <div className="absolute top-20 bottom-8 left-1/2 w-px -translate-x-1/2 border-l border-dashed border-white/20" />
+      <div className="absolute top-20 bottom-8 left-1/2 w-px -translate-x-1/2 border-l border-dashed border-neutral-300" />
 
       <div ref={markersRef} className="relative h-full">
         {markers.map((marker) => (
@@ -51,8 +51,8 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
             className="absolute left-1/2 -translate-x-1/2"
             style={{ top: `${marker.position * 100}%` }}
           >
-            <div className="h-px w-4 bg-white/40" />
-            <span className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap text-[10px] font-medium tracking-wider text-white/40 uppercase">
+            <div className="h-px w-4 bg-neutral-400" />
+            <span className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap text-[10px] font-medium tracking-wider text-neutral-400 uppercase">
               {marker.label}
             </span>
           </div>
@@ -65,7 +65,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
 export function TimelineRailMobile({ markers }: TimelineRailProps) {
   return (
     <div className="fixed top-0 left-0 z-40 block h-full w-8 md:hidden">
-      <div className="absolute top-20 bottom-8 left-1/2 w-px -translate-x-1/2 border-l border-dashed border-white/15" />
+      <div className="absolute top-20 bottom-8 left-1/2 w-px -translate-x-1/2 border-l border-dashed border-neutral-200" />
       <div className="relative h-full">
         {markers.map((marker) => (
           <div
@@ -73,7 +73,7 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
             className="absolute left-1/2 -translate-x-1/2"
             style={{ top: `${marker.position * 100}%` }}
           >
-            <div className="h-px w-2 bg-white/30" />
+            <div className="h-px w-2 bg-neutral-300" />
           </div>
         ))}
       </div>

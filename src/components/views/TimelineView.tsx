@@ -12,7 +12,7 @@ const eras: EraConfig[] = [
     id: 'agency',
     title: 'Agency Life',
     accent: 'text-red-500',
-    bgClass: 'bg-neutral-950',
+    bgClass: 'bg-neutral-100',
     section: {
       id: 'agency',
       label: 'Agency Life',
@@ -24,7 +24,7 @@ const eras: EraConfig[] = [
     id: 'berry',
     title: 'Berry Life',
     accent: 'text-blue-500',
-    bgClass: 'bg-neutral-950',
+    bgClass: 'bg-neutral-100',
     section: {
       id: 'berry',
       label: 'Berry Life',
@@ -36,7 +36,7 @@ const eras: EraConfig[] = [
     id: 'afterberry',
     title: 'After Berry',
     accent: 'text-orange-500',
-    bgClass: 'bg-neutral-950',
+    bgClass: 'bg-neutral-100',
     section: {
       id: 'afterberry',
       label: 'After Berry',
@@ -89,12 +89,12 @@ export default function TimelineView() {
         <h1 className="reveal text-5xl font-bold tracking-tight md:text-7xl">
           Created to Create
         </h1>
-        <p className="reveal mt-4 max-w-md text-lg text-white/50">
+        <p className="reveal mt-4 max-w-md text-lg text-neutral-500">
           A career in art direction, brand design, and building things that matter.
         </p>
         <button
           onClick={() => setAboutOpen(true)}
-          className="reveal mt-6 self-start text-sm text-white/40 underline underline-offset-4 transition-colors hover:text-white"
+          className="reveal mt-6 self-start text-sm text-neutral-400 underline underline-offset-4 transition-colors hover:text-neutral-900"
         >
           Read more about me
         </button>
@@ -109,10 +109,10 @@ export default function TimelineView() {
       ))}
 
       <div className="flex min-h-[40vh] flex-col items-center justify-center py-20 text-center">
-        <p className="text-lg text-white/50">Like what you see?</p>
+        <p className="text-lg text-neutral-500">Like what you see?</p>
         <button
           onClick={() => useAppStore.getState().setContactOpen(true)}
-          className="mt-4 rounded-full bg-white/10 px-8 py-3 text-sm font-medium transition-colors hover:bg-white/20"
+          className="mt-4 rounded-full bg-neutral-900/10 px-8 py-3 text-sm font-medium transition-colors hover:bg-neutral-900/15"
         >
           Get in Touch
         </button>

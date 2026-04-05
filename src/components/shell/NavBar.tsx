@@ -10,20 +10,20 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-neutral-950/60">
+    <nav className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-neutral-100/80">
       <span className="text-lg font-bold tracking-tight">MJay Studios</span>
 
       <div className="hidden items-center gap-6 md:flex">
         <ViewToggle />
         <button
           onClick={() => setAboutOpen(true)}
-          className="text-sm text-white/70 transition-colors hover:text-white"
+          className="text-sm text-neutral-500 transition-colors hover:text-neutral-900"
         >
           About
         </button>
         <button
           onClick={() => setContactOpen(true)}
-          className="text-sm text-white/70 transition-colors hover:text-white"
+          className="text-sm text-neutral-500 transition-colors hover:text-neutral-900"
         >
           Contact
         </button>
@@ -37,25 +37,25 @@ export default function NavBar() {
           aria-label="Menu"
         >
           <span
-            className={`h-0.5 w-5 bg-white transition-transform ${menuOpen ? 'translate-y-1.5 rotate-45' : ''}`}
+            className={`h-0.5 w-5 bg-neutral-900 transition-transform ${menuOpen ? 'translate-y-1.5 rotate-45' : ''}`}
           />
           <span
-            className={`h-0.5 w-5 bg-white transition-opacity ${menuOpen ? 'opacity-0' : ''}`}
+            className={`h-0.5 w-5 bg-neutral-900 transition-opacity ${menuOpen ? 'opacity-0' : ''}`}
           />
           <span
-            className={`h-0.5 w-5 bg-white transition-transform ${menuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}
+            className={`h-0.5 w-5 bg-neutral-900 transition-transform ${menuOpen ? '-translate-y-1.5 -rotate-45' : ''}`}
           />
         </button>
       </div>
 
       {menuOpen && (
-        <div className="absolute top-full right-0 left-0 flex flex-col gap-4 bg-neutral-950/95 px-6 py-4 backdrop-blur-md md:hidden">
+        <div className="absolute top-full right-0 left-0 flex flex-col gap-4 bg-neutral-100/95 px-6 py-4 backdrop-blur-md md:hidden">
           <button
             onClick={() => {
               setAboutOpen(true);
               setMenuOpen(false);
             }}
-            className="text-left text-sm text-white/70 hover:text-white"
+            className="text-left text-sm text-neutral-500 hover:text-neutral-900"
           >
             About
           </button>
@@ -64,7 +64,7 @@ export default function NavBar() {
               setContactOpen(true);
               setMenuOpen(false);
             }}
-            className="text-left text-sm text-white/70 hover:text-white"
+            className="text-left text-sm text-neutral-500 hover:text-neutral-900"
           >
             Contact
           </button>

@@ -39,13 +39,13 @@ export default function InfoPanel() {
     <>
       <div className="fixed top-28 left-20 z-40 hidden w-48 md:block">
         <div ref={contentRef}>
-          <h3 className="text-sm font-bold tracking-wide uppercase text-white/80">
+          <h3 className="text-sm font-bold tracking-wide uppercase text-neutral-700">
             {displayed.label}
           </h3>
           {displayed.dateRange && (
-            <p className="mt-1 text-xs text-white/40">{displayed.dateRange}</p>
+            <p className="mt-1 text-xs text-neutral-400">{displayed.dateRange}</p>
           )}
-          <p className="mt-2 text-xs leading-relaxed text-white/50">
+          <p className="mt-2 text-xs leading-relaxed text-neutral-500">
             {displayed.description}
           </p>
         </div>
@@ -54,14 +54,14 @@ export default function InfoPanel() {
       <div className="fixed bottom-0 right-0 left-0 z-40 block md:hidden">
         <button
           onClick={() => setExpanded(!expanded)}
-          className="w-full bg-neutral-900/95 px-4 py-3 text-left backdrop-blur-md"
+          className="w-full bg-white/95 px-4 py-3 text-left backdrop-blur-md"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold tracking-wide uppercase text-white/80">
+            <span className="text-xs font-bold tracking-wide uppercase text-neutral-700">
               {displayed.label}
             </span>
             <span
-              className={`text-white/40 transition-transform text-xs ${expanded ? 'rotate-180' : ''}`}
+              className={`text-neutral-400 transition-transform text-xs ${expanded ? 'rotate-180' : ''}`}
             >
               ^
             </span>
@@ -69,9 +69,9 @@ export default function InfoPanel() {
           {expanded && (
             <div className="mt-2">
               {displayed.dateRange && (
-                <p className="text-xs text-white/40">{displayed.dateRange}</p>
+                <p className="text-xs text-neutral-400">{displayed.dateRange}</p>
               )}
-              <p className="mt-1 text-xs leading-relaxed text-white/50">
+              <p className="mt-1 text-xs leading-relaxed text-neutral-500">
                 {displayed.description}
               </p>
             </div>

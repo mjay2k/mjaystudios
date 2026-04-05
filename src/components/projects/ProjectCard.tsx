@@ -42,7 +42,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     >
       <div
         ref={imageRef}
-        className="relative aspect-[4/3] overflow-hidden rounded-lg bg-neutral-800"
+        className="relative aspect-[4/3] overflow-hidden rounded-lg bg-neutral-200"
       >
         <Image
           src={project.images[activeIndex]}
@@ -73,7 +73,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       </div>
 
       <h3 className="mt-3 text-sm font-semibold">{project.title}</h3>
-      <p className="mt-1 text-xs leading-relaxed text-white/50">
+      <p className="mt-1 text-xs leading-relaxed text-neutral-500">
         {project.description}
       </p>
     </div>
