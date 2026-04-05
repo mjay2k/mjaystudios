@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { useAppStore } from '@/stores/useAppStore';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 
 interface Marker {
