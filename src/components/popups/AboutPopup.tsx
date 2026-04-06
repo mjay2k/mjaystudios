@@ -9,7 +9,7 @@ export default function AboutPopup() {
 
   return (
     <Modal open={aboutOpen} onClose={() => setAboutOpen(false)}>
-      <h2 className="text-2xl font-bold">Matthew Johnson</h2>
+      <h2 className="text-2xl font-bold font-display">Matthew Johnson</h2>
       <p className="mt-1 text-sm text-white/50">
         Art Director &middot; Designer &middot; AI Developer
       </p>

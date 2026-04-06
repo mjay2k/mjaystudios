@@ -86,7 +86,7 @@ export default function TimelineView() {
   return (
     <div>
       <div ref={introRef} className="flex min-h-[60vh] flex-col justify-center py-20">
-        <h1 className="reveal text-5xl font-bold tracking-tight md:text-7xl">
+        <h1 className="reveal text-5xl font-bold tracking-tight md:text-7xl font-display">
           Created to Create
         </h1>
         <p className="reveal mt-4 max-w-md text-lg text-neutral-500">

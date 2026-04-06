@@ -73,7 +73,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         )}
       </div>
 
-      <h3 className="mt-3 text-sm font-semibold">{project.title}</h3>
+      <h3 className="mt-3 text-sm font-semibold font-display">{project.title}</h3>
       <p className="mt-1 text-xs leading-relaxed text-neutral-500">
         {project.description}
       </p>

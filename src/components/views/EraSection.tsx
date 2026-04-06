@@ -74,7 +74,7 @@ export default function EraSection({ config, projects }: EraSectionProps) {
       />
       <h2
         ref={titleRef}
-        className="mb-12 text-3xl font-bold tracking-tight md:text-5xl"
+        className="mb-12 text-3xl font-bold tracking-tight md:text-5xl font-display"
       >
         <span className={config.accent}>{config.title}</span>
       </h2>

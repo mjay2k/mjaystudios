@@ -9,7 +9,7 @@ export default function ContactPopup() {
 
   return (
     <Modal open={contactOpen} onClose={() => setContactOpen(false)}>
-      <h2 className="text-2xl font-bold">Get in Touch</h2>
+      <h2 className="text-2xl font-bold font-display">Get in Touch</h2>
       <p className="mt-2 text-sm text-white/50">
         Open to freelance, collaboration, and creative opportunities.
       </p>

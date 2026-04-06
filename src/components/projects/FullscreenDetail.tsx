@@ -91,7 +91,7 @@ function DetailContent({ project }: { project: Project }) {
         )}
 
         <div className="max-w-lg text-center">
-          <h2 className="text-xl font-bold">{project.title}</h2>
+          <h2 className="text-xl font-bold font-display">{project.title}</h2>
           <p className="mt-2 text-sm text-white/60">
             {project.caseStudy?.extendedDescription ?? project.description}
           </p>

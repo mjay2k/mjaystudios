@@ -93,7 +93,7 @@ export default function CategoryView() {
             ref={(el) => { sectionRefs.current[cat] = el; }}
             className="py-16"
           >
-            <h2 className="mb-10 text-2xl font-bold tracking-tight md:text-4xl">
+            <h2 className="mb-10 text-2xl font-bold tracking-tight md:text-4xl font-display">
               {categoryLabels[cat] ?? cat}
             </h2>
 
