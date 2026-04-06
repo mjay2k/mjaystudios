@@ -102,7 +102,7 @@ export default function EraSection({ config, projects }: EraSectionProps) {
           {/* Logos — stacked on the right on desktop, inline on mobile */}
           {config.introImages && config.introImages.length > 0 && (
             <>
-              <div className="hidden md:flex flex-col items-center justify-center gap-6 flex-shrink-0">
+              <div className="hidden md:flex flex-col items-center justify-evenly flex-shrink-0 w-40 self-stretch">
                 {config.introImages.map((src, i) => (
                   <Image
                     key={i}
@@ -110,7 +110,7 @@ export default function EraSection({ config, projects }: EraSectionProps) {
                     alt={`${config.title} logo`}
                     width={160}
                     height={80}
-                    className="h-auto w-32 object-contain opacity-100"
+                    className="h-auto w-32 object-contain"
                   />
                 ))}
               </div>
