@@ -63,15 +63,10 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
   const ticksRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const isHoveringRef = useRef(false);
-  const currentSection = useAppStore((s) => s.currentSection);
   const [hoveredTick, setHoveredTick] = useState<{ tooltip: string; top: number } | null>(null);
 
   const ticks = useMemo(() => generateTicks(markers), [markers]);
-
-  const activeMarkerId = useMemo(() => {
-    if (!currentSection) return null;
-    return markers.find((m) => m.id === currentSection.id)?.id ?? null;
-  }, [currentSection, markers]);
+  const sortedMarkers = useMemo(() => [...markers].sort((a, b) => a.position - b.position), [markers]);
 
   // Parallax offset + fade in when timeline section appears
   useEffect(() => {
@@ -102,13 +97,19 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         if (!ticksRef.current) return;
         gsap.set(ticksRef.current, { y: self.progress * -80 });
 
-        // Animate ticks based on scroll position (like a scroll indicator)
-        if (isHoveringRef.current) return; // don't fight the mouse hover
+        // Animate ticks based on scroll position
+        if (isHoveringRef.current) return;
+
+        // Remap scroll progress (0-1) to tick range (first marker to last marker)
+        const firstPos = sortedMarkers[0]?.position ?? 0.1;
+        const lastPos = sortedMarkers[sortedMarkers.length - 1]?.position ?? 0.9;
+        const mappedProgress = firstPos + self.progress * (lastPos - firstPos);
+
         const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
         tickEls.forEach((el) => {
           const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
           const isGhost = el.getAttribute('data-ghost') === 'true';
-          const distance = Math.abs(tickPos - self.progress);
+          const distance = Math.abs(tickPos - mappedProgress);
 
           if (isGhost) {
             const ghostProx = Math.max(0, 1 - distance / 0.08);
@@ -129,37 +130,9 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       trigger.kill();
       fadeInTrigger?.kill();
     };
-  }, []);
+  }, [sortedMarkers]);
 
-  // Default animation: active section drives tick sizes, ghosts hidden
-  useEffect(() => {
-    if (!ticksRef.current || isHoveringRef.current) return;
-
-    const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
-    const markerPos = activeMarkerId
-      ? (markers.find((m) => m.id === activeMarkerId)?.position ?? -1)
-      : -1;
-
-    tickEls.forEach((el) => {
-      const isGhost = el.getAttribute('data-ghost') === 'true';
-      if (isGhost) {
-        gsap.to(el, { width: 0, opacity: 0, duration: 0.4, ease: 'power2.out' });
-        return;
-      }
-
-      const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
-      const distance = Math.abs(tickPos - markerPos);
-      const isVeryClose = distance < 0.06;
-      const isClose = distance < 0.15;
-
-      gsap.to(el, {
-        width: isVeryClose ? 28 : isClose ? 16 : 8,
-        opacity: isVeryClose ? 0.8 : isClose ? 0.35 : 0.15,
-        duration: 0.6,
-        ease: 'power2.out',
-      });
-    });
-  }, [activeMarkerId, markers]);
+  // No separate "default" effect — scroll handler drives tick sizes continuously
 
   // Mouse proximity animation — all ticks react to cursor Y
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -231,34 +204,8 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
   const handleMouseLeave = useCallback(() => {
     isHoveringRef.current = false;
     setHoveredTick(null);
-
-    // Restore default active-section-based animation
-    if (!ticksRef.current) return;
-    const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
-    const markerPos = activeMarkerId
-      ? (markers.find((m) => m.id === activeMarkerId)?.position ?? -1)
-      : -1;
-
-    tickEls.forEach((el) => {
-      const isGhost = el.getAttribute('data-ghost') === 'true';
-      if (isGhost) {
-        gsap.to(el, { width: 0, opacity: 0, duration: 0.4, ease: 'power2.out' });
-        return;
-      }
-
-      const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
-      const distance = Math.abs(tickPos - markerPos);
-      const isVeryClose = distance < 0.06;
-      const isClose = distance < 0.15;
-
-      gsap.to(el, {
-        width: isVeryClose ? 28 : isClose ? 16 : 8,
-        opacity: isVeryClose ? 0.8 : isClose ? 0.35 : 0.15,
-        duration: 0.5,
-        ease: 'power2.out',
-      });
-    });
-  }, [activeMarkerId, markers]);
+    // Scroll handler will take back over on next scroll tick
+  }, []);
 
   const handleTickClick = useCallback((markerId: string) => {
     const el = document.getElementById(`section-${markerId}`);
