@@ -9,11 +9,11 @@ import CategoryView from '@/components/views/CategoryView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
 const timelineMarkers: Marker[] = [
-  { id: 'intro', label: 'Intro', position: 0.05 },
+  { id: 'intro', label: '', position: 0.05 },
   { id: 'agency', label: '2010', position: 0.2 },
   { id: 'berry', label: '2017', position: 0.5 },
   { id: 'afterberry', label: '2023', position: 0.75 },
-  { id: 'contact', label: 'Contact', position: 0.95 },
+  { id: 'contact', label: '', position: 0.95 },
 ];
 
 const categoryMarkers: Marker[] = [

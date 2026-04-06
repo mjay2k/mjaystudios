@@ -13,6 +13,7 @@ interface EraConfig {
   accent: string;
   section: Section;
   bgClass?: string;
+  intro: string;
 }
 
 interface EraSectionProps {
@@ -67,19 +68,34 @@ export default function EraSection({ config, projects }: EraSectionProps) {
   }, [config.section, config.id, setCurrentSection]);
 
   return (
-    <section ref={sectionRef} className="relative py-20">
+    <section ref={sectionRef} className="relative">
       <div
         className={`era-bg ${config.bgClass ?? ''}`}
         id={`era-bg-${config.id}`}
       />
-      <h2
-        ref={titleRef}
-        className="mb-12 text-3xl font-bold tracking-tight md:text-5xl font-display"
-      >
-        <span className={config.accent}>{config.title}</span>
-      </h2>
 
-      <ProjectGrid projects={projects} />
+      {/* Era intro card */}
+      <div className="mb-16 rounded-2xl bg-neutral-50 px-8 py-12 md:px-12 md:py-16">
+        <h2
+          ref={titleRef}
+          className="text-3xl font-bold tracking-tight md:text-5xl font-display"
+        >
+          <span className={config.accent}>{config.title}</span>
+        </h2>
+        {config.section.dateRange && (
+          <p className="mt-2 text-sm font-medium text-neutral-400">
+            {config.section.dateRange}
+          </p>
+        )}
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-neutral-600">
+          {config.intro}
+        </p>
+      </div>
+
+      {/* Projects */}
+      <div className="py-8">
+        <ProjectGrid projects={projects} />
+      </div>
     </section>
   );
 }
