@@ -48,9 +48,9 @@ html.dark .border-neutral-300 { border-color: #404040; }
 html.dark .rail-tick { background-color: #f5f5f5; }
 
 /* Dark mode scrollbar */
-html.dark ::-webkit-scrollbar-thumb { background: rgba(241, 90, 41, 0.3); }
-html.dark ::-webkit-scrollbar-thumb:hover { background: rgba(241, 90, 41, 0.55); }
-html.dark { scrollbar-color: rgba(241, 90, 41, 0.3) transparent; }
+html.dark ::-webkit-scrollbar-thumb { background: #F15A29; }
+html.dark ::-webkit-scrollbar-thumb:hover { background: #ff6e3f; }
+html.dark { scrollbar-color: #F15A29 transparent; }
 
 /* Dark hamburger lines */
 html.dark nav .bg-neutral-900 { background-color: #f5f5f5; }
@@ -82,7 +82,7 @@ html {
 
 /* Custom scrollbar — slim, blends with timeline rail */
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -90,16 +90,16 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(241, 90, 41, 0.25);
-  border-radius: 3px;
+  background: #F15A29;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(241, 90, 41, 0.5);
+  background: #d94d1f;
 }
 
 /* Firefox */
 html {
   scrollbar-width: thin;
-  scrollbar-color: rgba(241, 90, 41, 0.25) transparent;
+  scrollbar-color: #F15A29 transparent;
 }

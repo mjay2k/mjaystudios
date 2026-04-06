@@ -106,21 +106,23 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         const mappedProgress = firstPos + self.progress * (lastPos - firstPos);
 
         const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
+        const radius = 0.12; // proximity radius in position units
+
         tickEls.forEach((el) => {
           const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
           const isGhost = el.getAttribute('data-ghost') === 'true';
           const distance = Math.abs(tickPos - mappedProgress);
+          const proximity = Math.max(0, 1 - distance / radius);
 
           if (isGhost) {
-            const ghostProx = Math.max(0, 1 - distance / 0.08);
-            gsap.set(el, { width: ghostProx * 14, opacity: ghostProx * 0.4 });
+            // Ghosts only appear very close, smaller radius
+            const ghostProx = Math.max(0, 1 - distance / 0.06);
+            gsap.set(el, { width: ghostProx * 14, opacity: ghostProx * 0.35 });
           } else {
-            const isVeryClose = distance < 0.05;
-            const isClose = distance < 0.12;
-            gsap.set(el, {
-              width: isVeryClose ? 32 : isClose ? 18 : 8,
-              opacity: isVeryClose ? 0.9 : isClose ? 0.4 : 0.15,
-            });
+            // Smooth gradient: 6px at min, 32px at max
+            const width = 6 + proximity * 26;
+            const opacity = 0.12 + proximity * 0.78;
+            gsap.set(el, { width, opacity });
           }
         });
       },
