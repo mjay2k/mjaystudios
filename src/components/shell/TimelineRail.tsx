@@ -301,7 +301,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
     }
   }, [hoveredTick]);
 
-  const railTop = 80;
+  const railTop = 20; // relative to rail container which starts at 64px
   const railBottom = 40;
 
   const scrollToTop = useCallback(() => {
@@ -310,21 +310,22 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
 
   return (
     <>
-    {/* Click-to-top zone — always interactive, separate from rail */}
-    <div
-      className="fixed top-0 right-0 z-50 hidden h-20 cursor-pointer md:block"
-      style={{ width: 92 }}
-      onClick={scrollToTop}
-      title="Back to top"
-    />
 
     <div
       ref={railRef}
       className="fixed top-0 right-0 z-40 hidden h-full md:block cursor-pointer"
-      style={{ width: 92 }}
+      style={{ width: 92, top: 64 }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={(e) => {
+        // If click is above the ticks area, scroll to top
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        const clickY = e.clientY - rect.top;
+        if (clickY < railTop - 64) {
+          scrollToTop();
+        }
+      }}
     >
 
       {/* Tooltip */}
