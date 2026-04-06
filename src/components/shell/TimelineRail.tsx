@@ -389,73 +389,88 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
 }
 
 export function TimelineRailMobile({ markers }: TimelineRailProps) {
-  const ticksRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
   const currentSection = useAppStore((s) => s.currentSection);
+  const prevSectionRef = useRef<string | null>(null);
+  const fadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const ticks = useMemo(() => generateTicks(markers), [markers]);
-
-  const activeMarkerId = useMemo(() => {
+  // Find the marker label for the current section
+  const currentMarker = useMemo(() => {
     if (!currentSection) return null;
-    return markers.find((m) => m.id === currentSection.id)?.id ?? null;
+    return markers.find((m) => m.id === currentSection.id) ?? null;
   }, [currentSection, markers]);
 
+  // Get display label — use tooltip (section name) for mobile
+  const displayLabel = currentMarker?.tooltip ?? currentMarker?.label ?? '';
+
   useEffect(() => {
-    if (!ticksRef.current) return;
+    if (!labelRef.current || !displayLabel) return;
 
-    const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
-    tickEls.forEach((el) => {
-      const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
-      const markerPos = activeMarkerId
-        ? (markers.find((m) => m.id === activeMarkerId)?.position ?? 0)
-        : -1;
-      const distance = Math.abs(tickPos - markerPos);
-      const isVeryClose = distance < 0.06;
-      const isClose = distance < 0.15;
+    const sectionId = currentSection?.id ?? '';
+    // Only animate if section actually changed
+    if (prevSectionRef.current === sectionId) return;
+    prevSectionRef.current = sectionId;
 
-      gsap.to(el, {
-        width: isVeryClose ? 18 : isClose ? 10 : 5,
-        opacity: isVeryClose ? 0.8 : isClose ? 0.35 : 0.12,
-        duration: 0.6,
-        ease: 'power2.out',
-      });
-    });
-  }, [activeMarkerId, markers]);
+    // Clear any pending fade timer
+    if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
 
-  const handleTickClick = useCallback((markerId: string) => {
-    const el = document.getElementById(`section-${markerId}`);
-    if (el) {
-      gsap.to(window, {
-        scrollTo: { y: el, offsetY: 60 },
-        duration: 1,
-        ease: 'power3.inOut',
-      });
-    }
-  }, []);
+    // Slide up and fade in
+    gsap.fromTo(
+      labelRef.current,
+      { y: 12, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' }
+    );
+
+    // Fade out after 3 seconds
+    fadeTimerRef.current = setTimeout(() => {
+      if (labelRef.current) {
+        gsap.to(labelRef.current, { opacity: 0, duration: 0.8, ease: 'power2.in' });
+      }
+    }, 3000);
+
+    return () => {
+      if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
+    };
+  }, [displayLabel, currentSection]);
+
+  // Also show on scroll activity, then fade
+  useEffect(() => {
+    let scrollTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const handleScroll = () => {
+      if (!labelRef.current || !displayLabel) return;
+
+      // Show the label
+      gsap.to(labelRef.current, { opacity: 1, duration: 0.2, overwrite: 'auto' });
+
+      // Reset fade timer
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        if (labelRef.current) {
+          gsap.to(labelRef.current, { opacity: 0, duration: 0.8, ease: 'power2.in' });
+        }
+      }, 3000);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimer) clearTimeout(scrollTimer);
+    };
+  }, [displayLabel]);
+
+  if (!displayLabel) return null;
 
   return (
-    <div className="fixed top-0 right-0 z-40 block h-full w-5 md:hidden">
+    <div className="fixed right-3 top-16 z-40 md:hidden pointer-events-none">
       <div
-        ref={ticksRef}
-        style={{ top: 72, bottom: 60, position: 'absolute', right: 0, left: 0 }}
+        ref={labelRef}
+        className="flex items-center gap-2 opacity-0"
       >
-        {ticks.map((tick, i) => (
-          <div
-            key={i}
-            className={`absolute right-0 flex items-center justify-end ${tick.isMarker ? 'cursor-pointer' : ''}`}
-            style={{ top: `${tick.position * 100}%`, padding: '4px 0' }}
-            onClick={() => tick.markerId && handleTickClick(tick.markerId)}
-          >
-            <div
-              className="rail-tick h-px bg-neutral-900 rounded-l-full"
-              data-pos={tick.position}
-              style={{
-                width: tick.isMarker ? 14 : 5,
-                opacity: tick.isMarker ? 0.3 : 0.12,
-                marginRight: -2,
-              }}
-            />
-          </div>
-        ))}
+        <span className="text-[10px] font-medium tracking-wider uppercase text-neutral-400 font-body">
+          {displayLabel}
+        </span>
+        <div className="w-4 h-[2px] rounded-full" style={{ backgroundColor: 'var(--color-brand)' }} />
       </div>
     </div>
   );
