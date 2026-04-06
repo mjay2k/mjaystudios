@@ -15,21 +15,46 @@ interface TimelineRailProps {
   markers: Marker[];
 }
 
-function generateTicks(markers: Marker[]) {
-  const ticks: { position: number; isMarker: boolean; markerId?: string; label?: string; tooltip?: string }[] = [];
+interface Tick {
+  position: number;
+  isMarker: boolean;
+  isGhost: boolean; // extra ticks that only appear on hover
+  markerId?: string;
+  label?: string;
+  tooltip?: string;
+  belongsTo?: string; // which marker section this tick falls under (for click targeting)
+}
+
+function generateTicks(markers: Marker[]): Tick[] {
+  const ticks: Tick[] = [];
 
   markers.forEach((m) => {
-    ticks.push({ position: m.position, isMarker: true, markerId: m.id, label: m.label, tooltip: m.tooltip });
+    ticks.push({ position: m.position, isMarker: true, isGhost: false, markerId: m.id, label: m.label, tooltip: m.tooltip, belongsTo: m.id });
   });
 
   const sorted = [...markers].sort((a, b) => a.position - b.position);
   for (let i = 0; i < sorted.length - 1; i++) {
     const start = sorted[i].position;
     const end = sorted[i + 1].position;
+    const sectionId = sorted[i].id; // in-between ticks belong to the section above them
+
+    // 3 visible decorative ticks
     const count = 3;
     const step = (end - start) / (count + 1);
     for (let j = 1; j <= count; j++) {
-      ticks.push({ position: start + step * j, isMarker: false });
+      ticks.push({ position: start + step * j, isMarker: false, isGhost: false, belongsTo: sectionId });
+    }
+
+    // 4 ghost ticks (only appear on hover) — placed between each pair of existing ticks
+    const ghostCount = 4;
+    const ghostStep = (end - start) / (ghostCount + 1);
+    for (let j = 1; j <= ghostCount; j++) {
+      const pos = start + ghostStep * j;
+      // Skip if too close to an existing tick
+      const tooClose = ticks.some((t) => Math.abs(t.position - pos) < 0.01);
+      if (!tooClose) {
+        ticks.push({ position: pos, isMarker: false, isGhost: true, belongsTo: sectionId });
+      }
     }
   }
 
@@ -88,7 +113,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
     };
   }, []);
 
-  // Default animation: active section drives tick sizes
+  // Default animation: active section drives tick sizes, ghosts hidden
   useEffect(() => {
     if (!ticksRef.current || isHoveringRef.current) return;
 
@@ -98,6 +123,12 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       : -1;
 
     tickEls.forEach((el) => {
+      const isGhost = el.getAttribute('data-ghost') === 'true';
+      if (isGhost) {
+        gsap.to(el, { width: 0, opacity: 0, duration: 0.4, ease: 'power2.out' });
+        return;
+      }
+
       const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
       const distance = Math.abs(tickPos - markerPos);
       const isVeryClose = distance < 0.06;
@@ -123,22 +154,33 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       const rect = el.getBoundingClientRect();
       const tickCenterY = rect.top + rect.height / 2;
       const distancePx = Math.abs(mouseY - tickCenterY);
+      const isGhost = el.getAttribute('data-ghost') === 'true';
 
-      // Proximity radius in pixels
       const maxRadius = 120;
       const proximity = Math.max(0, 1 - distancePx / maxRadius);
 
-      // Interpolate: min 6px / 0.1 opacity → max 40px / 1.0 opacity
-      const width = 6 + proximity * 34;
-      const opacity = 0.1 + proximity * 0.9;
-
-      gsap.to(el, {
-        width,
-        opacity,
-        duration: 0.15,
-        ease: 'none',
-        overwrite: 'auto',
-      });
+      if (isGhost) {
+        // Ghosts only appear when cursor is nearby
+        const ghostRadius = 80;
+        const ghostProximity = Math.max(0, 1 - distancePx / ghostRadius);
+        gsap.to(el, {
+          width: ghostProximity * 20,
+          opacity: ghostProximity * 0.6,
+          duration: 0.15,
+          ease: 'none',
+          overwrite: 'auto',
+        });
+      } else {
+        const width = 6 + proximity * 34;
+        const opacity = 0.1 + proximity * 0.9;
+        gsap.to(el, {
+          width,
+          opacity,
+          duration: 0.15,
+          ease: 'none',
+          overwrite: 'auto',
+        });
+      }
     });
 
     // Find closest marker for tooltip
@@ -180,6 +222,12 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       : -1;
 
     tickEls.forEach((el) => {
+      const isGhost = el.getAttribute('data-ghost') === 'true';
+      if (isGhost) {
+        gsap.to(el, { width: 0, opacity: 0, duration: 0.4, ease: 'power2.out' });
+        return;
+      }
+
       const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
       const distance = Math.abs(tickPos - markerPos);
       const isVeryClose = distance < 0.06;
@@ -249,32 +297,38 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         ref={ticksRef}
         style={{ top: railTop, bottom: railBottom, position: 'absolute', right: 0, left: 0 }}
       >
-        {ticks.map((tick, i) => (
-          <div
-            key={i}
-            className="absolute right-0 flex items-center justify-end"
-            style={{ top: `${tick.position * 100}%`, padding: '6px 0' }}
-            onClick={() => tick.markerId && handleTickClick(tick.markerId)}
-          >
-            {/* Label */}
-            {tick.isMarker && tick.label && (
-              <span className="mr-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body">
-                {tick.label}
-              </span>
-            )}
-            {/* Tick */}
+        {ticks.map((tick, i) => {
+          // Click target: markers scroll to themselves, in-between ticks scroll to their section
+          const clickTarget = tick.markerId ?? tick.belongsTo;
+
+          return (
             <div
-              className="rail-tick h-[1.5px] bg-neutral-900 rounded-l-full"
-              data-pos={tick.position}
-              data-marker-id={tick.markerId ?? ''}
-              style={{
-                width: tick.isMarker ? 24 : 10,
-                opacity: tick.isMarker ? 0.4 : 0.15,
-                marginRight: tick.isMarker ? -4 : -2,
-              }}
-            />
-          </div>
-        ))}
+              key={i}
+              className={`absolute right-0 flex items-center justify-end ${clickTarget ? 'cursor-pointer' : ''}`}
+              style={{ top: `${tick.position * 100}%`, padding: '6px 0' }}
+              onClick={() => clickTarget && handleTickClick(clickTarget)}
+            >
+              {/* Label */}
+              {tick.isMarker && tick.label && (
+                <span className="mr-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body">
+                  {tick.label}
+                </span>
+              )}
+              {/* Tick */}
+              <div
+                className="rail-tick h-[1.5px] bg-neutral-900 rounded-l-full"
+                data-pos={tick.position}
+                data-marker-id={tick.markerId ?? ''}
+                data-ghost={tick.isGhost}
+                style={{
+                  width: tick.isGhost ? 0 : tick.isMarker ? 24 : 10,
+                  opacity: tick.isGhost ? 0 : tick.isMarker ? 0.4 : 0.15,
+                  marginRight: tick.isMarker ? -4 : -2,
+                }}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
