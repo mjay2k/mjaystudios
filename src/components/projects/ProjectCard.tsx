@@ -12,14 +12,11 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [prevIndex, setPrevIndex] = useState(0);
   const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
-  const incomingRef = useRef<HTMLDivElement>(null);
-  const outgoingRef = useRef<HTMLDivElement>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
   const setDetailProject = useAppStore((s) => s.setDetailProject);
   const hasDetail = project.caseStudy || project.images.length > 1;
   const loadedHeights = useRef<number[]>([]);
-  const isFirstRender = useRef(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleImageLoad = useCallback(
@@ -45,25 +42,34 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     });
   }, [project.images]);
 
-  // Auto-cycle with random start offset so cards don't all transition together
+  // Crossfade via GSAP — all images are always in the DOM, stacked
+  useEffect(() => {
+    if (!stackRef.current || project.images.length <= 1) return;
+
+    const layers = stackRef.current.querySelectorAll('.img-layer');
+    layers.forEach((layer, i) => {
+      gsap.to(layer, {
+        opacity: i === activeIndex ? 1 : 0,
+        duration: 1.5,
+        ease: 'power2.inOut',
+      });
+    });
+  }, [activeIndex, project.images.length]);
+
+  // Auto-cycle with random start offset
   useEffect(() => {
     if (!project.autoCycle || project.images.length <= 1) return;
 
-    const holdTime = 7000; // 7 seconds per image
-    const randomDelay = Math.random() * holdTime; // stagger start
+    const holdTime = 7000;
+    const randomDelay = Math.random() * holdTime;
 
     const timeout = setTimeout(() => {
       advance();
-      const interval = setInterval(advance, holdTime);
-      intervalRef.current = interval;
+      intervalRef.current = setInterval(advance, holdTime);
     }, randomDelay);
 
     function advance() {
-      setActiveIndex((prev) => {
-        const next = (prev + 1) % project.images.length;
-        setPrevIndex(prev);
-        return next;
-      });
+      setActiveIndex((prev) => (prev + 1) % project.images.length);
     }
 
     return () => {
@@ -72,38 +78,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     };
   }, [project.autoCycle, project.images.length]);
 
-  // Crossfade: preload incoming image first, then animate
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-
-    // Preload the incoming image before starting crossfade
-    const img = new window.Image();
-    img.src = project.images[activeIndex];
-    img.onload = () => {
-      if (!incomingRef.current || !outgoingRef.current) return;
-
-      gsap.fromTo(
-        outgoingRef.current,
-        { opacity: 1 },
-        { opacity: 0, duration: 1.5, ease: 'power2.inOut' }
-      );
-      gsap.fromTo(
-        incomingRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 1.5, ease: 'power2.inOut' }
-      );
-    };
-
-    // If already cached, onload fires immediately
-    if (img.complete) {
-      img.onload?.(new Event('load') as unknown as globalThis.Event);
-    }
-  }, [activeIndex, project.images]);
-
-  const showCrossfade = project.images.length > 1;
+  const multiImage = project.images.length > 1;
 
   return (
     <div
@@ -112,35 +87,34 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     >
       <div
         className="relative overflow-hidden rounded-lg bg-neutral-200"
-        style={maxHeight ? { minHeight: maxHeight } : undefined}
+        style={maxHeight && multiImage ? { minHeight: maxHeight } : undefined}
       >
-        {showCrossfade ? (
-          <>
-            {/* Outgoing image (previous) — sits behind */}
-            <div ref={outgoingRef} className="absolute inset-0">
-              <Image
-                src={project.images[prevIndex]}
-                alt={project.title}
-                width={800}
-                height={600}
-                className="h-auto w-full"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
-
-            {/* Incoming image (current) — fades in on top */}
-            <div ref={incomingRef} className="relative">
-              <Image
-                src={project.images[activeIndex]}
-                alt={project.title}
-                width={800}
-                height={600}
-                className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                onLoad={handleImageLoad}
-              />
-            </div>
-          </>
+        {multiImage ? (
+          <div ref={stackRef} className="relative">
+            {project.images.map((src, i) => (
+              <div
+                key={src}
+                className="img-layer"
+                style={{
+                  position: i === 0 ? 'relative' : 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  opacity: i === 0 ? 1 : 0,
+                }}
+              >
+                <Image
+                  src={src}
+                  alt={`${project.title} ${i + 1}`}
+                  width={800}
+                  height={600}
+                  className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  onLoad={handleImageLoad}
+                />
+              </div>
+            ))}
+          </div>
         ) : (
           <Image
             src={project.images[0]}
@@ -159,8 +133,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </div>
         )}
 
-        {project.images.length > 1 && (
-          <div className="absolute bottom-3 left-3 flex gap-1">
+        {multiImage && (
+          <div className="absolute bottom-3 left-3 flex gap-1 z-10">
             {project.images.map((_, i) => (
               <div
                 key={i}
