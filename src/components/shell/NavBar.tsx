@@ -12,14 +12,19 @@ export default function NavBar() {
 
   return (
     <nav className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-neutral-100/80">
-      <Image
-        src="/mjaystudios-logo.svg"
-        alt="MJay Studios"
-        width={140}
-        height={36}
-        className="h-8 w-auto"
-        priority
-      />
+      <div className="flex items-center gap-2">
+        <Image
+          src="/mjaystudios-logo.svg"
+          alt="MJay Studios"
+          width={200}
+          height={48}
+          className="h-10 w-auto md:h-12"
+          priority
+        />
+        <span className="text-lg md:text-xl font-bold font-display text-orange-500 tracking-tight">
+          Matthew Johnson
+        </span>
+      </div>
 
       <div className="hidden items-center gap-6 md:flex">
         <ViewToggle />
