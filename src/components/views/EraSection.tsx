@@ -78,37 +78,57 @@ export default function EraSection({ config, projects }: EraSectionProps) {
 
       {/* Era intro card */}
       <div className="mb-16 rounded-2xl bg-neutral-50 px-8 py-12 md:px-12 md:py-16">
-        <h2
-          ref={titleRef}
-          className="text-3xl font-bold tracking-tight md:text-5xl font-display"
-        >
-          <span className={config.accent}>{config.title}</span>
-        </h2>
-        {config.section.dateRange && (
-          <p className="mt-2 text-sm font-medium text-neutral-400">
-            {config.section.dateRange}
-          </p>
-        )}
-        <div className="mt-4 max-w-xl space-y-3 text-base leading-relaxed text-neutral-600">
-          {config.intro.split('\n').filter(Boolean).map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
-        </div>
-
-        {config.introImages && config.introImages.length > 0 && (
-          <div className="mt-6 flex items-center gap-6">
-            {config.introImages.map((src, i) => (
-              <Image
-                key={i}
-                src={src}
-                alt={`${config.title} logo`}
-                width={120}
-                height={60}
-                className="h-10 w-auto object-contain opacity-60"
-              />
-            ))}
+        <div className="flex flex-col md:flex-row md:gap-12">
+          {/* Copy */}
+          <div className="flex-1">
+            <h2
+              ref={titleRef}
+              className="text-3xl font-bold tracking-tight md:text-5xl font-display"
+            >
+              <span className={config.accent}>{config.title}</span>
+            </h2>
+            {config.section.dateRange && (
+              <p className="mt-2 text-sm font-medium text-neutral-400">
+                {config.section.dateRange}
+              </p>
+            )}
+            <div className="mt-4 max-w-xl space-y-3 text-base leading-relaxed text-neutral-600">
+              {config.intro.split('\n').filter(Boolean).map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
           </div>
-        )}
+
+          {/* Logos — stacked on the right on desktop, inline on mobile */}
+          {config.introImages && config.introImages.length > 0 && (
+            <>
+              <div className="hidden md:flex flex-col items-center justify-center gap-6 flex-shrink-0">
+                {config.introImages.map((src, i) => (
+                  <Image
+                    key={i}
+                    src={src}
+                    alt={`${config.title} logo`}
+                    width={160}
+                    height={80}
+                    className="h-auto w-32 object-contain opacity-50"
+                  />
+                ))}
+              </div>
+              <div className="mt-6 flex items-center gap-6 md:hidden">
+                {config.introImages.map((src, i) => (
+                  <Image
+                    key={i}
+                    src={src}
+                    alt={`${config.title} logo`}
+                    width={100}
+                    height={50}
+                    className="h-8 w-auto object-contain opacity-50"
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Projects */}
