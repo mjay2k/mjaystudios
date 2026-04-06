@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 type ActiveView = 'timeline' | 'category';
+type ThemeMode = 'light' | 'dark';
 
 interface Section {
   id: string;
@@ -27,6 +28,9 @@ interface AppState {
 
   detailProject: string | null;
   setDetailProject: (id: string | null) => void;
+
+  theme: ThemeMode;
+  toggleTheme: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -47,6 +51,14 @@ export const useAppStore = create<AppState>((set) => ({
 
   detailProject: null,
   setDetailProject: (id) => set({ detailProject: id }),
+
+  theme: 'light',
+  toggleTheme: () =>
+    set((state) => {
+      const next = state.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.classList.toggle('dark', next === 'dark');
+      return { theme: next };
+    }),
 }));
 
-export type { ActiveView, Section, AppState };
+export type { ActiveView, ThemeMode, Section, AppState };

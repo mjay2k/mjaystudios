@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useAppStore } from '@/stores/useAppStore';
 import ViewToggle from './ViewToggle';
+import ThemeToggle from './ThemeToggle';
 
 export default function NavBar() {
   const setAboutOpen = useAppStore((s) => s.setAboutOpen);
@@ -28,6 +29,7 @@ export default function NavBar() {
 
       <div className="hidden items-center gap-6 md:flex">
         <ViewToggle />
+        <ThemeToggle />
         <button
           onClick={() => setAboutOpen(true)}
           className="text-sm text-neutral-500 transition-colors hover:text-neutral-900"
@@ -44,6 +46,7 @@ export default function NavBar() {
 
       <div className="flex items-center gap-4 md:hidden">
         <ViewToggle />
+        <ThemeToggle />
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="flex h-8 w-8 flex-col items-center justify-center gap-1"
