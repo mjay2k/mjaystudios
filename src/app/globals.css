@@ -86,7 +86,7 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #171717;
 }
 
 ::-webkit-scrollbar-thumb {
