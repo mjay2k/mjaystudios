@@ -20,6 +20,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const hasDetail = project.caseStudy || project.images.length > 1;
   const loadedHeights = useRef<number[]>([]);
   const isFirstRender = useRef(true);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleImageLoad = useCallback(
     (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -44,43 +45,63 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     });
   }, [project.images]);
 
-  // Auto-cycle
+  // Auto-cycle with random start offset so cards don't all transition together
   useEffect(() => {
     if (!project.autoCycle || project.images.length <= 1) return;
 
-    const interval = setInterval(() => {
+    const holdTime = 7000; // 7 seconds per image
+    const randomDelay = Math.random() * holdTime; // stagger start
+
+    const timeout = setTimeout(() => {
+      advance();
+      const interval = setInterval(advance, holdTime);
+      intervalRef.current = interval;
+    }, randomDelay);
+
+    function advance() {
       setActiveIndex((prev) => {
         const next = (prev + 1) % project.images.length;
         setPrevIndex(prev);
         return next;
       });
-    }, 5000);
+    }
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(timeout);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, [project.autoCycle, project.images.length]);
 
-  // Crossfade: outgoing fades out, incoming fades in
+  // Crossfade: preload incoming image first, then animate
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    if (!incomingRef.current || !outgoingRef.current) return;
 
-    // Outgoing starts visible, fades out
-    gsap.fromTo(
-      outgoingRef.current,
-      { opacity: 1 },
-      { opacity: 0, duration: 1.2, ease: 'power2.inOut' }
-    );
+    // Preload the incoming image before starting crossfade
+    const img = new window.Image();
+    img.src = project.images[activeIndex];
+    img.onload = () => {
+      if (!incomingRef.current || !outgoingRef.current) return;
 
-    // Incoming starts transparent, fades in
-    gsap.fromTo(
-      incomingRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 1.2, ease: 'power2.inOut' }
-    );
-  }, [activeIndex]);
+      gsap.fromTo(
+        outgoingRef.current,
+        { opacity: 1 },
+        { opacity: 0, duration: 1.5, ease: 'power2.inOut' }
+      );
+      gsap.fromTo(
+        incomingRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.5, ease: 'power2.inOut' }
+      );
+    };
+
+    // If already cached, onload fires immediately
+    if (img.complete) {
+      img.onload?.(new Event('load') as unknown as globalThis.Event);
+    }
+  }, [activeIndex, project.images]);
 
   const showCrossfade = project.images.length > 1;
 
