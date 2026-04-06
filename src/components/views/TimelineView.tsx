@@ -17,7 +17,7 @@ const eras: EraConfig[] = [
     intro:
       'Started at Keller Crescent as a digital designer building websites and banner ads. Didn\'t have enough digital work to fill the day, so I started contributing to major campaigns — and my concepts started winning. Climbed from junior digital work to art directing national campaigns for Heaven Hill brands including PAMA, Burnett\'s Vodka, and Rittenhouse Rye.\n\nKeller Crescent was a legendary Evansville agency — top 50 in the world in its heyday. I came in during the decline, watched the parent company get bought out and the agency reborn as 10over12 Creative. When that wound down too, I was the last creative standing — a whole floor of the building to myself.',
     introImages: [
-      '/portfolio/agency/keller-crescent-logo.jpg',
+      '/portfolio/agency/keller-crescent-logo.png',
       '/portfolio/agency/10over12-logo.png',
     ],
     section: {
