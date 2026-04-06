@@ -37,7 +37,7 @@ export default function InfoPanel() {
 
   return (
     <>
-      <div className="fixed top-28 left-20 z-40 hidden w-48 md:block">
+      <div className="fixed top-28 left-8 z-40 hidden w-48 md:block">
         <div ref={contentRef}>
           <h3 className="text-sm font-bold tracking-wide uppercase text-neutral-700">
             {displayed.label}

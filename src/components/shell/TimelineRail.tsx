@@ -7,8 +7,8 @@ import { useAppStore } from '@/stores/useAppStore';
 interface Marker {
   id: string;
   label: string;
-  tooltip?: string; // shown on hover
-  position: number; // 0-1 normalized position along the rail
+  tooltip?: string;
+  position: number;
 }
 
 interface TimelineRailProps {
@@ -98,7 +98,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
     if (hoveredTick) {
       gsap.to(tooltipRef.current, { opacity: 1, x: 0, duration: 0.2, ease: 'power2.out' });
     } else {
-      gsap.to(tooltipRef.current, { opacity: 0, x: -4, duration: 0.15, ease: 'power2.in' });
+      gsap.to(tooltipRef.current, { opacity: 0, x: 4, duration: 0.15, ease: 'power2.in' });
     }
   }, [hoveredTick]);
 
@@ -124,21 +124,22 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
   const railBottom = 40;
 
   return (
-    <div className="fixed top-0 left-0 z-40 hidden h-full md:block" style={{ width: 80 }}>
-      {/* Tooltip */}
+    <div className="fixed top-0 right-0 z-40 hidden h-full md:block" style={{ width: 80 }}>
+      {/* Tooltip — appears to the left of the rail */}
       <div
         ref={tooltipRef}
         className="fixed z-50 pointer-events-none"
         style={{
-          left: 84,
+          right: 84,
           top: hoveredTick?.top ?? 0,
-          transform: 'translateY(-50%) translateX(-4px)',
+          transform: 'translateY(-50%) translateX(4px)',
           opacity: 0,
         }}
       >
         <div className="rounded-md bg-neutral-900 px-3 py-1.5 text-[10px] font-medium text-white shadow-lg whitespace-nowrap font-body">
           {hoveredTick?.tooltip}
-          <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-neutral-900 rotate-45" />
+          {/* Arrow pointing right */}
+          <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 bg-neutral-900 rotate-45" />
         </div>
       </div>
 
@@ -152,18 +153,16 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
           return (
             <div
               key={i}
-              className={`absolute left-0 flex items-center group ${isInteractive ? 'cursor-pointer' : ''}`}
+              className={`absolute right-0 flex items-center justify-end group ${isInteractive ? 'cursor-pointer' : ''}`}
               style={{ top: `${tick.position * 100}%`, padding: '6px 0' }}
               onMouseEnter={(e) => {
                 if (!isInteractive) return;
                 handleTickHover(tick, e);
-                // Expand tick on hover
                 const tickEl = (e.currentTarget as HTMLElement).querySelector('.rail-tick');
                 if (tickEl) gsap.to(tickEl, { width: 36, opacity: 1, duration: 0.25, ease: 'power2.out' });
               }}
               onMouseLeave={(e) => {
                 setHoveredTick(null);
-                // Return tick to normal (will be re-set by the active section effect)
                 const tickEl = (e.currentTarget as HTMLElement).querySelector('.rail-tick');
                 if (tickEl) {
                   const tickPos = parseFloat(tickEl.getAttribute('data-pos') ?? '0');
@@ -183,20 +182,22 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
               }}
               onClick={() => tick.markerId && handleTickClick(tick.markerId)}
             >
+              {/* Label on the left side of the tick */}
+              {tick.isMarker && tick.label && (
+                <span className="mr-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body group-hover:text-neutral-700 transition-colors">
+                  {tick.label}
+                </span>
+              )}
+              {/* Tick bleeds off right edge */}
               <div
-                className="rail-tick h-[1.5px] bg-neutral-900 rounded-r-full transition-colors"
+                className="rail-tick h-[1.5px] bg-neutral-900 rounded-l-full transition-colors"
                 data-pos={tick.position}
                 style={{
                   width: tick.isMarker ? 24 : 10,
                   opacity: tick.isMarker ? 0.4 : 0.15,
-                  marginLeft: tick.isMarker ? -4 : -2,
+                  marginRight: tick.isMarker ? -4 : -2,
                 }}
               />
-              {tick.isMarker && tick.label && (
-                <span className="ml-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body group-hover:text-neutral-700 transition-colors">
-                  {tick.label}
-                </span>
-              )}
             </div>
           );
         })}
@@ -250,8 +251,9 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
     }
   }, []);
 
+  // Mobile stays on the right too
   return (
-    <div className="fixed top-0 left-0 z-40 block h-full w-5 md:hidden">
+    <div className="fixed top-0 right-0 z-40 block h-full w-5 md:hidden">
       <div
         ref={ticksRef}
         style={{ top: 72, bottom: 60, position: 'absolute', right: 0, left: 0 }}
@@ -259,17 +261,17 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
         {ticks.map((tick, i) => (
           <div
             key={i}
-            className={`absolute left-0 flex items-center ${tick.isMarker ? 'cursor-pointer' : ''}`}
+            className={`absolute right-0 flex items-center justify-end ${tick.isMarker ? 'cursor-pointer' : ''}`}
             style={{ top: `${tick.position * 100}%`, padding: '4px 0' }}
             onClick={() => tick.markerId && handleTickClick(tick.markerId)}
           >
             <div
-              className="rail-tick h-px bg-neutral-900 rounded-r-full"
+              className="rail-tick h-px bg-neutral-900 rounded-l-full"
               data-pos={tick.position}
               style={{
                 width: tick.isMarker ? 14 : 5,
                 opacity: tick.isMarker ? 0.3 : 0.12,
-                marginLeft: -2,
+                marginRight: -2,
               }}
             />
           </div>

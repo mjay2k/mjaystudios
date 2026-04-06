@@ -24,7 +24,7 @@ export default function Shell({ markers, children }: ShellProps) {
       <ContactPopup />
       <FullscreenDetail />
 
-      <div className="ml-8 pt-20 md:ml-56">
+      <div className="px-6 pt-20 pr-10 md:px-16 md:pr-24">
         {children}
       </div>
     </div>
