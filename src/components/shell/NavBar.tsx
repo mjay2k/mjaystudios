@@ -22,7 +22,7 @@ export default function NavBar() {
           className="h-10 w-auto md:h-12"
           priority
         />
-        <span className="text-lg md:text-xl font-bold font-display text-orange-500 tracking-tight">
+        <span className="text-lg md:text-xl font-bold font-display tracking-tight" style={{ color: 'var(--color-brand)' }}>
           Matthew Johnson
         </span>
       </div>

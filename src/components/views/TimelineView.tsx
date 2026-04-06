@@ -40,7 +40,7 @@ const eras: EraConfig[] = [
   {
     id: 'afterberry',
     title: 'After Berry',
-    accent: 'text-orange-500',
+    accent: 'text-brand',
     bgClass: 'bg-neutral-100',
     intro:
       'Now combining everything — design, strategy, and AI-powered development. Building apps (Bible Warden, News Warden) and this site from scratch. The next chapter.',
