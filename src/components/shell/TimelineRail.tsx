@@ -15,45 +15,86 @@ interface TimelineRailProps {
   markers: Marker[];
 }
 
+type TickSize = 'big' | 'small';
+
 interface Tick {
   position: number;
-  isMarker: boolean;
-  isGhost: boolean; // extra ticks that only appear on hover
+  size: TickSize;           // alternating big/small base pattern
+  isGhost: boolean;         // hidden by default, appears on hover
+  isMarker: boolean;        // has a label/tooltip, clickable to section
   markerId?: string;
   label?: string;
   tooltip?: string;
-  belongsTo?: string; // which marker section this tick falls under (for click targeting)
+  belongsTo?: string;       // which section to scroll to on click
 }
 
 function generateTicks(markers: Marker[]): Tick[] {
   const ticks: Tick[] = [];
   const sorted = [...markers].sort((a, b) => a.position - b.position);
 
-  // Add markers
-  sorted.forEach((m) => {
-    ticks.push({ position: m.position, isMarker: true, isGhost: false, markerId: m.id, label: m.label, tooltip: m.tooltip, belongsTo: m.id });
-  });
-
-  // Between each pair of markers, add evenly spaced ticks
-  // Pattern: visible, ghost, visible, ghost, visible, ghost, visible
-  // = 3 visible + 4 ghost = 7 ticks between each marker pair, all evenly spaced
+  // Between each pair of markers, create a uniform grid:
+  // marker(big) - small - ghost - big - ghost - small - ghost - big - small - marker(big)
+  // This gives evenly spaced ticks with a clean big/small alternation
   for (let i = 0; i < sorted.length - 1; i++) {
-    const start = sorted[i].position;
-    const end = sorted[i + 1].position;
-    const sectionId = sorted[i].id;
-    const totalBetween = 7;
-    const step = (end - start) / (totalBetween + 1);
+    const startMarker = sorted[i];
+    const endMarker = sorted[i + 1];
+    const sectionId = startMarker.id;
 
-    for (let j = 1; j <= totalBetween; j++) {
-      const isGhost = j % 2 === 0; // even positions are ghosts
-      ticks.push({
-        position: start + step * j,
-        isMarker: false,
-        isGhost,
-        belongsTo: sectionId,
-      });
+    // Total slots between markers (not counting the markers themselves): 8
+    // So 10 total positions including both markers, step = gap/9
+    const totalSlots = 9;
+    const gap = endMarker.position - startMarker.position;
+    const step = gap / totalSlots;
+
+    for (let j = 0; j <= totalSlots; j++) {
+      const position = startMarker.position + step * j;
+      const isStartMarker = j === 0;
+      const isEndMarker = j === totalSlots;
+
+      // Skip end marker — it'll be the start of the next segment
+      if (isEndMarker) continue;
+
+      // Alternating pattern: even index = big, odd = small
+      const size: TickSize = j % 2 === 0 ? 'big' : 'small';
+
+      // Ghosts: positions 2, 4, 6, 8 (every other non-marker slot)
+      const isGhost = !isStartMarker && j % 3 === 0;
+
+      if (isStartMarker) {
+        ticks.push({
+          position,
+          size: 'big',
+          isGhost: false,
+          isMarker: true,
+          markerId: startMarker.id,
+          label: startMarker.label,
+          tooltip: startMarker.tooltip,
+          belongsTo: sectionId,
+        });
+      } else {
+        ticks.push({
+          position,
+          size,
+          isGhost,
+          isMarker: false,
+          belongsTo: sectionId,
+        });
+      }
     }
   }
+
+  // Add the last marker
+  const last = sorted[sorted.length - 1];
+  ticks.push({
+    position: last.position,
+    size: 'big',
+    isGhost: false,
+    isMarker: true,
+    markerId: last.id,
+    label: last.label,
+    tooltip: last.tooltip,
+    belongsTo: last.id,
+  });
 
   return ticks.sort((a, b) => a.position - b.position);
 }
@@ -108,7 +149,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
         const radius = 0.12;
 
-        // Find the single closest non-ghost tick
+        // Find single closest non-ghost tick for orange highlight
         let closestEl: Element | null = null;
         let closestDist = Infinity;
         tickEls.forEach((el) => {
@@ -120,15 +161,21 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         tickEls.forEach((el) => {
           const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
           const isGhost = el.getAttribute('data-ghost') === 'true';
+          const tickSize = el.getAttribute('data-size'); // 'big' or 'small'
           const distance = Math.abs(tickPos - mappedProgress);
           const proximity = Math.max(0, 1 - distance / radius);
 
+          // Base widths: big=20, small=10. Proximity amplifies from base.
+          const baseWidth = tickSize === 'big' ? 20 : 10;
+          const baseOpacity = tickSize === 'big' ? 0.2 : 0.12;
+
           if (isGhost) {
             const ghostProx = Math.max(0, 1 - distance / 0.06);
-            gsap.set(el, { width: ghostProx * 16, opacity: ghostProx * 0.35, backgroundColor: '' });
+            const gw = tickSize === 'big' ? ghostProx * 16 : ghostProx * 8;
+            gsap.set(el, { width: gw, opacity: ghostProx * 0.3, backgroundColor: '' });
           } else {
-            const width = 7 + proximity * 30;
-            const opacity = 0.12 + proximity * 0.78;
+            const width = baseWidth + proximity * 18;
+            const opacity = baseOpacity + proximity * 0.7;
             const isClosest = el === closestEl;
             gsap.set(el, { width, opacity, backgroundColor: isClosest ? '#F15A29' : '' });
           }
@@ -166,23 +213,26 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       const tickCenterY = rect.top + rect.height / 2;
       const distancePx = Math.abs(mouseY - tickCenterY);
       const isGhost = el.getAttribute('data-ghost') === 'true';
+      const tickSize = el.getAttribute('data-size');
 
       const maxRadius = 120;
       const proximity = Math.max(0, 1 - distancePx / maxRadius);
+      const baseWidth = tickSize === 'big' ? 20 : 10;
 
       if (isGhost) {
         const ghostRadius = 80;
         const ghostProximity = Math.max(0, 1 - distancePx / ghostRadius);
+        const gw = tickSize === 'big' ? ghostProximity * 18 : ghostProximity * 10;
         gsap.to(el, {
-          width: ghostProximity * 22,
-          opacity: ghostProximity * 0.6,
+          width: gw,
+          opacity: ghostProximity * 0.5,
           backgroundColor: '',
           duration: 0.15,
           ease: 'none',
           overwrite: 'auto',
         });
       } else {
-        const width = 7 + proximity * 38;
+        const width = baseWidth + proximity * 22;
         const opacity = 0.1 + proximity * 0.9;
         const isClosest = el === closestHoverEl;
         gsap.to(el, {
@@ -321,10 +371,11 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
                 data-pos={tick.position}
                 data-marker-id={tick.markerId ?? ''}
                 data-ghost={tick.isGhost}
+                data-size={tick.size}
                 style={{
-                  width: tick.isGhost ? 0 : tick.isMarker ? 24 : 10,
-                  opacity: tick.isGhost ? 0 : tick.isMarker ? 0.4 : 0.15,
-                  marginRight: tick.isMarker ? -4 : -2,
+                  width: tick.isGhost ? 0 : tick.size === 'big' ? 20 : 10,
+                  opacity: tick.isGhost ? 0 : tick.size === 'big' ? 0.2 : 0.12,
+                  marginRight: -2,
                 }}
               />
             </div>
