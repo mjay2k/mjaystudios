@@ -14,39 +14,22 @@ interface TimelineRailProps {
   markers: Marker[];
 }
 
-// Number of decorative tick marks between each marker
-const TICKS_BETWEEN = 4;
-
+// Generate decorative ticks between markers
 function generateTicks(markers: Marker[]) {
   const ticks: { position: number; isMarker: boolean; markerId?: string; label?: string }[] = [];
 
-  // Add marker ticks
   markers.forEach((m) => {
     ticks.push({ position: m.position, isMarker: true, markerId: m.id, label: m.label });
   });
 
-  // Add decorative ticks between markers
   const sorted = [...markers].sort((a, b) => a.position - b.position);
   for (let i = 0; i < sorted.length - 1; i++) {
     const start = sorted[i].position;
     const end = sorted[i + 1].position;
-    const step = (end - start) / (TICKS_BETWEEN + 1);
-    for (let j = 1; j <= TICKS_BETWEEN; j++) {
+    const count = 3;
+    const step = (end - start) / (count + 1);
+    for (let j = 1; j <= count; j++) {
       ticks.push({ position: start + step * j, isMarker: false });
-    }
-  }
-
-  // Add a few ticks before first and after last
-  if (sorted.length > 0) {
-    const first = sorted[0].position;
-    const last = sorted[sorted.length - 1].position;
-    for (let i = 1; i <= 2; i++) {
-      if (first - i * 0.03 > 0.02) {
-        ticks.push({ position: first - i * 0.03, isMarker: false });
-      }
-      if (last + i * 0.03 < 0.98) {
-        ticks.push({ position: last + i * 0.03, isMarker: false });
-      }
     }
   }
 
@@ -54,18 +37,17 @@ function generateTicks(markers: Marker[]) {
 }
 
 export default function TimelineRail({ markers }: TimelineRailProps) {
-  const railRef = useRef<HTMLDivElement>(null);
   const ticksRef = useRef<HTMLDivElement>(null);
   const currentSection = useAppStore((s) => s.currentSection);
 
-  const ticks = generateTicks(markers);
+  const ticks = useMemo(() => generateTicks(markers), [markers]);
 
   const activeMarkerId = useMemo(() => {
     if (!currentSection) return null;
     return markers.find((m) => m.id === currentSection.id)?.id ?? null;
   }, [currentSection, markers]);
 
-  // Parallax: ticks scroll at 0.5x speed
+  // Parallax offset
   useEffect(() => {
     if (!ticksRef.current) return;
 
@@ -76,67 +58,65 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       onUpdate: (self) => {
         if (!ticksRef.current) return;
         gsap.set(ticksRef.current, {
-          y: self.progress * -150,
+          y: self.progress * -80,
         });
       },
     });
 
-    return () => {
-      trigger.kill();
-    };
+    return () => { trigger.kill(); };
   }, []);
 
-  // Animate ticks when active marker changes
+  // Animate tick widths based on active section
   useEffect(() => {
-    if (!ticksRef.current || !activeMarkerId) return;
+    if (!ticksRef.current) return;
 
     const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
     tickEls.forEach((el) => {
       const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
-      const markerPos = markers.find((m) => m.id === activeMarkerId)?.position ?? 0;
+      const markerPos = activeMarkerId
+        ? (markers.find((m) => m.id === activeMarkerId)?.position ?? 0)
+        : -1;
       const distance = Math.abs(tickPos - markerPos);
 
-      // Ticks near the active marker grow wider and brighter
-      const isClose = distance < 0.12;
-      const isVeryClose = distance < 0.05;
-      const targetWidth = isVeryClose ? 32 : isClose ? 20 : 10;
-      const targetOpacity = isVeryClose ? 1 : isClose ? 0.5 : 0.2;
+      const isVeryClose = distance < 0.06;
+      const isClose = distance < 0.15;
 
       gsap.to(el, {
-        width: targetWidth,
-        opacity: targetOpacity,
-        duration: 0.5,
+        width: isVeryClose ? 28 : isClose ? 16 : 8,
+        opacity: isVeryClose ? 0.8 : isClose ? 0.35 : 0.15,
+        duration: 0.6,
         ease: 'power2.out',
       });
     });
   }, [activeMarkerId, markers]);
 
+  // Rail area: top 80px (nav) to bottom 40px
+  const railTop = 80;
+  const railBottom = 40;
+
   return (
-    <div
-      ref={railRef}
-      className="fixed top-0 left-0 z-40 hidden h-full w-12 md:block"
-    >
-      <div ref={ticksRef} className="relative h-full">
+    <div className="fixed top-0 left-0 z-40 hidden h-full w-14 md:block">
+      <div
+        ref={ticksRef}
+        style={{ top: railTop, bottom: railBottom, position: 'absolute', right: 0, left: 0 }}
+      >
         {ticks.map((tick, i) => (
           <div
             key={i}
-            className="absolute right-0 flex items-center"
+            className="absolute right-0 flex items-center justify-end"
             style={{ top: `${tick.position * 100}%` }}
           >
-            {/* Label (only for markers with labels) */}
             {tick.isMarker && tick.label && (
-              <span className="absolute right-full mr-3 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body">
+              <span className="mr-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body">
                 {tick.label}
               </span>
             )}
-
-            {/* Tick bar */}
             <div
-              className="rail-tick h-px bg-neutral-400 origin-right"
+              className="rail-tick h-[1.5px] bg-neutral-900 rounded-full"
               data-pos={tick.position}
               style={{
-                width: tick.isMarker ? 24 : 10,
-                opacity: tick.isMarker ? 0.6 : 0.2,
+                width: tick.isMarker ? 20 : 8,
+                opacity: tick.isMarker ? 0.4 : 0.15,
               }}
             />
           </div>
@@ -150,7 +130,7 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
   const ticksRef = useRef<HTMLDivElement>(null);
   const currentSection = useAppStore((s) => s.currentSection);
 
-  const ticks = generateTicks(markers);
+  const ticks = useMemo(() => generateTicks(markers), [markers]);
 
   const activeMarkerId = useMemo(() => {
     if (!currentSection) return null;
@@ -158,41 +138,46 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
   }, [currentSection, markers]);
 
   useEffect(() => {
-    if (!ticksRef.current || !activeMarkerId) return;
+    if (!ticksRef.current) return;
 
     const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
     tickEls.forEach((el) => {
       const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
-      const markerPos = markers.find((m) => m.id === activeMarkerId)?.position ?? 0;
+      const markerPos = activeMarkerId
+        ? (markers.find((m) => m.id === activeMarkerId)?.position ?? 0)
+        : -1;
       const distance = Math.abs(tickPos - markerPos);
 
-      const isClose = distance < 0.12;
-      const isVeryClose = distance < 0.05;
+      const isVeryClose = distance < 0.06;
+      const isClose = distance < 0.15;
 
       gsap.to(el, {
-        width: isVeryClose ? 20 : isClose ? 12 : 6,
-        opacity: isVeryClose ? 1 : isClose ? 0.5 : 0.15,
-        duration: 0.5,
+        width: isVeryClose ? 18 : isClose ? 10 : 5,
+        opacity: isVeryClose ? 0.8 : isClose ? 0.35 : 0.12,
+        duration: 0.6,
         ease: 'power2.out',
       });
     });
   }, [activeMarkerId, markers]);
 
   return (
-    <div className="fixed top-0 left-0 z-40 block h-full w-6 md:hidden">
-      <div ref={ticksRef} className="relative h-full">
+    <div className="fixed top-0 left-0 z-40 block h-full w-7 md:hidden">
+      <div
+        ref={ticksRef}
+        style={{ top: 72, bottom: 60, position: 'absolute', right: 0, left: 0 }}
+      >
         {ticks.map((tick, i) => (
           <div
             key={i}
-            className="absolute right-0 flex items-center"
+            className="absolute right-0 flex items-center justify-end"
             style={{ top: `${tick.position * 100}%` }}
           >
             <div
-              className="rail-tick h-px bg-neutral-400 origin-right"
+              className="rail-tick h-px bg-neutral-900 rounded-full"
               data-pos={tick.position}
               style={{
-                width: tick.isMarker ? 14 : 6,
-                opacity: tick.isMarker ? 0.5 : 0.15,
+                width: tick.isMarker ? 12 : 5,
+                opacity: tick.isMarker ? 0.3 : 0.12,
               }}
             />
           </div>
