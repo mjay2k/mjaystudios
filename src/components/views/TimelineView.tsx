@@ -15,12 +15,12 @@ const eras: EraConfig[] = [
     accent: 'text-red-500',
     bgClass: 'bg-neutral-100',
     intro:
-      'It started at Keller — a Louisville agency where bourbon was the business and bold creative was the expectation. Art directing campaigns for Heaven Hill, PAMA, Burnett\'s, Hpnotiq, and Rittenhouse Rye meant learning to sell through design. Every label, every ad, every trade show booth had to earn its space. This is where the eye got trained.',
+      'It started at Keller Crescent Advertising as a digital designer building websites and winning conceptual work for national clients. Then came 10over12 Creative, where I stepped into the art director role — directing multi-channel campaigns for Heaven Hill, PAMA, Burnett\'s, Hpnotiq, and Rittenhouse Rye from initial concept through final production. Every label, every ad, every trade show booth had to earn its space.',
     section: {
       id: 'agency',
       label: 'Agency Life',
-      description: 'Art direction and brand design for spirits, beverage, and consumer brands at Keller.',
-      dateRange: '2010 — 2017',
+      description: 'From digital designer at Keller Crescent to Art Director at 10over12 Creative.',
+      dateRange: '2008 — 2014',
     },
   },
   {
@@ -29,12 +29,12 @@ const eras: EraConfig[] = [
     accent: 'text-blue-500',
     bgClass: 'bg-neutral-100',
     intro:
-      'Berry Global was a different scale — a Fortune 500 packaging company where creative had to work across divisions, continents, and trade shows the size of city blocks. Leading the in-house creative team meant building brand campaigns like EPIC, designing Pack Expo booths that stopped traffic, and making industrial packaging feel like something worth caring about.',
+      'Berry Global was a different scale — a Fortune 500 packaging company where creative had to work across divisions, continents, and trade shows the size of city blocks. As Senior Graphic Designer, I drove the company\'s visual identity across an extensive brand portfolio, designed Pack Expo booths that won a 2022 Silver ADDY, and built campaigns like EPIC and "Do Better. Dose Better." that picked up additional Silver ADDYs in 2018, 2019, and 2024.',
     section: {
       id: 'berry',
       label: 'Berry Life',
-      description: 'Leading creative for packaging, campaigns, and trade shows at Berry Global.',
-      dateRange: '2017 — 2023',
+      description: 'Senior Graphic Designer driving visual identity at Berry Global.',
+      dateRange: '2015 — 2024',
     },
   },
   {
@@ -43,12 +43,12 @@ const eras: EraConfig[] = [
     accent: 'text-orange-500',
     bgClass: 'bg-neutral-100',
     intro:
-      'After a decade in corporate creative, I stepped out to teach design — and fell headfirst into AI. What started as curiosity became mastery. I taught myself to build what I could envision, and that led to Bible Warden and News Warden — AI-powered apps designed, developed, and shipped from scratch. The art director learned to code.',
+      'After nearly a decade in corporate creative, I stepped into the classroom — teaching computer science, broadcast production, and yearbook design at Evansville Christian High School. At the same time, I dove deep into AI and app development. That journey led to Bible Warden, a gamified mobile reading app built in Swift, and News Warden, a custom news aggregator highlighting clean front-end architecture. The art director learned to build.',
     section: {
       id: 'afterberry',
       label: 'After Berry',
-      description: 'Teaching design, mastering AI development, and launching Bible Warden and News Warden.',
-      dateRange: '2023 — Present',
+      description: 'Teaching CS & media, building AI-powered apps from the ground up.',
+      dateRange: '2024 — Present',
     },
   },
 ];
@@ -110,9 +110,9 @@ export default function TimelineView() {
               Created to Create
             </h1>
             <p className="reveal mt-6 max-w-lg text-lg leading-relaxed text-neutral-500">
-              Over a decade of art direction, brand design, and building things that connect.
-              From bourbon labels to Fortune 500 campaigns to AI-powered apps — every chapter
-              sharpened the eye and expanded what was possible.
+              15+ years bridging art direction, brand strategy, and digital innovation.
+              From bourbon labels to Fortune 500 campaigns to AI-powered apps —
+              recognized with 4 Silver ADDY Awards along the way.
             </p>
             <button
               onClick={() => setAboutOpen(true)}

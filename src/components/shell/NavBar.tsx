@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useAppStore } from '@/stores/useAppStore';
 import ViewToggle from './ViewToggle';
 
@@ -11,7 +12,14 @@ export default function NavBar() {
 
   return (
     <nav className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-neutral-100/80">
-      <span className="text-lg font-bold tracking-tight font-display">MJay Studios</span>
+      <Image
+        src="/mjaystudios-logo.svg"
+        alt="MJay Studios"
+        width={140}
+        height={36}
+        className="h-8 w-auto"
+        priority
+      />
 
       <div className="hidden items-center gap-6 md:flex">
         <ViewToggle />

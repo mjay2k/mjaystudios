@@ -15,18 +15,32 @@ export default function ContactPopup() {
       </p>
       <div className="mt-6 space-y-4">
         <a
-          href="mailto:matt@mjaystudios.com"
+          href="mailto:mjay2k@gmail.com"
           className="block text-sm text-white/70 transition-colors hover:text-white"
         >
-          matt@mjaystudios.com
+          mjay2k@gmail.com
         </a>
         <a
-          href="https://linkedin.com/in/matthewjohnson"
+          href="tel:8124537766"
+          className="block text-sm text-white/70 transition-colors hover:text-white"
+        >
+          (812) 453-7766
+        </a>
+        <a
+          href="https://linkedin.com/in/mjaystudios"
           target="_blank"
           rel="noopener noreferrer"
           className="block text-sm text-white/70 transition-colors hover:text-white"
         >
           LinkedIn
+        </a>
+        <a
+          href="https://mjaystudios.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block text-sm text-white/70 transition-colors hover:text-white"
+        >
+          mjaystudios.com
         </a>
       </div>
     </Modal>
