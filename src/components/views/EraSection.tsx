@@ -76,8 +76,8 @@ export default function EraSection({ config, projects }: EraSectionProps) {
         id={`era-bg-${config.id}`}
       />
 
-      {/* Era intro card */}
-      <div className="mb-16 rounded-2xl bg-neutral-50 px-8 py-12 md:px-12 md:py-16">
+      {/* Era intro card — full bleed left on mobile */}
+      <div className="mb-16 rounded-r-2xl md:rounded-2xl bg-neutral-50 -ml-4 pl-4 pr-6 py-10 md:ml-0 md:px-12 md:py-16">
         <div className="flex flex-col md:flex-row md:gap-12">
           {/* Copy */}
           <div className="flex-1">
@@ -92,7 +92,7 @@ export default function EraSection({ config, projects }: EraSectionProps) {
                 {config.section.dateRange}
               </p>
             )}
-            <div className="mt-4 max-w-xl space-y-3 text-base leading-relaxed text-neutral-600">
+            <div className="mt-4 max-w-xl space-y-3 text-[13px] md:text-base leading-relaxed text-neutral-600">
               {config.intro.split('\n').filter(Boolean).map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}
