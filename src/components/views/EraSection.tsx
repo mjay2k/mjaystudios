@@ -122,7 +122,7 @@ export default function EraSection({ config, projects }: EraSectionProps) {
                     alt={`${config.title} logo`}
                     width={100}
                     height={50}
-                    className="h-8 w-auto object-contain opacity-100"
+                    className="h-14 w-auto object-contain"
                   />
                 ))}
               </div>
