@@ -256,6 +256,9 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Dark strip behind scrollbar — ticks bleed into this */}
+      <div className="absolute top-0 right-0 h-full bg-neutral-900" style={{ width: 10 }} />
+
       {/* Tooltip */}
       <div
         ref={tooltipRef}

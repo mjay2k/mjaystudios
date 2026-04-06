@@ -95,11 +95,11 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d94d1f;
+  background: #ff6e3f;
 }
 
 /* Firefox */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #F15A29 transparent;
+  scrollbar-color: #F15A29 #171717;
 }
