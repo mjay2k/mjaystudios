@@ -462,15 +462,15 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
   if (!displayLabel) return null;
 
   return (
-    <div className="fixed right-3 top-16 z-40 md:hidden pointer-events-none">
+    <div className="fixed right-4 top-20 z-50 md:hidden pointer-events-none">
       <div
         ref={labelRef}
-        className="flex items-center gap-2 opacity-0"
+        className="flex items-center gap-2 rounded-full bg-neutral-100/90 px-3 py-1.5 shadow-sm backdrop-blur-sm opacity-0"
       >
-        <span className="text-[10px] font-medium tracking-wider uppercase text-neutral-400 font-body">
+        <div className="w-3 h-[2px] rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-brand)' }} />
+        <span className="text-[10px] font-semibold tracking-wider uppercase text-neutral-600 font-body whitespace-nowrap">
           {displayLabel}
         </span>
-        <div className="w-4 h-[2px] rounded-full" style={{ backgroundColor: 'var(--color-brand)' }} />
       </div>
     </div>
   );
