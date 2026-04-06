@@ -115,14 +115,15 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
           const proximity = Math.max(0, 1 - distance / radius);
 
           if (isGhost) {
-            // Ghosts only appear very close, smaller radius
             const ghostProx = Math.max(0, 1 - distance / 0.06);
-            gsap.set(el, { width: ghostProx * 14, opacity: ghostProx * 0.35 });
+            gsap.set(el, { width: ghostProx * 16, opacity: ghostProx * 0.35 });
           } else {
-            // Smooth gradient: 6px at min, 32px at max
-            const width = 6 + proximity * 26;
+            // Smooth gradient: 7px at min, 37px at max (~15% bigger)
+            const width = 7 + proximity * 30;
             const opacity = 0.12 + proximity * 0.78;
-            gsap.set(el, { width, opacity });
+            // Closest ticks get brand orange
+            const color = proximity > 0.7 ? '#F15A29' : '';
+            gsap.set(el, { width, opacity, backgroundColor: color || '' });
           }
         });
       },
@@ -153,22 +154,23 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       const proximity = Math.max(0, 1 - distancePx / maxRadius);
 
       if (isGhost) {
-        // Ghosts only appear when cursor is nearby
         const ghostRadius = 80;
         const ghostProximity = Math.max(0, 1 - distancePx / ghostRadius);
         gsap.to(el, {
-          width: ghostProximity * 20,
+          width: ghostProximity * 22,
           opacity: ghostProximity * 0.6,
           duration: 0.15,
           ease: 'none',
           overwrite: 'auto',
         });
       } else {
-        const width = 6 + proximity * 34;
+        const width = 7 + proximity * 38;
         const opacity = 0.1 + proximity * 0.9;
+        const color = proximity > 0.7 ? '#F15A29' : '';
         gsap.to(el, {
           width,
           opacity,
+          backgroundColor: color || '',
           duration: 0.15,
           ease: 'none',
           overwrite: 'auto',
@@ -243,7 +245,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
     {/* Click-to-top zone — always interactive, separate from rail */}
     <div
       className="fixed top-0 right-0 z-50 hidden h-20 cursor-pointer md:block"
-      style={{ width: 80 }}
+      style={{ width: 92 }}
       onClick={scrollToTop}
       title="Back to top"
     />
@@ -251,7 +253,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
     <div
       ref={railRef}
       className="fixed top-0 right-0 z-40 hidden h-full md:block cursor-pointer"
-      style={{ width: 80 }}
+      style={{ width: 92 }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -262,7 +264,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         ref={tooltipRef}
         className="fixed z-50 pointer-events-none"
         style={{
-          right: 84,
+          right: 96,
           top: hoveredTick?.top ?? 0,
           transform: 'translateY(-50%) translateX(4px)',
           opacity: 0,
@@ -297,7 +299,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
               )}
               {/* Tick */}
               <div
-                className="rail-tick h-[1.5px] bg-neutral-900 rounded-l-full"
+                className="rail-tick h-[2px] bg-neutral-900 rounded-l-full"
                 data-pos={tick.position}
                 data-marker-id={tick.markerId ?? ''}
                 data-ghost={tick.isGhost}
