@@ -9,19 +9,19 @@ import CategoryView from '@/components/views/CategoryView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
 const timelineMarkers: Marker[] = [
-  { id: 'intro', label: '', position: 0.05 },
-  { id: 'agency', label: '2010', position: 0.2 },
-  { id: 'berry', label: '2017', position: 0.5 },
-  { id: 'afterberry', label: '2023', position: 0.75 },
-  { id: 'contact', label: '', position: 0.95 },
+  { id: 'intro', label: '', tooltip: 'In the Beginning', position: 0.05 },
+  { id: 'agency', label: '2010', tooltip: 'Agency Life', position: 0.2 },
+  { id: 'berry', label: '2017', tooltip: 'Berry Life', position: 0.5 },
+  { id: 'afterberry', label: '2023', tooltip: 'After Berry', position: 0.75 },
+  { id: 'contact', label: '', tooltip: 'Get in Touch', position: 0.95 },
 ];
 
 const categoryMarkers: Marker[] = [
-  { id: 'advertising', label: 'Ads', position: 0.1 },
-  { id: 'packaging', label: 'Packaging', position: 0.3 },
-  { id: 'environmental', label: 'Booths', position: 0.5 },
-  { id: 'logo', label: 'Logos', position: 0.7 },
-  { id: 'digital', label: 'Digital', position: 0.9 },
+  { id: 'advertising', label: 'Ads', tooltip: 'Advertising & Print', position: 0.1 },
+  { id: 'packaging', label: 'Packaging', tooltip: 'Packaging Design', position: 0.3 },
+  { id: 'environmental', label: 'Booths', tooltip: 'Booth & Environmental', position: 0.5 },
+  { id: 'logo', label: 'Logos', tooltip: 'Logo Design', position: 0.7 },
+  { id: 'digital', label: 'Digital', tooltip: 'Digital & Apps', position: 0.9 },
 ];
 
 export default function Home() {

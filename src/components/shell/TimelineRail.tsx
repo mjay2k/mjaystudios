@@ -1,12 +1,13 @@
 'use client';
 
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 
 interface Marker {
   id: string;
   label: string;
+  tooltip?: string; // shown on hover
   position: number; // 0-1 normalized position along the rail
 }
 
@@ -14,12 +15,11 @@ interface TimelineRailProps {
   markers: Marker[];
 }
 
-// Generate decorative ticks between markers
 function generateTicks(markers: Marker[]) {
-  const ticks: { position: number; isMarker: boolean; markerId?: string; label?: string }[] = [];
+  const ticks: { position: number; isMarker: boolean; markerId?: string; label?: string; tooltip?: string }[] = [];
 
   markers.forEach((m) => {
-    ticks.push({ position: m.position, isMarker: true, markerId: m.id, label: m.label });
+    ticks.push({ position: m.position, isMarker: true, markerId: m.id, label: m.label, tooltip: m.tooltip });
   });
 
   const sorted = [...markers].sort((a, b) => a.position - b.position);
@@ -38,7 +38,9 @@ function generateTicks(markers: Marker[]) {
 
 export default function TimelineRail({ markers }: TimelineRailProps) {
   const ticksRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const currentSection = useAppStore((s) => s.currentSection);
+  const [hoveredTick, setHoveredTick] = useState<{ tooltip: string; top: number } | null>(null);
 
   const ticks = useMemo(() => generateTicks(markers), [markers]);
 
@@ -90,40 +92,114 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
     });
   }, [activeMarkerId, markers]);
 
-  // Rail area: top 80px (nav) to bottom 40px
+  // Tooltip animation
+  useEffect(() => {
+    if (!tooltipRef.current) return;
+    if (hoveredTick) {
+      gsap.to(tooltipRef.current, { opacity: 1, x: 0, duration: 0.2, ease: 'power2.out' });
+    } else {
+      gsap.to(tooltipRef.current, { opacity: 0, x: -4, duration: 0.15, ease: 'power2.in' });
+    }
+  }, [hoveredTick]);
+
+  const handleTickClick = useCallback((markerId: string) => {
+    const el = document.getElementById(`section-${markerId}`);
+    if (el) {
+      gsap.to(window, {
+        scrollTo: { y: el, offsetY: 80 },
+        duration: 1,
+        ease: 'power3.inOut',
+      });
+    }
+    setHoveredTick(null);
+  }, []);
+
+  const handleTickHover = useCallback((tick: typeof ticks[0], e: React.MouseEvent) => {
+    if (!tick.isMarker || !tick.tooltip) return;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    setHoveredTick({ tooltip: tick.tooltip, top: rect.top + rect.height / 2 });
+  }, []);
+
   const railTop = 80;
   const railBottom = 40;
 
   return (
     <div className="fixed top-0 left-0 z-40 hidden h-full md:block" style={{ width: 80 }}>
+      {/* Tooltip */}
+      <div
+        ref={tooltipRef}
+        className="fixed z-50 pointer-events-none"
+        style={{
+          left: 84,
+          top: hoveredTick?.top ?? 0,
+          transform: 'translateY(-50%) translateX(-4px)',
+          opacity: 0,
+        }}
+      >
+        <div className="rounded-md bg-neutral-900 px-3 py-1.5 text-[10px] font-medium text-white shadow-lg whitespace-nowrap font-body">
+          {hoveredTick?.tooltip}
+          <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-neutral-900 rotate-45" />
+        </div>
+      </div>
+
       <div
         ref={ticksRef}
         style={{ top: railTop, bottom: railBottom, position: 'absolute', right: 0, left: 0 }}
       >
-        {ticks.map((tick, i) => (
-          <div
-            key={i}
-            className="absolute left-0 flex items-center"
-            style={{ top: `${tick.position * 100}%` }}
-          >
-            {/* Tick bleeds off left edge */}
+        {ticks.map((tick, i) => {
+          const isInteractive = tick.isMarker && tick.markerId;
+
+          return (
             <div
-              className="rail-tick h-[1.5px] bg-neutral-900 rounded-r-full"
-              data-pos={tick.position}
-              style={{
-                width: tick.isMarker ? 24 : 10,
-                opacity: tick.isMarker ? 0.4 : 0.15,
-                marginLeft: tick.isMarker ? -4 : -2,
+              key={i}
+              className={`absolute left-0 flex items-center group ${isInteractive ? 'cursor-pointer' : ''}`}
+              style={{ top: `${tick.position * 100}%`, padding: '6px 0' }}
+              onMouseEnter={(e) => {
+                if (!isInteractive) return;
+                handleTickHover(tick, e);
+                // Expand tick on hover
+                const tickEl = (e.currentTarget as HTMLElement).querySelector('.rail-tick');
+                if (tickEl) gsap.to(tickEl, { width: 36, opacity: 1, duration: 0.25, ease: 'power2.out' });
               }}
-            />
-            {/* Label on the right side of the tick */}
-            {tick.isMarker && tick.label && (
-              <span className="ml-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body">
-                {tick.label}
-              </span>
-            )}
-          </div>
-        ))}
+              onMouseLeave={(e) => {
+                setHoveredTick(null);
+                // Return tick to normal (will be re-set by the active section effect)
+                const tickEl = (e.currentTarget as HTMLElement).querySelector('.rail-tick');
+                if (tickEl) {
+                  const tickPos = parseFloat(tickEl.getAttribute('data-pos') ?? '0');
+                  const markerPos = activeMarkerId
+                    ? (markers.find((m) => m.id === activeMarkerId)?.position ?? 0)
+                    : -1;
+                  const distance = Math.abs(tickPos - markerPos);
+                  const isVeryClose = distance < 0.06;
+                  const isClose = distance < 0.15;
+                  gsap.to(tickEl, {
+                    width: isVeryClose ? 28 : isClose ? 16 : tick.isMarker ? 24 : 10,
+                    opacity: isVeryClose ? 0.8 : isClose ? 0.35 : tick.isMarker ? 0.4 : 0.15,
+                    duration: 0.4,
+                    ease: 'power2.out',
+                  });
+                }
+              }}
+              onClick={() => tick.markerId && handleTickClick(tick.markerId)}
+            >
+              <div
+                className="rail-tick h-[1.5px] bg-neutral-900 rounded-r-full transition-colors"
+                data-pos={tick.position}
+                style={{
+                  width: tick.isMarker ? 24 : 10,
+                  opacity: tick.isMarker ? 0.4 : 0.15,
+                  marginLeft: tick.isMarker ? -4 : -2,
+                }}
+              />
+              {tick.isMarker && tick.label && (
+                <span className="ml-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body group-hover:text-neutral-700 transition-colors">
+                  {tick.label}
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -163,6 +239,17 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
     });
   }, [activeMarkerId, markers]);
 
+  const handleTickClick = useCallback((markerId: string) => {
+    const el = document.getElementById(`section-${markerId}`);
+    if (el) {
+      gsap.to(window, {
+        scrollTo: { y: el, offsetY: 60 },
+        duration: 1,
+        ease: 'power3.inOut',
+      });
+    }
+  }, []);
+
   return (
     <div className="fixed top-0 left-0 z-40 block h-full w-5 md:hidden">
       <div
@@ -172,8 +259,9 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
         {ticks.map((tick, i) => (
           <div
             key={i}
-            className="absolute left-0 flex items-center"
-            style={{ top: `${tick.position * 100}%` }}
+            className={`absolute left-0 flex items-center ${tick.isMarker ? 'cursor-pointer' : ''}`}
+            style={{ top: `${tick.position * 100}%`, padding: '4px 0' }}
+            onClick={() => tick.markerId && handleTickClick(tick.markerId)}
           >
             <div
               className="rail-tick h-px bg-neutral-900 rounded-r-full"

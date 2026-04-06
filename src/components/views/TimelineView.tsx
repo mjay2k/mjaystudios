@@ -92,7 +92,7 @@ export default function TimelineView() {
   return (
     <div>
       {/* Opening — no dates, just the beginning */}
-      <div ref={introRef} className="flex min-h-[60vh] flex-col justify-center py-20">
+      <div ref={introRef} id="section-intro" className="flex min-h-[60vh] flex-col justify-center py-20">
         <p className="reveal text-sm font-medium uppercase tracking-widest text-neutral-400 mb-4">
           In the Beginning
         </p>
@@ -122,7 +122,7 @@ export default function TimelineView() {
       ))}
 
       {/* Outro */}
-      <div className="flex min-h-[40vh] flex-col items-center justify-center py-20 text-center">
+      <div id="section-contact" className="flex min-h-[40vh] flex-col items-center justify-center py-20 text-center">
         <p className="text-lg text-neutral-500">Like what you see?</p>
         <button
           onClick={() => useAppStore.getState().setContactOpen(true)}
