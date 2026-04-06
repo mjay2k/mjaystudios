@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 import ProjectGrid from '@/components/projects/ProjectGrid';
@@ -14,6 +15,7 @@ interface EraConfig {
   section: Section;
   bgClass?: string;
   intro: string;
+  introImages?: string[];
 }
 
 interface EraSectionProps {
@@ -92,6 +94,21 @@ export default function EraSection({ config, projects }: EraSectionProps) {
             <p key={i}>{paragraph}</p>
           ))}
         </div>
+
+        {config.introImages && config.introImages.length > 0 && (
+          <div className="mt-6 flex items-center gap-6">
+            {config.introImages.map((src, i) => (
+              <Image
+                key={i}
+                src={src}
+                alt={`${config.title} logo`}
+                width={120}
+                height={60}
+                className="h-10 w-auto object-contain opacity-60"
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Projects */}
