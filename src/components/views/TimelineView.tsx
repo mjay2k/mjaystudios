@@ -34,6 +34,9 @@ const eras: EraConfig[] = [
     bgClass: 'bg-neutral-100',
     intro:
       'Nine years as Senior Graphic Designer, growing into the creative lead on Berry\'s highest-profile work. National campaigns, packaging design across multiple product lines, large-scale Pack Expo booth designs, annual ESG reports, and sales presentations. If it was important, it was on my desk.',
+    introImages: [
+      '/portfolio/berry/berry-global-logo.png',
+    ],
     section: {
       id: 'berry',
       label: 'Berry Life',
