@@ -82,7 +82,7 @@ html {
 
 /* Custom scrollbar — slim, blends with timeline rail */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {

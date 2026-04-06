@@ -77,19 +77,19 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
   useEffect(() => {
     if (!ticksRef.current || !railRef.current) return;
 
-    // Fade in the rail when section-intro enters viewport
+    // Fade in only the ticks (not the whole rail) when section-intro enters viewport
     const introEl = document.getElementById('section-intro');
     let fadeInTrigger: ScrollTrigger | undefined;
-    if (introEl) {
-      gsap.set(railRef.current, { opacity: 0 });
+    if (introEl && ticksRef.current) {
+      gsap.set(ticksRef.current, { opacity: 0 });
       fadeInTrigger = ScrollTrigger.create({
         trigger: introEl,
         start: 'top 80%',
         onEnter: () => {
-          if (railRef.current) gsap.to(railRef.current, { opacity: 1, duration: 0.6, ease: 'power2.out' });
+          if (ticksRef.current) gsap.to(ticksRef.current, { opacity: 1, duration: 0.6, ease: 'power2.out' });
         },
         onLeaveBack: () => {
-          if (railRef.current) gsap.to(railRef.current, { opacity: 0, duration: 0.4, ease: 'power2.in' });
+          if (ticksRef.current) gsap.to(ticksRef.current, { opacity: 0, duration: 0.4, ease: 'power2.in' });
         },
       });
     }
