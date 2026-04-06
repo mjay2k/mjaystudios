@@ -106,7 +106,16 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         const mappedProgress = firstPos + self.progress * (lastPos - firstPos);
 
         const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
-        const radius = 0.12; // proximity radius in position units
+        const radius = 0.12;
+
+        // Find the single closest non-ghost tick
+        let closestEl: Element | null = null;
+        let closestDist = Infinity;
+        tickEls.forEach((el) => {
+          if (el.getAttribute('data-ghost') === 'true') return;
+          const d = Math.abs(parseFloat(el.getAttribute('data-pos') ?? '0') - mappedProgress);
+          if (d < closestDist) { closestDist = d; closestEl = el; }
+        });
 
         tickEls.forEach((el) => {
           const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
@@ -116,14 +125,12 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
 
           if (isGhost) {
             const ghostProx = Math.max(0, 1 - distance / 0.06);
-            gsap.set(el, { width: ghostProx * 16, opacity: ghostProx * 0.35 });
+            gsap.set(el, { width: ghostProx * 16, opacity: ghostProx * 0.35, backgroundColor: '' });
           } else {
-            // Smooth gradient: 7px at min, 37px at max (~15% bigger)
             const width = 7 + proximity * 30;
             const opacity = 0.12 + proximity * 0.78;
-            // Closest ticks get brand orange
-            const color = proximity > 0.7 ? '#F15A29' : '';
-            gsap.set(el, { width, opacity, backgroundColor: color || '' });
+            const isClosest = el === closestEl;
+            gsap.set(el, { width, opacity, backgroundColor: isClosest ? '#F15A29' : '' });
           }
         });
       },
@@ -144,6 +151,16 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
     const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
     const mouseY = e.clientY;
 
+    // Find single closest non-ghost tick for orange highlight
+    let closestHoverEl: Element | null = null;
+    let closestHoverDist = Infinity;
+    tickEls.forEach((el) => {
+      if (el.getAttribute('data-ghost') === 'true') return;
+      const rect = el.getBoundingClientRect();
+      const d = Math.abs(mouseY - (rect.top + rect.height / 2));
+      if (d < closestHoverDist) { closestHoverDist = d; closestHoverEl = el; }
+    });
+
     tickEls.forEach((el) => {
       const rect = el.getBoundingClientRect();
       const tickCenterY = rect.top + rect.height / 2;
@@ -159,6 +176,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         gsap.to(el, {
           width: ghostProximity * 22,
           opacity: ghostProximity * 0.6,
+          backgroundColor: '',
           duration: 0.15,
           ease: 'none',
           overwrite: 'auto',
@@ -166,11 +184,11 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       } else {
         const width = 7 + proximity * 38;
         const opacity = 0.1 + proximity * 0.9;
-        const color = proximity > 0.7 ? '#F15A29' : '';
+        const isClosest = el === closestHoverEl;
         gsap.to(el, {
           width,
           opacity,
-          backgroundColor: color || '',
+          backgroundColor: isClosest ? '#F15A29' : '',
           duration: 0.15,
           ease: 'none',
           overwrite: 'auto',
