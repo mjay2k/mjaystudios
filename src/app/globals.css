@@ -47,10 +47,7 @@ html.dark .border-neutral-300 { border-color: #404040; }
 /* Dark mode rail ticks */
 html.dark .rail-tick { background-color: #f5f5f5; }
 
-/* Dark mode scrollbar */
-html.dark ::-webkit-scrollbar-thumb { background: #F15A29; }
-html.dark ::-webkit-scrollbar-thumb:hover { background: #ff6e3f; }
-html.dark { scrollbar-color: #F15A29 transparent; }
+/* Dark mode — scrollbar hidden same as light */
 
 /* Dark hamburger lines */
 html.dark nav .bg-neutral-900 { background-color: #f5f5f5; }
@@ -81,25 +78,13 @@ html {
 }
 
 /* Custom scrollbar — slim, blends with timeline rail */
+/* Hide native scrollbar — timeline ticks serve as the scroll indicator */
 ::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #171717;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #F15A29;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #ff6e3f;
+  width: 0;
+  display: none;
 }
 
 /* Firefox */
 html {
-  scrollbar-width: thin;
-  scrollbar-color: #F15A29 #171717;
+  scrollbar-width: none;
 }
