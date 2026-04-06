@@ -273,6 +273,15 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Click above ticks area to scroll to top */}
+      <div
+        className="absolute top-0 right-0 left-0"
+        style={{ height: railTop }}
+        onClick={() => {
+          gsap.to(window, { scrollTo: { y: 0 }, duration: 1, ease: 'power3.inOut' });
+        }}
+      />
+
       {/* Tooltip */}
       <div
         ref={tooltipRef}
