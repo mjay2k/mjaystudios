@@ -12,21 +12,25 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-neutral-100/80">
+    <nav className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-3 backdrop-blur-md bg-neutral-100/80">
       <div className="flex items-center gap-2">
         <Image
           src="/mjaystudios-logo.svg"
           alt="MJay Studios"
           width={200}
           height={48}
-          className="h-10 w-auto md:h-12"
+          className="h-12 w-auto md:h-12"
           priority
         />
-        <span className="text-lg md:text-xl font-bold font-display tracking-tight" style={{ color: 'var(--color-brand)' }}>
-          Matthew Johnson
+        <span
+          className="text-lg md:text-xl font-bold font-display tracking-tight leading-[1.1]"
+          style={{ color: 'var(--color-brand)' }}
+        >
+          Matthew<br />Johnson
         </span>
       </div>
 
+      {/* Desktop nav */}
       <div className="hidden items-center gap-6 md:flex">
         <ViewToggle />
         <ThemeToggle />
@@ -44,8 +48,8 @@ export default function NavBar() {
         </button>
       </div>
 
-      <div className="flex items-center gap-4 md:hidden">
-        <ViewToggle />
+      {/* Mobile nav — only dark mode toggle + hamburger visible */}
+      <div className="flex items-center gap-3 md:hidden">
         <ThemeToggle />
         <button
           onClick={() => setMenuOpen(!menuOpen)}
@@ -64,8 +68,12 @@ export default function NavBar() {
         </button>
       </div>
 
+      {/* Mobile dropdown — includes view toggle */}
       {menuOpen && (
-        <div className="absolute top-full right-0 left-0 flex flex-col gap-4 bg-neutral-100/95 px-6 py-4 backdrop-blur-md md:hidden">
+        <div className="absolute top-full right-0 left-0 flex flex-col gap-4 bg-neutral-100/95 px-6 py-5 backdrop-blur-md md:hidden">
+          <div className="pb-3 border-b border-neutral-200">
+            <ViewToggle />
+          </div>
           <button
             onClick={() => {
               setAboutOpen(true);
