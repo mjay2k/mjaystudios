@@ -108,7 +108,7 @@ export default function TimelineView() {
           </div>
           <div className="flex-1">
             <h1 className="reveal text-5xl font-bold tracking-tight md:text-7xl font-display">
-              Created to Create
+              Created to <span style={{ color: 'var(--color-brand)' }}>Create</span>
             </h1>
             <p className="reveal mt-6 max-w-lg text-lg leading-relaxed text-neutral-500">
               15+ years bridging art direction, brand strategy, and digital innovation.
