@@ -95,7 +95,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
   const railBottom = 40;
 
   return (
-    <div className="fixed top-0 left-0 z-40 hidden h-full w-14 md:block">
+    <div className="fixed top-0 left-0 z-40 hidden h-full md:block" style={{ width: 80 }}>
       <div
         ref={ticksRef}
         style={{ top: railTop, bottom: railBottom, position: 'absolute', right: 0, left: 0 }}
@@ -103,22 +103,25 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         {ticks.map((tick, i) => (
           <div
             key={i}
-            className="absolute right-0 flex items-center justify-end"
+            className="absolute left-0 flex items-center"
             style={{ top: `${tick.position * 100}%` }}
           >
+            {/* Tick bleeds off left edge */}
+            <div
+              className="rail-tick h-[1.5px] bg-neutral-900 rounded-r-full"
+              data-pos={tick.position}
+              style={{
+                width: tick.isMarker ? 24 : 10,
+                opacity: tick.isMarker ? 0.4 : 0.15,
+                marginLeft: tick.isMarker ? -4 : -2,
+              }}
+            />
+            {/* Label on the right side of the tick */}
             {tick.isMarker && tick.label && (
-              <span className="mr-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body">
+              <span className="ml-2 whitespace-nowrap text-[9px] font-medium tracking-wider text-neutral-400 uppercase font-body">
                 {tick.label}
               </span>
             )}
-            <div
-              className="rail-tick h-[1.5px] bg-neutral-900 rounded-full"
-              data-pos={tick.position}
-              style={{
-                width: tick.isMarker ? 20 : 8,
-                opacity: tick.isMarker ? 0.4 : 0.15,
-              }}
-            />
           </div>
         ))}
       </div>
@@ -161,7 +164,7 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
   }, [activeMarkerId, markers]);
 
   return (
-    <div className="fixed top-0 left-0 z-40 block h-full w-7 md:hidden">
+    <div className="fixed top-0 left-0 z-40 block h-full w-5 md:hidden">
       <div
         ref={ticksRef}
         style={{ top: 72, bottom: 60, position: 'absolute', right: 0, left: 0 }}
@@ -169,15 +172,16 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
         {ticks.map((tick, i) => (
           <div
             key={i}
-            className="absolute right-0 flex items-center justify-end"
+            className="absolute left-0 flex items-center"
             style={{ top: `${tick.position * 100}%` }}
           >
             <div
-              className="rail-tick h-px bg-neutral-900 rounded-full"
+              className="rail-tick h-px bg-neutral-900 rounded-r-full"
               data-pos={tick.position}
               style={{
-                width: tick.isMarker ? 12 : 5,
+                width: tick.isMarker ? 14 : 5,
                 opacity: tick.isMarker ? 0.3 : 0.12,
+                marginLeft: -2,
               }}
             />
           </div>
