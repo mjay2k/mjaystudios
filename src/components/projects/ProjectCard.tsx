@@ -12,13 +12,15 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(0);
   const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
-  const imageRef = useRef<HTMLDivElement>(null);
+  const incomingRef = useRef<HTMLDivElement>(null);
+  const outgoingRef = useRef<HTMLDivElement>(null);
   const setDetailProject = useAppStore((s) => s.setDetailProject);
   const hasDetail = project.caseStudy || project.images.length > 1;
   const loadedHeights = useRef<number[]>([]);
+  const isFirstRender = useRef(true);
 
-  // Track the tallest image so the container doesn't jump
   const handleImageLoad = useCallback(
     (e: React.SyntheticEvent<HTMLImageElement>) => {
       const img = e.currentTarget;
@@ -33,34 +35,54 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     []
   );
 
-  // Preload all images to measure heights
+  // Preload all images
   useEffect(() => {
     if (project.images.length <= 1) return;
-
     project.images.forEach((src) => {
       const img = new window.Image();
       img.src = src;
     });
   }, [project.images]);
 
+  // Auto-cycle
   useEffect(() => {
     if (!project.autoCycle || project.images.length <= 1) return;
 
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % project.images.length);
+      setActiveIndex((prev) => {
+        const next = (prev + 1) % project.images.length;
+        setPrevIndex(prev);
+        return next;
+      });
     }, 5000);
 
     return () => clearInterval(interval);
   }, [project.autoCycle, project.images.length]);
 
+  // Crossfade: outgoing fades out, incoming fades in
   useEffect(() => {
-    if (!imageRef.current) return;
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (!incomingRef.current || !outgoingRef.current) return;
+
+    // Outgoing starts visible, fades out
     gsap.fromTo(
-      imageRef.current,
+      outgoingRef.current,
+      { opacity: 1 },
+      { opacity: 0, duration: 1.2, ease: 'power2.inOut' }
+    );
+
+    // Incoming starts transparent, fades in
+    gsap.fromTo(
+      incomingRef.current,
       { opacity: 0 },
       { opacity: 1, duration: 1.2, ease: 'power2.inOut' }
     );
   }, [activeIndex]);
+
+  const showCrossfade = project.images.length > 1;
 
   return (
     <div
@@ -68,19 +90,47 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       onClick={() => hasDetail && setDetailProject(project.id)}
     >
       <div
-        ref={imageRef}
         className="relative overflow-hidden rounded-lg bg-neutral-200"
         style={maxHeight ? { minHeight: maxHeight } : undefined}
       >
-        <Image
-          src={project.images[activeIndex]}
-          alt={project.title}
-          width={800}
-          height={600}
-          className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          onLoad={handleImageLoad}
-        />
+        {showCrossfade ? (
+          <>
+            {/* Outgoing image (previous) — sits behind */}
+            <div ref={outgoingRef} className="absolute inset-0">
+              <Image
+                src={project.images[prevIndex]}
+                alt={project.title}
+                width={800}
+                height={600}
+                className="h-auto w-full"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+
+            {/* Incoming image (current) — fades in on top */}
+            <div ref={incomingRef} className="relative">
+              <Image
+                src={project.images[activeIndex]}
+                alt={project.title}
+                width={800}
+                height={600}
+                className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                onLoad={handleImageLoad}
+              />
+            </div>
+          </>
+        ) : (
+          <Image
+            src={project.images[0]}
+            alt={project.title}
+            width={800}
+            height={600}
+            className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            onLoad={handleImageLoad}
+          />
+        )}
 
         {hasDetail && (
           <div className="absolute bottom-3 right-3 rounded-full bg-black/50 px-3 py-1 text-[10px] font-medium text-white/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
