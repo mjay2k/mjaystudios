@@ -57,6 +57,7 @@ export default function TimelineView() {
   const introRef = useRef<HTMLDivElement>(null);
   const setAboutOpen = useAppStore((s) => s.setAboutOpen);
   const setCurrentSection = useAppStore((s) => s.setCurrentSection);
+  const theme = useAppStore((s) => s.theme);
 
   useEffect(() => {
     if (!introRef.current) return;
@@ -97,7 +98,7 @@ export default function TimelineView() {
         <div className="flex flex-col md:flex-row md:items-center gap-12 w-full">
           <div className="reveal flex-shrink-0">
             <Image
-              src="/portfolio/headshot.jpg"
+              src={theme === 'dark' ? '/portfolio/headshot-dark.jpg' : '/portfolio/headshot.jpg'}
               alt="Matthew Johnson"
               width={280}
               height={280}
