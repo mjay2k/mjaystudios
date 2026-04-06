@@ -56,11 +56,15 @@ export const projects: Project[] = [
   },
   {
     id: 'pama-liqueur',
-    title: 'PAMA Pomegranate Liqueur',
-    description: 'Trade advertising, outdoor, truck wrap, and Valentine campaign.',
+    title: 'Endless PAMAbilities',
+    description: 'Dozens of cocktails composed into mosaic art around the bottle. Scaled across seasons — Valentine\'s, Holiday. Ran nationally in print, outdoor, and digital.',
     year: 2013,
     era: 'agency',
     categories: ['advertising', 'packaging'],
+    caseStudy: {
+      extendedDescription: 'The client wanted to communicate the vast mixability of PAMA. I took a show-don\'t-tell approach — dozens of unique cocktails, each professionally mixed and shot, composed into a single mosaic art piece around the bottle. The full composition lives inside a branded frame built on PAMA\'s pomegranate motif. The concept scaled across seasons — Valentine\'s Day, Holiday — same framework, fresh executions. Ran nationally in print, outdoor, and digital. Award-winning campaign.',
+      additionalImages: [],
+    },
     images: [
       '/portfolio/agency/PAMA_TradeAd.jpg',
       '/portfolio/agency/PAMA_TruckWrap.jpg',
@@ -74,7 +78,11 @@ export const projects: Project[] = [
   {
     id: 'rittenhouse-rye',
     title: 'Rittenhouse Rye',
-    description: 'Label redesign, packaging, and product photography for Rittenhouse Rye whiskey.',
+    description: 'Complete packaging overhaul for a heritage whiskey brand dating back to 1934. Currently on shelves nationwide.',
+    caseStudy: {
+      extendedDescription: 'A complete packaging overhaul for a heritage whiskey brand dating back to 1934, named after Philadelphia\'s Rittenhouse Square. The new design draws from the original label language while making it feel current and authoritative — honoring the history without being stuck in it. Currently on shelves nationwide.',
+      additionalImages: [],
+    },
     year: 2014,
     era: 'agency',
     categories: ['packaging'],
@@ -90,8 +98,12 @@ export const projects: Project[] = [
   },
   {
     id: 'burnetts-vodka',
-    title: "Burnett's Vodka",
-    description: 'Recipe book design, candy poster, and outdoor advertising.',
+    title: 'Always Your Flavorite',
+    description: 'Hero flavor bursts from the bottle, revealing ingredients. The lineup stretches behind it — there\'s always more. Ran nationally across print, outdoor, and digital.',
+    caseStudy: {
+      extendedDescription: 'Burnett\'s needed a campaign that could spotlight any single flavor while reinforcing the range behind it. I designed a system where the hero flavor bursts from the bottle, revealing the ingredients in a way that makes them look alive and appetizing. The rest of the lineup stretches out behind it, bleeding off the edge — there\'s always more. One layout, infinite flavor swaps. The campaign ran nationally across print, outdoor, and digital.',
+      additionalImages: [],
+    },
     year: 2014,
     era: 'agency',
     categories: ['advertising', 'packaging'],

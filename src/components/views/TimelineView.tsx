@@ -15,7 +15,7 @@ const eras: EraConfig[] = [
     accent: 'text-red-500',
     bgClass: 'bg-neutral-100',
     intro:
-      'It started at Keller Crescent Advertising as a digital designer building websites and winning conceptual work for national clients. Then came 10over12 Creative, where I stepped into the art director role — directing multi-channel campaigns for Heaven Hill, PAMA, Burnett\'s, Hpnotiq, and Rittenhouse Rye from initial concept through final production. Every label, every ad, every trade show booth had to earn its space.',
+      'Started at Keller Crescent as a digital designer building websites and banner ads. Didn\'t have enough digital work to fill the day, so I started contributing to major campaigns — and my concepts started winning. Climbed from junior digital work to art directing national campaigns for Heaven Hill brands including PAMA, Burnett\'s Vodka, and Rittenhouse Rye.\n\nKeller Crescent was a legendary Evansville agency — top 50 in the world in its heyday. I came in during the decline, watched the parent company get bought out and the agency reborn as 10over12 Creative. When that wound down too, I was the last creative standing — a whole floor of the building to myself.',
     section: {
       id: 'agency',
       label: 'Agency Life',
@@ -29,11 +29,11 @@ const eras: EraConfig[] = [
     accent: 'text-blue-500',
     bgClass: 'bg-neutral-100',
     intro:
-      'Berry Global was a different scale — a Fortune 500 packaging company where creative had to work across divisions, continents, and trade shows the size of city blocks. As Senior Graphic Designer, I drove the company\'s visual identity across an extensive brand portfolio, designed Pack Expo booths that won a 2022 Silver ADDY, and built campaigns like EPIC and "Do Better. Dose Better." that picked up additional Silver ADDYs in 2018, 2019, and 2024.',
+      'Nine years as Senior Graphic Designer, growing into the creative lead on Berry\'s highest-profile work. National campaigns, packaging design across multiple product lines, large-scale Pack Expo booth designs, annual ESG reports, and sales presentations. If it was important, it was on my desk.',
     section: {
       id: 'berry',
       label: 'Berry Life',
-      description: 'Senior Graphic Designer driving visual identity at Berry Global.',
+      description: 'Senior Graphic Designer at Berry Global. If it was important, it was on my desk.',
       dateRange: '2015 — 2024',
     },
   },
@@ -43,11 +43,11 @@ const eras: EraConfig[] = [
     accent: 'text-orange-500',
     bgClass: 'bg-neutral-100',
     intro:
-      'After nearly a decade in corporate creative, I stepped into the classroom — teaching computer science, broadcast production, and yearbook design at Evansville Christian High School. At the same time, I dove deep into AI and app development. That journey led to Bible Warden, a gamified mobile reading app built in Swift, and News Warden, a custom news aggregator highlighting clean front-end architecture. The art director learned to build.',
+      'Now combining everything — design, strategy, and AI-powered development. Building apps (Bible Warden, News Warden) and this site from scratch. The next chapter.',
     section: {
       id: 'afterberry',
       label: 'After Berry',
-      description: 'Teaching CS & media, building AI-powered apps from the ground up.',
+      description: 'Design, strategy, and AI-powered development. The next chapter.',
       dateRange: '2024 — Present',
     },
   },

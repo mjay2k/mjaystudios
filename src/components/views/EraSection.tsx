@@ -87,9 +87,11 @@ export default function EraSection({ config, projects }: EraSectionProps) {
             {config.section.dateRange}
           </p>
         )}
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-neutral-600">
-          {config.intro}
-        </p>
+        <div className="mt-4 max-w-xl space-y-3 text-base leading-relaxed text-neutral-600">
+          {config.intro.split('\n').filter(Boolean).map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
+        </div>
       </div>
 
       {/* Projects */}
