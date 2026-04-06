@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { useAppStore } from '@/stores/useAppStore';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import EraSection from './EraSection';
@@ -92,24 +93,41 @@ export default function TimelineView() {
   return (
     <div>
       {/* Opening — no dates, just the beginning */}
-      <div ref={introRef} id="section-intro" className="flex min-h-[60vh] flex-col justify-center py-20">
-        <p className="reveal text-sm font-medium uppercase tracking-widest text-neutral-400 mb-4">
-          In the Beginning
-        </p>
-        <h1 className="reveal text-5xl font-bold tracking-tight md:text-7xl font-display">
-          Created to Create
-        </h1>
-        <p className="reveal mt-6 max-w-lg text-lg leading-relaxed text-neutral-500">
-          Over a decade of art direction, brand design, and building things that connect.
-          From bourbon labels to Fortune 500 campaigns to AI-powered apps — every chapter
-          sharpened the eye and expanded what was possible.
-        </p>
-        <button
-          onClick={() => setAboutOpen(true)}
-          className="reveal mt-8 self-start text-sm text-neutral-400 underline underline-offset-4 transition-colors hover:text-neutral-900"
-        >
-          Read more about me
-        </button>
+      <div ref={introRef} id="section-intro" className="flex min-h-[70vh] items-center py-20">
+        <div className="flex flex-col md:flex-row md:items-center gap-12 w-full">
+          {/* Headshot */}
+          <div className="reveal flex-shrink-0">
+            <Image
+              src="/portfolio/headshot.jpg"
+              alt="Matthew Johnson"
+              width={280}
+              height={280}
+              className="rounded-2xl object-cover w-48 h-48 md:w-64 md:h-64"
+              priority
+            />
+          </div>
+
+          {/* Copy */}
+          <div className="flex-1">
+            <p className="reveal text-sm font-medium uppercase tracking-widest text-neutral-400 mb-4">
+              In the Beginning
+            </p>
+            <h1 className="reveal text-5xl font-bold tracking-tight md:text-7xl font-display">
+              Created to Create
+            </h1>
+            <p className="reveal mt-6 max-w-lg text-lg leading-relaxed text-neutral-500">
+              Over a decade of art direction, brand design, and building things that connect.
+              From bourbon labels to Fortune 500 campaigns to AI-powered apps — every chapter
+              sharpened the eye and expanded what was possible.
+            </p>
+            <button
+              onClick={() => setAboutOpen(true)}
+              className="reveal mt-8 self-start text-sm text-neutral-400 underline underline-offset-4 transition-colors hover:text-neutral-900"
+            >
+              Read more about me
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Era sections — dates start here */}
