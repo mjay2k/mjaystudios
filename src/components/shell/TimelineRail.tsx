@@ -27,34 +27,31 @@ interface Tick {
 
 function generateTicks(markers: Marker[]): Tick[] {
   const ticks: Tick[] = [];
+  const sorted = [...markers].sort((a, b) => a.position - b.position);
 
-  markers.forEach((m) => {
+  // Add markers
+  sorted.forEach((m) => {
     ticks.push({ position: m.position, isMarker: true, isGhost: false, markerId: m.id, label: m.label, tooltip: m.tooltip, belongsTo: m.id });
   });
 
-  const sorted = [...markers].sort((a, b) => a.position - b.position);
+  // Between each pair of markers, add evenly spaced ticks
+  // Pattern: visible, ghost, visible, ghost, visible, ghost, visible
+  // = 3 visible + 4 ghost = 7 ticks between each marker pair, all evenly spaced
   for (let i = 0; i < sorted.length - 1; i++) {
     const start = sorted[i].position;
     const end = sorted[i + 1].position;
-    const sectionId = sorted[i].id; // in-between ticks belong to the section above them
+    const sectionId = sorted[i].id;
+    const totalBetween = 7;
+    const step = (end - start) / (totalBetween + 1);
 
-    // 3 visible decorative ticks
-    const count = 3;
-    const step = (end - start) / (count + 1);
-    for (let j = 1; j <= count; j++) {
-      ticks.push({ position: start + step * j, isMarker: false, isGhost: false, belongsTo: sectionId });
-    }
-
-    // 4 ghost ticks (only appear on hover) — placed between each pair of existing ticks
-    const ghostCount = 4;
-    const ghostStep = (end - start) / (ghostCount + 1);
-    for (let j = 1; j <= ghostCount; j++) {
-      const pos = start + ghostStep * j;
-      // Skip if too close to an existing tick
-      const tooClose = ticks.some((t) => Math.abs(t.position - pos) < 0.01);
-      if (!tooClose) {
-        ticks.push({ position: pos, isMarker: false, isGhost: true, belongsTo: sectionId });
-      }
+    for (let j = 1; j <= totalBetween; j++) {
+      const isGhost = j % 2 === 0; // even positions are ghosts
+      ticks.push({
+        position: start + step * j,
+        isMarker: false,
+        isGhost,
+        belongsTo: sectionId,
+      });
     }
   }
 
