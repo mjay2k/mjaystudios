@@ -101,6 +101,27 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       onUpdate: (self) => {
         if (!ticksRef.current) return;
         gsap.set(ticksRef.current, { y: self.progress * -80 });
+
+        // Animate ticks based on scroll position (like a scroll indicator)
+        if (isHoveringRef.current) return; // don't fight the mouse hover
+        const tickEls = ticksRef.current.querySelectorAll('.rail-tick');
+        tickEls.forEach((el) => {
+          const tickPos = parseFloat(el.getAttribute('data-pos') ?? '0');
+          const isGhost = el.getAttribute('data-ghost') === 'true';
+          const distance = Math.abs(tickPos - self.progress);
+
+          if (isGhost) {
+            const ghostProx = Math.max(0, 1 - distance / 0.08);
+            gsap.set(el, { width: ghostProx * 14, opacity: ghostProx * 0.4 });
+          } else {
+            const isVeryClose = distance < 0.05;
+            const isClose = distance < 0.12;
+            gsap.set(el, {
+              width: isVeryClose ? 32 : isClose ? 18 : 8,
+              opacity: isVeryClose ? 0.9 : isClose ? 0.4 : 0.15,
+            });
+          }
+        });
       },
     });
 
@@ -264,7 +285,20 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
   const railTop = 80;
   const railBottom = 40;
 
+  const scrollToTop = useCallback(() => {
+    gsap.to(window, { scrollTo: { y: 0 }, duration: 1, ease: 'power3.inOut' });
+  }, []);
+
   return (
+    <>
+    {/* Click-to-top zone — always interactive, separate from rail */}
+    <div
+      className="fixed top-0 right-0 z-50 hidden h-20 cursor-pointer md:block"
+      style={{ width: 80 }}
+      onClick={scrollToTop}
+      title="Back to top"
+    />
+
     <div
       ref={railRef}
       className="fixed top-0 right-0 z-40 hidden h-full md:block cursor-pointer"
@@ -273,15 +307,6 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Click above ticks area to scroll to top */}
-      <div
-        className="absolute top-0 right-0 left-0"
-        style={{ height: railTop }}
-        onClick={() => {
-          gsap.to(window, { scrollTo: { y: 0 }, duration: 1, ease: 'power3.inOut' });
-        }}
-      />
-
       {/* Tooltip */}
       <div
         ref={tooltipRef}
@@ -337,6 +362,7 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         })}
       </div>
     </div>
+    </>
   );
 }
 
