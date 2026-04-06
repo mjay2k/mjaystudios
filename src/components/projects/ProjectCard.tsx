@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { gsap } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
@@ -12,9 +12,36 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
   const imageRef = useRef<HTMLDivElement>(null);
   const setDetailProject = useAppStore((s) => s.setDetailProject);
   const hasDetail = project.caseStudy || project.images.length > 1;
+  const loadedHeights = useRef<number[]>([]);
+
+  // Track the tallest image so the container doesn't jump
+  const handleImageLoad = useCallback(
+    (e: React.SyntheticEvent<HTMLImageElement>) => {
+      const img = e.currentTarget;
+      const renderedHeight = img.offsetHeight;
+      loadedHeights.current.push(renderedHeight);
+
+      if (loadedHeights.current.length > 0) {
+        const tallest = Math.max(...loadedHeights.current);
+        setMaxHeight((prev) => (prev === undefined || tallest > prev ? tallest : prev));
+      }
+    },
+    []
+  );
+
+  // Preload all images to measure heights
+  useEffect(() => {
+    if (project.images.length <= 1) return;
+
+    project.images.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, [project.images]);
 
   useEffect(() => {
     if (!project.autoCycle || project.images.length <= 1) return;
@@ -43,6 +70,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <div
         ref={imageRef}
         className="relative overflow-hidden rounded-lg bg-neutral-200"
+        style={maxHeight ? { minHeight: maxHeight } : undefined}
       >
         <Image
           src={project.images[activeIndex]}
@@ -51,6 +79,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           height={600}
           className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
           sizes="(max-width: 768px) 100vw, 50vw"
+          onLoad={handleImageLoad}
         />
 
         {hasDetail && (
