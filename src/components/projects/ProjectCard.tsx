@@ -48,7 +48,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % project.images.length);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [project.autoCycle, project.images.length]);
@@ -57,8 +57,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     if (!imageRef.current) return;
     gsap.fromTo(
       imageRef.current,
-      { opacity: 0.6 },
-      { opacity: 1, duration: 0.5, ease: 'power2.out' }
+      { opacity: 0 },
+      { opacity: 1, duration: 1.2, ease: 'power2.inOut' }
     );
   }, [activeIndex]);
 
