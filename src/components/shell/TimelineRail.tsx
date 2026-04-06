@@ -51,9 +51,26 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
     return markers.find((m) => m.id === currentSection.id)?.id ?? null;
   }, [currentSection, markers]);
 
-  // Parallax offset
+  // Parallax offset + fade in when timeline section appears
   useEffect(() => {
-    if (!ticksRef.current) return;
+    if (!ticksRef.current || !railRef.current) return;
+
+    // Fade in the rail when section-intro enters viewport
+    const introEl = document.getElementById('section-intro');
+    let fadeInTrigger: ScrollTrigger | undefined;
+    if (introEl) {
+      gsap.set(railRef.current, { opacity: 0 });
+      fadeInTrigger = ScrollTrigger.create({
+        trigger: introEl,
+        start: 'top 80%',
+        onEnter: () => {
+          if (railRef.current) gsap.to(railRef.current, { opacity: 1, duration: 0.6, ease: 'power2.out' });
+        },
+        onLeaveBack: () => {
+          if (railRef.current) gsap.to(railRef.current, { opacity: 0, duration: 0.4, ease: 'power2.in' });
+        },
+      });
+    }
 
     const trigger = ScrollTrigger.create({
       trigger: document.documentElement,
@@ -65,7 +82,10 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       },
     });
 
-    return () => { trigger.kill(); };
+    return () => {
+      trigger.kill();
+      fadeInTrigger?.kill();
+    };
   }, []);
 
   // Default animation: active section drives tick sizes

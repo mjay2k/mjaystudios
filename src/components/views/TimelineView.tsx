@@ -92,10 +92,9 @@ export default function TimelineView() {
 
   return (
     <div>
-      {/* Opening — no dates, just the beginning */}
-      <div ref={introRef} id="section-intro" className="flex min-h-[70vh] items-center py-20">
+      {/* Hero — above the timeline */}
+      <div className="flex min-h-[70vh] items-center py-20">
         <div className="flex flex-col md:flex-row md:items-center gap-12 w-full">
-          {/* Headshot */}
           <div className="reveal flex-shrink-0">
             <Image
               src="/portfolio/headshot.jpg"
@@ -106,12 +105,7 @@ export default function TimelineView() {
               priority
             />
           </div>
-
-          {/* Copy */}
           <div className="flex-1">
-            <p className="reveal text-sm font-medium uppercase tracking-widest text-neutral-400 mb-4">
-              In the Beginning
-            </p>
             <h1 className="reveal text-5xl font-bold tracking-tight md:text-7xl font-display">
               Created to Create
             </h1>
@@ -130,7 +124,14 @@ export default function TimelineView() {
         </div>
       </div>
 
-      {/* Era sections — dates start here */}
+      {/* Timeline starts here — "In the Beginning" is the first marker */}
+      <div ref={introRef} id="section-intro" className="py-8">
+        <p className="text-sm font-medium uppercase tracking-widest text-neutral-400 mb-2 font-body">
+          In the Beginning
+        </p>
+      </div>
+
+      {/* Era sections */}
       {eras.map((era) => (
         <EraSection
           key={era.id}

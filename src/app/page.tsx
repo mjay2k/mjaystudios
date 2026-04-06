@@ -9,7 +9,7 @@ import CategoryView from '@/components/views/CategoryView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
 const timelineMarkers: Marker[] = [
-  { id: 'intro', label: '', tooltip: 'In the Beginning', position: 0.05 },
+  { id: 'intro', label: 'Begin', tooltip: 'In the Beginning', position: 0.05 },
   { id: 'agency', label: '2010', tooltip: 'Agency Life', position: 0.2 },
   { id: 'berry', label: '2017', tooltip: 'Berry Life', position: 0.5 },
   { id: 'afterberry', label: '2023', tooltip: 'After Berry', position: 0.75 },
