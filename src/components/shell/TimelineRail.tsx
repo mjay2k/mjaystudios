@@ -459,20 +459,104 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
     };
   }, [displayLabel]);
 
-  if (!displayLabel) return null;
+  const ticks = useMemo(() => generateTicks(markers), [markers]);
+  const ticksContainerRef = useRef<HTMLDivElement>(null);
+  const sortedMobile = useMemo(() => [...markers].sort((a, b) => a.position - b.position), [markers]);
+
+  // Scroll-driven tick animation for mobile
+  useEffect(() => {
+    if (!ticksContainerRef.current) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: document.documentElement,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        if (!ticksContainerRef.current) return;
+
+        const firstPos = sortedMobile[0]?.position ?? 0.1;
+        const lastPos = sortedMobile[sortedMobile.length - 1]?.position ?? 0.9;
+        const mapped = firstPos + self.progress * (lastPos - firstPos);
+        const radius = 0.12;
+
+        const els = ticksContainerRef.current.querySelectorAll('.mobile-tick');
+
+        let closestEl: Element | null = null;
+        let closestD = Infinity;
+        els.forEach((el) => {
+          if (el.getAttribute('data-ghost') === 'true') return;
+          const d = Math.abs(parseFloat(el.getAttribute('data-pos') ?? '0') - mapped);
+          if (d < closestD) { closestD = d; closestEl = el; }
+        });
+
+        els.forEach((el) => {
+          const pos = parseFloat(el.getAttribute('data-pos') ?? '0');
+          const isGhost = el.getAttribute('data-ghost') === 'true';
+          const sz = el.getAttribute('data-size');
+          const dist = Math.abs(pos - mapped);
+          const prox = Math.max(0, 1 - dist / radius);
+          const base = sz === 'big' ? 12 : 6;
+
+          if (isGhost) {
+            const gp = Math.max(0, 1 - dist / 0.06);
+            gsap.set(el, { width: gp * 10, opacity: gp * 0.3, backgroundColor: '' });
+          } else {
+            const w = base + prox * 14;
+            const o = 0.1 + prox * 0.7;
+            gsap.set(el, { width: w, opacity: o, backgroundColor: el === closestEl ? '#F15A29' : '' });
+          }
+        });
+      },
+    });
+
+    return () => { trigger.kill(); };
+  }, [sortedMobile]);
 
   return (
-    <div className="fixed right-4 top-20 z-50 md:hidden pointer-events-none">
+    <>
+    {/* Floating label */}
+    {displayLabel && (
+      <div className="fixed right-4 top-20 z-50 md:hidden pointer-events-none">
+        <div
+          ref={labelRef}
+          className="flex items-center gap-2 rounded-full bg-neutral-100/90 px-3 py-1.5 shadow-sm backdrop-blur-sm opacity-0"
+        >
+          <div className="w-3 h-[2px] rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-brand)' }} />
+          <span className="text-[10px] font-semibold tracking-wider uppercase text-neutral-600 font-body whitespace-nowrap">
+            {displayLabel}
+          </span>
+        </div>
+      </div>
+    )}
+
+    {/* Tick marks */}
+    <div className="fixed top-0 right-0 z-40 block h-full md:hidden" style={{ width: 20, top: 64 }}>
       <div
-        ref={labelRef}
-        className="flex items-center gap-2 rounded-full bg-neutral-100/90 px-3 py-1.5 shadow-sm backdrop-blur-sm opacity-0"
+        ref={ticksContainerRef}
+        style={{ top: 16, bottom: 40, position: 'absolute', right: 0, left: 0 }}
       >
-        <div className="w-3 h-[2px] rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-brand)' }} />
-        <span className="text-[10px] font-semibold tracking-wider uppercase text-neutral-600 font-body whitespace-nowrap">
-          {displayLabel}
-        </span>
+        {ticks.map((tick, i) => (
+          <div
+            key={i}
+            className="absolute right-0 flex items-center justify-end"
+            style={{ top: `${tick.position * 100}%`, padding: '4px 0' }}
+          >
+            <div
+              className="mobile-tick h-[1.5px] bg-neutral-900 rounded-l-full"
+              data-pos={tick.position}
+              data-ghost={tick.isGhost}
+              data-size={tick.size}
+              style={{
+                width: tick.isGhost ? 0 : tick.size === 'big' ? 12 : 6,
+                opacity: tick.isGhost ? 0 : tick.size === 'big' ? 0.15 : 0.08,
+                marginRight: -1,
+              }}
+            />
+          </div>
+        ))}
       </div>
     </div>
+    </>
   );
 }
 
