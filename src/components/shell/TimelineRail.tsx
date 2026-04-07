@@ -433,9 +433,9 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
 
     fadeTimerRef.current = setTimeout(() => {
       if (labelRef.current) {
-        gsap.to(labelRef.current, { opacity: 0, duration: 0.8, ease: 'power2.in' });
+        gsap.to(labelRef.current, { opacity: 0, duration: 0.6, ease: 'power2.in' });
       }
-    }, 3000);
+    }, 2000);
 
     return () => {
       if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
@@ -453,9 +453,9 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
       if (scrollTimer) clearTimeout(scrollTimer);
       scrollTimer = setTimeout(() => {
         if (labelRef.current) {
-          gsap.to(labelRef.current, { opacity: 0, duration: 0.8, ease: 'power2.in' });
+          gsap.to(labelRef.current, { opacity: 0, duration: 0.6, ease: 'power2.in' });
         }
-      }, 3000);
+      }, 1500);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -520,25 +520,25 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
 
   return (
     <>
-    {/* Floating label — positioned along the rail based on marker position */}
+    {/* Floating label — positioned along the rail */}
     {displayLabel && (
       <div
-        className="fixed right-6 z-50 md:hidden pointer-events-none transition-all duration-500 ease-out"
+        className="fixed right-5 z-50 md:hidden pointer-events-none transition-all duration-500 ease-out"
         style={{
-          // Map marker position (0-1) to the tick rail area
-          // Rail: top 80px to (100vh - 104px)
           top: `calc(80px + ${labelTopPx} * (100vh - 184px))`,
           transform: 'translateY(-50%)',
         }}
       >
         <div
           ref={labelRef}
-          className="flex items-center gap-2 rounded-full bg-neutral-100/90 px-3 py-1.5 shadow-sm backdrop-blur-sm opacity-0"
+          className="opacity-0"
         >
-          <span className="text-[10px] font-semibold tracking-wider uppercase text-neutral-600 font-body whitespace-nowrap">
-            {displayLabel}
-          </span>
-          <div className="w-3 h-[2px] rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-brand)' }} />
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] font-semibold tracking-widest uppercase text-neutral-500 font-body whitespace-nowrap">
+              {displayLabel}
+            </span>
+            <div className="w-5 h-[2px] rounded-full" style={{ backgroundColor: 'var(--color-brand)' }} />
+          </div>
         </div>
       </div>
     )}

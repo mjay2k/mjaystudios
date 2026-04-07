@@ -68,30 +68,38 @@ export default function NavBar() {
         </button>
       </div>
 
-      {/* Mobile dropdown — includes view toggle */}
+      {/* Mobile dropdown — full-width, touch-friendly */}
       {menuOpen && (
-        <div className="absolute top-full right-0 left-0 flex flex-col gap-4 bg-neutral-100/95 px-6 py-5 backdrop-blur-md md:hidden">
-          <div className="pb-3 border-b border-neutral-200">
+        <div className="absolute top-full right-0 left-0 bg-neutral-100/98 px-6 py-6 backdrop-blur-xl border-t border-neutral-200/50 md:hidden">
+          {/* View toggle — prominent */}
+          <div className="pb-5 mb-5 border-b border-neutral-200/50">
+            <p className="text-[10px] font-medium uppercase tracking-widest text-neutral-400 mb-3">View</p>
             <ViewToggle />
           </div>
-          <button
-            onClick={() => {
-              setAboutOpen(true);
-              setMenuOpen(false);
-            }}
-            className="text-left text-sm text-neutral-500 hover:text-neutral-900"
-          >
-            About
-          </button>
-          <button
-            onClick={() => {
-              setContactOpen(true);
-              setMenuOpen(false);
-            }}
-            className="text-left text-sm text-neutral-500 hover:text-neutral-900"
-          >
-            Contact
-          </button>
+
+          {/* Nav links — large touch targets */}
+          <div className="flex flex-col gap-1">
+            <button
+              onClick={() => {
+                setAboutOpen(true);
+                setMenuOpen(false);
+              }}
+              className="flex items-center justify-between py-3.5 text-base font-medium text-neutral-700 active:text-neutral-900"
+            >
+              About
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-neutral-300"><polyline points="9 18 15 12 9 6" /></svg>
+            </button>
+            <button
+              onClick={() => {
+                setContactOpen(true);
+                setMenuOpen(false);
+              }}
+              className="flex items-center justify-between py-3.5 text-base font-medium text-neutral-700 active:text-neutral-900"
+            >
+              Contact
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-neutral-300"><polyline points="9 18 15 12 9 6" /></svg>
+            </button>
+          </div>
         </div>
       )}
     </nav>
