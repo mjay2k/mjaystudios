@@ -4,8 +4,12 @@ import { useRef, useEffect, useMemo, useState, useCallback } from 'react';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 
-function getTickColor(): string {
-  return document.documentElement.classList.contains('dark') ? '#f5f5f5' : '#171717';
+// Clear inline backgroundColor so CSS class takes over
+function clearTickColor(el: Element) {
+  (el as HTMLElement).style.backgroundColor = '';
+}
+function setTickOrange(el: Element) {
+  (el as HTMLElement).style.backgroundColor = '#F15A29';
 }
 
 interface Marker {
@@ -176,12 +180,13 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
           if (isGhost) {
             const ghostProx = Math.max(0, 1 - distance / 0.06);
             const gw = tickSize === 'big' ? ghostProx * 16 : ghostProx * 8;
-            gsap.set(el, { width: gw, opacity: ghostProx * 0.3, backgroundColor: getTickColor() });
+            gsap.set(el, { width: gw, opacity: ghostProx * 0.3 });
           } else {
             const width = baseWidth + proximity * 18;
             const opacity = baseOpacity + proximity * 0.7;
             const isClosest = el === closestEl;
-            gsap.set(el, { width, opacity, backgroundColor: isClosest ? '#F15A29' : getTickColor() });
+            gsap.set(el, { width, opacity });
+            if (isClosest) { setTickOrange(el); } else { clearTickColor(el); }
           }
         });
       },
@@ -230,11 +235,11 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         gsap.to(el, {
           width: gw,
           opacity: ghostProximity * 0.5,
-          backgroundColor: getTickColor(),
           duration: 0.15,
           ease: 'none',
           overwrite: 'auto',
         });
+        clearTickColor(el);
       } else {
         const width = baseWidth + proximity * 22;
         const opacity = 0.1 + proximity * 0.9;
@@ -242,11 +247,11 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
         gsap.to(el, {
           width,
           opacity,
-          backgroundColor: isClosest ? '#F15A29' : getTickColor(),
           duration: 0.15,
           ease: 'none',
           overwrite: 'auto',
         });
+        if (isClosest) { setTickOrange(el); } else { clearTickColor(el); }
       }
     });
 
@@ -488,11 +493,12 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
 
           if (isGhost) {
             const gp = Math.max(0, 1 - dist / 0.06);
-            gsap.set(el, { width: gp * 10, opacity: gp * 0.3, backgroundColor: getTickColor() });
+            gsap.set(el, { width: gp * 10, opacity: gp * 0.3 });
           } else {
             const w = base + prox * 14;
             const o = 0.1 + prox * 0.7;
-            gsap.set(el, { width: w, opacity: o, backgroundColor: el === closestEl ? '#F15A29' : getTickColor() });
+            gsap.set(el, { width: w, opacity: o });
+            if (el === closestEl) { setTickOrange(el); } else { clearTickColor(el); }
           }
         });
       },
