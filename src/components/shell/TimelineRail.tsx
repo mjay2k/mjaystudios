@@ -403,25 +403,34 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
   // Get display label — use tooltip (section name) for mobile
   const displayLabel = currentMarker?.tooltip ?? currentMarker?.label ?? '';
 
+  // Calculate vertical position based on marker position along the rail
+  const labelTopPx = useMemo(() => {
+    if (!currentMarker) return 100;
+    // Rail container starts at 64px, ticks area: top 16px, bottom 40px
+    // So tick area spans from 64+16=80 to viewport bottom - 40
+    // Use marker.position (0-1) mapped to that range
+    // We'll use vh-based calculation: 80px top + position * (viewportH - 80 - 40)
+    // But since we don't have viewport height in useMemo, use a percentage approach
+    // The label container is fixed, so we can use calc-style top
+    return currentMarker.position;
+  }, [currentMarker]);
+
   useEffect(() => {
     if (!labelRef.current || !displayLabel) return;
 
     const sectionId = currentSection?.id ?? '';
-    // Only animate if section actually changed
     if (prevSectionRef.current === sectionId) return;
     prevSectionRef.current = sectionId;
 
-    // Clear any pending fade timer
     if (fadeTimerRef.current) clearTimeout(fadeTimerRef.current);
 
-    // Slide up and fade in
+    // Animate to new vertical position + fade in
     gsap.fromTo(
       labelRef.current,
-      { y: 12, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.4, ease: 'power2.out' }
+      { opacity: 0, scale: 0.95 },
+      { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
     );
 
-    // Fade out after 3 seconds
     fadeTimerRef.current = setTimeout(() => {
       if (labelRef.current) {
         gsap.to(labelRef.current, { opacity: 0, duration: 0.8, ease: 'power2.in' });
@@ -433,17 +442,14 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
     };
   }, [displayLabel, currentSection]);
 
-  // Also show on scroll activity, then fade
+  // Show on scroll, then fade
   useEffect(() => {
     let scrollTimer: ReturnType<typeof setTimeout> | null = null;
 
     const handleScroll = () => {
       if (!labelRef.current || !displayLabel) return;
-
-      // Show the label
       gsap.to(labelRef.current, { opacity: 1, duration: 0.2, overwrite: 'auto' });
 
-      // Reset fade timer
       if (scrollTimer) clearTimeout(scrollTimer);
       scrollTimer = setTimeout(() => {
         if (labelRef.current) {
@@ -514,17 +520,25 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
 
   return (
     <>
-    {/* Floating label */}
+    {/* Floating label — positioned along the rail based on marker position */}
     {displayLabel && (
-      <div className="fixed right-4 top-20 z-50 md:hidden pointer-events-none">
+      <div
+        className="fixed right-6 z-50 md:hidden pointer-events-none transition-all duration-500 ease-out"
+        style={{
+          // Map marker position (0-1) to the tick rail area
+          // Rail: top 80px to (100vh - 104px)
+          top: `calc(80px + ${labelTopPx} * (100vh - 184px))`,
+          transform: 'translateY(-50%)',
+        }}
+      >
         <div
           ref={labelRef}
           className="flex items-center gap-2 rounded-full bg-neutral-100/90 px-3 py-1.5 shadow-sm backdrop-blur-sm opacity-0"
         >
-          <div className="w-3 h-[2px] rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-brand)' }} />
           <span className="text-[10px] font-semibold tracking-wider uppercase text-neutral-600 font-body whitespace-nowrap">
             {displayLabel}
           </span>
+          <div className="w-3 h-[2px] rounded-full flex-shrink-0" style={{ backgroundColor: 'var(--color-brand)' }} />
         </div>
       </div>
     )}
