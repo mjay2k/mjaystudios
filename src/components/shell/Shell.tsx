@@ -3,7 +3,6 @@
 import { ReactNode } from 'react';
 import NavBar from './NavBar';
 import TimelineRail, { TimelineRailMobile, Marker } from './TimelineRail';
-import InfoPanel from './InfoPanel';
 import AboutPopup from '@/components/popups/AboutPopup';
 import ContactPopup from '@/components/popups/ContactPopup';
 import FullscreenDetail from '@/components/projects/FullscreenDetail';
@@ -19,7 +18,6 @@ export default function Shell({ markers, children }: ShellProps) {
       <NavBar />
       <TimelineRail markers={markers} />
       <TimelineRailMobile markers={markers} />
-      <InfoPanel />
       <AboutPopup />
       <ContactPopup />
       <FullscreenDetail />

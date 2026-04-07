@@ -124,36 +124,48 @@ export default function TimelineView() {
             </p>
             <button
               onClick={() => setAboutOpen(true)}
-              className="reveal mt-8 self-start text-sm text-neutral-400 underline underline-offset-4 transition-colors hover:text-neutral-900"
+              className="reveal mt-8 inline-flex items-center gap-2 text-sm font-medium transition-colors hover:opacity-80"
+              style={{ color: 'var(--color-brand)' }}
             >
-              Read more about me
+              About me
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Timeline starts here — "In the Beginning" is the first marker */}
-      <div ref={introRef} id="section-intro" className="py-8">
-        <p className="text-sm font-medium uppercase tracking-widest text-neutral-400 mb-2 font-body">
-          In the Beginning
+      {/* Timeline anchor — invisible marker for scroll tracking */}
+      <div ref={introRef} id="section-intro" className="h-px" />
+
+      {/* Era sections with spacing */}
+      {eras.map((era) => {
+        const eraProjects = getProjectsByEra(era.id as 'agency' | 'berry' | 'afterberry');
+        // Skip eras with no projects
+        if (eraProjects.length === 0) return (
+          <EraSection key={era.id} config={era} projects={[]} />
+        );
+        return (
+          <EraSection
+            key={era.id}
+            config={era}
+            projects={eraProjects}
+          />
+        );
+      })}
+
+      {/* Outro — stronger CTA */}
+      <div id="section-contact" className="flex min-h-[50vh] flex-col items-center justify-center py-24 text-center">
+        <div className="w-12 h-[3px] rounded-full mb-8" style={{ backgroundColor: 'var(--color-brand)' }} />
+        <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight">
+          Let&apos;s <span style={{ color: 'var(--color-brand)' }}>build</span> something.
+        </h2>
+        <p className="mt-4 max-w-md text-neutral-500">
+          Open to freelance, collaboration, and creative opportunities.
         </p>
-      </div>
-
-      {/* Era sections */}
-      {eras.map((era) => (
-        <EraSection
-          key={era.id}
-          config={era}
-          projects={getProjectsByEra(era.id as 'agency' | 'berry' | 'afterberry')}
-        />
-      ))}
-
-      {/* Outro */}
-      <div id="section-contact" className="flex min-h-[40vh] flex-col items-center justify-center py-20 text-center">
-        <p className="text-lg text-neutral-500">Like what you see?</p>
         <button
           onClick={() => useAppStore.getState().setContactOpen(true)}
-          className="mt-4 rounded-full bg-neutral-900/10 px-8 py-3 text-sm font-medium font-display transition-colors hover:bg-neutral-900/15"
+          className="mt-8 rounded-full px-10 py-3.5 text-sm font-semibold font-display text-white transition-colors hover:opacity-90"
+          style={{ backgroundColor: 'var(--color-brand)' }}
         >
           Get in Touch
         </button>

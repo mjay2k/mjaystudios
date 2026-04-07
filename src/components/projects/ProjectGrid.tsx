@@ -49,7 +49,7 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
         <div
           key={project.id}
           className={`project-card ${
-            i % 2 === 1 ? 'md:mt-16' : ''
+            i % 2 === 1 ? 'md:mt-8' : ''
           }`}
         >
           <ProjectCard project={project} />

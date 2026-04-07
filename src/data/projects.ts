@@ -241,37 +241,16 @@ export const projects: Project[] = [
   },
 
   // === ERA: AFTER BERRY ===
-  {
-    id: 'bible-warden',
-    title: 'Bible Warden',
-    description: 'AI-powered Bible study app — concept, design, and development.',
-    year: 2025,
-    era: 'afterberry',
-    categories: ['digital'],
-    images: ['/portfolio/afterberry/bible-warden-placeholder.jpg'],
-    autoCycle: false,
-    sortOrder: 1,
-  },
-  {
-    id: 'news-warden',
-    title: 'News Warden',
-    description: 'AI-powered news aggregation and analysis app.',
-    year: 2025,
-    era: 'afterberry',
-    categories: ['digital'],
-    images: ['/portfolio/afterberry/news-warden-placeholder.jpg'],
-    autoCycle: false,
-    sortOrder: 2,
-  },
+  // Bible Warden and News Warden — add back when screenshots are available
 
-  // === LOGOS (spans eras, shown in Category view) ===
+  // === LOGOS (Category view only — not shown in timeline) ===
   {
     id: 'logo-designs',
     title: 'Logo Design Collection',
     description: 'Brand identity designs across multiple industries.',
     year: 2015,
     era: 'agency',
-    categories: ['logo'],
+    categories: ['logo'],  // No 'advertising' or 'packaging' — only appears in Category > Logo view
     images: [
       '/portfolio/logos/mjLogoDesign_bornand.png',
       '/portfolio/logos/mjLogoDesign_CIH.png',
@@ -296,6 +275,8 @@ export const projects: Project[] = [
 export function getProjectsByEra(era: Project['era']): Project[] {
   return projects
     .filter((p) => p.era === era)
+    // Exclude logo-only projects from timeline view
+    .filter((p) => !(p.categories.length === 1 && p.categories[0] === 'logo'))
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 

@@ -70,7 +70,7 @@ export default function EraSection({ config, projects }: EraSectionProps) {
   }, [config.section, config.id, setCurrentSection]);
 
   return (
-    <section ref={sectionRef} id={`section-${config.id}`} className="relative">
+    <section ref={sectionRef} id={`section-${config.id}`} className="relative pt-12 md:pt-20">
       <div
         className={`era-bg ${config.bgClass ?? ''}`}
         id={`era-bg-${config.id}`}
