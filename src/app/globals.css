@@ -48,6 +48,7 @@ html.dark .border-neutral-300 { border-color: #404040; }
 
 /* Dark mode rail ticks */
 html.dark .rail-tick { background-color: #f5f5f5; }
+html.dark .mobile-tick { background-color: #f5f5f5; }
 
 /* Dark mode — scrollbar hidden same as light */
 
