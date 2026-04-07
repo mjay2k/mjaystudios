@@ -442,28 +442,7 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
     };
   }, [displayLabel, currentSection]);
 
-  // Show on scroll, then fade
-  useEffect(() => {
-    let scrollTimer: ReturnType<typeof setTimeout> | null = null;
-
-    const handleScroll = () => {
-      if (!labelRef.current || !displayLabel) return;
-      gsap.to(labelRef.current, { opacity: 1, duration: 0.2, overwrite: 'auto' });
-
-      if (scrollTimer) clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        if (labelRef.current) {
-          gsap.to(labelRef.current, { opacity: 0, duration: 0.6, ease: 'power2.in' });
-        }
-      }, 1500);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimer) clearTimeout(scrollTimer);
-    };
-  }, [displayLabel]);
+  // Label only shows on section change (above), no scroll listener
 
   const ticks = useMemo(() => generateTicks(markers), [markers]);
   const ticksContainerRef = useRef<HTMLDivElement>(null);
