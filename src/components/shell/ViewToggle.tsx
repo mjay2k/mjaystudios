@@ -4,7 +4,11 @@ import { useAppStore } from '@/stores/useAppStore';
 import { useRef, useEffect } from 'react';
 import { gsap } from '@/lib/gsap';
 
-export default function ViewToggle() {
+interface ViewToggleProps {
+  size?: 'default' | 'large';
+}
+
+export default function ViewToggle({ size = 'default' }: ViewToggleProps) {
   const activeView = useAppStore((s) => s.activeView);
   const setActiveView = useAppStore((s) => s.setActiveView);
   const pillRef = useRef<HTMLDivElement>(null);
@@ -23,27 +27,38 @@ export default function ViewToggle() {
     });
   }, [activeView]);
 
+  const isLarge = size === 'large';
+
   return (
     <div
       ref={containerRef}
-      className="relative flex items-center rounded-full bg-neutral-900/10 p-1"
+      className={`relative flex items-center rounded-full bg-neutral-900/10 ${isLarge ? 'p-1.5 w-full' : 'p-1'}`}
     >
       <div
         ref={pillRef}
-        className="absolute top-1 left-0 h-[calc(100%-8px)] rounded-full bg-neutral-900/15"
+        className={`absolute left-0 rounded-full ${isLarge ? 'top-1.5 h-[calc(100%-12px)]' : 'top-1 h-[calc(100%-8px)]'}`}
+        style={{ backgroundColor: 'var(--color-brand)' }}
       />
       <button
         onClick={() => setActiveView('timeline')}
-        className={`relative z-10 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide transition-colors ${
-          activeView === 'timeline' ? 'text-neutral-900' : 'text-neutral-400'
+        className={`relative z-10 rounded-full font-medium tracking-wide transition-colors ${
+          isLarge ? 'flex-1 px-6 py-3 text-sm' : 'px-4 py-1.5 text-xs'
+        } ${
+          activeView === 'timeline'
+            ? 'text-white'
+            : isLarge ? 'text-neutral-500' : 'text-neutral-400'
         }`}
       >
         Timeline
       </button>
       <button
         onClick={() => setActiveView('category')}
-        className={`relative z-10 rounded-full px-4 py-1.5 text-xs font-medium tracking-wide transition-colors ${
-          activeView === 'category' ? 'text-neutral-900' : 'text-neutral-400'
+        className={`relative z-10 rounded-full font-medium tracking-wide transition-colors ${
+          isLarge ? 'flex-1 px-6 py-3 text-sm' : 'px-4 py-1.5 text-xs'
+        } ${
+          activeView === 'category'
+            ? 'text-white'
+            : isLarge ? 'text-neutral-500' : 'text-neutral-400'
         }`}
       >
         By Type

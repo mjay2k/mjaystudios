@@ -68,36 +68,33 @@ export default function NavBar() {
         </button>
       </div>
 
-      {/* Mobile dropdown — full-width, touch-friendly */}
+      {/* Mobile dropdown */}
       {menuOpen && (
-        <div className="absolute top-full right-0 left-0 bg-neutral-100/98 px-6 py-6 backdrop-blur-xl border-t border-neutral-200/50 md:hidden">
-          {/* View toggle — prominent */}
-          <div className="pb-5 mb-5 border-b border-neutral-200/50">
-            <p className="text-[10px] font-medium uppercase tracking-widest text-neutral-400 mb-3">View</p>
-            <ViewToggle />
+        <div className="absolute top-full right-0 left-0 bg-neutral-100/98 px-6 py-8 backdrop-blur-xl border-t border-neutral-200/50 md:hidden">
+          {/* View toggle — full width, large */}
+          <div className="mb-8">
+            <ViewToggle size="large" />
           </div>
 
-          {/* Nav links — large touch targets */}
-          <div className="flex flex-col gap-1">
+          {/* Nav links — centered, large */}
+          <div className="flex flex-col items-center gap-2">
             <button
               onClick={() => {
                 setAboutOpen(true);
                 setMenuOpen(false);
               }}
-              className="flex items-center justify-between py-3.5 text-base font-medium text-neutral-700 active:text-neutral-900"
+              className="w-full py-4 text-center text-lg font-display font-bold text-neutral-700 active:text-neutral-900 rounded-xl active:bg-neutral-200/50 transition-colors"
             >
               About
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-neutral-300"><polyline points="9 18 15 12 9 6" /></svg>
             </button>
             <button
               onClick={() => {
                 setContactOpen(true);
                 setMenuOpen(false);
               }}
-              className="flex items-center justify-between py-3.5 text-base font-medium text-neutral-700 active:text-neutral-900"
+              className="w-full py-4 text-center text-lg font-display font-bold text-neutral-700 active:text-neutral-900 rounded-xl active:bg-neutral-200/50 transition-colors"
             >
               Contact
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-neutral-300"><polyline points="9 18 15 12 9 6" /></svg>
             </button>
           </div>
         </div>
