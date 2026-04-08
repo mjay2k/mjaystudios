@@ -41,8 +41,8 @@ export default function FloatingBubbles() {
 
   return (
     <div
-      className="absolute inset-0 overflow-hidden -z-10"
-      style={{ background: isDark ? '#0a0a0a' : '#ebebeb' }}
+      className="fixed inset-0 overflow-hidden"
+      style={{ background: isDark ? '#0a0a0a' : '#ebebeb', zIndex: -1 }}
       aria-hidden="true"
     >
       {bubbles.map((b, i) => (

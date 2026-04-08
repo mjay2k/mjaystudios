@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${syne.variable} ${jakarta.variable}`}>
-      <body className="bg-neutral-100 text-neutral-900 antialiased font-body">
+      <body className="text-neutral-900 antialiased font-body">
         {children}
       </body>
     </html>

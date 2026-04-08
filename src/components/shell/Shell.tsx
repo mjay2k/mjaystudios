@@ -6,6 +6,7 @@ import TimelineRail, { TimelineRailMobile, Marker } from './TimelineRail';
 import AboutPopup from '@/components/popups/AboutPopup';
 import ContactPopup from '@/components/popups/ContactPopup';
 import FullscreenDetail from '@/components/projects/FullscreenDetail';
+import FloatingBubbles from '@/components/ui/FloatingBubbles';
 
 interface ShellProps {
   markers: Marker[];
@@ -15,6 +16,7 @@ interface ShellProps {
 export default function Shell({ markers, children }: ShellProps) {
   return (
     <div className="relative min-h-screen">
+      <FloatingBubbles />
       <NavBar />
       <TimelineRail markers={markers} />
       <TimelineRailMobile markers={markers} />
