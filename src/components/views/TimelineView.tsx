@@ -101,10 +101,10 @@ export default function TimelineView() {
 
   return (
     <div>
-      {/* Hero */}
-      <div className="relative flex min-h-[80vh] items-center py-24 md:py-32 overflow-hidden rounded-3xl">
+      {/* Hero — full bleed */}
+      <div className="relative flex min-h-[80vh] items-center py-24 md:py-32 overflow-hidden -mx-4 -mt-20 px-4 pt-20 md:-mx-10 md:px-10">
         <VantaBackground />
-        <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16 w-full">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-10 md:gap-16 w-full">
           {/* Headshot */}
           <div className="reveal flex-shrink-0 relative">
             {/* Border accent — desktop only */}
