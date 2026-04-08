@@ -56,23 +56,38 @@ function DetailContent({ project }: { project: Project }) {
         className="relative h-full w-full overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
-        <button
-          onClick={handleClose}
-          className="fixed top-5 right-5 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/60 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
-          aria-label="Close"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
+        {/* Top bar — close + minimize */}
+        <div className="fixed top-5 right-5 z-20 flex items-center gap-2">
+          {/* Minimize toggle — desktop only */}
+          <button
+            onClick={() => setMinimized(!minimized)}
+            className="hidden md:flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+            title={minimized ? 'Show details' : 'Focus on image'}
+          >
+            {minimized ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
+            )}
+          </button>
+          {/* Close */}
+          <button
+            onClick={handleClose}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/60 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+            aria-label="Close"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
 
         {/* Desktop layout */}
-        <div className="hidden md:flex h-full">
-          {/* Image area */}
-          <div className="flex-1 flex items-center justify-center p-8">
-            <div className={`flex items-center gap-4 w-full transition-all duration-500 ${minimized ? 'max-w-6xl' : 'max-w-4xl'}`}>
+        <div className="hidden md:flex h-full" style={{ padding: 15 }}>
+          {/* Image area — always fits in viewport */}
+          <div className="flex-1 flex items-center justify-center">
+            <div className="flex items-center gap-4 w-full h-full">
               {allImages.length > 1 ? (
                 <button
                   onClick={prev}
@@ -82,14 +97,14 @@ function DetailContent({ project }: { project: Project }) {
                 </button>
               ) : <div className="w-10 flex-shrink-0" />}
 
-              <div className="relative flex-1 overflow-hidden rounded-xl">
+              <div className="relative flex-1 flex items-center justify-center h-full overflow-hidden rounded-xl">
                 <Image
                   src={allImages[activeIndex]}
                   alt={`${project.title} — ${activeIndex + 1}`}
                   width={1200}
                   height={900}
-                  className="h-auto w-full"
-                  sizes={minimized ? '85vw' : '60vw'}
+                  className="max-h-full max-w-full h-auto w-auto object-contain"
+                  sizes="70vw"
                 />
               </div>
 
@@ -106,7 +121,7 @@ function DetailContent({ project }: { project: Project }) {
 
           {/* Info sidebar — collapsible */}
           <div className={`flex-shrink-0 flex flex-col justify-center border-l border-white/5 transition-all duration-500 overflow-hidden ${minimized ? 'w-0 p-0 border-transparent' : 'w-80 p-8'}`}>
-            <div className={`transition-opacity duration-300 ${minimized ? 'opacity-0' : 'opacity-100'}`}>
+            <div className={`transition-opacity duration-300 min-w-[260px] ${minimized ? 'opacity-0' : 'opacity-100'}`}>
               <div className="w-8 h-[3px] rounded-full mb-6" style={{ backgroundColor: 'var(--color-brand)' }} />
 
               <h2 className="text-2xl font-bold font-display text-white">
@@ -145,39 +160,19 @@ function DetailContent({ project }: { project: Project }) {
               )}
             </div>
           </div>
-
-          {/* Minimize/expand toggle */}
-          <button
-            onClick={() => setMinimized(!minimized)}
-            className="fixed bottom-6 right-6 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
-            title={minimized ? 'Show details' : 'Hide details'}
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              className={`transition-transform duration-300 ${minimized ? 'rotate-180' : ''}`}
-            >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
         </div>
 
-        {/* Mobile layout: full screen, scrollable */}
-        <div className="flex flex-col md:hidden min-h-full">
-          {/* Image with arrows below */}
-          <div className="relative flex-1 flex flex-col items-center px-4 pt-16 pb-4">
-            <div className="relative w-full overflow-hidden rounded-xl">
+        {/* Mobile layout */}
+        <div className="flex flex-col md:hidden min-h-full" style={{ padding: 15 }}>
+          {/* Image — constrained to viewport */}
+          <div className="flex-1 flex items-center justify-center pt-12">
+            <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-xl">
               <Image
                 src={allImages[activeIndex]}
                 alt={`${project.title} — ${activeIndex + 1}`}
                 width={800}
                 height={600}
-                className="h-auto w-full"
+                className="max-h-full max-w-full h-auto w-auto object-contain"
                 sizes="95vw"
               />
             </div>
@@ -253,25 +248,6 @@ function DetailContent({ project }: { project: Project }) {
             )}
           </div>
 
-          {/* Mobile minimize toggle */}
-          <button
-            onClick={() => setMinimized(!minimized)}
-            className="fixed bottom-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/50 backdrop-blur-sm"
-            title={minimized ? 'Show details' : 'Focus on image'}
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              className={`transition-transform duration-300 ${minimized ? '' : 'rotate-180'}`}
-            >
-              <polyline points="6 15 12 9 18 15" />
-            </svg>
-          </button>
         </div>
       </div>
     </div>
