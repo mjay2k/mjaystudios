@@ -103,15 +103,16 @@ export default function TimelineView() {
       {/* Hero */}
       <div className="flex min-h-[80vh] items-center py-24 md:py-32">
         <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16 w-full">
-          {/* Headshot with subtle border treatment */}
+          {/* Headshot */}
           <div className="reveal flex-shrink-0 relative">
-            <div className="absolute -inset-2 rounded-3xl opacity-20" style={{ border: '2px solid var(--color-brand)' }} />
+            {/* Border accent — desktop only */}
+            <div className="hidden md:block absolute -inset-2 rounded-3xl opacity-20" style={{ border: '2px solid var(--color-brand)' }} />
             <Image
               src={theme === 'dark' ? '/portfolio/headshot-dark.jpg' : '/portfolio/headshot.jpg'}
               alt="Matthew Johnson"
               width={320}
               height={320}
-              className="rounded-2xl object-cover w-52 h-52 md:w-72 md:h-72 relative z-10"
+              className="rounded-2xl object-cover w-36 h-36 md:w-72 md:h-72 relative z-10"
               priority
             />
           </div>
