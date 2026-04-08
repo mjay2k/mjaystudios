@@ -3,6 +3,7 @@
 import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
+import AnimatedGradient from '@/components/ui/AnimatedGradient';
 import { useAppStore } from '@/stores/useAppStore';
 import ProjectGrid from '@/components/projects/ProjectGrid';
 import type { Project } from '@/data/projects';
@@ -77,7 +78,8 @@ export default function EraSection({ config, projects }: EraSectionProps) {
       />
 
       {/* Era intro — editorial style */}
-      <div className="mb-20 md:mb-28">
+      <div className="relative mb-20 md:mb-28 overflow-hidden rounded-2xl p-8 md:p-12">
+        <AnimatedGradient variant="card" />
         {/* Large era title as visual moment */}
         <div className="flex items-end gap-4 mb-6">
           <h2

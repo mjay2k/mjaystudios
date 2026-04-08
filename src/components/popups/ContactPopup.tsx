@@ -6,6 +6,8 @@ import Modal from './Modal';
 export default function ContactPopup() {
   const contactOpen = useAppStore((s) => s.contactOpen);
   const setContactOpen = useAppStore((s) => s.setContactOpen);
+  const theme = useAppStore((s) => s.theme);
+  const isDark = theme === 'dark';
 
   const contacts = [
     {
@@ -61,12 +63,12 @@ export default function ContactPopup() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-8 h-[2px] rounded-full" style={{ backgroundColor: 'var(--color-brand)' }} />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">Get in Touch</span>
+          <span className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${isDark ? 'text-white/40' : 'text-neutral-400'}`}>Get in Touch</span>
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold font-display text-white leading-tight">
+        <h2 className={`text-3xl md:text-4xl font-bold font-display leading-tight ${isDark ? 'text-white' : 'text-neutral-900'}`}>
           Let&apos;s work<br />together.
         </h2>
-        <p className="mt-3 text-sm text-white/40">
+        <p className={`mt-3 text-sm ${isDark ? 'text-white/40' : 'text-neutral-500'}`}>
           Open to freelance, collaboration, and creative opportunities.
         </p>
       </div>
@@ -79,16 +81,18 @@ export default function ContactPopup() {
             href={c.href}
             target={c.href.startsWith('http') ? '_blank' : undefined}
             rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            className="flex items-center gap-4 rounded-xl bg-white/5 px-5 py-4 transition-all hover:bg-white/10 group"
+            className={`flex items-center gap-4 rounded-xl px-5 py-4 transition-all group ${
+              isDark ? 'bg-white/5 hover:bg-white/10' : 'bg-neutral-900/5 hover:bg-neutral-900/10'
+            }`}
           >
-            <div className="flex-shrink-0 text-white/30 group-hover:text-white/60 transition-colors" style={{ color: undefined }}>
+            <div className={`flex-shrink-0 transition-colors ${isDark ? 'text-white/30 group-hover:text-white/60' : 'text-neutral-400 group-hover:text-neutral-600'}`}>
               {c.icon}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-medium uppercase tracking-wider text-white/30">{c.label}</p>
-              <p className="text-sm font-medium text-white/70 group-hover:text-white transition-colors truncate">{c.value}</p>
+              <p className={`text-[10px] font-medium uppercase tracking-wider ${isDark ? 'text-white/30' : 'text-neutral-400'}`}>{c.label}</p>
+              <p className={`text-sm font-medium transition-colors truncate ${isDark ? 'text-white/70 group-hover:text-white' : 'text-neutral-700 group-hover:text-neutral-900'}`}>{c.value}</p>
             </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-white/20 group-hover:text-white/50 transition-colors flex-shrink-0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className={`transition-colors flex-shrink-0 ${isDark ? 'text-white/20 group-hover:text-white/50' : 'text-neutral-300 group-hover:text-neutral-500'}`}>
               <polyline points="9 18 15 12 9 6" />
             </svg>
           </a>

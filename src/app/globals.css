@@ -15,6 +15,31 @@ body {
   font-family: var(--font-syne), sans-serif;
 }
 
+/* Animated mesh gradient */
+@keyframes mesh-drift {
+  0% { background-position: 0% 0%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 50% 100%; }
+  75% { background-position: 0% 50%; }
+  100% { background-position: 0% 0%; }
+}
+
+@keyframes mesh-drift-reverse {
+  0% { background-position: 100% 100%; }
+  25% { background-position: 0% 50%; }
+  50% { background-position: 50% 0%; }
+  75% { background-position: 100% 50%; }
+  100% { background-position: 100% 100%; }
+}
+
+.animate-mesh-drift {
+  animation: mesh-drift 20s ease-in-out infinite;
+}
+
+.animate-mesh-drift-reverse {
+  animation: mesh-drift-reverse 25s ease-in-out infinite;
+}
+
 /* Dark mode transitions */
 html {
   transition: background-color 0.3s ease, color 0.3s ease;

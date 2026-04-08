@@ -51,7 +51,7 @@ export default function AboutPopup() {
       </div>
 
       {/* Bio */}
-      <div className="space-y-4 text-sm leading-[1.7] text-white/65">
+      <div className={`space-y-4 text-sm leading-[1.7] ${theme === 'dark' ? 'text-white/65' : 'text-neutral-600'}`}>
         <p>
           Award-winning creative leader with over 15 years bridging strategic
           brand development, digital innovation, and multimedia production.
@@ -75,8 +75,8 @@ export default function AboutPopup() {
       </div>
 
       {/* Footer */}
-      <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-        <p className="text-[10px] text-white/30 leading-relaxed">
+      <div className={`mt-8 pt-6 flex items-center justify-between ${theme === 'dark' ? 'border-t border-white/5' : 'border-t border-neutral-200'}`}>
+        <p className={`text-[10px] leading-relaxed ${theme === 'dark' ? 'text-white/30' : 'text-neutral-400'}`}>
           BS Interdisciplinary Studies, Liberty University<br />
           AA Visual Communications, Ivy Tech
         </p>
@@ -84,7 +84,7 @@ export default function AboutPopup() {
           href="https://linkedin.com/in/mjaystudios"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-white/50 border border-white/10 transition-colors hover:border-white/30 hover:text-white/80"
+          className={`rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-wider border transition-colors ${theme === 'dark' ? 'text-white/50 border-white/10 hover:border-white/30 hover:text-white/80' : 'text-neutral-500 border-neutral-300 hover:border-neutral-500 hover:text-neutral-800'}`}
         >
           LinkedIn
         </a>
