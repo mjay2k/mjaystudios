@@ -69,37 +69,40 @@ function DetailContent({ project }: { project: Project }) {
 
         {/* Desktop layout: side by side */}
         <div className="hidden md:flex h-full">
-          {/* Image area — takes most of the space */}
+          {/* Image area with arrows flanking outside */}
           <div className="flex-1 flex items-center justify-center p-8">
-            <div className="relative w-full max-w-3xl">
-              <div className="relative w-full overflow-hidden rounded-xl">
+            <div className="flex items-center gap-4 w-full max-w-4xl">
+              {/* Prev arrow — outside left of image */}
+              {allImages.length > 1 ? (
+                <button
+                  onClick={prev}
+                  className="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40 transition hover:bg-white/10 hover:text-white"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
+                </button>
+              ) : <div className="w-10 flex-shrink-0" />}
+
+              {/* Image */}
+              <div className="relative flex-1 overflow-hidden rounded-xl">
                 <Image
                   src={allImages[activeIndex]}
                   alt={`${project.title} — ${activeIndex + 1}`}
                   width={1200}
                   height={900}
                   className="h-auto w-full"
-                  sizes="70vw"
+                  sizes="60vw"
                 />
               </div>
 
-              {/* Nav arrows overlaid on image */}
-              {allImages.length > 1 && (
-                <>
-                  <button
-                    onClick={prev}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white/70 backdrop-blur-sm transition hover:bg-black/60 hover:text-white"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
-                  </button>
-                  <button
-                    onClick={next}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white/70 backdrop-blur-sm transition hover:bg-black/60 hover:text-white"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
-                  </button>
-                </>
-              )}
+              {/* Next arrow — outside right of image */}
+              {allImages.length > 1 ? (
+                <button
+                  onClick={next}
+                  className="flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40 transition hover:bg-white/10 hover:text-white"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
+                </button>
+              ) : <div className="w-10 flex-shrink-0" />}
             </div>
           </div>
 
@@ -150,8 +153,8 @@ function DetailContent({ project }: { project: Project }) {
 
         {/* Mobile layout: full screen, scrollable */}
         <div className="flex flex-col md:hidden min-h-full">
-          {/* Image — near full width */}
-          <div className="relative flex-1 flex items-center px-4 pt-16 pb-4">
+          {/* Image with arrows below */}
+          <div className="relative flex-1 flex flex-col items-center px-4 pt-16 pb-4">
             <div className="relative w-full overflow-hidden rounded-xl">
               <Image
                 src={allImages[activeIndex]}
@@ -161,41 +164,36 @@ function DetailContent({ project }: { project: Project }) {
                 className="h-auto w-full"
                 sizes="95vw"
               />
-
-              {allImages.length > 1 && (
-                <>
-                  <button
-                    onClick={prev}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white/70 backdrop-blur-sm"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
-                  </button>
-                  <button
-                    onClick={next}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white/70 backdrop-blur-sm"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
-                  </button>
-                </>
-              )}
             </div>
           </div>
 
-          {/* Dot indicators */}
+          {/* Nav arrows + dots below image */}
           {allImages.length > 1 && (
-            <div className="flex justify-center gap-1.5 py-3">
-              {allImages.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveIndex(i)}
-                  className={`h-1.5 rounded-full transition-all ${
-                    i === activeIndex
-                      ? 'w-6'
-                      : 'w-1.5 bg-white/20'
-                  }`}
-                  style={i === activeIndex ? { backgroundColor: 'var(--color-brand)' } : undefined}
-                />
-              ))}
+            <div className="flex items-center justify-center gap-5 py-4">
+              <button
+                onClick={prev}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40 transition hover:bg-white/10 hover:text-white"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
+              </button>
+              <div className="flex gap-1.5">
+                {allImages.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveIndex(i)}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === activeIndex ? 'w-6' : 'w-1.5 bg-white/20'
+                    }`}
+                    style={i === activeIndex ? { backgroundColor: 'var(--color-brand)' } : undefined}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={next}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40 transition hover:bg-white/10 hover:text-white"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
+              </button>
             </div>
           )}
 
