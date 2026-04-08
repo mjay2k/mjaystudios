@@ -37,13 +37,13 @@ export default function VantaBackground({ className = '' }: VantaBackgroundProps
         gyroControls: false,
         minHeight: 200,
         minWidth: 200,
-        skyColor: isDark ? 0x0a0a0a : 0xf0ebe6,
-        cloudColor: isDark ? 0x1a1a1a : 0xe0d8d0,
-        cloudShadowColor: isDark ? 0x050505 : 0xc8beb2,
+        skyColor: isDark ? 0x080808 : 0xd4cec6,
+        cloudColor: isDark ? 0x222222 : 0xa09488,
+        cloudShadowColor: isDark ? 0x000000 : 0x8a7e72,
         sunColor: isDark ? 0xF15A29 : 0xF15A29,
-        sunGlareColor: isDark ? 0x331008 : 0xf5ddd0,
-        sunlightColor: isDark ? 0x1a0a04 : 0xf0d8c8,
-        speed: 0.7,
+        sunGlareColor: isDark ? 0x4a1a08 : 0xf0b090,
+        sunlightColor: isDark ? 0x2a0e04 : 0xe8c0a0,
+        speed: 0.8,
       });
     }
 
@@ -85,8 +85,8 @@ export default function VantaBackground({ className = '' }: VantaBackgroundProps
   return (
     <div
       ref={vantaRef}
-      className={`absolute inset-0 ${className}`}
-      style={{ opacity: theme === 'dark' ? 0.6 : 0.4 }}
+      className={`absolute inset-0 -z-10 ${className}`}
+      style={{ opacity: theme === 'dark' ? 0.8 : 0.7 }}
       aria-hidden="true"
     />
   );
