@@ -328,12 +328,35 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={(e) => {
-        // If click is above the ticks area, scroll to top
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
         const clickY = e.clientY - rect.top;
-        if (clickY < railTop - 64) {
+
+        // Above ticks area — scroll to top
+        if (clickY < railTop) {
           scrollToTop();
+          return;
         }
+
+        // Map click position to scroll progress
+        const railHeight = rect.height - railTop - railBottom;
+        const clickProgress = Math.max(0, Math.min(1, (clickY - railTop) / railHeight));
+
+        // Map to marker range (0.1-0.9) then to page scroll
+        const firstPos = sortedMarkers[0]?.position ?? 0.1;
+        const lastPos = sortedMarkers[sortedMarkers.length - 1]?.position ?? 0.9;
+        const mappedPos = firstPos + clickProgress * (lastPos - firstPos);
+
+        // Convert position to actual scroll target
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        // Reverse the mapping: progress = (mappedPos - firstPos) / (lastPos - firstPos)
+        const scrollProgress = (mappedPos - firstPos) / (lastPos - firstPos);
+        const targetY = scrollProgress * maxScroll;
+
+        gsap.to(window, {
+          scrollTo: { y: targetY },
+          duration: 0.8,
+          ease: 'power3.out',
+        });
       }}
     >
 
