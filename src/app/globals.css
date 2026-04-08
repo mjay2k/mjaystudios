@@ -15,6 +15,13 @@ body {
   font-family: var(--font-syne), sans-serif;
 }
 
+/* Floating bubbles animation */
+@keyframes bubble-move {
+  100% {
+    transform: translate3d(0, 0, 1px) rotate(360deg);
+  }
+}
+
 /* Animated mesh gradient */
 @keyframes mesh-drift {
   0% { background-position: 0% 0%; }
