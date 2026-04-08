@@ -100,35 +100,40 @@ export default function TimelineView() {
 
   return (
     <div>
-      {/* Hero — above the timeline */}
-      <div className="flex min-h-[70vh] items-center py-20">
-        <div className="flex flex-col md:flex-row md:items-center gap-12 w-full">
-          <div className="reveal flex-shrink-0">
+      {/* Hero */}
+      <div className="flex min-h-[80vh] items-center py-24 md:py-32">
+        <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16 w-full">
+          {/* Headshot with subtle border treatment */}
+          <div className="reveal flex-shrink-0 relative">
+            <div className="absolute -inset-2 rounded-3xl opacity-20" style={{ border: '2px solid var(--color-brand)' }} />
             <Image
               src={theme === 'dark' ? '/portfolio/headshot-dark.jpg' : '/portfolio/headshot.jpg'}
               alt="Matthew Johnson"
-              width={280}
-              height={280}
-              className="rounded-2xl object-cover w-48 h-48 md:w-64 md:h-64"
+              width={320}
+              height={320}
+              className="rounded-2xl object-cover w-52 h-52 md:w-72 md:h-72 relative z-10"
               priority
             />
           </div>
           <div className="flex-1">
-            <h1 className="reveal text-5xl font-bold tracking-tight md:text-7xl font-display">
-              Created to <span style={{ color: 'var(--color-brand)' }}>Create</span>
+            <div className="reveal flex items-center gap-3 mb-5">
+              <div className="w-8 h-[2px] rounded-full" style={{ backgroundColor: 'var(--color-brand)' }} />
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">Art Director &middot; Designer &middot; Builder</span>
+            </div>
+            <h1 className="reveal text-5xl font-bold tracking-tight md:text-8xl font-display leading-[0.95]">
+              Created to<br /><span style={{ color: 'var(--color-brand)' }}>Create</span>
             </h1>
-            <p className="reveal mt-6 max-w-lg text-lg leading-relaxed text-neutral-500">
+            <p className="reveal mt-8 max-w-md text-base leading-relaxed text-neutral-500">
               15+ years bridging art direction, brand strategy, and digital innovation.
               From bourbon labels to Fortune 500 campaigns to AI-powered apps —
               recognized with 4 Silver ADDY Awards along the way.
             </p>
             <button
               onClick={() => setAboutOpen(true)}
-              className="reveal mt-8 inline-flex items-center gap-2 text-sm font-medium transition-colors hover:opacity-80"
-              style={{ color: 'var(--color-brand)' }}
+              className="reveal mt-8 inline-flex items-center gap-2 rounded-full border border-neutral-300 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-neutral-600 transition-all hover:border-neutral-900 hover:text-neutral-900"
             >
               About me
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
             </button>
           </div>
         </div>

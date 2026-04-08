@@ -43,13 +43,13 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
   return (
     <div
       ref={gridRef}
-      className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10"
+      className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12"
     >
       {projects.map((project, i) => (
         <div
           key={project.id}
           className={`project-card ${
-            i % 2 === 1 ? 'md:mt-8' : ''
+            i % 2 === 1 ? 'md:mt-12' : ''
           }`}
         >
           <ProjectCard project={project} />

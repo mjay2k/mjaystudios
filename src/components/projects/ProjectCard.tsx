@@ -82,11 +82,11 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <div
-      className={`group relative ${hasDetail ? 'cursor-pointer' : ''}`}
+      className={`group relative transition-all duration-300 ${hasDetail ? 'cursor-pointer' : ''}`}
       onClick={() => hasDetail && setDetailProject(project.id)}
     >
       <div
-        className="relative overflow-hidden rounded-lg bg-neutral-200"
+        className="relative overflow-hidden rounded-xl bg-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-shadow duration-300 group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
         style={maxHeight && multiImage ? { minHeight: maxHeight } : undefined}
       >
         {multiImage ? (
@@ -147,10 +147,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         )}
       </div>
 
-      <h3 className="mt-3 text-sm font-semibold font-display">{project.title}</h3>
-      <p className="mt-1 text-xs leading-relaxed text-neutral-500">
-        {project.description}
-      </p>
+      <div className="mt-4">
+        <h3 className="text-sm font-bold font-display tracking-tight">{project.title}</h3>
+        <p className="mt-1.5 text-xs leading-relaxed text-neutral-400">
+          {project.description}
+        </p>
+      </div>
     </div>
   );
 }

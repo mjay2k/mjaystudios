@@ -70,63 +70,53 @@ export default function EraSection({ config, projects }: EraSectionProps) {
   }, [config.section, config.id, setCurrentSection]);
 
   return (
-    <section ref={sectionRef} id={`section-${config.id}`} className="relative pt-12 md:pt-20">
+    <section ref={sectionRef} id={`section-${config.id}`} className="relative pt-16 md:pt-28">
       <div
         className={`era-bg ${config.bgClass ?? ''}`}
         id={`era-bg-${config.id}`}
       />
 
-      {/* Era intro card — full bleed left on mobile */}
-      <div className="mb-16 rounded-r-2xl md:rounded-2xl bg-neutral-50 -ml-4 pl-4 pr-6 py-10 md:ml-0 md:px-12 md:py-16">
-        <div className="flex flex-col md:flex-row md:gap-12">
-          {/* Copy */}
-          <div className="flex-1">
-            <h2
-              ref={titleRef}
-              className="text-3xl font-bold tracking-tight md:text-5xl font-display"
-            >
-              <span className={config.accent}>{config.title}</span>
-            </h2>
-            {config.section.dateRange && (
-              <p className="mt-2 text-sm font-medium text-neutral-400">
-                {config.section.dateRange}
-              </p>
-            )}
-            <div className="mt-4 max-w-xl space-y-3 text-[13px] md:text-base leading-relaxed text-neutral-600">
-              {config.intro.split('\n').filter(Boolean).map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
-            </div>
+      {/* Era intro — editorial style */}
+      <div className="mb-20 md:mb-28">
+        {/* Large era title as visual moment */}
+        <div className="flex items-end gap-4 mb-6">
+          <h2
+            ref={titleRef}
+            className="text-5xl md:text-8xl font-bold tracking-tight font-display leading-[0.9]"
+          >
+            <span className={config.accent}>{config.title}</span>
+          </h2>
+          {config.section.dateRange && (
+            <span className="text-sm font-medium text-neutral-400 pb-1 md:pb-2">
+              {config.section.dateRange}
+            </span>
+          )}
+        </div>
+
+        {/* Divider line */}
+        <div className="w-full h-px bg-neutral-200 mb-8" />
+
+        {/* Copy + logos side by side */}
+        <div className="flex flex-col md:flex-row md:gap-16">
+          <div className="flex-1 max-w-2xl space-y-4 text-[13px] md:text-[15px] leading-relaxed text-neutral-500">
+            {config.intro.split('\n').filter(Boolean).map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))}
           </div>
 
-          {/* Logos — stacked on the right on desktop, inline on mobile */}
           {config.introImages && config.introImages.length > 0 && (
-            <>
-              <div className="hidden md:flex flex-col items-center justify-evenly flex-shrink-0 w-40 self-stretch">
-                {config.introImages.map((src, i) => (
-                  <Image
-                    key={i}
-                    src={src}
-                    alt={`${config.title} logo`}
-                    width={160}
-                    height={80}
-                    className="h-auto w-32 object-contain"
-                  />
-                ))}
-              </div>
-              <div className="mt-6 flex items-center gap-6 md:hidden">
-                {config.introImages.map((src, i) => (
-                  <Image
-                    key={i}
-                    src={src}
-                    alt={`${config.title} logo`}
-                    width={100}
-                    height={50}
-                    className="h-14 w-auto object-contain"
-                  />
-                ))}
-              </div>
-            </>
+            <div className="flex md:flex-col items-center justify-center gap-6 mt-6 md:mt-0 flex-shrink-0 md:w-36 opacity-40">
+              {config.introImages.map((src, i) => (
+                <Image
+                  key={i}
+                  src={src}
+                  alt={`${config.title} logo`}
+                  width={140}
+                  height={70}
+                  className="h-10 md:h-auto md:w-28 w-auto object-contain"
+                />
+              ))}
+            </div>
           )}
         </div>
       </div>
