@@ -47,9 +47,18 @@ body {
   animation: mesh-drift-reverse 25s ease-in-out infinite;
 }
 
+/* Rail background — solid strip so bubbles don't show behind timeline */
+:root {
+  --rail-bg: #f2f2f2;
+}
+
 /* Dark mode transitions */
 html {
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark {
+  --rail-bg: #111111;
 }
 
 html.dark body {

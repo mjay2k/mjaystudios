@@ -322,8 +322,8 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
 
     <div
       ref={railRef}
-      className="fixed top-0 right-0 z-40 hidden h-full md:block cursor-pointer"
-      style={{ width: 92, top: 64 }}
+      className="fixed top-0 right-0 z-40 hidden h-full md:block cursor-pointer rail-bg"
+      style={{ width: 92, top: 64, backgroundColor: 'var(--rail-bg)' }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -556,7 +556,7 @@ export function TimelineRailMobile({ markers }: TimelineRailProps) {
     )}
 
     {/* Tick marks */}
-    <div className="fixed top-0 right-0 z-40 block h-full md:hidden" style={{ width: 20, top: 64 }}>
+    <div className="fixed top-0 right-0 z-40 block h-full md:hidden" style={{ width: 20, top: 64, backgroundColor: 'var(--rail-bg)' }}>
       <div
         ref={ticksContainerRef}
         style={{ top: 16, bottom: 40, position: 'absolute', right: 0, left: 0 }}

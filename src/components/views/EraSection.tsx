@@ -107,7 +107,9 @@ export default function EraSection({ config, projects }: EraSectionProps) {
           </div>
 
           {config.introImages && config.introImages.length > 0 && (
-            <div className="flex md:flex-col items-center justify-center gap-6 mt-6 md:mt-0 flex-shrink-0 md:w-36 opacity-40">
+            <div className="flex md:flex-col items-center justify-center gap-6 mt-6 md:mt-0 flex-shrink-0 md:w-40 rounded-2xl p-4 border border-neutral-200/30 backdrop-blur-sm"
+              style={{ background: 'rgba(255,255,255,0.06)' }}
+            >
               {config.introImages.map((src, i) => (
                 <Image
                   key={i}
@@ -115,7 +117,7 @@ export default function EraSection({ config, projects }: EraSectionProps) {
                   alt={`${config.title} logo`}
                   width={140}
                   height={70}
-                  className="h-10 md:h-auto md:w-28 w-auto object-contain"
+                  className="h-10 md:h-auto md:w-28 w-auto object-contain opacity-50"
                 />
               ))}
             </div>

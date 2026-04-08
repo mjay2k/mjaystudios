@@ -4,7 +4,13 @@ import { useAppStore } from '@/stores/useAppStore';
 
 export default function FloatingBubbles() {
   const theme = useAppStore((s) => s.theme);
+  const aboutOpen = useAppStore((s) => s.aboutOpen);
+  const contactOpen = useAppStore((s) => s.contactOpen);
+  const detailProject = useAppStore((s) => s.detailProject);
   const isDark = theme === 'dark';
+
+  // Elevate above content when a popup is open so bubbles show through backdrop
+  const isPopupOpen = aboutOpen || contactOpen || !!detailProject;
 
   // Light: white/gray bubbles. Dark: darker subtle bubbles
   const colors = isDark
@@ -41,8 +47,12 @@ export default function FloatingBubbles() {
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden"
-      style={{ background: isDark ? '#0a0a0a' : '#ebebeb', zIndex: -1 }}
+      className="fixed inset-0 overflow-hidden pointer-events-none"
+      style={{
+        background: isDark ? '#0a0a0a' : '#ebebeb',
+        zIndex: isPopupOpen ? 95 : 1,
+        transition: 'z-index 0s',
+      }}
       aria-hidden="true"
     >
       {bubbles.map((b, i) => (

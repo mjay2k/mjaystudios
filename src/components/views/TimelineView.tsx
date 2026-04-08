@@ -98,10 +98,12 @@ export default function TimelineView() {
     };
   }, [setCurrentSection]);
 
+  const isDark = theme === 'dark';
+
   return (
     <div>
-      {/* Hero — full bleed */}
-      <div className="relative flex min-h-[80vh] items-center py-24 md:py-32 -mx-4 -mt-20 px-4 pt-20 md:-mx-10 md:px-10">
+      {/* Hero — full bleed, transparent window to bubbles */}
+      <div className="relative flex min-h-[80vh] items-center py-24 md:py-32 -ml-4 -mr-8 -mt-20 pl-4 pr-8 pt-20 md:-ml-10 md:-mr-28 md:pl-10 md:pr-28">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-10 md:gap-16 w-full">
           {/* Headshot */}
           <div className="reveal flex-shrink-0 relative">
@@ -140,41 +142,49 @@ export default function TimelineView() {
         </div>
       </div>
 
-      {/* Timeline anchor — invisible marker for scroll tracking */}
-      <div ref={introRef} id="section-intro" className="h-px" />
+      {/* Solid content panel — slides over bubbles with rounded top edge */}
+      <div
+        className="relative -ml-4 -mr-8 md:-ml-10 md:-mr-28 rounded-t-3xl"
+        style={{ backgroundColor: isDark ? '#111111' : '#f2f2f2' }}
+      >
+        <div className="pl-4 pr-8 md:pl-10 md:pr-28 pt-8">
+          {/* Timeline anchor — invisible marker for scroll tracking */}
+          <div ref={introRef} id="section-intro" className="h-px" />
 
-      {/* Era sections with spacing */}
-      {eras.map((era) => {
-        const eraProjects = getProjectsByEra(era.id as 'agency' | 'berry' | 'afterberry');
-        // Skip eras with no projects
-        if (eraProjects.length === 0) return (
-          <EraSection key={era.id} config={era} projects={[]} />
-        );
-        return (
-          <EraSection
-            key={era.id}
-            config={era}
-            projects={eraProjects}
-          />
-        );
-      })}
+          {/* Era sections with spacing */}
+          {eras.map((era) => {
+            const eraProjects = getProjectsByEra(era.id as 'agency' | 'berry' | 'afterberry');
+            // Skip eras with no projects
+            if (eraProjects.length === 0) return (
+              <EraSection key={era.id} config={era} projects={[]} />
+            );
+            return (
+              <EraSection
+                key={era.id}
+                config={era}
+                projects={eraProjects}
+              />
+            );
+          })}
 
-      {/* Outro — stronger CTA */}
-      <div id="section-contact" className="flex min-h-[50vh] flex-col items-center justify-center py-24 text-center">
-        <div className="w-12 h-[3px] rounded-full mb-8" style={{ backgroundColor: 'var(--color-brand)' }} />
-        <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight">
-          Let&apos;s <span style={{ color: 'var(--color-brand)' }}>build</span> something.
-        </h2>
-        <p className="mt-4 max-w-md text-neutral-500">
-          Open to freelance, collaboration, and creative opportunities.
-        </p>
-        <button
-          onClick={() => useAppStore.getState().setContactOpen(true)}
-          className="mt-8 rounded-full px-10 py-3.5 text-sm font-semibold font-display text-white transition-colors hover:opacity-90"
-          style={{ backgroundColor: 'var(--color-brand)' }}
-        >
-          Get in Touch
-        </button>
+          {/* Outro — stronger CTA */}
+          <div id="section-contact" className="flex min-h-[50vh] flex-col items-center justify-center py-24 text-center">
+            <div className="w-12 h-[3px] rounded-full mb-8" style={{ backgroundColor: 'var(--color-brand)' }} />
+            <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight">
+              Let&apos;s <span style={{ color: 'var(--color-brand)' }}>build</span> something.
+            </h2>
+            <p className="mt-4 max-w-md text-neutral-500">
+              Open to freelance, collaboration, and creative opportunities.
+            </p>
+            <button
+              onClick={() => useAppStore.getState().setContactOpen(true)}
+              className="mt-8 rounded-full px-10 py-3.5 text-sm font-semibold font-display text-white transition-colors hover:opacity-90"
+              style={{ backgroundColor: 'var(--color-brand)' }}
+            >
+              Get in Touch
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
