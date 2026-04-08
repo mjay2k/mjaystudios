@@ -57,6 +57,13 @@ export const useAppStore = create<AppState>((set) => ({
     set((state) => {
       const next = state.theme === 'light' ? 'dark' : 'light';
       document.documentElement.classList.toggle('dark', next === 'dark');
+
+      // Force ScrollTrigger to re-evaluate tick colors
+      requestAnimationFrame(() => {
+        window.scrollBy(0, 1);
+        requestAnimationFrame(() => window.scrollBy(0, -1));
+      });
+
       return { theme: next };
     }),
 }));
