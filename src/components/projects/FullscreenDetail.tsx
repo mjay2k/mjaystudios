@@ -10,6 +10,7 @@ function DetailContent({ project }: { project: Project }) {
   const setDetailProject = useAppStore((s) => s.setDetailProject);
   const [activeIndex, setActiveIndex] = useState(0);
   const [showInfo, setShowInfo] = useState(false);
+  const [minimized, setMinimized] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -67,12 +68,11 @@ function DetailContent({ project }: { project: Project }) {
           </svg>
         </button>
 
-        {/* Desktop layout: side by side */}
+        {/* Desktop layout */}
         <div className="hidden md:flex h-full">
-          {/* Image area with arrows flanking outside */}
+          {/* Image area */}
           <div className="flex-1 flex items-center justify-center p-8">
-            <div className="flex items-center gap-4 w-full max-w-4xl">
-              {/* Prev arrow — outside left of image */}
+            <div className={`flex items-center gap-4 w-full transition-all duration-500 ${minimized ? 'max-w-6xl' : 'max-w-4xl'}`}>
               {allImages.length > 1 ? (
                 <button
                   onClick={prev}
@@ -82,7 +82,6 @@ function DetailContent({ project }: { project: Project }) {
                 </button>
               ) : <div className="w-10 flex-shrink-0" />}
 
-              {/* Image */}
               <div className="relative flex-1 overflow-hidden rounded-xl">
                 <Image
                   src={allImages[activeIndex]}
@@ -90,11 +89,10 @@ function DetailContent({ project }: { project: Project }) {
                   width={1200}
                   height={900}
                   className="h-auto w-full"
-                  sizes="60vw"
+                  sizes={minimized ? '85vw' : '60vw'}
                 />
               </div>
 
-              {/* Next arrow — outside right of image */}
               {allImages.length > 1 ? (
                 <button
                   onClick={next}
@@ -106,49 +104,67 @@ function DetailContent({ project }: { project: Project }) {
             </div>
           </div>
 
-          {/* Info sidebar */}
-          <div className="w-80 flex-shrink-0 flex flex-col justify-center p-8 border-l border-white/5">
-            {/* Orange accent line */}
-            <div className="w-8 h-[3px] rounded-full mb-6" style={{ backgroundColor: 'var(--color-brand)' }} />
+          {/* Info sidebar — collapsible */}
+          <div className={`flex-shrink-0 flex flex-col justify-center border-l border-white/5 transition-all duration-500 overflow-hidden ${minimized ? 'w-0 p-0 border-transparent' : 'w-80 p-8'}`}>
+            <div className={`transition-opacity duration-300 ${minimized ? 'opacity-0' : 'opacity-100'}`}>
+              <div className="w-8 h-[3px] rounded-full mb-6" style={{ backgroundColor: 'var(--color-brand)' }} />
 
-            <h2 className="text-2xl font-bold font-display text-white">
-              {project.title}
-            </h2>
+              <h2 className="text-2xl font-bold font-display text-white">
+                {project.title}
+              </h2>
 
-            {allImages.length > 1 && (
-              <p className="mt-2 text-xs text-white/30">
-                {activeIndex + 1} of {allImages.length}
+              {allImages.length > 1 && (
+                <p className="mt-2 text-xs text-white/30">
+                  {activeIndex + 1} of {allImages.length}
+                </p>
+              )}
+
+              <p className="mt-4 text-sm leading-relaxed text-white/60">
+                {description}
               </p>
-            )}
 
-            <p className="mt-4 text-sm leading-relaxed text-white/60">
-              {description}
-            </p>
+              {project.caseStudy?.processNotes && (
+                <p className="mt-4 text-xs italic text-white/35">
+                  {project.caseStudy.processNotes}
+                </p>
+              )}
 
-            {project.caseStudy?.processNotes && (
-              <p className="mt-4 text-xs italic text-white/35">
-                {project.caseStudy.processNotes}
-              </p>
-            )}
-
-            {/* Dot indicators */}
-            {allImages.length > 1 && (
-              <div className="mt-6 flex gap-1.5">
-                {allImages.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveIndex(i)}
-                    className={`h-1.5 rounded-full transition-all ${
-                      i === activeIndex
-                        ? 'w-6'
-                        : 'w-1.5 bg-white/20 hover:bg-white/40'
-                    }`}
-                    style={i === activeIndex ? { backgroundColor: 'var(--color-brand)' } : undefined}
-                  />
-                ))}
-              </div>
-            )}
+              {allImages.length > 1 && (
+                <div className="mt-6 flex gap-1.5">
+                  {allImages.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveIndex(i)}
+                      className={`h-1.5 rounded-full transition-all ${
+                        i === activeIndex ? 'w-6' : 'w-1.5 bg-white/20 hover:bg-white/40'
+                      }`}
+                      style={i === activeIndex ? { backgroundColor: 'var(--color-brand)' } : undefined}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
+
+          {/* Minimize/expand toggle */}
+          <button
+            onClick={() => setMinimized(!minimized)}
+            className="fixed bottom-6 right-6 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white"
+            title={minimized ? 'Show details' : 'Hide details'}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              className={`transition-transform duration-300 ${minimized ? 'rotate-180' : ''}`}
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
         </div>
 
         {/* Mobile layout: full screen, scrollable */}
@@ -167,12 +183,12 @@ function DetailContent({ project }: { project: Project }) {
             </div>
           </div>
 
-          {/* Nav arrows + dots below image */}
+          {/* Nav arrows below image */}
           {allImages.length > 1 && (
             <div className="flex items-center justify-center gap-5 py-4">
               <button
                 onClick={prev}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40 transition hover:bg-white/10 hover:text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
               </button>
@@ -190,15 +206,15 @@ function DetailContent({ project }: { project: Project }) {
               </div>
               <button
                 onClick={next}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40 transition hover:bg-white/10 hover:text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-white/40"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
               </button>
             </div>
           )}
 
-          {/* Expandable info panel */}
-          <div className="px-5 pb-8">
+          {/* Info panel — tap to toggle */}
+          <div className={`px-5 pb-8 transition-all duration-300 ${minimized ? 'opacity-0 h-0 overflow-hidden pb-0' : ''}`}>
             <button
               onClick={() => setShowInfo(!showInfo)}
               className="flex w-full items-center justify-between py-3"
@@ -236,6 +252,26 @@ function DetailContent({ project }: { project: Project }) {
               </div>
             )}
           </div>
+
+          {/* Mobile minimize toggle */}
+          <button
+            onClick={() => setMinimized(!minimized)}
+            className="fixed bottom-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/50 backdrop-blur-sm"
+            title={minimized ? 'Show details' : 'Focus on image'}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              className={`transition-transform duration-300 ${minimized ? '' : 'rotate-180'}`}
+            >
+              <polyline points="6 15 12 9 18 15" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
