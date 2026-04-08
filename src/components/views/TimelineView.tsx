@@ -7,7 +7,7 @@ import { gsap, ScrollTrigger } from '@/lib/gsap';
 import EraSection from './EraSection';
 import type { EraConfig } from './EraSection';
 import { getProjectsByEra } from '@/data/projects';
-import AnimatedGradient from '@/components/ui/AnimatedGradient';
+import VantaBackground from '@/components/ui/VantaBackground';
 
 const eras: EraConfig[] = [
   {
@@ -102,8 +102,8 @@ export default function TimelineView() {
   return (
     <div>
       {/* Hero */}
-      <div className="relative flex min-h-[80vh] items-center py-24 md:py-32">
-        <AnimatedGradient variant="hero" />
+      <div className="relative flex min-h-[80vh] items-center py-24 md:py-32 overflow-hidden rounded-3xl">
+        <VantaBackground />
         <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16 w-full">
           {/* Headshot */}
           <div className="reveal flex-shrink-0 relative">
