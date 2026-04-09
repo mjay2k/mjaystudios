@@ -47,18 +47,10 @@ body {
   animation: mesh-drift-reverse 25s ease-in-out infinite;
 }
 
-/* Rail background — matches bubbles bg so no seam is visible */
-:root {
-  --rail-bg: #ebebeb;
-}
 
 /* Dark mode transitions */
 html {
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-html.dark {
-  --rail-bg: #0a0a0a;
 }
 
 html.dark body {
@@ -95,6 +87,13 @@ html.dark .mobile-tick { background-color: #f5f5f5; }
 
 /* Dark hamburger lines */
 html.dark nav .bg-neutral-900 { background-color: #f5f5f5; }
+
+/* Full-bleed: escape any parent padding to stretch edge-to-edge */
+.hero-bleed,
+.content-panel {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
 
 html,
 body {
