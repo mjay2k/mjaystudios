@@ -103,7 +103,7 @@ export default function TimelineView() {
   return (
     <div>
       {/* Hero — full bleed, transparent window to bubbles */}
-      <div className="hero-bleed relative flex min-h-[80vh] items-center py-24 md:py-32 -mt-20 pt-20 px-4 md:px-10 md:pr-28">
+      <div className="hero-bleed relative flex min-h-[80vh] items-center py-24 md:py-32 -mt-20 pt-20 pl-4 pr-8 md:pl-10 md:pr-28">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-10 md:gap-16 w-full max-w-7xl mx-auto">
           {/* Headshot */}
           <div className="reveal flex-shrink-0 relative">
@@ -147,7 +147,7 @@ export default function TimelineView() {
         className="content-panel relative rounded-t-3xl"
         style={{ backgroundColor: isDark ? '#111111' : '#f2f2f2' }}
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-10 md:pr-28 pt-8">
+        <div className="max-w-7xl mx-auto pl-4 pr-8 md:pl-10 md:pr-28 pt-8">
           {/* Timeline anchor — invisible marker for scroll tracking */}
           <div ref={introRef} id="section-intro" className="h-px" />
 
