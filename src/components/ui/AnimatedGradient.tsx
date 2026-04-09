@@ -35,14 +35,14 @@ export default function AnimatedGradient({ variant = 'hero', className = '' }: A
       `,
     popup: isDark
       ? `
-        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(241,90,41,0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(59,130,246,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,255,255,0.02) 0%, transparent 70%)
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(241,90,41,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(59,130,246,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 70%)
       `
       : `
-        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(241,90,41,0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(160,160,160,0.15) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(241,90,41,0.03) 0%, transparent 70%)
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(241,90,41,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(160,160,160,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(241,90,41,0.06) 0%, transparent 70%)
       `,
   };
 

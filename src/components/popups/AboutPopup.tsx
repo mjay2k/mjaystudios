@@ -11,28 +11,24 @@ export default function AboutPopup() {
 
   return (
     <Modal open={aboutOpen} onClose={() => setAboutOpen(false)}>
-      {/* Hero area with headshot */}
-      <div className="relative -mx-8 -mt-8 mb-8 overflow-hidden rounded-t-2xl">
-        <div className="bg-gradient-to-br from-neutral-800 to-neutral-950 px-8 pt-10 pb-8">
-          <div className="flex items-end gap-5">
-            <Image
-              src={theme === 'dark' ? '/portfolio/headshot-dark.jpg' : '/portfolio/headshot.jpg'}
-              alt="Matthew Johnson"
-              width={96}
-              height={96}
-              className="rounded-xl object-cover w-20 h-20 md:w-24 md:h-24 ring-2 ring-white/10"
-            />
-            <div className="pb-1">
-              <h2 className="text-2xl md:text-3xl font-bold font-display text-white">
-                Matthew Johnson
-              </h2>
-              <div className="flex items-center gap-2 mt-1">
-                <div className="w-4 h-[2px] rounded-full" style={{ backgroundColor: 'var(--color-brand)' }} />
-                <p className="text-xs font-medium text-white/50 tracking-wide">
-                  Creative Leader &middot; Art Director &middot; Developer
-                </p>
-              </div>
-            </div>
+      {/* Header with headshot */}
+      <div className="flex items-center gap-5 mb-8">
+        <Image
+          src={theme === 'dark' ? '/portfolio/headshot-dark.jpg' : '/portfolio/headshot.jpg'}
+          alt="Matthew Johnson"
+          width={96}
+          height={96}
+          className={`rounded-xl object-cover w-20 h-20 md:w-24 md:h-24 ring-2 ${theme === 'dark' ? 'ring-white/10' : 'ring-neutral-200'}`}
+        />
+        <div>
+          <h2 className={`text-2xl md:text-3xl font-bold font-display ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
+            Matthew Johnson
+          </h2>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="w-4 h-[2px] rounded-full" style={{ backgroundColor: 'var(--color-brand)' }} />
+            <p className={`text-xs font-medium tracking-wide ${theme === 'dark' ? 'text-white/50' : 'text-neutral-400'}`}>
+              Creative Leader &middot; Art Director &middot; Developer
+            </p>
           </div>
         </div>
       </div>

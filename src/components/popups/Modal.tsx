@@ -49,8 +49,8 @@ export default function Modal({ open, onClose, children }: ModalProps) {
   return (
     <div
       ref={overlayRef}
-      className={`fixed inset-0 z-[100] flex items-end md:items-center justify-center opacity-0 backdrop-blur-md ${
-        isDark ? 'bg-black/60' : 'bg-neutral-500/40'
+      className={`fixed inset-0 z-[100] flex items-end md:items-center justify-center opacity-0 backdrop-blur-lg ${
+        isDark ? 'bg-black/40' : 'bg-neutral-500/25'
       }`}
       onClick={handleClose}
     >
