@@ -103,7 +103,7 @@ export default function TimelineView() {
   return (
     <div>
       {/* Hero — full bleed, transparent window to bubbles */}
-      <div className="relative flex min-h-[80vh] items-center py-24 md:py-32 -ml-4 -mr-8 -mt-20 pl-4 pr-8 pt-20 md:-ml-10 md:-mr-28 md:pl-10 md:pr-28">
+      <div className="relative flex min-h-[80vh] items-center py-24 md:py-32 -mx-4 -mt-20 px-4 pt-20 md:-mx-10 md:px-10">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-10 md:gap-16 w-full max-w-7xl mx-auto">
           {/* Headshot */}
           <div className="reveal flex-shrink-0 relative">

@@ -47,9 +47,9 @@ body {
   animation: mesh-drift-reverse 25s ease-in-out infinite;
 }
 
-/* Rail background — solid strip so bubbles don't show behind timeline */
+/* Rail background — matches bubbles bg so no seam is visible */
 :root {
-  --rail-bg: #f2f2f2;
+  --rail-bg: #ebebeb;
 }
 
 /* Dark mode transitions */
@@ -58,7 +58,7 @@ html {
 }
 
 html.dark {
-  --rail-bg: #111111;
+  --rail-bg: #0a0a0a;
 }
 
 html.dark body {
