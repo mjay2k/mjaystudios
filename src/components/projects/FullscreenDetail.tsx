@@ -48,7 +48,7 @@ function DetailContent({ project }: { project: Project }) {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[110] bg-neutral-950/50 backdrop-blur-lg"
+      className="fixed inset-0 z-[110]"
       onClick={handleClose}
     >
       <div

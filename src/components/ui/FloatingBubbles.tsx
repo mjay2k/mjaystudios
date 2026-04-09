@@ -8,14 +8,18 @@ export default function FloatingBubbles() {
   const contactOpen = useAppStore((s) => s.contactOpen);
   const detailProject = useAppStore((s) => s.detailProject);
   const isDark = theme === 'dark';
+  const isDetailOpen = !!detailProject;
+  const isPopupOpen = aboutOpen || contactOpen || isDetailOpen;
 
-  // Elevate above content when a popup is open so bubbles show through backdrop
-  const isPopupOpen = aboutOpen || contactOpen || !!detailProject;
+  // Three color modes: light, dark, and detail (always dark-style for fullscreen gallery)
+  const useDetailColors = isDetailOpen;
+  const useDarkColors = isDark || useDetailColors;
 
-  // Light: white/gray bubbles. Dark: darker subtle bubbles
-  const colors = isDark
+  const colors = useDarkColors
     ? ['#1a1a1a', '#222222', '#181818', '#252525']
     : ['#ffffff', '#d6d6d6', '#c0c0c0', '#ffffff'];
+
+  const bgColor = useDarkColors ? '#0a0a0a' : '#ebebeb';
 
   const bubbles = [
     { color: 0, top: 8, left: 76, dur: 15, delay: -13, ox: -8, oy: -7, shadow: 7.17 },
@@ -49,9 +53,9 @@ export default function FloatingBubbles() {
     <div
       className="fixed inset-0 overflow-hidden pointer-events-none"
       style={{
-        background: isDark ? '#0a0a0a' : '#ebebeb',
+        background: bgColor,
         zIndex: isPopupOpen ? 95 : 1,
-        transition: 'z-index 0s',
+        transition: 'background 0.4s ease',
       }}
       aria-hidden="true"
     >
