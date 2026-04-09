@@ -36,16 +36,8 @@ export default function EraSection({ config, projects }: EraSectionProps) {
       trigger: sectionRef.current,
       start: 'top 40%',
       end: 'bottom 40%',
-      onEnter: () => {
-        setCurrentSection(config.section);
-        document.querySelectorAll('.era-bg').forEach((el) => el.classList.remove('active'));
-        document.getElementById(`era-bg-${config.id}`)?.classList.add('active');
-      },
-      onEnterBack: () => {
-        setCurrentSection(config.section);
-        document.querySelectorAll('.era-bg').forEach((el) => el.classList.remove('active'));
-        document.getElementById(`era-bg-${config.id}`)?.classList.add('active');
-      },
+      onEnter: () => setCurrentSection(config.section),
+      onEnterBack: () => setCurrentSection(config.section),
     });
 
     if (titleRef.current) {
@@ -72,10 +64,6 @@ export default function EraSection({ config, projects }: EraSectionProps) {
 
   return (
     <section ref={sectionRef} id={`section-${config.id}`} className="relative pt-16 md:pt-28">
-      <div
-        className={`era-bg ${config.bgClass ?? ''}`}
-        id={`era-bg-${config.id}`}
-      />
 
       {/* Era intro — editorial style */}
       <div className="relative mb-20 md:mb-28 overflow-hidden rounded-2xl p-8 md:p-12">

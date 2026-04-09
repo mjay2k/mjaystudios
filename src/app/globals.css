@@ -105,21 +105,6 @@ html {
   scroll-behavior: auto;
 }
 
-/* Era background layers */
-.era-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-  background-size: cover;
-  background-position: center;
-}
-
-.era-bg.active {
-  opacity: 1;
-}
 
 /* Custom scrollbar — slim, blends with timeline rail */
 /* Hide native scrollbar — timeline ticks serve as the scroll indicator */
