@@ -84,10 +84,10 @@ function DetailContent({ project }: { project: Project }) {
         </div>
 
         {/* Desktop layout */}
-        <div className="hidden md:flex h-full" style={{ padding: 15 }}>
+        <div className="hidden md:flex h-full max-h-screen" style={{ padding: 15 }}>
           {/* Image area — always fits in viewport */}
-          <div className="flex-1 flex items-center justify-center">
-            <div className="flex items-center gap-4 w-full h-full">
+          <div className="flex-1 flex items-center justify-center overflow-hidden">
+            <div className="flex items-center gap-4 w-full h-full max-h-[calc(100vh-30px)]">
               {allImages.length > 1 ? (
                 <button
                   onClick={prev}
