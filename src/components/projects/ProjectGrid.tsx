@@ -38,7 +38,7 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: card,
-            start: 'top bottom',
+            start: 'center bottom',
             toggleActions: 'play none none none',
           },
         }
