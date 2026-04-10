@@ -1,5 +1,5 @@
 ---
-title: Protect Campaign
+title: Protect What's Inside
 client: Berry Global
 year: 2020
 categories: [advertising]
@@ -9,4 +9,4 @@ draft: false
 hero:
 link:
 ---
-Product protection focused advertising for Berry Global.
+Trade ad for Berry's barrier packaging line. An oyster guards its pearl underwater — the visual metaphor sells the product before you read a word. Ran in packaging industry trade publications.

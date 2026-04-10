@@ -9,4 +9,4 @@ draft: false
 hero:
 link:
 ---
-Sparkle ad campaign and Endless Summer holiday promotions.
+Ad campaign for Hpnotiq's Sparkle line and Endless Summer seasonal promotions. Bold color palette and nightlife energy.

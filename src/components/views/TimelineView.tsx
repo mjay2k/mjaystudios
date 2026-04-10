@@ -50,7 +50,7 @@ const eras: EraConfig[] = [
     accent: 'text-brand',
     bgClass: 'bg-neutral-100',
     intro:
-      'Now combining everything — design, strategy, and AI-powered development. Building apps (Bible Warden, News Warden) and this site from scratch. The next chapter.',
+      'After nearly a decade in corporate creative, I stepped into the classroom — teaching computer science, broadcast production, and yearbook design at Evansville Christian High School. At the same time, I dove deep into AI and app development. That journey led to Bible Warden, a gamified mobile reading app built in Swift, and News Warden, a custom news aggregator highlighting clean front-end architecture. The art director learned to build.',
     section: {
       id: 'afterberry',
       label: 'After Berry',

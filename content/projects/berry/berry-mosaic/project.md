@@ -9,4 +9,4 @@ draft: false
 hero:
 link:
 ---
-Collaborative employee mosaic project for Berry Global.
+Large-format mosaic composed of employee photos, installed at Berry's corporate headquarters. Hundreds of individual portraits assembled into a single cohesive image representing the global workforce.

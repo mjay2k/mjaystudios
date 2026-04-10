@@ -9,4 +9,4 @@ draft: false
 hero:
 link:
 ---
-Product packaging design for Resinite film brand.
+Product packaging design for Berry's Resinite stretch film brand. Clean, industrial aesthetic that communicates strength and reliability on the shelf and in distribution.

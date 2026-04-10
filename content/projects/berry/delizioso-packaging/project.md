@@ -9,4 +9,4 @@ draft: false
 hero:
 link:
 ---
-Premium ice cream packaging design concept.
+Premium ice cream packaging concept demonstrating Berry's IML (in-mold labeling) print capabilities. The design shows what's possible when packaging becomes the brand experience.

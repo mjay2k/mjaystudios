@@ -8,4 +8,4 @@ draft: false
 hero:
 link:
 ---
-Brand identity designs across multiple industries.
+Brand identity work across multiple industries — from healthcare to consumer products to startups. Each mark designed to communicate clearly at any scale.

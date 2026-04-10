@@ -1,6 +1,6 @@
 ---
 title: Heaven Hill Digital Campaign
-client: Heaven Hill
+client: Heaven Hill Distillery
 year: 2013
 categories: [advertising]
 autoCycle: true
@@ -9,4 +9,4 @@ draft: false
 hero:
 link:
 ---
-Digital carousel ads for Heaven Hill portfolio brands.
+Digital carousel ads showcasing Heaven Hill's portfolio brands. Designed for high-impact rotation across web and social placements.

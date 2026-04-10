@@ -28,7 +28,7 @@
   {
     "id": "heaven-hill",
     "title": "Heaven Hill Brands",
-    "description": "Bourbon and spirits branding, packaging, and advertising campaigns.",
+    "description": "Comprehensive brand work across Heaven Hill's spirits portfolio — trade ads, point-of-sale, and campaign support for one of America's largest bourbon producers.",
     "year": 2012,
     "era": "agency",
     "categories": [
@@ -44,12 +44,12 @@
     ],
     "autoCycle": true,
     "sortOrder": 1,
-    "client": "Heaven Hill"
+    "client": "Heaven Hill Distillery"
   },
   {
     "id": "heaven-hill-carousel",
     "title": "Heaven Hill Digital Campaign",
-    "description": "Digital carousel ads for Heaven Hill portfolio brands.",
+    "description": "Digital carousel ads showcasing Heaven Hill's portfolio brands. Designed for high-impact rotation across web and social placements.",
     "year": 2013,
     "era": "agency",
     "categories": [
@@ -65,12 +65,12 @@
     ],
     "autoCycle": true,
     "sortOrder": 2,
-    "client": "Heaven Hill"
+    "client": "Heaven Hill Distillery"
   },
   {
     "id": "hpnotiq-sparkle",
     "title": "Hpnotiq Sparkle",
-    "description": "Sparkle ad campaign and Endless Summer holiday promotions.",
+    "description": "Ad campaign for Hpnotiq's Sparkle line and Endless Summer seasonal promotions. Bold color palette and nightlife energy.",
     "year": 2015,
     "era": "agency",
     "categories": [
@@ -88,7 +88,7 @@
   {
     "id": "logo-designs",
     "title": "Logo Design Collection",
-    "description": "Brand identity designs across multiple industries.",
+    "description": "Brand identity work across multiple industries — from healthcare to consumer products to startups. Each mark designed to communicate clearly at any scale.",
     "year": 2015,
     "era": "agency",
     "categories": [
@@ -166,7 +166,7 @@
   {
     "id": "berry-mosaic",
     "title": "Berry Global Mosaic",
-    "description": "Collaborative employee mosaic project for Berry Global.",
+    "description": "Large-format mosaic composed of employee photos, installed at Berry's corporate headquarters. Hundreds of individual portraits assembled into a single cohesive image representing the global workforce.",
     "year": 2021,
     "era": "berry",
     "categories": [
@@ -182,7 +182,7 @@
   {
     "id": "cannabis-kit",
     "title": "Cannabis Packaging Kit",
-    "description": "Packaging solutions kit for cannabis industry.",
+    "description": "Sample kit showcasing Berry's packaging solutions for the cannabis industry. Designed to put product in prospects' hands — child-resistant containers, tubes, and barrier packaging all in one branded presentation.",
     "year": 2020,
     "era": "berry",
     "categories": [
@@ -198,7 +198,7 @@
   {
     "id": "delizioso-packaging",
     "title": "Delizioso Ice Cream Packaging",
-    "description": "Premium ice cream packaging design concept.",
+    "description": "Premium ice cream packaging concept demonstrating Berry's IML (in-mold labeling) print capabilities. The design shows what's possible when packaging becomes the brand experience.",
     "year": 2020,
     "era": "berry",
     "categories": [
@@ -214,7 +214,7 @@
   {
     "id": "epic-campaign",
     "title": "EPIC Brand Campaign",
-    "description": "Four-part brand values campaign — Engaging, Protective, Innovative, Committed.",
+    "description": "Four-part brand values campaign — Engaging, Protective, Innovative, Committed. Each ad pairs bold typography with product photography to communicate Berry's core identity across trade publications.",
     "year": 2018,
     "era": "berry",
     "categories": [
@@ -228,12 +228,16 @@
     ],
     "autoCycle": true,
     "sortOrder": 1,
+    "caseStudy": {
+      "extendedDescription": "Berry needed a unified campaign that could communicate its brand pillars across trade publications and internal communications. I designed a system where each value — Engaging, Protective, Innovative, Committed — gets its own ad with distinct imagery but a consistent layout framework. The campaign reinforced Berry's position as a Fortune 500 packaging leader.",
+      "additionalImages": []
+    },
     "client": "Berry Global"
   },
   {
     "id": "pack-expo-booths",
     "title": "Pack Expo Trade Show Booths",
-    "description": "Booth design and environmental graphics for Pack Expo 2018, 2019, and 2022.",
+    "description": "Large-scale booth design and environmental graphics for Pack Expo — the packaging industry's biggest trade show. Designed Berry's presence across 2018, 2019, and 2022 shows.",
     "year": 2018,
     "era": "berry",
     "categories": [
@@ -250,12 +254,17 @@
     ],
     "autoCycle": true,
     "sortOrder": 5,
+    "caseStudy": {
+      "extendedDescription": "Pack Expo is where the packaging industry does business. I designed Berry's booth presence across multiple years — from initial concepts through production-ready files. Each year required a fresh approach while maintaining brand consistency. The 2022 booth won a Silver ADDY Award.",
+      "additionalImages": [],
+      "processNotes": "Silver ADDY Award winner (2022). Concepted, designed, and produced booth graphics across three consecutive show years."
+    },
     "client": "Berry Global"
   },
   {
     "id": "protect-campaign",
-    "title": "Protect Campaign",
-    "description": "Product protection focused advertising for Berry Global.",
+    "title": "Protect What's Inside",
+    "description": "Trade ad for Berry's barrier packaging line. An oyster guards its pearl underwater — the visual metaphor sells the product before you read a word. Ran in packaging industry trade publications.",
     "year": 2020,
     "era": "berry",
     "categories": [
@@ -271,7 +280,7 @@
   {
     "id": "resinite-packaging",
     "title": "Resinite Packaging",
-    "description": "Product packaging design for Resinite film brand.",
+    "description": "Product packaging design for Berry's Resinite stretch film brand. Clean, industrial aesthetic that communicates strength and reliability on the shelf and in distribution.",
     "year": 2019,
     "era": "berry",
     "categories": [
@@ -288,7 +297,7 @@
   {
     "id": "verdant-campaign",
     "title": "Verdant Goodbye",
-    "description": "Sustainability-focused brand ad for Berry Global.",
+    "description": "Sustainability-focused brand ad for Berry Global. The concept reframes packaging waste as a solvable problem — Berry's products designed with end-of-life in mind.",
     "year": 2019,
     "era": "berry",
     "categories": [

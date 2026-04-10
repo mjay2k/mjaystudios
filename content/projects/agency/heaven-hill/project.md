@@ -1,6 +1,6 @@
 ---
 title: Heaven Hill Brands
-client: Heaven Hill
+client: Heaven Hill Distillery
 year: 2012
 categories: [advertising, packaging]
 autoCycle: true
@@ -9,4 +9,4 @@ draft: false
 hero:
 link:
 ---
-Bourbon and spirits branding, packaging, and advertising campaigns.
+Comprehensive brand work across Heaven Hill's spirits portfolio — trade ads, point-of-sale, and campaign support for one of America's largest bourbon producers.

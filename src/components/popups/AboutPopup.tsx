@@ -49,10 +49,10 @@ export default function AboutPopup() {
       {/* Bio */}
       <div className={`space-y-4 text-sm leading-[1.7] ${theme === 'dark' ? 'text-white/65' : 'text-neutral-600'}`}>
         <p>
-          Award-winning creative leader with over 15 years bridging strategic
-          brand development, digital innovation, and multimedia production.
-          Managing high-stakes projects from concept to completion while
-          leveraging AI-driven tools to accelerate development.
+          Award-winning creative leader with over 15 years bridging strategic brand
+          development, digital innovation, and multimedia production. Managing
+          high-stakes projects from concept to completion while leveraging
+          AI-driven tools to accelerate development and generate dynamic media.
         </p>
         <p>
           My career started in agency life — building websites at Keller
@@ -66,7 +66,9 @@ export default function AboutPopup() {
         <p>
           Now I&apos;m teaching computer science and media production while
           building AI-powered apps — Bible Warden (iOS, Swift) and News Warden
-          (web) — from the ground up.
+          (web) — from the ground up. I bring a rare combination: the eye of an
+          art director, the strategic thinking of a brand leader, and the
+          technical capability to build what I design.
         </p>
       </div>
 

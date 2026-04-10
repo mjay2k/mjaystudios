@@ -9,4 +9,4 @@ draft: false
 hero:
 link:
 ---
-Sustainability-focused brand ad for Berry Global.
+Sustainability-focused brand ad for Berry Global. The concept reframes packaging waste as a solvable problem — Berry's products designed with end-of-life in mind.
