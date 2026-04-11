@@ -1,6 +1,7 @@
 /**
- * Pre-build script: reads content/projects/ markdown files and generates
- * src/data/projects.generated.json for the client-side app to import.
+ * Pre-build script: reads content/projects/ markdown files and images,
+ * syncs images to public/portfolio/ for serving, and generates
+ * src/data/projects.generated.json for the client-side app.
  *
  * Run: node scripts/build-content.mjs
  */
@@ -16,23 +17,39 @@ const OUTPUT_FILE = path.join(ROOT, 'src/data/projects.generated.json');
 const ERAS = ['agency', 'berry', 'afterberry'];
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
 
-function discoverImages(era, projectId, hero) {
-  const imageDir = era === 'agency' && projectId === 'logo-designs'
-    ? path.join(PUBLIC_DIR, 'logos', projectId)
-    : path.join(PUBLIC_DIR, era, projectId);
+/**
+ * Sync images from content/projects/{era}/{id}/ to public/portfolio/{era}/{id}/
+ * so Next.js can serve them. Returns the list of image filenames found.
+ */
+function syncAndDiscoverImages(era, projectId, hero) {
+  const contentImageDir = path.join(CONTENT_DIR, era, projectId);
+  const publicImageDir = path.join(PUBLIC_DIR, era, projectId);
 
-  if (!fs.existsSync(imageDir)) return [];
+  if (!fs.existsSync(contentImageDir)) return [];
 
-  const files = fs.readdirSync(imageDir)
+  // Find all images in the content folder
+  const files = fs.readdirSync(contentImageDir)
     .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
     .sort();
 
-  const urlBase = era === 'agency' && projectId === 'logo-designs'
-    ? `/portfolio/logos/${projectId}`
-    : `/portfolio/${era}/${projectId}`;
+  if (files.length === 0) return [];
 
+  // Ensure public dir exists and sync images
+  fs.mkdirSync(publicImageDir, { recursive: true });
+  for (const file of files) {
+    const src = path.join(contentImageDir, file);
+    const dest = path.join(publicImageDir, file);
+    // Only copy if source is newer or dest doesn't exist
+    if (!fs.existsSync(dest) || fs.statSync(src).mtimeMs > fs.statSync(dest).mtimeMs) {
+      fs.copyFileSync(src, dest);
+    }
+  }
+
+  // Build public URL paths
+  const urlBase = `/portfolio/${era}/${projectId}`;
   let images = files.map((f) => `${urlBase}/${f}`);
 
+  // If hero is specified, move it to front
   if (hero) {
     const heroIndex = images.findIndex((img) => img.endsWith(hero));
     if (heroIndex > 0) {
@@ -64,7 +81,7 @@ function parseProjectFile(filePath, era, projectId) {
     if (key === 'process') processNotes = value;
   }
 
-  const images = discoverImages(era, projectId, data.hero || undefined);
+  const images = syncAndDiscoverImages(era, projectId, data.hero || undefined);
 
   let caseStudy = undefined;
   if (extendedDescription) {
