@@ -39,15 +39,18 @@ export default function LogoShowcase() {
 
       const trigger = ScrollTrigger.create({
         trigger: item,
-        start: 'top 80%',
-        end: 'top 20%',
+        start: 'top bottom',
+        end: 'top 50%',
         scrub: 0.3,
         onUpdate: (self) => {
-          const p = self.progress * 100;
+          // Scale progress so wipe fully completes
+          const p = Math.min(self.progress * 130, 100);
           const offset = 15;
           const left = 100 - p - offset;
           const right = 100 - p + offset;
-          darkLayer.style.clipPath = `polygon(${Math.max(0, right)}% 0%, 100% 0%, 100% 100%, ${Math.max(0, left)}% 100%)`;
+          darkLayer.style.clipPath = p >= 100
+            ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
+            : `polygon(${Math.max(0, right)}% 0%, 100% 0%, 100% 100%, ${Math.max(0, left)}% 100%)`;
         },
       });
       triggers.push(trigger);
