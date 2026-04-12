@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
+import { gsap } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 import ViewToggle from './ViewToggle';
 import ThemeToggle from './ThemeToggle';
@@ -10,11 +11,38 @@ export default function NavBar() {
   const setAboutOpen = useAppStore((s) => s.setAboutOpen);
   const setContactOpen = useAppStore((s) => s.setContactOpen);
   const [menuOpen, setMenuOpen] = useState(false);
+  const logoRef = useRef<HTMLImageElement>(null);
+  const nameRef = useRef<HTMLSpanElement>(null);
+
+  const scrollToTop = () => {
+    gsap.to(window, { scrollTo: { y: 0 }, duration: 1, ease: 'power3.inOut' });
+  };
+
+  const handleLogoHover = () => {
+    if (logoRef.current) {
+      gsap.to(logoRef.current, { rotation: '+=360', duration: 0.6, ease: 'power2.inOut' });
+    }
+    if (nameRef.current) {
+      gsap.to(nameRef.current, { color: 'var(--color-brand)', duration: 0.2 });
+    }
+  };
+
+  const handleLogoLeave = () => {
+    if (nameRef.current) {
+      gsap.to(nameRef.current, { clearProps: 'color', duration: 0.3 });
+    }
+  };
 
   return (
     <nav className="fixed top-0 right-0 left-0 z-50 flex items-center justify-between px-6 py-3 backdrop-blur-md bg-neutral-100/95">
-      <div className="flex items-center gap-2">
+      <button
+        onClick={scrollToTop}
+        onMouseEnter={handleLogoHover}
+        onMouseLeave={handleLogoLeave}
+        className="flex items-center gap-2 cursor-pointer"
+      >
         <Image
+          ref={logoRef}
           src="/mjaystudios-logo.svg"
           alt="MJay Studios"
           width={200}
@@ -23,12 +51,12 @@ export default function NavBar() {
           priority
         />
         <span
-          className="text-lg md:text-xl font-bold font-display tracking-tight leading-[1.1]"
-          style={{ color: 'var(--color-brand)' }}
+          ref={nameRef}
+          className="text-lg md:text-xl font-bold font-display tracking-tight leading-[1.1] transition-colors text-neutral-900"
         >
           Matthew<br />Johnson
         </span>
-      </div>
+      </button>
 
       {/* Desktop nav */}
       <div className="hidden items-center gap-6 md:flex">
