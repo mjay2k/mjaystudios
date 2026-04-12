@@ -25,13 +25,7 @@ const categoryDescriptions: Record<string, string> = {
   digital: 'App design, UI/UX, and digital product development.',
 };
 
-const categoryAccents: Record<string, string> = {
-  advertising: 'text-red-500',
-  packaging: 'text-blue-500',
-  environmental: 'text-emerald-500',
-  logo: '',
-  digital: '',
-};
+const categoryAccents: Record<string, string> = {};
 
 export default function CategoryView() {
   const setCurrentSection = useAppStore((s) => s.setCurrentSection);
