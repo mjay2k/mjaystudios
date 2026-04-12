@@ -30,39 +30,45 @@ export default function EraSection({ config, projects, showLogos }: EraSectionPr
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const setCurrentSection = useAppStore((s) => s.setCurrentSection);
+  const theme = useAppStore((s) => s.theme);
 
   useEffect(() => {
     if (!sectionRef.current) return;
 
-    const trigger = ScrollTrigger.create({
+    const triggers: ScrollTrigger[] = [];
+
+    triggers.push(ScrollTrigger.create({
       trigger: sectionRef.current,
       start: 'top 40%',
       end: 'bottom 40%',
       onEnter: () => setCurrentSection(config.section),
       onEnterBack: () => setCurrentSection(config.section),
-    });
+    }));
 
     if (titleRef.current) {
-      gsap.fromTo(
-        titleRef.current,
-        { opacity: 0, x: -30 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: 'top 80%',
-          },
-        }
-      );
+      // Reset title so animation can replay after theme change
+      gsap.set(titleRef.current, { opacity: 0, x: -30 });
+
+      gsap.to(titleRef.current, {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: titleRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      });
     }
 
     return () => {
-      trigger.kill();
+      triggers.forEach((t) => t.kill());
+      ScrollTrigger.getAll()
+        .filter((t) => t.trigger === titleRef.current)
+        .forEach((t) => t.kill());
     };
-  }, [config.section, config.id, setCurrentSection]);
+  }, [config.section, config.id, setCurrentSection, theme]);
 
   return (
     <section ref={sectionRef} id={`section-${config.id}`} className="relative pt-16 md:pt-28">
