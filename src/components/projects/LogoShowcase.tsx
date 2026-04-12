@@ -1,8 +1,9 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { ScrollTrigger } from '@/lib/gsap';
+import { useAppStore } from '@/stores/useAppStore';
 
 // 12 logo pairs: odd = dark, even = light
 const LOGO_COUNT = 12;
@@ -24,14 +25,14 @@ function getLogoPair(index: number) {
 
 export default function LogoShowcase() {
   const gridRef = useRef<HTMLDivElement>(null);
+  const theme = useAppStore((s) => s.theme);
 
-  useEffect(() => {
-    if (!gridRef.current) return;
+  const setupTriggers = useCallback(() => {
+    if (!gridRef.current) return [];
 
     const logoItems = gridRef.current.querySelectorAll<HTMLElement>('.logo-item');
     const triggers: ScrollTrigger[] = [];
 
-    // Each logo gets its own ScrollTrigger for the diagonal wipe
     logoItems.forEach((item) => {
       const darkLayer = item.querySelector<HTMLElement>('.logo-dark');
       if (!darkLayer) return;
@@ -52,10 +53,16 @@ export default function LogoShowcase() {
       triggers.push(trigger);
     });
 
+    return triggers;
+  }, []);
+
+  // Recreate triggers when theme changes (ScrollTrigger positions can shift)
+  useEffect(() => {
+    const triggers = setupTriggers();
     return () => {
       triggers.forEach((t) => t.kill());
     };
-  }, []);
+  }, [setupTriggers, theme]);
 
   const logos = Array.from({ length: LOGO_COUNT }, (_, i) => getLogoPair(i));
 
