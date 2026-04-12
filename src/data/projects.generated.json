@@ -138,54 +138,6 @@
     "client": "Heaven Hill"
   },
   {
-    "id": "berry-mosaic",
-    "title": "Berry Global Mosaic",
-    "description": "Large-format mosaic composed of employee photos, installed at Berry's corporate headquarters. Hundreds of individual portraits assembled into a single cohesive image representing the global workforce.",
-    "year": 2021,
-    "era": "berry",
-    "categories": [
-      "environmental"
-    ],
-    "images": [
-      "/portfolio/berry/berry-mosaic/01-mosaic.jpg"
-    ],
-    "autoCycle": false,
-    "sortOrder": 8,
-    "client": "Berry Global"
-  },
-  {
-    "id": "cannabis-kit",
-    "title": "Cannabis Packaging Kit",
-    "description": "Sample kit showcasing Berry's packaging solutions for the cannabis industry. Designed to put product in prospects' hands — child-resistant containers, tubes, and barrier packaging all in one branded presentation.",
-    "year": 2020,
-    "era": "berry",
-    "categories": [
-      "packaging"
-    ],
-    "images": [
-      "/portfolio/berry/cannabis-kit/01-Cannabis-Kit.jpg"
-    ],
-    "autoCycle": false,
-    "sortOrder": 6,
-    "client": "Berry Global"
-  },
-  {
-    "id": "delizioso-packaging",
-    "title": "Delizioso Ice Cream Packaging",
-    "description": "Premium ice cream packaging concept demonstrating Berry's IML (in-mold labeling) print capabilities. The design shows what's possible when packaging becomes the brand experience.",
-    "year": 2020,
-    "era": "berry",
-    "categories": [
-      "packaging"
-    ],
-    "images": [
-      "/portfolio/berry/delizioso-packaging/01-Delizioso.png"
-    ],
-    "autoCycle": false,
-    "sortOrder": 7,
-    "client": "Berry Global"
-  },
-  {
     "id": "epic-campaign",
     "title": "EPIC Brand Campaign",
     "description": "Four-part brand values campaign — Engaging, Protective, Innovative, Committed. Each ad pairs bold typography with product photography to communicate Berry's core identity across trade publications.",
@@ -236,6 +188,31 @@
     "client": "Berry Global"
   },
   {
+    "id": "packaging",
+    "title": "Packaging Design",
+    "description": "At Berry Global, I designed a wide variety of packaging solutions, including custom sample kits, demonstration mock products that highlighted the company's capabilities, and production packaging for real retail products sold nationally.",
+    "year": 2020,
+    "era": "berry",
+    "categories": [
+      "packaging"
+    ],
+    "images": [
+      "/portfolio/berry/packaging/packaging_can.jpg",
+      "/portfolio/berry/packaging/packaging_delizioso.jpg",
+      "/portfolio/berry/packaging/packaging_jarcollection.jpg",
+      "/portfolio/berry/packaging/packaging_resinite.jpg"
+    ],
+    "autoCycle": true,
+    "sortOrder": 7,
+    "client": "Berry Global",
+    "captions": {
+      "packaging_delizioso.jpg": "",
+      "packaging_can.jpg": "",
+      "packaging_jarcollection.jpg": "",
+      "packaging_resinite.jpg": ""
+    }
+  },
+  {
     "id": "protect-campaign",
     "title": "Protect What's Inside",
     "description": "Trade ad for Berry's barrier packaging line. An oyster guards its pearl underwater — the visual metaphor sells the product before you read a word. Ran in packaging industry trade publications.",
@@ -249,23 +226,6 @@
     ],
     "autoCycle": false,
     "sortOrder": 4,
-    "client": "Berry Global"
-  },
-  {
-    "id": "resinite-packaging",
-    "title": "Resinite Packaging",
-    "description": "Product packaging design for Berry's Resinite stretch film brand. Clean, industrial aesthetic that communicates strength and reliability on the shelf and in distribution.",
-    "year": 2019,
-    "era": "berry",
-    "categories": [
-      "packaging"
-    ],
-    "images": [
-      "/portfolio/berry/resinite-packaging/01-RESINITE-packaging.png",
-      "/portfolio/berry/resinite-packaging/02-RESINITE-packaging2.png"
-    ],
-    "autoCycle": true,
-    "sortOrder": 3,
     "client": "Berry Global"
   },
   {

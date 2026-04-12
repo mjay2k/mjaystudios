@@ -43,7 +43,13 @@ function DetailContent({ project }: { project: Project }) {
   const prev = () => setActiveIndex((i) => (i - 1 + allImages.length) % allImages.length);
   const next = () => setActiveIndex((i) => (i + 1) % allImages.length);
 
-  const description = project.caseStudy?.extendedDescription ?? project.description;
+  const baseDescription = project.caseStudy?.extendedDescription ?? project.description;
+
+  // Per-image caption: match current image filename to captions map
+  const currentImage = allImages[activeIndex];
+  const currentFilename = currentImage?.split('/').pop() ?? '';
+  const caption = project.captions?.[currentFilename];
+  const description = caption || baseDescription;
 
   return (
     <div

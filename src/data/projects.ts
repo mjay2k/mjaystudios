@@ -19,6 +19,7 @@ export interface Project {
   sortOrder: number;
   client?: string;
   link?: string;
+  captions?: Record<string, string>;
 }
 
 export const projects: Project[] = generatedProjects as Project[];
