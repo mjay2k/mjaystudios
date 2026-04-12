@@ -75,7 +75,7 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
   const logos = Array.from({ length: LOGO_COUNT }, (_, i) => getLogoPair(i));
 
   return (
-    <div className="relative py-16 md:py-24">
+    <div className={`relative ${hideHeader ? '' : 'py-16 md:py-24'}`}>
       {/* Section header — hidden when used inside CategoryView */}
       {!hideHeader && (
         <div className="mb-12 md:mb-16">
