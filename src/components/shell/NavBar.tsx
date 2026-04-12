@@ -64,13 +64,17 @@ export default function NavBar() {
         <ThemeToggle />
         <button
           onClick={() => setAboutOpen(true)}
-          className="text-sm text-neutral-500 transition-colors hover:text-neutral-900"
+          className="text-sm text-neutral-500 transition-colors"
+          onMouseEnter={(e) => { e.currentTarget.style.color = '#F15A29'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
         >
           About
         </button>
         <button
           onClick={() => setContactOpen(true)}
-          className="text-sm text-neutral-500 transition-colors hover:text-neutral-900"
+          className="text-sm text-neutral-500 transition-colors"
+          onMouseEnter={(e) => { e.currentTarget.style.color = '#F15A29'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
         >
           Contact
         </button>
