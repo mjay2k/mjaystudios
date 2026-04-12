@@ -39,18 +39,23 @@ export default function LogoShowcase() {
 
       const trigger = ScrollTrigger.create({
         trigger: item,
-        start: 'top bottom',
-        end: 'top 50%',
-        scrub: 0.3,
+        start: 'top 60%',  // visible for a beat before wipe starts
+        end: 'top 15%',
+        scrub: 0.5,
         onUpdate: (self) => {
-          // Scale progress so wipe fully completes
-          const p = Math.min(self.progress * 130, 100);
-          const offset = 15;
-          const left = 100 - p - offset;
-          const right = 100 - p + offset;
-          darkLayer.style.clipPath = p >= 100
-            ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
-            : `polygon(${Math.max(0, right)}% 0%, 100% 0%, 100% 100%, ${Math.max(0, left)}% 100%)`;
+          const p = Math.min(self.progress * 120, 100);
+          // Vertical wipe with soft feathered edge via gradient mask
+          // The dark layer reveals from top to bottom with a blurred edge
+          const edge = 20; // feather size in %
+          const pos = p;
+          if (p >= 100) {
+            darkLayer.style.maskImage = 'none';
+            darkLayer.style.webkitMaskImage = 'none';
+          } else {
+            const gradient = `linear-gradient(to bottom, black ${Math.max(0, pos - edge)}%, transparent ${pos}%)`;
+            darkLayer.style.maskImage = gradient;
+            darkLayer.style.webkitMaskImage = gradient;
+          }
         },
       });
       triggers.push(trigger);
@@ -99,7 +104,7 @@ export default function LogoShowcase() {
             {/* Dark version (diagonal wipe overlay) */}
             <div
               className="logo-dark absolute inset-0"
-              style={{ clipPath: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)' }}
+              style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 0%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 0%)' }}
             >
               <Image
                 src={pair.dark}
