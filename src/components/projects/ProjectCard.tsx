@@ -133,22 +133,29 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </div>
         )}
 
-        {multiImage && (
-          <div className="absolute bottom-3 left-3 flex gap-1 z-10">
-            {project.images.map((_, i) => (
-              <div
-                key={i}
-                className={`h-1 w-1 rounded-full ${
-                  i === activeIndex ? 'bg-white/80' : 'bg-white/30'
-                }`}
-              />
-            ))}
-          </div>
-        )}
       </div>
 
+      {/* Title + hash mark indicators */}
       <div className="mt-4">
-        <h3 className="text-sm font-bold font-display tracking-tight">{project.title}</h3>
+        <div className="flex items-center gap-3">
+          <h3 className="text-sm font-bold font-display tracking-tight">{project.title}</h3>
+          {multiImage && (
+            <div className="flex items-end gap-[3px]">
+              {project.images.map((_, i) => (
+                <div
+                  key={i}
+                  className="transition-all duration-300"
+                  style={{
+                    width: i === activeIndex ? 3 : 2,
+                    height: i === activeIndex ? 14 : (i % 2 === 0 ? 8 : 6),
+                    borderRadius: 1,
+                    backgroundColor: i === activeIndex ? '#F15A29' : '#333333',
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
         <p className="mt-1.5 text-xs leading-relaxed text-neutral-400">
           {project.description}
         </p>
