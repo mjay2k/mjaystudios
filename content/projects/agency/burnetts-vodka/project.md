@@ -2,7 +2,7 @@
 title: Always Your Flavorite
 client: Burnett's Vodka
 year: 2014
-categories: [advertising, packaging]
+categories: [advertising]
 autoCycle: true
 sortOrder: 5
 draft: false

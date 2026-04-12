@@ -2,7 +2,7 @@
 title: Endless PAMAbilities
 client: Heaven Hill
 year: 2013
-categories: [advertising, packaging]
+categories: [advertising]
 autoCycle: true
 sortOrder: 3
 draft: false

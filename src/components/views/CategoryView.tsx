@@ -83,10 +83,7 @@ export default function CategoryView() {
   return (
     <div>
       {/* Category jump nav — sticky below navbar */}
-      <div
-        className="sticky top-16 z-30 mb-12 flex flex-wrap gap-2 py-3 backdrop-blur-md"
-        style={{ backgroundColor: isDark ? 'rgba(17,17,17,0.85)' : 'rgba(242,242,242,0.85)' }}
-      >
+      <div className="sticky top-16 z-30 mb-12 flex flex-wrap gap-2 py-3">
         {categories.map((cat) => {
           const projects = getProjectsByCategory(cat);
           if (projects.length === 0 && cat !== 'logo') return null;
@@ -94,11 +91,11 @@ export default function CategoryView() {
             <button
               key={cat}
               onClick={() => scrollToCategory(cat)}
-              className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
-                isDark
-                  ? 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'
-                  : 'bg-neutral-900/5 text-neutral-500 hover:bg-neutral-900/10 hover:text-neutral-900'
-              }`}
+              className="rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 bg-white text-neutral-500 hover:text-white"
+              style={{ ['--tw-bg-opacity' as string]: 1 }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F15A29'; e.currentTarget.style.color = 'white'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = isDark ? '#222' : 'white'; e.currentTarget.style.color = ''; }}
+              ref={(el) => { if (el) el.style.backgroundColor = isDark ? '#222' : 'white'; }}
             >
               {categoryLabels[cat] ?? cat}
             </button>
@@ -134,7 +131,7 @@ export default function CategoryView() {
             </div>
 
             {isLogo ? (
-              <LogoShowcase />
+              <LogoShowcase hideHeader />
             ) : (
               <ProjectGrid projects={catProjects} />
             )}

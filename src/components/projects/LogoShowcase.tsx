@@ -23,7 +23,7 @@ function getLogoPair(index: number) {
   };
 }
 
-export default function LogoShowcase() {
+export default function LogoShowcase({ hideHeader = false }: { hideHeader?: boolean }) {
   const gridRef = useRef<HTMLDivElement>(null);
   const theme = useAppStore((s) => s.theme);
 
@@ -76,15 +76,17 @@ export default function LogoShowcase() {
 
   return (
     <div className="relative py-16 md:py-24">
-      {/* Section header */}
-      <div className="mb-12 md:mb-16">
-        <h3 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-neutral-300">
-          Logo <span style={{ color: 'var(--color-brand)' }}>Design</span>
-        </h3>
-        <p className="mt-3 text-sm text-neutral-400 max-w-md">
-          Brand identity work across multiple industries.
-        </p>
-      </div>
+      {/* Section header — hidden when used inside CategoryView */}
+      {!hideHeader && (
+        <div className="mb-12 md:mb-16">
+          <h3 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-neutral-300">
+            Logo <span style={{ color: 'var(--color-brand)' }}>Design</span>
+          </h3>
+          <p className="mt-3 text-sm text-neutral-400 max-w-md">
+            Brand identity work across multiple industries.
+          </p>
+        </div>
+      )}
 
       {/* Logo grid */}
       <div
