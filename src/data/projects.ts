@@ -37,6 +37,7 @@ export function getProjectsByEra(era: Project['era']): Project[] {
 export function getProjectsByCategory(category: string): Project[] {
   return projects
     .filter((p) => p.categories.includes(category))
+    .filter((p) => p.images.length > 0)
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 

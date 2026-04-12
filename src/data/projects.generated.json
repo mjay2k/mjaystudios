@@ -10,9 +10,13 @@
       "packaging"
     ],
     "images": [
-      "/portfolio/agency/burnetts-vodka/BURNETTS_CandyPoster.jpg",
-      "/portfolio/agency/burnetts-vodka/burnettsCampaign_book.jpg",
-      "/portfolio/agency/burnetts-vodka/burnettsCampaign_outdoor.jpg"
+      "/portfolio/agency/burnetts-vodka/1-burnettsCampaign_reg.jpg",
+      "/portfolio/agency/burnetts-vodka/2-burnettsCampaign_rasp.jpg",
+      "/portfolio/agency/burnetts-vodka/3-burnettsCampaign_pinkL.jpg",
+      "/portfolio/agency/burnetts-vodka/4-burnettsCampaign_outdoor.jpg",
+      "/portfolio/agency/burnetts-vodka/5-BURNETTS_CandyPoster.jpg",
+      "/portfolio/agency/burnetts-vodka/6-burnettsCampaign_book.jpg",
+      "/portfolio/agency/burnetts-vodka/7-burnettsCampaign_cit.jpg"
     ],
     "autoCycle": true,
     "sortOrder": 5,
