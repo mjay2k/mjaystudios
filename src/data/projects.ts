@@ -20,6 +20,7 @@ export interface Project {
   client?: string;
   link?: string;
   captions?: Record<string, string>;
+  concept?: boolean;
 }
 
 export const projects: Project[] = generatedProjects as Project[];

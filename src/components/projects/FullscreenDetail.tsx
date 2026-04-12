@@ -134,6 +134,14 @@ function DetailContent({ project }: { project: Project }) {
                 {project.title}
               </h2>
 
+              {project.concept && (
+                <div className="inline-block mt-2 rounded px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
+                  style={{ backgroundColor: '#F15A29', color: '#000' }}
+                >
+                  Concept
+                </div>
+              )}
+
               {allImages.length > 1 && (
                 <p className="mt-2 text-xs text-white/30">
                   {activeIndex + 1} of {allImages.length}

@@ -26,19 +26,24 @@
     "client": "Burnett's Vodka"
   },
   {
-    "id": "heaven-hill",
-    "title": "Heaven Hill Brands",
-    "description": "Comprehensive brand work across Heaven Hill's spirits portfolio — trade ads, point-of-sale, and campaign support for one of America's largest bourbon producers.",
+    "id": "ellisParkBillboard",
+    "title": "Ellis Park Billboard Concepts",
+    "description": "Conceptual billboard campaign for Ellis Park Racing. Each version riffs on real racehorse names.  The visual is tied to the tag line beautifully, the horse name coming out of the mouth mid-yell,  \"Go Horse!\" works both ways: you're cheering for your pick and losing your voice doing it.",
     "year": 2012,
     "era": "agency",
     "categories": [
       "advertising",
-      "packaging"
+      "outdoor"
     ],
-    "images": [],
+    "images": [
+      "/portfolio/agency/ellisParkBillboard/Ellis2011_goHorse1.jpg",
+      "/portfolio/agency/ellisParkBillboard/Ellis2011_goHorse2.jpg",
+      "/portfolio/agency/ellisParkBillboard/Ellis2011_goHorse3.jpg"
+    ],
     "autoCycle": true,
     "sortOrder": 1,
-    "client": "Heaven Hill Distillery"
+    "client": "Ellis Park",
+    "concept": true
   },
   {
     "id": "hpnotiq-sparkle",

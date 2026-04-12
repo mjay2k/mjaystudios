@@ -133,6 +133,14 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </div>
         )}
 
+        {project.concept && (
+          <div className="absolute top-3 right-3 rounded px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider z-10"
+            style={{ backgroundColor: '#F15A29', color: '#000' }}
+          >
+            Concept
+          </div>
+        )}
+
       </div>
 
       {/* Title + hash mark indicators */}
