@@ -10,7 +10,7 @@ const BASE_PATH = '/portfolio/agency/logo-designs';
 
 function getLogoPair(index: number) {
   // Files: logos-2-01 (dark), logos-2-02 (light), logos-2-03 (dark), logos-2-04 (light)...
-  // But numbering skips 19-22: 01-18, then 23-28
+  // Numbering skips 19-22: 01-18, then 23-28
   const fileNumbers = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 23, 24, 25, 26, 27, 28,
   ];
@@ -31,7 +31,7 @@ export default function LogoShowcase() {
   useEffect(() => {
     if (!containerRef.current || !gridRef.current) return;
 
-    const darkLayers = gridRef.current.querySelectorAll('.logo-dark');
+    const darkLayers = gridRef.current.querySelectorAll<HTMLElement>('.logo-dark');
 
     // Pin the grid while the diagonal wipe happens
     const pinTrigger = ScrollTrigger.create({
@@ -42,26 +42,29 @@ export default function LogoShowcase() {
       pinSpacing: true,
     });
 
-    // Animate each dark layer's clip-path from hidden to fully revealed
-    darkLayers.forEach((layer, i) => {
-      // Stagger the reveal slightly per logo
-      const staggerDelay = i * 0.03;
-
-      gsap.fromTo(
-        layer,
-        { clipPath: 'polygon(100% 0%, 100% 0%, 100% 0%, 100% 0%)' },
-        {
-          clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top top',
-            end: '+=100%',
-            scrub: true,
-          },
-          delay: staggerDelay,
-        }
-      );
+    // Animate a diagonal wipe using a progress-driven approach
+    // The wipe sweeps from top-right to bottom-left
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: 'top top',
+      end: '+=100%',
+      scrub: 0.5,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        // Expand from 0 to 200% to create the diagonal sweep
+        // The polygon moves from off-screen right to fully covering
+        const p = progress * 200;
+        darkLayers.forEach((layer, i) => {
+          // Slight stagger per logo
+          const stagger = i * 3;
+          const localP = Math.max(0, Math.min(100, p - stagger));
+          // Diagonal wipe: a slanted edge sweeps left
+          const offset = 20; // width of the diagonal edge
+          const left = 100 - localP - offset;
+          const right = 100 - localP + offset;
+          layer.style.clipPath = `polygon(${Math.max(0, right)}% 0%, 100% 0%, 100% 100%, ${Math.max(0, left)}% 100%)`;
+        });
+      },
     });
 
     return () => {
@@ -91,7 +94,7 @@ export default function LogoShowcase() {
       >
         {logos.map((pair, i) => (
           <div key={i} className="relative aspect-square overflow-hidden rounded-xl">
-            {/* Light version (base layer) */}
+            {/* Light version (base layer — always visible) */}
             <Image
               src={pair.light}
               alt={`Logo design ${i + 1}`}
@@ -99,10 +102,10 @@ export default function LogoShowcase() {
               className="object-cover"
               sizes="(max-width: 768px) 50vw, 25vw"
             />
-            {/* Dark version (diagonal wipe overlay) */}
+            {/* Dark version (diagonal wipe overlay — starts clipped to nothing) */}
             <div
               className="logo-dark absolute inset-0"
-              style={{ clipPath: 'polygon(100% 0%, 100% 0%, 100% 0%, 100% 0%)' }}
+              style={{ clipPath: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)' }}
             >
               <Image
                 src={pair.dark}
