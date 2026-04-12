@@ -82,8 +82,8 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
           <h3 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-neutral-300">
             Logo <span style={{ color: 'var(--color-brand)' }}>Design</span>
           </h3>
-          <p className="mt-3 text-sm text-neutral-400 max-w-md">
-            Brand identity work across multiple industries.
+          <p className="mt-4 text-sm leading-relaxed text-neutral-400 max-w-lg">
+            A selection of logos that have gone live throughout my career — at Keller Crescent, 10over12, Berry Global, and freelance. Branding is one of the most satisfying creative challenges: distill an entire business into a single mark that speaks loudly, works at any scale, and does its job from day one.
           </p>
         </div>
       )}

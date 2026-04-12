@@ -21,7 +21,7 @@ const categoryDescriptions: Record<string, string> = {
   advertising: 'Print ads, trade advertising, outdoor campaigns, and digital banners.',
   packaging: 'Product packaging, label design, and packaging systems.',
   environmental: 'Trade show booths, environmental graphics, and spatial design.',
-  logo: 'Brand identity and logo design across industries.',
+  logo: 'A selection of logos from across my full career — agency, corporate, and freelance. Branding is one of the most satisfying creative challenges: distill a business into a single mark that speaks loudly and does its job from day one.',
   digital: 'App design, UI/UX, and digital product development.',
 };
 
