@@ -52,7 +52,7 @@ export default function NavBar() {
         />
         <span
           ref={nameRef}
-          className="text-lg md:text-xl font-bold font-display tracking-tight leading-[1.1] transition-colors text-neutral-900"
+          className="text-lg md:text-xl font-bold font-display tracking-tight leading-[0.95] transition-colors text-neutral-900"
         >
           Matthew<br />Johnson
         </span>
