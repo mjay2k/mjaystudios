@@ -3,8 +3,9 @@
 import { useRef, useEffect } from 'react';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
+import AnimatedGradient from '@/components/ui/AnimatedGradient';
 import ProjectGrid from '@/components/projects/ProjectGrid';
-import LogoReveal from '@/components/logo/LogoReveal';
+import LogoShowcase from '@/components/projects/LogoShowcase';
 import { getProjectsByCategory, getAllCategories } from '@/data/projects';
 import type { Section } from '@/stores/useAppStore';
 
@@ -24,8 +25,18 @@ const categoryDescriptions: Record<string, string> = {
   digital: 'App design, UI/UX, and digital product development.',
 };
 
+const categoryAccents: Record<string, string> = {
+  advertising: 'text-red-500',
+  packaging: 'text-blue-500',
+  environmental: 'text-emerald-500',
+  logo: '',
+  digital: '',
+};
+
 export default function CategoryView() {
   const setCurrentSection = useAppStore((s) => s.setCurrentSection);
+  const theme = useAppStore((s) => s.theme);
+  const isDark = theme === 'dark';
   const categories = getAllCategories();
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
@@ -67,44 +78,63 @@ export default function CategoryView() {
     return () => {
       triggers.forEach((t) => t.kill());
     };
-  }, [categories, setCurrentSection]);
+  }, [categories, setCurrentSection, theme]);
 
   return (
     <div>
-      <div className="sticky top-20 z-30 mb-12 flex flex-wrap gap-2 bg-neutral-100/80 py-3 backdrop-blur-sm">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => scrollToCategory(cat)}
-            className="rounded-full bg-neutral-900/5 px-4 py-1.5 text-xs font-medium text-neutral-500 transition-colors hover:bg-neutral-900/10 hover:text-neutral-900"
-          >
-            {categoryLabels[cat] ?? cat}
-          </button>
-        ))}
+      {/* Category jump nav — sticky below navbar */}
+      <div
+        className="sticky top-16 z-30 mb-12 flex flex-wrap gap-2 py-3 backdrop-blur-md"
+        style={{ backgroundColor: isDark ? 'rgba(17,17,17,0.85)' : 'rgba(242,242,242,0.85)' }}
+      >
+        {categories.map((cat) => {
+          const projects = getProjectsByCategory(cat);
+          if (projects.length === 0 && cat !== 'logo') return null;
+          return (
+            <button
+              key={cat}
+              onClick={() => scrollToCategory(cat)}
+              className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                isDark
+                  ? 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'
+                  : 'bg-neutral-900/5 text-neutral-500 hover:bg-neutral-900/10 hover:text-neutral-900'
+              }`}
+            >
+              {categoryLabels[cat] ?? cat}
+            </button>
+          );
+        })}
       </div>
 
       {categories.map((cat) => {
         const catProjects = getProjectsByCategory(cat);
         const isLogo = cat === 'logo';
 
+        // Skip empty categories (except logo which has its own showcase)
+        if (catProjects.length === 0 && !isLogo) return null;
+
         return (
           <section
             key={cat}
             ref={(el) => { sectionRefs.current[cat] = el; }}
-            className="py-16"
+            className="pt-16 pb-8 md:pt-24 md:pb-12"
           >
-            <h2 className="mb-10 text-2xl font-bold tracking-tight md:text-4xl font-display">
-              {categoryLabels[cat] ?? cat}
-            </h2>
+            {/* Editorial section header */}
+            <div className="relative mb-16 md:mb-20 overflow-hidden rounded-2xl p-8 md:p-12">
+              <AnimatedGradient variant="card" />
+              <h2 className="text-4xl md:text-7xl font-bold tracking-tight font-display leading-[0.9] mb-4">
+                <span className={categoryAccents[cat] || ''} style={!categoryAccents[cat] ? { color: 'var(--color-brand)' } : undefined}>
+                  {categoryLabels[cat] ?? cat}
+                </span>
+              </h2>
+              <div className="w-full h-px bg-neutral-200 mb-6" />
+              <p className={`text-sm md:text-base max-w-lg ${isDark ? 'text-white/50' : 'text-neutral-500'}`}>
+                {categoryDescriptions[cat] ?? ''}
+              </p>
+            </div>
 
             {isLogo ? (
-              <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-                {catProjects.flatMap((p) =>
-                  p.images.map((img, i) => (
-                    <LogoReveal key={`${p.id}-${i}`} src={img} alt={`${p.title} logo ${i + 1}`} />
-                  ))
-                )}
-              </div>
+              <LogoShowcase />
             ) : (
               <ProjectGrid projects={catProjects} />
             )}
