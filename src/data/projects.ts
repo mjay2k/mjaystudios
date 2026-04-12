@@ -28,6 +28,8 @@ export function getProjectsByEra(era: Project['era']): Project[] {
     .filter((p) => p.era === era)
     // Exclude logo-only projects from timeline view
     .filter((p) => !(p.categories.length === 1 && p.categories[0] === 'logo'))
+    // Exclude projects with no images
+    .filter((p) => p.images.length > 0)
     .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 

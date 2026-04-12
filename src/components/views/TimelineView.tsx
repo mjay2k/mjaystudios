@@ -163,6 +163,7 @@ export default function TimelineView() {
                 key={era.id}
                 config={era}
                 projects={eraProjects}
+                showLogos={era.id === 'agency'}
               />
             );
           })}

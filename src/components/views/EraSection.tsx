@@ -6,6 +6,7 @@ import { gsap, ScrollTrigger } from '@/lib/gsap';
 import AnimatedGradient from '@/components/ui/AnimatedGradient';
 import { useAppStore } from '@/stores/useAppStore';
 import ProjectGrid from '@/components/projects/ProjectGrid';
+import LogoShowcase from '@/components/projects/LogoShowcase';
 import type { Project } from '@/data/projects';
 import type { Section } from '@/stores/useAppStore';
 
@@ -22,9 +23,10 @@ interface EraConfig {
 interface EraSectionProps {
   config: EraConfig;
   projects: Project[];
+  showLogos?: boolean;
 }
 
-export default function EraSection({ config, projects }: EraSectionProps) {
+export default function EraSection({ config, projects, showLogos }: EraSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const setCurrentSection = useAppStore((s) => s.setCurrentSection);
@@ -117,6 +119,9 @@ export default function EraSection({ config, projects }: EraSectionProps) {
       <div className="py-8">
         <ProjectGrid projects={projects} />
       </div>
+
+      {/* Logo showcase — agency era only */}
+      {showLogos && <LogoShowcase />}
     </section>
   );
 }

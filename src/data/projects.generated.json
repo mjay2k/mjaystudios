@@ -10,12 +10,9 @@
       "packaging"
     ],
     "images": [
-      "/portfolio/agency/burnetts-vodka/01-BurnettsRecipeBook_Cvr.jpg",
-      "/portfolio/agency/burnetts-vodka/02-BurnettsRecipeBook_Index.jpg",
-      "/portfolio/agency/burnetts-vodka/03-BurnettsRecipeBook_Spread.jpg",
-      "/portfolio/agency/burnetts-vodka/04-BURNETTS_CandyPoster.jpg",
-      "/portfolio/agency/burnetts-vodka/05-Burn-outdoor1.jpg",
-      "/portfolio/agency/burnetts-vodka/06-Burn-outdoor2.jpg"
+      "/portfolio/agency/burnetts-vodka/BURNETTS_CandyPoster.jpg",
+      "/portfolio/agency/burnetts-vodka/burnettsCampaign_book.jpg",
+      "/portfolio/agency/burnetts-vodka/burnettsCampaign_outdoor.jpg"
     ],
     "autoCycle": true,
     "sortOrder": 5,
@@ -35,36 +32,9 @@
       "advertising",
       "packaging"
     ],
-    "images": [
-      "/portfolio/agency/heaven-hill/01-25604_HH.jpg",
-      "/portfolio/agency/heaven-hill/02-25608_HH.jpg",
-      "/portfolio/agency/heaven-hill/03-25610_HH.jpg",
-      "/portfolio/agency/heaven-hill/04-25620_HH.jpg",
-      "/portfolio/agency/heaven-hill/05-25623_HH.jpg"
-    ],
+    "images": [],
     "autoCycle": true,
     "sortOrder": 1,
-    "client": "Heaven Hill Distillery"
-  },
-  {
-    "id": "heaven-hill-carousel",
-    "title": "Heaven Hill Digital Campaign",
-    "description": "Digital carousel ads showcasing Heaven Hill's portfolio brands. Designed for high-impact rotation across web and social placements.",
-    "year": 2013,
-    "era": "agency",
-    "categories": [
-      "advertising"
-    ],
-    "images": [
-      "/portfolio/agency/heaven-hill-carousel/01-HH_Caro_1.jpg",
-      "/portfolio/agency/heaven-hill-carousel/02-HH_Caro_2.jpg",
-      "/portfolio/agency/heaven-hill-carousel/03-HH_Caro_3.jpg",
-      "/portfolio/agency/heaven-hill-carousel/04-HH_Caro_4.jpg",
-      "/portfolio/agency/heaven-hill-carousel/05-HH_Caro_5.jpg",
-      "/portfolio/agency/heaven-hill-carousel/06-HH_Caro_6.jpg"
-    ],
-    "autoCycle": true,
-    "sortOrder": 2,
     "client": "Heaven Hill Distillery"
   },
   {
@@ -76,11 +46,7 @@
     "categories": [
       "advertising"
     ],
-    "images": [
-      "/portfolio/agency/hpnotiq-sparkle/01-SparkleAd.jpg",
-      "/portfolio/agency/hpnotiq-sparkle/02-endlessOHoliday.jpg",
-      "/portfolio/agency/hpnotiq-sparkle/03-endlessOriginal.jpg"
-    ],
+    "images": [],
     "autoCycle": true,
     "sortOrder": 6,
     "client": "Hpnotiq"
@@ -95,20 +61,30 @@
       "logo"
     ],
     "images": [
-      "/portfolio/agency/logo-designs/mjLogoDesign_CIH.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_bornand.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_cleanstream.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_community.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_don.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_elastifit.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_flip.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_letgo.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_luster.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_magnolia.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_plastic.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_rodeo.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_sleepguard.png",
-      "/portfolio/agency/logo-designs/mjLogoDesign_spark.png"
+      "/portfolio/agency/logo-designs/logos-2-01.jpg",
+      "/portfolio/agency/logo-designs/logos-2-02.jpg",
+      "/portfolio/agency/logo-designs/logos-2-03.jpg",
+      "/portfolio/agency/logo-designs/logos-2-04.jpg",
+      "/portfolio/agency/logo-designs/logos-2-05.jpg",
+      "/portfolio/agency/logo-designs/logos-2-06.jpg",
+      "/portfolio/agency/logo-designs/logos-2-07.jpg",
+      "/portfolio/agency/logo-designs/logos-2-08.jpg",
+      "/portfolio/agency/logo-designs/logos-2-09.jpg",
+      "/portfolio/agency/logo-designs/logos-2-10.jpg",
+      "/portfolio/agency/logo-designs/logos-2-11.jpg",
+      "/portfolio/agency/logo-designs/logos-2-12.jpg",
+      "/portfolio/agency/logo-designs/logos-2-13.jpg",
+      "/portfolio/agency/logo-designs/logos-2-14.jpg",
+      "/portfolio/agency/logo-designs/logos-2-15.jpg",
+      "/portfolio/agency/logo-designs/logos-2-16.jpg",
+      "/portfolio/agency/logo-designs/logos-2-17.jpg",
+      "/portfolio/agency/logo-designs/logos-2-18.jpg",
+      "/portfolio/agency/logo-designs/logos-2-23.jpg",
+      "/portfolio/agency/logo-designs/logos-2-24.jpg",
+      "/portfolio/agency/logo-designs/logos-2-25.jpg",
+      "/portfolio/agency/logo-designs/logos-2-26.jpg",
+      "/portfolio/agency/logo-designs/logos-2-27.jpg",
+      "/portfolio/agency/logo-designs/logos-2-28.jpg"
     ],
     "autoCycle": false,
     "sortOrder": 10
@@ -124,11 +100,10 @@
       "packaging"
     ],
     "images": [
-      "/portfolio/agency/pama-liqueur/01-PAMA_TradeAd.jpg",
-      "/portfolio/agency/pama-liqueur/02-PAMA_TruckWrap.jpg",
-      "/portfolio/agency/pama-liqueur/03-PAMA-outdoor1.jpg",
-      "/portfolio/agency/pama-liqueur/04-PAMAValentineAd.jpg",
-      "/portfolio/agency/pama-liqueur/05-PAMA-JUMBO-28379.jpg"
+      "/portfolio/agency/pama-liqueur/01-PAMA_Ad.jpg",
+      "/portfolio/agency/pama-liqueur/01-PAMA_Ad_holidays.jpg",
+      "/portfolio/agency/pama-liqueur/01-PAMA_Ad_valin.jpg",
+      "/portfolio/agency/pama-liqueur/01-PAMA_Ads_outdoor.jpg"
     ],
     "autoCycle": true,
     "sortOrder": 3,
@@ -149,11 +124,10 @@
       "packaging"
     ],
     "images": [
-      "/portfolio/agency/rittenhouse-rye/01-RITTENHOUSE_newlabel.jpg",
-      "/portfolio/agency/rittenhouse-rye/02-rittenhouse_rye.jpg",
-      "/portfolio/agency/rittenhouse-rye/03-rittenhouse_rye_drama.jpg",
-      "/portfolio/agency/rittenhouse-rye/04-RittenhouseCaseMockup.jpg",
-      "/portfolio/agency/rittenhouse-rye/05-RittenhouseLabel_UPDATED3.jpg"
+      "/portfolio/agency/rittenhouse-rye/Rittenhouse-photo1.jpg",
+      "/portfolio/agency/rittenhouse-rye/Rittenhouse-photo2.jpg",
+      "/portfolio/agency/rittenhouse-rye/Rittenhouse-process.jpg",
+      "/portfolio/agency/rittenhouse-rye/Rittenhouse_packaging.jpg"
     ],
     "autoCycle": true,
     "sortOrder": 4,
