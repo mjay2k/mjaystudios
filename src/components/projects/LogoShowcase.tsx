@@ -44,15 +44,8 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
         scrub: 0.3,
         onUpdate: (self) => {
           const p = Math.min(self.progress * 110, 100);
-          const edge = 20;
-          if (p >= 100) {
-            darkLayer.style.maskImage = 'none';
-            (darkLayer.style as CSSStyleDeclaration & { webkitMaskImage: string }).webkitMaskImage = 'none';
-          } else {
-            const gradient = `linear-gradient(to bottom, black ${Math.max(0, p - edge)}%, transparent ${p}%)`;
-            darkLayer.style.maskImage = gradient;
-            (darkLayer.style as CSSStyleDeclaration & { webkitMaskImage: string }).webkitMaskImage = gradient;
-          }
+          // Vertical wipe using clip-path (works on all browsers including iOS)
+          darkLayer.style.clipPath = `inset(0 0 ${100 - p}% 0)`;
         },
       });
       triggers.push(trigger);
@@ -103,7 +96,7 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
             {/* Dark version (diagonal wipe overlay) */}
             <div
               className="logo-dark absolute inset-0"
-              style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 0%)', maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 0%)' }}
+              style={{ clipPath: 'inset(0 0 100% 0)' }}
             >
               <Image
                 src={pair.dark}
