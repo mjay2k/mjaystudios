@@ -6,9 +6,10 @@ import { gsap } from '@/lib/gsap';
 
 interface ViewToggleProps {
   size?: 'default' | 'large';
+  onSelect?: () => void;
 }
 
-export default function ViewToggle({ size = 'default' }: ViewToggleProps) {
+export default function ViewToggle({ size = 'default', onSelect }: ViewToggleProps) {
   const activeView = useAppStore((s) => s.activeView);
   const setActiveView = useAppStore((s) => s.setActiveView);
   const pillRef = useRef<HTMLDivElement>(null);
@@ -40,7 +41,7 @@ export default function ViewToggle({ size = 'default' }: ViewToggleProps) {
         style={{ backgroundColor: 'var(--color-brand)' }}
       />
       <button
-        onClick={() => setActiveView('timeline')}
+        onClick={() => { setActiveView('timeline'); onSelect?.(); }}
         className={`relative z-10 rounded-full font-medium tracking-wide transition-colors ${
           isLarge ? 'flex-1 px-6 py-3 text-sm' : 'px-4 py-1.5 text-xs'
         } ${
@@ -52,7 +53,7 @@ export default function ViewToggle({ size = 'default' }: ViewToggleProps) {
         Timeline
       </button>
       <button
-        onClick={() => setActiveView('category')}
+        onClick={() => { setActiveView('category'); onSelect?.(); }}
         className={`relative z-10 rounded-full font-medium tracking-wide transition-colors ${
           isLarge ? 'flex-1 px-6 py-3 text-sm' : 'px-4 py-1.5 text-xs'
         } ${

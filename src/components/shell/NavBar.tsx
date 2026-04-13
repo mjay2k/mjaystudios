@@ -105,7 +105,7 @@ export default function NavBar() {
         <div className="absolute top-full right-0 left-0 bg-neutral-100/98 px-6 py-8 backdrop-blur-xl border-t border-neutral-200/50 md:hidden">
           {/* View toggle — full width, large */}
           <div className="mb-8">
-            <ViewToggle size="large" />
+            <ViewToggle size="large" onSelect={() => setMenuOpen(false)} />
           </div>
 
           {/* Nav links — centered, large */}
