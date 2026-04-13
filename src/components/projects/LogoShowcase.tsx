@@ -1,8 +1,7 @@
 'use client';
 
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
-import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 
 // 12 logo pairs: odd = dark, even = light
@@ -25,71 +24,77 @@ function getLogoPair(index: number) {
 
 export default function LogoShowcase({ hideHeader = false }: { hideHeader?: boolean }) {
   const gridRef = useRef<HTMLDivElement>(null);
+  const darkLayersRef = useRef<HTMLElement[]>([]);
+  const [wipeProgress, setWipeProgress] = useState(0);
+  const [isTouching, setIsTouching] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartX = useRef(0);
+  const progressRef = useRef(0);
   const theme = useAppStore((s) => s.theme);
 
-  const setupTriggers = useCallback(() => {
-    if (!gridRef.current) return [];
-
-    const logoItems = gridRef.current.querySelectorAll<HTMLElement>('.logo-item');
-    const triggers: ScrollTrigger[] = [];
-    const isMobile = window.innerWidth < 768;
-
-    logoItems.forEach((item) => {
-      const darkLayer = item.querySelector<HTMLElement>('.logo-dark');
-      if (!darkLayer) return;
-
-      if (isMobile) {
-        // Mobile: use IntersectionObserver for reliable visibility detection
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                gsap.fromTo(darkLayer,
-                  { clipPath: 'inset(0 0 100% 0)' },
-                  { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power2.inOut', delay: 0.2 }
-                );
-                observer.unobserve(item);
-              }
-            });
-          },
-          { threshold: 0.3 }
-        );
-        observer.observe(item);
-        // Store cleanup
-        const origKill = { kill: () => observer.disconnect() };
-        triggers.push(origKill as unknown as ScrollTrigger);
-      } else {
-        // Desktop: scroll-scrubbed wipe
-        const trigger = ScrollTrigger.create({
-          trigger: item,
-          start: 'center bottom',
-          end: 'center 60%',
-          scrub: 0.2,
-          onUpdate: (self) => {
-            const p = Math.min(self.progress * 120, 100);
-            darkLayer.style.clipPath = `inset(0 0 ${100 - p}% 0)`;
-          },
-        });
-        triggers.push(trigger);
-      }
-    });
-
-    return triggers;
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
   }, []);
 
-  // Recreate triggers when theme changes (ScrollTrigger positions can shift)
-  useEffect(() => {
-    const triggers = setupTriggers();
-    return () => {
-      triggers.forEach((t) => t.kill());
-    };
-  }, [setupTriggers, theme]);
+  // Apply wipe to all dark layers
+  const applyWipe = useCallback((progress: number) => {
+    const clamped = Math.max(0, Math.min(100, progress));
+    progressRef.current = clamped;
+    setWipeProgress(clamped);
+    darkLayersRef.current.forEach((layer) => {
+      if (layer) {
+        // Horizontal wipe from right to left
+        layer.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
+      }
+    });
+  }, []);
+
+  // Desktop: cursor X position over grid controls wipe
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!gridRef.current) return;
+    const rect = gridRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const progress = (x / rect.width) * 100;
+    // Invert: left = dark (100%), right = light (0%)
+    applyWipe(100 - progress);
+  }, [applyWipe]);
+
+  const handleMouseLeave = useCallback(() => {
+    // Snap back to light (0%)
+    applyWipe(0);
+  }, [applyWipe]);
+
+  // Mobile: swipe controls wipe
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    setIsTouching(true);
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!gridRef.current) return;
+    const rect = gridRef.current.getBoundingClientRect();
+    const deltaX = touchStartX.current - e.touches[0].clientX;
+    // Map swipe distance to progress: swipe left = reveal dark
+    const progress = Math.max(0, Math.min(100, (deltaX / rect.width) * 200));
+    applyWipe(progress);
+  }, [applyWipe]);
+
+  const handleTouchEnd = useCallback(() => {
+    setIsTouching(false);
+    // Snap to nearest state
+    if (progressRef.current > 50) {
+      applyWipe(100);
+    } else {
+      applyWipe(0);
+    }
+  }, [applyWipe]);
 
   const logos = Array.from({ length: LOGO_COUNT }, (_, i) => getLogoPair(i));
+  const isRevealed = wipeProgress > 50;
 
   return (
     <div className={`relative ${hideHeader ? '' : 'py-16 md:py-24'}`}>
-      {/* Section header — hidden when used inside CategoryView */}
+      {/* Section header */}
       {!hideHeader && (
         <div className="mb-12 md:mb-16">
           <h3 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-neutral-300">
@@ -101,10 +106,43 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
         </div>
       )}
 
-      {/* Logo grid */}
+      {/* Interaction hint */}
+      <div className="flex items-center gap-2 mb-6 text-neutral-400">
+        {isMobile ? (
+          <>
+            {/* Swipe icon */}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8" />
+              <path d="M15 15l3-3 3 3" />
+              <path d="M21 15l-3-3-3 3" />
+            </svg>
+            <span className="text-xs font-medium">
+              {isRevealed ? 'Swipe right to restore' : 'Swipe left to reverse'}
+            </span>
+          </>
+        ) : (
+          <>
+            {/* Cursor icon */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 3l14 9-7 2-4 7z" />
+            </svg>
+            <span className="text-xs font-medium">
+              {isTouching || wipeProgress > 0 ? 'Move right to restore' : 'Hover to reveal reverse colorways'}
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* Logo grid — interactive */}
       <div
         ref={gridRef}
-        className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4"
+        className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 select-none"
+        onMouseMove={!isMobile ? handleMouseMove : undefined}
+        onMouseLeave={!isMobile ? handleMouseLeave : undefined}
+        onTouchStart={isMobile ? handleTouchStart : undefined}
+        onTouchMove={isMobile ? handleTouchMove : undefined}
+        onTouchEnd={isMobile ? handleTouchEnd : undefined}
+        style={{ cursor: !isMobile ? 'ew-resize' : undefined }}
       >
         {logos.map((pair, i) => (
           <div key={i} className="logo-item relative aspect-square overflow-hidden rounded-xl">
@@ -113,13 +151,14 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
               src={pair.light}
               alt={`Logo design ${i + 1}`}
               fill
-              className="object-cover"
+              className="object-cover pointer-events-none"
               sizes="(max-width: 768px) 50vw, 25vw"
             />
-            {/* Dark version (diagonal wipe overlay) */}
+            {/* Dark version (wipe overlay) */}
             <div
-              className="logo-dark absolute inset-0"
-              style={{ clipPath: 'inset(0 0 100% 0)' }}
+              className="logo-dark absolute inset-0 pointer-events-none"
+              ref={(el) => { if (el) darkLayersRef.current[i] = el; }}
+              style={{ clipPath: 'inset(0 100% 0 0)' }}
             >
               <Image
                 src={pair.dark}
