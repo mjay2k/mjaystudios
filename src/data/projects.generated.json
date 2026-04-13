@@ -217,7 +217,8 @@
       "additionalImages": [],
       "processNotes": "Silver ADDY Award winner (2022). Concepted, designed, and produced booth graphics across three consecutive show years."
     },
-    "client": "Berry Global"
+    "client": "Berry Global",
+    "wide": true
   },
   {
     "id": "packaging",
@@ -258,7 +259,8 @@
     ],
     "autoCycle": false,
     "sortOrder": 4,
-    "client": "Berry Global"
+    "client": "Berry Global",
+    "compact": true
   },
   {
     "id": "verdant-campaign",

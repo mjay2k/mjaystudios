@@ -6,6 +6,7 @@ categories: [advertising]
 autoCycle: false
 sortOrder: 4
 draft: false
+compact: true
 hero:
 link:
 ---

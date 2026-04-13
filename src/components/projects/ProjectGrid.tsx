@@ -73,6 +73,18 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
           );
         }
 
+        if (project.wide) {
+          normalIdx++;
+          return (
+            <div
+              key={project.id}
+              className="project-card col-span-2 md:col-span-3"
+            >
+              <ProjectCard project={project} />
+            </div>
+          );
+        }
+
         const idx = normalIdx++;
         return (
           <div

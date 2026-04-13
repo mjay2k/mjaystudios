@@ -6,6 +6,7 @@ categories: [environmental]
 autoCycle: true
 sortOrder: 5
 draft: false
+wide: true
 hero: 01-booth-design.png
 link:
 ---
