@@ -12,22 +12,22 @@ interface ProjectGridProps {
 export default function ProjectGrid({ projects }: ProjectGridProps) {
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // Split into normal and compact projects
-  const normalProjects = projects.filter((p) => !p.compact);
-  const compactProjects = projects.filter((p) => p.compact);
-
   useEffect(() => {
     if (!gridRef.current) return;
 
     const cards = gridRef.current.querySelectorAll('.project-card');
+    let normalIndex = 0;
 
-    cards.forEach((card, i) => {
-      const isRightCol = i % 2 === 1;
+    cards.forEach((card) => {
+      const isCompact = card.classList.contains('compact-card');
+      const isRightCol = !isCompact && normalIndex % 2 === 1;
+      if (!isCompact) normalIndex++;
+
       gsap.fromTo(
         card,
         {
           opacity: 0,
-          x: isRightCol ? 80 : 60,
+          x: isRightCol || isCompact ? 80 : 60,
           rotateY: 8,
           scale: 0.95,
         },
@@ -52,32 +52,37 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
     };
   }, [projects]);
 
+  // Track normal card index for stagger offset
+  let normalIdx = 0;
+
   return (
-    <div ref={gridRef} style={{ perspective: '1200px' }}>
-      {/* Normal-sized projects — 2 column grid */}
-      {normalProjects.length > 0 && (
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12">
-          {normalProjects.map((project, i) => (
+    <div
+      ref={gridRef}
+      className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6"
+      style={{ perspective: '1200px' }}
+    >
+      {projects.map((project) => {
+        if (project.compact) {
+          return (
             <div
               key={project.id}
-              className={`project-card ${i % 2 === 1 ? 'md:mt-12' : ''}`}
+              className="project-card compact-card col-span-1"
             >
               <ProjectCard project={project} />
             </div>
-          ))}
-        </div>
-      )}
+          );
+        }
 
-      {/* Compact projects — 4 column grid (2 on mobile) */}
-      {compactProjects.length > 0 && (
-        <div className={`grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 ${normalProjects.length > 0 ? 'mt-10 md:mt-12' : ''}`}>
-          {compactProjects.map((project) => (
-            <div key={project.id} className="project-card">
-              <ProjectCard project={project} />
-            </div>
-          ))}
-        </div>
-      )}
+        const idx = normalIdx++;
+        return (
+          <div
+            key={project.id}
+            className={`project-card col-span-2 ${idx % 2 === 1 ? 'md:mt-12' : ''}`}
+          >
+            <ProjectCard project={project} />
+          </div>
+        );
+      })}
     </div>
   );
 }
