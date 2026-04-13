@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
+import { gsap } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 
 // 12 logo pairs: odd = dark, even = light
@@ -36,18 +37,29 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
     setIsMobile(window.innerWidth < 768);
   }, []);
 
-  // Apply wipe to all dark layers
+  // Apply wipe to all dark layers (instant — used during drag)
   const applyWipe = useCallback((progress: number) => {
     const clamped = Math.max(0, Math.min(100, progress));
     progressRef.current = clamped;
     setWipeProgress(clamped);
     darkLayersRef.current.forEach((layer) => {
       if (layer) {
-        // Horizontal wipe from right to left
-        layer.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
+        // Wipe from left to right: 0% = light, 100% = dark
+        layer.style.clipPath = `inset(0 0 0 ${100 - clamped}%)`;
       }
     });
   }, []);
+
+  // Smooth animated snap to a target progress
+  const animateWipe = useCallback((target: number) => {
+    const obj = { val: progressRef.current };
+    gsap.to(obj, {
+      val: target,
+      duration: 0.4,
+      ease: 'power2.out',
+      onUpdate: () => applyWipe(obj.val),
+    });
+  }, [applyWipe]);
 
   // Desktop: cursor X position over grid controls wipe
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -55,20 +67,15 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
     const rect = gridRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const progress = (x / rect.width) * 100;
-    // Invert: left = dark (100%), right = light (0%)
-    applyWipe(100 - progress);
+    applyWipe(progress);
   }, [applyWipe]);
 
   const handleMouseLeave = useCallback(() => {
-    // Snap to nearest state instead of resetting
-    if (progressRef.current > 50) {
-      applyWipe(100);
-    } else {
-      applyWipe(0);
-    }
-  }, [applyWipe]);
+    // Smooth snap to nearest state
+    animateWipe(progressRef.current > 50 ? 100 : 0);
+  }, [animateWipe]);
 
-  // Mobile: swipe controls wipe
+  // Mobile: swipe controls wipe (starts from current position)
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     setIsTouching(true);
@@ -77,21 +84,22 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (!gridRef.current) return;
     const rect = gridRef.current.getBoundingClientRect();
-    const deltaX = touchStartX.current - e.touches[0].clientX;
-    // Map swipe distance to progress: swipe left = reveal dark
-    const progress = Math.max(0, Math.min(100, (deltaX / rect.width) * 200));
+    const deltaX = e.touches[0].clientX - touchStartX.current;
+    // Swipe right = reveal dark, swipe left = restore light
+    const swipeProgress = (deltaX / rect.width) * 200;
+    const startProgress = progressRef.current;
+    // If already dark (100), swiping left goes back. If light (0), swiping right goes dark.
+    const progress = startProgress > 50
+      ? 100 + swipeProgress  // swiping left from dark state
+      : swipeProgress;        // swiping right from light state
     applyWipe(progress);
   }, [applyWipe]);
 
   const handleTouchEnd = useCallback(() => {
     setIsTouching(false);
-    // Snap to nearest state
-    if (progressRef.current > 50) {
-      applyWipe(100);
-    } else {
-      applyWipe(0);
-    }
-  }, [applyWipe]);
+    // Smooth snap to nearest state
+    animateWipe(progressRef.current > 50 ? 100 : 0);
+  }, [animateWipe]);
 
   const logos = Array.from({ length: LOGO_COUNT }, (_, i) => getLogoPair(i));
   const isRevealed = wipeProgress > 50;
@@ -121,7 +129,7 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
               <path d="M21 15l-3-3-3 3" />
             </svg>
             <span className="text-xs font-medium">
-              {isRevealed ? 'Swipe right to restore' : 'Swipe left to reverse'}
+              {isRevealed ? 'Swipe left to restore' : 'Swipe right to reverse'}
             </span>
           </>
         ) : (
@@ -131,7 +139,7 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
               <path d="M5 3l14 9-7 2-4 7z" />
             </svg>
             <span className="text-xs font-medium">
-              {isTouching || wipeProgress > 0 ? 'Move right to restore' : 'Hover to reveal reverse colorways'}
+              {isRevealed ? 'Move left to restore' : 'Hover to reveal reverse colorways'}
             </span>
           </>
         )}
@@ -162,7 +170,7 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
             <div
               className="logo-dark absolute inset-0 pointer-events-none"
               ref={(el) => { if (el) darkLayersRef.current[i] = el; }}
-              style={{ clipPath: 'inset(0 100% 0 0)' }}
+              style={{ clipPath: 'inset(0 0 0 100%)' }}
             >
               <Image
                 src={pair.dark}
