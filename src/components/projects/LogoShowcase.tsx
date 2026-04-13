@@ -44,8 +44,8 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
     setWipeProgress(clamped);
     darkLayersRef.current.forEach((layer) => {
       if (layer) {
-        // Wipe from left to right: 0% = light, 100% = dark
-        layer.style.clipPath = `inset(0 0 0 ${100 - clamped}%)`;
+        // Wipe from right to left: cursor/finger moves right = wipe goes right
+        layer.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
       }
     });
   }, []);
@@ -170,7 +170,7 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
             <div
               className="logo-dark absolute inset-0 pointer-events-none"
               ref={(el) => { if (el) darkLayersRef.current[i] = el; }}
-              style={{ clipPath: 'inset(0 0 0 100%)' }}
+              style={{ clipPath: 'inset(0 100% 0 0)' }}
             >
               <Image
                 src={pair.dark}
