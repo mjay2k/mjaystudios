@@ -39,22 +39,19 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
 
       const trigger = ScrollTrigger.create({
         trigger: item,
-        start: 'top 60%',  // visible for a beat before wipe starts
-        end: 'top 15%',
-        scrub: 0.5,
+        start: 'top 80%',
+        end: 'bottom 40%',
+        scrub: 0.3,
         onUpdate: (self) => {
-          const p = Math.min(self.progress * 120, 100);
-          // Vertical wipe with soft feathered edge via gradient mask
-          // The dark layer reveals from top to bottom with a blurred edge
-          const edge = 20; // feather size in %
-          const pos = p;
+          const p = Math.min(self.progress * 110, 100);
+          const edge = 20;
           if (p >= 100) {
             darkLayer.style.maskImage = 'none';
-            darkLayer.style.webkitMaskImage = 'none';
+            (darkLayer.style as CSSStyleDeclaration & { webkitMaskImage: string }).webkitMaskImage = 'none';
           } else {
-            const gradient = `linear-gradient(to bottom, black ${Math.max(0, pos - edge)}%, transparent ${pos}%)`;
+            const gradient = `linear-gradient(to bottom, black ${Math.max(0, p - edge)}%, transparent ${p}%)`;
             darkLayer.style.maskImage = gradient;
-            darkLayer.style.webkitMaskImage = gradient;
+            (darkLayer.style as CSSStyleDeclaration & { webkitMaskImage: string }).webkitMaskImage = gradient;
           }
         },
       });
@@ -106,7 +103,7 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
             {/* Dark version (diagonal wipe overlay) */}
             <div
               className="logo-dark absolute inset-0"
-              style={{ maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 0%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 0%)' }}
+              style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 0%)', maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 0%)' }}
             >
               <Image
                 src={pair.dark}
