@@ -4,7 +4,7 @@ client: Heaven Hill
 year: 2014
 categories: [packaging]
 autoCycle: true
-sortOrder: 4
+sortOrder: 3
 draft: false
 hero: RITTENHOUSE_newlabel.jpg
 link:

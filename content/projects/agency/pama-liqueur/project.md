@@ -4,7 +4,7 @@ client: Heaven Hill
 year: 2013
 categories: [advertising]
 autoCycle: true
-sortOrder: 3
+sortOrder: 2
 draft: false
 hero: PAMA_TradeAd.jpg
 link:

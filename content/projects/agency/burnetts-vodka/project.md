@@ -4,7 +4,7 @@ client: Burnett's Vodka
 year: 2014
 categories: [advertising]
 autoCycle: true
-sortOrder: 5
+sortOrder: 1
 draft: false
 hero: 1of3_BurnettsRecipeBook_Cvr.jpg
 link:

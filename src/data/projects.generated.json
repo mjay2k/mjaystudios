@@ -18,7 +18,7 @@
       "/portfolio/agency/burnetts-vodka/7-burnettsCampaign_cit.jpg"
     ],
     "autoCycle": true,
-    "sortOrder": 5,
+    "sortOrder": 1,
     "caseStudy": {
       "extendedDescription": "Burnett's needed a campaign that could spotlight any single flavor while reinforcing the range behind it. I designed a system where the hero flavor bursts from the bottle, revealing the ingredients in a way that makes them look alive and appetizing. The rest of the lineup stretches out behind it, bleeding off the edge — there's always more. One layout, infinite flavor swaps. The campaign ran nationally across print, outdoor, and digital.",
       "additionalImages": []
@@ -41,7 +41,7 @@
       "/portfolio/agency/ellisParkBillboard/Ellis2011_goHorse3.jpg"
     ],
     "autoCycle": true,
-    "sortOrder": 1,
+    "sortOrder": 5,
     "client": "Ellis Park",
     "concept": true
   },
@@ -113,7 +113,7 @@
       "/portfolio/agency/pama-liqueur/01-PAMA_Ads_outdoor.jpg"
     ],
     "autoCycle": true,
-    "sortOrder": 3,
+    "sortOrder": 2,
     "caseStudy": {
       "extendedDescription": "The client wanted to communicate the vast mixability of PAMA. I took a show-don't-tell approach — dozens of unique cocktails, each professionally mixed and shot, composed into a single mosaic art piece around the bottle. The full composition lives inside a branded frame built on PAMA's pomegranate motif. The concept scaled across seasons — Valentine's Day, Holiday — same framework, fresh executions. Ran nationally in print, outdoor, and digital. Award-winning campaign.",
       "additionalImages": [],
@@ -137,12 +137,35 @@
       "/portfolio/agency/rittenhouse-rye/Rittenhouse_packaging.jpg"
     ],
     "autoCycle": true,
-    "sortOrder": 4,
+    "sortOrder": 3,
     "caseStudy": {
       "extendedDescription": "A complete packaging overhaul for a heritage whiskey brand dating back to 1934, named after Philadelphia's Rittenhouse Square. The new design draws from the original label language while making it feel current and authoritative — honoring the history without being stuck in it. Currently on shelves nationwide.",
       "additionalImages": []
     },
     "client": "Heaven Hill"
+  },
+  {
+    "id": "sitex-corp",
+    "title": "SiteX Corp Website",
+    "description": "Designed and co-developed a website for SiteX Corp, a professional clothing company. The site lets users swap the background pattern between three animal prints — a direct tie-in with their \"Dress for Your Role\" campaign.",
+    "year": 2014,
+    "era": "agency",
+    "categories": [
+      "advertising",
+      "digital"
+    ],
+    "images": [
+      "/portfolio/agency/sitex-corp/1-SiteX_sgs.jpg",
+      "/portfolio/agency/sitex-corp/2-SiteX_sgs.jpg",
+      "/portfolio/agency/sitex-corp/3-SiteX_sgs.jpg"
+    ],
+    "autoCycle": true,
+    "sortOrder": 4,
+    "caseStudy": {
+      "extendedDescription": "SiteX needed a web presence that reinforced their campaign message: dress like you mean it. I designed the full site and co-programmed it with a teammate. The standout feature is an interactive background switcher — three animal print patterns (leopard, zebra, snake) that the user can toggle on the fly. It's a small detail that turns the site into an extension of the campaign, not just a brochure next to it.",
+      "additionalImages": []
+    },
+    "client": "SiteX Corp"
   },
   {
     "id": "epic-campaign",

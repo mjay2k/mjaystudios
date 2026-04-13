@@ -32,14 +32,23 @@ export function getProjectsByEra(era: Project['era']): Project[] {
     .filter((p) => !(p.categories.length === 1 && p.categories[0] === 'logo'))
     // Exclude projects with no images
     .filter((p) => p.images.length > 0)
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    // Concepts sort last, then by sortOrder
+    .sort((a, b) => {
+      if (a.concept && !b.concept) return 1;
+      if (!a.concept && b.concept) return -1;
+      return a.sortOrder - b.sortOrder;
+    });
 }
 
 export function getProjectsByCategory(category: string): Project[] {
   return projects
     .filter((p) => p.categories.includes(category))
     .filter((p) => p.images.length > 0)
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    .sort((a, b) => {
+      if (a.concept && !b.concept) return 1;
+      if (!a.concept && b.concept) return -1;
+      return a.sortOrder - b.sortOrder;
+    });
 }
 
 export function getAllCategories(): string[] {

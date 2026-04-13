@@ -4,7 +4,7 @@ client: Ellis Park
 year: 2012
 categories: [advertising, outdoor]
 autoCycle: true
-sortOrder: 1
+sortOrder: 5
 draft: false
 concept: true
 hero:
