@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { ScrollTrigger } from '@/lib/gsap';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 
 // 12 logo pairs: odd = dark, even = light
@@ -32,23 +32,40 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
 
     const logoItems = gridRef.current.querySelectorAll<HTMLElement>('.logo-item');
     const triggers: ScrollTrigger[] = [];
+    const isMobile = window.innerWidth < 768;
 
     logoItems.forEach((item) => {
       const darkLayer = item.querySelector<HTMLElement>('.logo-dark');
       if (!darkLayer) return;
 
-      const trigger = ScrollTrigger.create({
-        trigger: item,
-        // Start when logo center hits bottom of viewport, end when center hits 60%
-        start: 'center bottom',
-        end: 'center 60%',
-        scrub: 0.2,
-        onUpdate: (self) => {
-          const p = Math.min(self.progress * 120, 100);
-          darkLayer.style.clipPath = `inset(0 0 ${100 - p}% 0)`;
-        },
-      });
-      triggers.push(trigger);
+      if (isMobile) {
+        // Mobile: one-shot animation when logo enters viewport
+        const trigger = ScrollTrigger.create({
+          trigger: item,
+          start: 'top 75%',
+          once: true,
+          onEnter: () => {
+            gsap.fromTo(darkLayer,
+              { clipPath: 'inset(0 0 100% 0)' },
+              { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power2.inOut' }
+            );
+          },
+        });
+        triggers.push(trigger);
+      } else {
+        // Desktop: scroll-scrubbed wipe
+        const trigger = ScrollTrigger.create({
+          trigger: item,
+          start: 'center bottom',
+          end: 'center 60%',
+          scrub: 0.2,
+          onUpdate: (self) => {
+            const p = Math.min(self.progress * 120, 100);
+            darkLayer.style.clipPath = `inset(0 0 ${100 - p}% 0)`;
+          },
+        });
+        triggers.push(trigger);
+      }
     });
 
     return triggers;
