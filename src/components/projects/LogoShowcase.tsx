@@ -60,8 +60,12 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
   }, [applyWipe]);
 
   const handleMouseLeave = useCallback(() => {
-    // Snap back to light (0%)
-    applyWipe(0);
+    // Snap to nearest state instead of resetting
+    if (progressRef.current > 50) {
+      applyWipe(100);
+    } else {
+      applyWipe(0);
+    }
   }, [applyWipe]);
 
   // Mobile: swipe controls wipe
