@@ -39,19 +39,25 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
       if (!darkLayer) return;
 
       if (isMobile) {
-        // Mobile: one-shot animation when logo enters viewport
-        const trigger = ScrollTrigger.create({
-          trigger: item,
-          start: 'top 75%',
-          once: true,
-          onEnter: () => {
-            gsap.fromTo(darkLayer,
-              { clipPath: 'inset(0 0 100% 0)' },
-              { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power2.inOut' }
-            );
+        // Mobile: use IntersectionObserver for reliable visibility detection
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                gsap.fromTo(darkLayer,
+                  { clipPath: 'inset(0 0 100% 0)' },
+                  { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power2.inOut', delay: 0.2 }
+                );
+                observer.unobserve(item);
+              }
+            });
           },
-        });
-        triggers.push(trigger);
+          { threshold: 0.3 }
+        );
+        observer.observe(item);
+        // Store cleanup
+        const origKill = { kill: () => observer.disconnect() };
+        triggers.push(origKill as unknown as ScrollTrigger);
       } else {
         // Desktop: scroll-scrubbed wipe
         const trigger = ScrollTrigger.create({
