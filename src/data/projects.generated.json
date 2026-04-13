@@ -43,7 +43,8 @@
     "autoCycle": true,
     "sortOrder": 5,
     "client": "Ellis Park",
-    "concept": true
+    "concept": true,
+    "compact": true
   },
   {
     "id": "hpnotiq-sparkle",
@@ -165,7 +166,8 @@
       "extendedDescription": "SiteX needed a web presence that reinforced their campaign message: dress like you mean it. I designed the full site and co-programmed it with a teammate. The standout feature is an interactive background switcher — three animal print patterns (zebra, peacock, leopard) that the user can toggle on the fly. It's a small detail that turns the site into an extension of the campaign, not just a brochure next to it.",
       "additionalImages": []
     },
-    "client": "SiteX Corp"
+    "client": "SiteX Corp",
+    "compact": true
   },
   {
     "id": "epic-campaign",

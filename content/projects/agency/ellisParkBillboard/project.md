@@ -6,6 +6,7 @@ categories: [advertising, outdoor]
 autoCycle: true
 sortOrder: 5
 draft: false
+compact: true
 concept: true
 hero:
 link:

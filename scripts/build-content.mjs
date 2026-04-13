@@ -107,6 +107,7 @@ function parseProjectFile(filePath, era, projectId) {
     ...(data.link ? { link: data.link } : {}),
     ...(data.captions ? { captions: data.captions } : {}),
     ...(data.concept ? { concept: true } : {}),
+    ...(data.compact ? { compact: true } : {}),
   };
 }
 

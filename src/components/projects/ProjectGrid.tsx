@@ -12,14 +12,16 @@ interface ProjectGridProps {
 export default function ProjectGrid({ projects }: ProjectGridProps) {
   const gridRef = useRef<HTMLDivElement>(null);
 
+  // Split into normal and compact projects
+  const normalProjects = projects.filter((p) => !p.compact);
+  const compactProjects = projects.filter((p) => p.compact);
+
   useEffect(() => {
     if (!gridRef.current) return;
 
     const cards = gridRef.current.querySelectorAll('.project-card');
 
     cards.forEach((card, i) => {
-      // Slide in from the right (timeline side) with a slight rotation
-      // like cards being dealt from the timeline rail
       const isRightCol = i % 2 === 1;
       gsap.fromTo(
         card,
@@ -51,21 +53,31 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
   }, [projects]);
 
   return (
-    <div
-      ref={gridRef}
-      className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12"
-      style={{ perspective: '1200px' }}
-    >
-      {projects.map((project, i) => (
-        <div
-          key={project.id}
-          className={`project-card ${
-            i % 2 === 1 ? 'md:mt-12' : ''
-          }`}
-        >
-          <ProjectCard project={project} />
+    <div ref={gridRef} style={{ perspective: '1200px' }}>
+      {/* Normal-sized projects — 2 column grid */}
+      {normalProjects.length > 0 && (
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12">
+          {normalProjects.map((project, i) => (
+            <div
+              key={project.id}
+              className={`project-card ${i % 2 === 1 ? 'md:mt-12' : ''}`}
+            >
+              <ProjectCard project={project} />
+            </div>
+          ))}
         </div>
-      ))}
+      )}
+
+      {/* Compact projects — 4 column grid (2 on mobile) */}
+      {compactProjects.length > 0 && (
+        <div className={`grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 ${normalProjects.length > 0 ? 'mt-10 md:mt-12' : ''}`}>
+          {compactProjects.map((project) => (
+            <div key={project.id} className="project-card">
+              <ProjectCard project={project} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

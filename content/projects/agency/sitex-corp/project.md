@@ -6,6 +6,7 @@ categories: [advertising, digital]
 autoCycle: true
 sortOrder: 4
 draft: false
+compact: true
 hero:
 link:
 ---

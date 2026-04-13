@@ -21,6 +21,7 @@ export interface Project {
   link?: string;
   captions?: Record<string, string>;
   concept?: boolean;
+  compact?: boolean;
 }
 
 export const projects: Project[] = generatedProjects as Project[];
