@@ -39,12 +39,12 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
 
       const trigger = ScrollTrigger.create({
         trigger: item,
-        start: 'top 80%',
-        end: 'bottom 40%',
-        scrub: 0.3,
+        // Start when logo center hits bottom of viewport, end when center hits 60%
+        start: 'center bottom',
+        end: 'center 60%',
+        scrub: 0.2,
         onUpdate: (self) => {
-          const p = Math.min(self.progress * 110, 100);
-          // Vertical wipe using clip-path (works on all browsers including iOS)
+          const p = Math.min(self.progress * 120, 100);
           darkLayer.style.clipPath = `inset(0 0 ${100 - p}% 0)`;
         },
       });
