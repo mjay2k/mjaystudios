@@ -2,7 +2,7 @@
 title: Ellis Park Billboard Concepts
 client: Ellis Park
 year: 2012
-categories: [advertising, outdoor]
+categories: [advertising]
 autoCycle: true
 sortOrder: 5
 draft: false
