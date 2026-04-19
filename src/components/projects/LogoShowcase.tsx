@@ -157,7 +157,7 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
         style={{ cursor: !isMobile ? 'ew-resize' : undefined }}
       >
         {logos.map((pair, i) => (
-          <div key={i} className="logo-item relative aspect-square overflow-hidden rounded-xl">
+          <div key={i} className="logo-item relative aspect-square overflow-hidden rounded-xl bg-neutral-100">
             {/* Light version (base layer) */}
             <Image
               src={pair.light}
