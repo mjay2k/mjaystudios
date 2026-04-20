@@ -128,8 +128,21 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         )}
 
         {hasDetail && (
-          <div className="absolute bottom-3 right-3 rounded-full bg-black/50 px-3 py-1 text-[10px] font-medium text-white/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-            View Details
+          <div className="absolute bottom-3 right-3 flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+            {project.link && (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="rounded-full bg-black/50 px-3 py-1 text-[10px] font-medium text-white/60 backdrop-blur-sm transition-colors hover:text-white"
+              >
+                Visit Site ↗
+              </a>
+            )}
+            <div className="rounded-full bg-black/50 px-3 py-1 text-[10px] font-medium text-white/60 backdrop-blur-sm">
+              View Details
+            </div>
           </div>
         )}
 
