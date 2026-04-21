@@ -156,32 +156,37 @@ export default function LogoShowcase({ hideHeader = false }: { hideHeader?: bool
         onTouchEnd={isMobile ? handleTouchEnd : undefined}
         style={{ cursor: !isMobile ? 'ew-resize' : undefined }}
       >
-        {logos.map((pair, i) => (
-          <div key={i} className="logo-item relative aspect-square overflow-hidden rounded-xl" style={{ backgroundColor: theme === 'dark' ? '#111111' : '#f2f2f2', outline: theme === 'dark' ? '1px solid #111111' : 'none' }}>
-            {/* Light version (base layer) */}
-            <Image
-              src={pair.light}
-              alt={`Logo design ${i + 1}`}
-              fill
-              className="object-cover pointer-events-none"
-              sizes="(max-width: 768px) 50vw, 25vw"
-            />
-            {/* Dark version (wipe overlay) */}
-            <div
-              className="logo-dark absolute inset-0 pointer-events-none"
-              ref={(el) => { if (el) darkLayersRef.current[i] = el; }}
-              style={{ clipPath: 'inset(0 100% 0 0)' }}
-            >
+        {logos.map((pair, i) => {
+          const isDark = theme === 'dark';
+          const baseSrc = isDark ? pair.dark : pair.light;
+          const overlaySrc = isDark ? pair.light : pair.dark;
+          return (
+            <div key={i} className="logo-item relative aspect-square overflow-hidden rounded-xl" style={{ backgroundColor: isDark ? '#111111' : '#f2f2f2' }}>
+              {/* Base layer — matches current theme */}
               <Image
-                src={pair.dark}
-                alt={`Logo design ${i + 1} dark`}
+                src={baseSrc}
+                alt={`Logo design ${i + 1}`}
                 fill
-                className="object-cover"
+                className="object-cover pointer-events-none"
                 sizes="(max-width: 768px) 50vw, 25vw"
               />
+              {/* Wipe overlay — opposite colorway */}
+              <div
+                className="logo-dark absolute inset-0 pointer-events-none"
+                ref={(el) => { if (el) darkLayersRef.current[i] = el; }}
+                style={{ clipPath: 'inset(0 100% 0 0)' }}
+              >
+                <Image
+                  src={overlaySrc}
+                  alt={`Logo design ${i + 1} alt`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
