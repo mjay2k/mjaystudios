@@ -133,7 +133,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="group/link absolute top-3 left-3 z-10 flex h-9 items-center gap-1.5 rounded-full px-2.5 text-white shadow-lg transition-all duration-300 w-9 hover:w-[105px] overflow-hidden"
+            className="group/link absolute top-3 left-3 z-10 flex h-9 items-center justify-center rounded-full text-white shadow-lg transition-all duration-300 w-9 hover:w-auto hover:px-4 hover:gap-2 overflow-hidden"
             style={{ backgroundColor: '#F15A29' }}
           >
             <svg className="flex-shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -141,7 +141,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />
             </svg>
-            <span className="whitespace-nowrap text-[11px] font-semibold opacity-0 transition-opacity duration-300 group-hover/link:opacity-100">Visit Site</span>
+            <span className="whitespace-nowrap text-[11px] font-semibold max-w-0 overflow-hidden transition-all duration-300 group-hover/link:max-w-[80px]">Visit Site</span>
           </a>
         )}
 
