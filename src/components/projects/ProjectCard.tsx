@@ -133,7 +133,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="group/link absolute top-3 left-3 z-10 flex h-9 items-center gap-2 rounded-full px-2.5 text-white shadow-lg transition-all duration-300 w-9 hover:w-[120px] overflow-hidden"
+            className="group/link absolute top-3 left-3 z-10 flex h-9 items-center gap-1.5 rounded-full px-2.5 text-white shadow-lg transition-all duration-300 w-9 hover:w-[105px] overflow-hidden"
             style={{ backgroundColor: '#F15A29' }}
           >
             <svg className="flex-shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
