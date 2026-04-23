@@ -8,6 +8,7 @@ import type { SiteVersion } from '@/stores/useAppStore';
 const versions: { id: SiteVersion; label: string; tag: string }[] = [
   { id: 'classic', label: 'Classic', tag: 'v1' },
   { id: 'cinematic', label: 'Cinematic Vault', tag: 'exp' },
+  { id: 'glitch', label: 'Dimensional Glitch', tag: 'x1' },
 ];
 
 export default function VersionSwitcher() {
@@ -140,10 +141,14 @@ export default function VersionSwitcher() {
                     style={{
                       background: v.id === 'classic'
                         ? isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'
-                        : 'rgba(241,90,41,0.15)',
+                        : v.id === 'glitch'
+                          ? 'rgba(0,255,136,0.15)'
+                          : 'rgba(241,90,41,0.15)',
                       color: v.id === 'classic'
                         ? isDark ? '#888' : '#999'
-                        : '#F15A29',
+                        : v.id === 'glitch'
+                          ? '#00ff88'
+                          : '#F15A29',
                     }}
                   >
                     {v.tag}

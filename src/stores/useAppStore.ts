@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 type ActiveView = 'timeline' | 'category';
 type ThemeMode = 'light' | 'dark';
-type SiteVersion = 'classic' | 'cinematic';
+type SiteVersion = 'classic' | 'cinematic' | 'glitch';
 
 interface Section {
   id: string;

@@ -7,6 +7,7 @@ import Shell from '@/components/shell/Shell';
 import TimelineView from '@/components/views/TimelineView';
 import CategoryView from '@/components/views/CategoryView';
 import CinematicView from '@/components/cinematic/CinematicView';
+import GlitchView from '@/components/glitch/GlitchView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
 const timelineMarkers: Marker[] = [
@@ -41,10 +42,9 @@ export default function Home() {
     );
   }, [activeView, siteVersion]);
 
-  // Cinematic version takes over the entire page
-  if (siteVersion === 'cinematic') {
-    return <CinematicView />;
-  }
+  // Experimental versions take over the entire page
+  if (siteVersion === 'cinematic') return <CinematicView />;
+  if (siteVersion === 'glitch') return <GlitchView />;
 
   const markers = activeView === 'timeline' ? timelineMarkers : categoryMarkers;
 
