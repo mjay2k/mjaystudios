@@ -6,6 +6,7 @@ import { gsap } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 import ViewToggle from './ViewToggle';
 import ThemeToggle from './ThemeToggle';
+import VersionSwitcher from './VersionSwitcher';
 
 export default function NavBar() {
   const setAboutOpen = useAppStore((s) => s.setAboutOpen);
@@ -62,6 +63,7 @@ export default function NavBar() {
       <div className="hidden items-center gap-6 md:flex">
         <ViewToggle />
         <ThemeToggle />
+        <VersionSwitcher />
         <button
           onClick={() => setAboutOpen(true)}
           className="text-sm text-neutral-500 transition-colors"
@@ -106,6 +108,11 @@ export default function NavBar() {
           {/* View toggle — full width, large */}
           <div className="mb-8">
             <ViewToggle size="large" onSelect={() => setMenuOpen(false)} />
+          </div>
+
+          {/* Version switcher — centered */}
+          <div className="mb-6 flex justify-center">
+            <VersionSwitcher />
           </div>
 
           {/* Nav links — centered, large */}

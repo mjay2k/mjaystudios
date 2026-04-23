@@ -6,6 +6,7 @@ import { useAppStore } from '@/stores/useAppStore';
 import Shell from '@/components/shell/Shell';
 import TimelineView from '@/components/views/TimelineView';
 import CategoryView from '@/components/views/CategoryView';
+import CinematicView from '@/components/cinematic/CinematicView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
 const timelineMarkers: Marker[] = [
@@ -26,10 +27,11 @@ const categoryMarkers: Marker[] = [
 
 export default function Home() {
   const activeView = useAppStore((s) => s.activeView);
+  const siteVersion = useAppStore((s) => s.siteVersion);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!contentRef.current) return;
+    if (!contentRef.current || siteVersion !== 'classic') return;
     window.scrollTo(0, 0);
 
     gsap.fromTo(
@@ -37,7 +39,12 @@ export default function Home() {
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
     );
-  }, [activeView]);
+  }, [activeView, siteVersion]);
+
+  // Cinematic version takes over the entire page
+  if (siteVersion === 'cinematic') {
+    return <CinematicView />;
+  }
 
   const markers = activeView === 'timeline' ? timelineMarkers : categoryMarkers;
 

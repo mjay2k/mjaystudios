@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 type ActiveView = 'timeline' | 'category';
 type ThemeMode = 'light' | 'dark';
+type SiteVersion = 'classic' | 'cinematic';
 
 interface Section {
   id: string;
@@ -31,6 +32,9 @@ interface AppState {
 
   theme: ThemeMode;
   toggleTheme: () => void;
+
+  siteVersion: SiteVersion;
+  setSiteVersion: (version: SiteVersion) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -66,6 +70,9 @@ export const useAppStore = create<AppState>((set) => ({
 
       return { theme: next };
     }),
+
+  siteVersion: 'classic',
+  setSiteVersion: (version) => set({ siteVersion: version }),
 }));
 
-export type { ActiveView, ThemeMode, Section, AppState };
+export type { ActiveView, ThemeMode, SiteVersion, Section, AppState };
