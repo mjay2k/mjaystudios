@@ -8,6 +8,7 @@ import TimelineView from '@/components/views/TimelineView';
 import CategoryView from '@/components/views/CategoryView';
 import CinematicView from '@/components/cinematic/CinematicView';
 import GlitchView from '@/components/glitch/GlitchView';
+import MagneticView from '@/components/magnetic/MagneticView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
 const timelineMarkers: Marker[] = [
@@ -45,6 +46,7 @@ export default function Home() {
   // Experimental versions take over the entire page
   if (siteVersion === 'cinematic') return <CinematicView />;
   if (siteVersion === 'glitch') return <GlitchView />;
+  if (siteVersion === 'magnetic') return <MagneticView />;
 
   const markers = activeView === 'timeline' ? timelineMarkers : categoryMarkers;
 

@@ -9,6 +9,7 @@ const versions: { id: SiteVersion; label: string; tag: string }[] = [
   { id: 'classic', label: 'Classic', tag: 'v1' },
   { id: 'cinematic', label: 'Cinematic Vault', tag: 'exp' },
   { id: 'glitch', label: 'Dimensional Glitch', tag: 'x1' },
+  { id: 'magnetic', label: 'Magnetic', tag: 'x2' },
 ];
 
 export default function VersionSwitcher() {
