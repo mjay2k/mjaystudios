@@ -7,7 +7,11 @@ import Shell from '@/components/shell/Shell';
 import TimelineView from '@/components/views/TimelineView';
 import CategoryView from '@/components/views/CategoryView';
 import CinematicView from '@/components/cinematic/CinematicView';
+import CinematicAbout from '@/components/cinematic/CinematicAbout';
+import CinematicContact from '@/components/cinematic/CinematicContact';
 import GlitchView from '@/components/glitch/GlitchView';
+import GlitchAbout from '@/components/glitch/GlitchAbout';
+import GlitchContact from '@/components/glitch/GlitchContact';
 import MagneticView from '@/components/magnetic/MagneticView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
@@ -44,8 +48,20 @@ export default function Home() {
   }, [activeView, siteVersion]);
 
   // Experimental versions take over the entire page
-  if (siteVersion === 'cinematic') return <CinematicView />;
-  if (siteVersion === 'glitch') return <GlitchView />;
+  if (siteVersion === 'cinematic') return (
+    <>
+      <CinematicView />
+      <CinematicAbout />
+      <CinematicContact />
+    </>
+  );
+  if (siteVersion === 'glitch') return (
+    <>
+      <GlitchView />
+      <GlitchAbout />
+      <GlitchContact />
+    </>
+  );
   if (siteVersion === 'magnetic') return <MagneticView />;
 
   const markers = activeView === 'timeline' ? timelineMarkers : categoryMarkers;

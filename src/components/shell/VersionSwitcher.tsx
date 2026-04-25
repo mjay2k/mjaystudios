@@ -5,12 +5,15 @@ import { gsap } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 import type { SiteVersion } from '@/stores/useAppStore';
 
-const versions: { id: SiteVersion; label: string; tag: string }[] = [
-  { id: 'classic', label: 'Classic', tag: 'v1' },
+const mainVersion = { id: 'classic' as SiteVersion, label: 'Timeline', tag: 'v1' };
+
+const experimentalVersions: { id: SiteVersion; label: string; tag: string }[] = [
   { id: 'cinematic', label: 'Cinematic Vault', tag: 'exp' },
   { id: 'glitch', label: 'Dimensional Glitch', tag: 'x1' },
   { id: 'magnetic', label: 'Magnetic', tag: 'x2' },
 ];
+
+const allVersions = [mainVersion, ...experimentalVersions];
 
 export default function VersionSwitcher() {
   const siteVersion = useAppStore((s) => s.siteVersion);
@@ -50,7 +53,7 @@ export default function VersionSwitcher() {
     }
   }, [open]);
 
-  const current = versions.find((v) => v.id === siteVersion)!;
+  const current = allVersions.find((v) => v.id === siteVersion)!;
 
   return (
     <div className="relative">
@@ -97,72 +100,106 @@ export default function VersionSwitcher() {
       {open && (
         <div
           ref={menuRef}
-          className="absolute right-0 top-full mt-2 w-56 rounded-xl overflow-hidden shadow-2xl"
+          className="absolute right-0 top-full mt-2 w-64 rounded-xl overflow-hidden shadow-2xl"
           style={{
             background: isDark ? '#1a1a1a' : '#ffffff',
             border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
             zIndex: 100,
           }}
         >
+          {/* ── Main version ── */}
           <div
             className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em]"
             style={{ color: isDark ? '#555' : '#aaa', borderBottom: `1px solid ${isDark ? '#262626' : '#f0f0f0'}` }}
           >
-            Site Versions
+            Portfolio
           </div>
-          {versions.map((v) => {
-            const isActive = v.id === siteVersion;
-            return (
-              <button
-                key={v.id}
-                onClick={() => {
-                  setSiteVersion(v.id);
-                  setOpen(false);
-                }}
-                className="flex w-full items-center justify-between px-4 py-3 text-left transition-colors duration-150"
-                style={{
-                  background: isActive
-                    ? isDark ? 'rgba(241,90,41,0.1)' : 'rgba(241,90,41,0.06)'
-                    : 'transparent',
-                  color: isActive ? '#F15A29' : isDark ? '#d4d4d4' : '#404040',
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) e.currentTarget.style.background = 'transparent';
-                }}
-              >
-                <div>
-                  <div className="text-xs font-bold font-display">{v.label}</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span
-                    className="rounded px-1.5 py-0.5 text-[9px] font-bold uppercase"
-                    style={{
-                      background: v.id === 'classic'
-                        ? isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'
-                        : v.id === 'glitch'
-                          ? 'rgba(0,255,136,0.15)'
-                          : 'rgba(241,90,41,0.15)',
-                      color: v.id === 'classic'
-                        ? isDark ? '#888' : '#999'
-                        : v.id === 'glitch'
-                          ? '#00ff88'
-                          : '#F15A29',
-                    }}
-                  >
-                    {v.tag}
-                  </span>
-                  {isActive && (
-                    <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#F15A29' }} />
-                  )}
-                </div>
-              </button>
-            );
-          })}
+          <VersionButton
+            version={mainVersion}
+            isActive={siteVersion === mainVersion.id}
+            isDark={isDark}
+            onClick={() => { setSiteVersion(mainVersion.id); setOpen(false); }}
+          />
+
+          {/* ── Experimental section ── */}
+          <div
+            className="px-3 pt-3 pb-2 text-[9px] font-bold uppercase tracking-[0.2em]"
+            style={{ color: isDark ? '#555' : '#aaa', borderTop: `1px solid ${isDark ? '#262626' : '#f0f0f0'}` }}
+          >
+            Experimental
+          </div>
+          <p
+            className="px-4 pb-2 text-[10px] leading-relaxed"
+            style={{ color: isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.35)' }}
+          >
+            Just for fun — not all features work in these views.
+          </p>
+          {experimentalVersions.map((v) => (
+            <VersionButton
+              key={v.id}
+              version={v}
+              isActive={v.id === siteVersion}
+              isDark={isDark}
+              onClick={() => { setSiteVersion(v.id); setOpen(false); }}
+            />
+          ))}
         </div>
       )}
     </div>
+  );
+}
+
+function VersionButton({
+  version,
+  isActive,
+  isDark,
+  onClick,
+}: {
+  version: { id: SiteVersion; label: string; tag: string };
+  isActive: boolean;
+  isDark: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors duration-150"
+      style={{
+        background: isActive
+          ? isDark ? 'rgba(241,90,41,0.1)' : 'rgba(241,90,41,0.06)'
+          : 'transparent',
+        color: isActive ? '#F15A29' : isDark ? '#d4d4d4' : '#404040',
+      }}
+      onMouseEnter={(e) => {
+        if (!isActive) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
+      }}
+      onMouseLeave={(e) => {
+        if (!isActive) e.currentTarget.style.background = 'transparent';
+      }}
+    >
+      <div className="text-xs font-bold font-display">{version.label}</div>
+      <div className="flex items-center gap-2">
+        <span
+          className="rounded px-1.5 py-0.5 text-[9px] font-bold uppercase"
+          style={{
+            background: version.id === 'classic'
+              ? isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'
+              : version.id === 'glitch'
+                ? 'rgba(0,255,136,0.15)'
+                : 'rgba(241,90,41,0.15)',
+            color: version.id === 'classic'
+              ? isDark ? '#888' : '#999'
+              : version.id === 'glitch'
+                ? '#00ff88'
+                : '#F15A29',
+          }}
+        >
+          {version.tag}
+        </span>
+        {isActive && (
+          <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#F15A29' }} />
+        )}
+      </div>
+    </button>
   );
 }
