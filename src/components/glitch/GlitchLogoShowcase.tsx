@@ -254,31 +254,31 @@ function LogoCard({
     }
 
     if (isHovered) {
-      // Immediately show clean dark version
+      // Immediately show clean dark version — no filters, no blend modes, no scanlines
       gsap.to(darkRef.current, {
-        filter: 'saturate(1) brightness(1) contrast(1)',
+        filter: 'none',
         x: 0, y: 0,
         duration: 0.25,
         ease: 'power2.out',
       });
+      // Hide light layer and reset it for clean display later
+      gsap.set(lightRef.current, { filter: 'none', mixBlendMode: 'normal' });
       gsap.to(lightRef.current, { opacity: 0, x: 0, y: 0, duration: 0.2 });
       gsap.to(greenOverlayRef.current, { opacity: 0, duration: 0.2 });
-      gsap.to(scanlineRef.current, { opacity: 0.15, duration: 0.2 });
+      gsap.to(scanlineRef.current, { opacity: 0, duration: 0.2 });
 
-      // Start the glitch cycle after a brief pause
-      // dark (clean) → glitch burst → light (clean) → pause → glitch burst → dark (clean) → repeat
+      // Glitch cycle: dark (clean) → burst → light (clean) → burst → dark → repeat
       const buildCycle = () => {
         const tl = gsap.timeline({ repeat: -1, delay: 2 });
 
         // ── Glitch burst: dark → light ──
-        // Quick flickers
         tl.to(darkRef.current, { filter: 'brightness(2) hue-rotate(90deg)', x: 3, duration: 0.04, ease: 'none' });
         tl.to(darkRef.current, { filter: 'brightness(0.5) hue-rotate(-60deg)', x: -4, duration: 0.04, ease: 'none' });
         tl.to(darkRef.current, { filter: 'brightness(1.5) hue-rotate(45deg)', x: 2, duration: 0.04, ease: 'none' });
-        // Swap to light
-        tl.set(darkRef.current, { filter: 'saturate(1) brightness(1) contrast(1)', x: 0 });
+        // Swap: hide dark, show light (both clean, no filters)
+        tl.set(darkRef.current, { filter: 'none', x: 0 });
         tl.to(darkRef.current, { opacity: 0, duration: 0.03 });
-        tl.to(lightRef.current, { opacity: 1, duration: 0.03 }, '<');
+        tl.to(lightRef.current, { opacity: 1, filter: 'none', duration: 0.03 }, '<');
         // Hold light clean
         tl.to({}, { duration: 3 });
 
@@ -286,10 +286,10 @@ function LogoCard({
         tl.to(lightRef.current, { filter: 'brightness(2) hue-rotate(-90deg)', x: -3, duration: 0.04, ease: 'none' });
         tl.to(lightRef.current, { filter: 'brightness(0.5) hue-rotate(60deg)', x: 4, duration: 0.04, ease: 'none' });
         tl.to(lightRef.current, { filter: 'brightness(1.5) hue-rotate(-45deg)', x: -2, duration: 0.04, ease: 'none' });
-        // Swap back to dark
+        // Swap: hide light, show dark (both clean)
         tl.set(lightRef.current, { filter: 'none', x: 0 });
         tl.to(lightRef.current, { opacity: 0, duration: 0.03 });
-        tl.to(darkRef.current, { opacity: 1, duration: 0.03 }, '<');
+        tl.to(darkRef.current, { opacity: 1, filter: 'none', duration: 0.03 }, '<');
         // Hold dark clean
         tl.to({}, { duration: 3 });
 
@@ -308,6 +308,7 @@ function LogoCard({
       gsap.to(lightRef.current, {
         filter: 'saturate(0.2) brightness(1.2) contrast(1.1) hue-rotate(180deg)',
         opacity: 0.35, x: 0, y: 0,
+        mixBlendMode: 'screen',
         duration: 0.4,
         ease: 'power3.out',
       });
@@ -335,15 +336,18 @@ function LogoCard({
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
-      {/* Dark version — base layer */}
-      <div ref={darkRef} className="absolute inset-0">
+      {/* Dark version — base layer. Filter on wrapper so GSAP can control it */}
+      <div
+        ref={darkRef}
+        className="absolute inset-0"
+        style={{ filter: 'saturate(0.3) brightness(0.7) contrast(1.2)' }}
+      >
         <Image
           src={pair.dark}
           alt={`Logo ${index + 1} dark`}
           fill
           className="object-cover"
           sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-          style={{ filter: 'saturate(0.3) brightness(0.7) contrast(1.2)' }}
         />
       </div>
 
@@ -354,7 +358,8 @@ function LogoCard({
         style={{ background: 'rgba(0,255,136,0.06)', mixBlendMode: 'color' }}
       />
 
-      {/* Light version — hidden at rest, shown during glitch cycle */}
+      {/* Light version — hidden at rest, shown during glitch cycle.
+          Filter + blend on wrapper so GSAP can clear them on hover */}
       <div
         ref={lightRef}
         className="absolute inset-0"

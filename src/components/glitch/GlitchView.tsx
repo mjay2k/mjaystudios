@@ -639,13 +639,13 @@ function ExpandedDetail({ project, onClose }: { project: Project; onClose: () =>
   return (
     <div
       ref={panelRef}
-      className="fixed inset-0 z-[55] overflow-y-auto"
+      className="fixed inset-0 z-[70] overflow-y-auto"
       style={{ background: 'rgba(2,8,4,0.97)', scrollbarWidth: 'none' }}
     >
       {/* Close */}
       <button
         onClick={handleClose}
-        className="fixed top-6 right-6 z-[65] flex h-10 w-10 items-center justify-center rounded transition-colors"
+        className="fixed top-6 right-6 z-[71] flex h-11 w-11 items-center justify-center rounded transition-all hover:scale-110"
         style={{ border: '1px solid rgba(0,255,136,0.2)', background: 'rgba(0,255,136,0.05)' }}
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" strokeWidth="1.5">
