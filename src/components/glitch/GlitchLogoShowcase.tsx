@@ -173,7 +173,7 @@ export default function GlitchLogoShowcase({ onClose }: Props) {
               {'> 12 identity pairs loaded — dark/light channels separated'}
             </div>
             <div className="text-[10px] sm:text-xs mt-1" style={{ color: 'rgba(0,255,136,0.25)' }}>
-              {'> hover to split channels — chromatic bleed expected'}
+              {'> hover to reveal — signal will alternate between colorways'}
             </div>
           </div>
         </div>
@@ -239,32 +239,88 @@ function LogoCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const darkRef = useRef<HTMLDivElement>(null);
   const lightRef = useRef<HTMLDivElement>(null);
+  const scanlineRef = useRef<HTMLDivElement>(null);
+  const greenOverlayRef = useRef<HTMLDivElement>(null);
+  const cycleRef = useRef<gsap.core.Timeline | null>(null);
 
-  // Animate hover — split channels
+  // Hover: remove distortion, show clean logo, start glitch cycle
   useEffect(() => {
-    if (!darkRef.current || !lightRef.current) return;
+    if (!darkRef.current || !lightRef.current || !scanlineRef.current || !greenOverlayRef.current) return;
+
+    // Kill any running cycle
+    if (cycleRef.current) {
+      cycleRef.current.kill();
+      cycleRef.current = null;
+    }
 
     if (isHovered) {
-      // Dark layer shifts left with green/cyan tint
+      // Immediately show clean dark version
       gsap.to(darkRef.current, {
-        x: -4,
-        y: -2,
-        duration: 0.3,
+        filter: 'saturate(1) brightness(1) contrast(1)',
+        x: 0, y: 0,
+        duration: 0.25,
         ease: 'power2.out',
       });
-      // Light layer shifts right with magenta tint
-      gsap.to(lightRef.current, {
-        x: 4,
-        y: 2,
-        opacity: 0.7,
-        duration: 0.3,
-        ease: 'power2.out',
-      });
+      gsap.to(lightRef.current, { opacity: 0, x: 0, y: 0, duration: 0.2 });
+      gsap.to(greenOverlayRef.current, { opacity: 0, duration: 0.2 });
+      gsap.to(scanlineRef.current, { opacity: 0.15, duration: 0.2 });
+
+      // Start the glitch cycle after a brief pause
+      // dark (clean) → glitch burst → light (clean) → pause → glitch burst → dark (clean) → repeat
+      const buildCycle = () => {
+        const tl = gsap.timeline({ repeat: -1, delay: 2 });
+
+        // ── Glitch burst: dark → light ──
+        // Quick flickers
+        tl.to(darkRef.current, { filter: 'brightness(2) hue-rotate(90deg)', x: 3, duration: 0.04, ease: 'none' });
+        tl.to(darkRef.current, { filter: 'brightness(0.5) hue-rotate(-60deg)', x: -4, duration: 0.04, ease: 'none' });
+        tl.to(darkRef.current, { filter: 'brightness(1.5) hue-rotate(45deg)', x: 2, duration: 0.04, ease: 'none' });
+        // Swap to light
+        tl.set(darkRef.current, { filter: 'saturate(1) brightness(1) contrast(1)', x: 0 });
+        tl.to(darkRef.current, { opacity: 0, duration: 0.03 });
+        tl.to(lightRef.current, { opacity: 1, duration: 0.03 }, '<');
+        // Hold light clean
+        tl.to({}, { duration: 3 });
+
+        // ── Glitch burst: light → dark ──
+        tl.to(lightRef.current, { filter: 'brightness(2) hue-rotate(-90deg)', x: -3, duration: 0.04, ease: 'none' });
+        tl.to(lightRef.current, { filter: 'brightness(0.5) hue-rotate(60deg)', x: 4, duration: 0.04, ease: 'none' });
+        tl.to(lightRef.current, { filter: 'brightness(1.5) hue-rotate(-45deg)', x: -2, duration: 0.04, ease: 'none' });
+        // Swap back to dark
+        tl.set(lightRef.current, { filter: 'none', x: 0 });
+        tl.to(lightRef.current, { opacity: 0, duration: 0.03 });
+        tl.to(darkRef.current, { opacity: 1, duration: 0.03 }, '<');
+        // Hold dark clean
+        tl.to({}, { duration: 3 });
+
+        return tl;
+      };
+
+      cycleRef.current = buildCycle();
     } else {
-      // Snap back together
-      gsap.to(darkRef.current, { x: 0, y: 0, duration: 0.4, ease: 'power3.out' });
-      gsap.to(lightRef.current, { x: 0, y: 0, opacity: 0.35, duration: 0.4, ease: 'power3.out' });
+      // Restore distorted resting state
+      gsap.to(darkRef.current, {
+        filter: 'saturate(0.3) brightness(0.7) contrast(1.2)',
+        opacity: 1, x: 0, y: 0,
+        duration: 0.4,
+        ease: 'power3.out',
+      });
+      gsap.to(lightRef.current, {
+        filter: 'saturate(0.2) brightness(1.2) contrast(1.1) hue-rotate(180deg)',
+        opacity: 0.35, x: 0, y: 0,
+        duration: 0.4,
+        ease: 'power3.out',
+      });
+      gsap.to(greenOverlayRef.current, { opacity: 1, duration: 0.3 });
+      gsap.to(scanlineRef.current, { opacity: 0.5, duration: 0.3 });
     }
+
+    return () => {
+      if (cycleRef.current) {
+        cycleRef.current.kill();
+        cycleRef.current = null;
+      }
+    };
   }, [isHovered]);
 
   return (
@@ -279,36 +335,34 @@ function LogoCard({
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
-      {/* Dark version — base layer, green CRT tint */}
-      <div
-        ref={darkRef}
-        className="absolute inset-0"
-      >
+      {/* Dark version — base layer */}
+      <div ref={darkRef} className="absolute inset-0">
         <Image
           src={pair.dark}
           alt={`Logo ${index + 1} dark`}
           fill
           className="object-cover"
           sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-          style={{
-            filter: 'saturate(0.3) brightness(0.7) contrast(1.2)',
-          }}
-        />
-        {/* Green overlay */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'rgba(0,255,136,0.06)',
-            mixBlendMode: 'color',
-          }}
+          style={{ filter: 'saturate(0.3) brightness(0.7) contrast(1.2)' }}
         />
       </div>
 
-      {/* Light version — ghost layer, offset + blended */}
+      {/* Green CRT overlay — fades out on hover */}
+      <div
+        ref={greenOverlayRef}
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'rgba(0,255,136,0.06)', mixBlendMode: 'color' }}
+      />
+
+      {/* Light version — hidden at rest, shown during glitch cycle */}
       <div
         ref={lightRef}
         className="absolute inset-0"
-        style={{ opacity: 0.35 }}
+        style={{
+          opacity: 0.35,
+          filter: 'saturate(0.2) brightness(1.2) contrast(1.1) hue-rotate(180deg)',
+          mixBlendMode: 'screen',
+        }}
       >
         <Image
           src={pair.light}
@@ -316,20 +370,16 @@ function LogoCard({
           fill
           className="object-cover"
           sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-          style={{
-            filter: 'saturate(0.2) brightness(1.2) contrast(1.1) hue-rotate(180deg)',
-            mixBlendMode: 'screen',
-          }}
         />
       </div>
 
       {/* Scanline */}
       <div
+        ref={scanlineRef}
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)',
-          opacity: isHovered ? 0.3 : 0.5,
-          transition: 'opacity 0.3s',
+          opacity: 0.5,
         }}
       />
 
@@ -347,19 +397,6 @@ function LogoCard({
       <div className="absolute bottom-1 right-1.5 font-mono text-[7px] sm:text-[8px]" style={{ color: 'rgba(0,255,136,0.25)' }}>
         {String(index + 1).padStart(2, '0')}
       </div>
-
-      {/* Live indicator on hover */}
-      {isHovered && (
-        <div className="absolute top-1.5 right-1.5 flex items-center gap-1">
-          <div
-            className="h-1 w-1 rounded-full"
-            style={{ background: '#00ff88', boxShadow: '0 0 4px rgba(0,255,136,0.6)' }}
-          />
-          <span className="font-mono text-[6px] font-bold" style={{ color: 'rgba(0,255,136,0.5)' }}>
-            SPLIT
-          </span>
-        </div>
-      )}
     </div>
   );
 }
