@@ -6,6 +6,7 @@ import { gsap } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 import { projects, type Project } from '@/data/projects';
 import GlitchNav from './GlitchNav';
+import GlitchLogoShowcase from './GlitchLogoShowcase';
 
 const featured = projects
   .filter((p) => p.images.length > 0)
@@ -343,12 +344,14 @@ export default function GlitchView() {
       )}
 
       {/* Expanded detail overlay */}
-      {expandedId && (
+      {expandedId && expandedId === 'logo-designs' ? (
+        <GlitchLogoShowcase onClose={handleClose} />
+      ) : expandedId ? (
         <ExpandedDetail
           project={featured.find((p) => p.id === expandedId)!}
           onClose={handleClose}
         />
-      )}
+      ) : null}
 
       {/* Nav */}
       <GlitchNav />
