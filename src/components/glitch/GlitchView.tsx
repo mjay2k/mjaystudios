@@ -8,7 +8,7 @@ import { projects, type Project } from '@/data/projects';
 import GlitchNav from './GlitchNav';
 
 const featured = projects
-  .filter((p) => p.images.length > 0 && !(p.categories.length === 1 && p.categories[0] === 'logo'))
+  .filter((p) => p.images.length > 0)
   .sort((a, b) => a.year - b.year);
 
 const GLITCH_CHARS = '!<>-_\\/[]{}—=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -16,11 +16,11 @@ const GLITCH_CHARS = '!<>-_\\/[]{}—=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 // Deterministic scattered layout — each card gets a position in a large scrollable field
 // Some big, some small, overlapping, rotated — like a hacker's multi-monitor wall
 function generateLayout(count: number) {
-  const cols = 4;
-  const baseW = 340;
-  const baseH = 240;
-  const gapX = 380;
-  const gapY = 300;
+  const cols = 5;
+  const baseW = 320;
+  const baseH = 220;
+  const gapX = 360;
+  const gapY = 280;
 
   return Array.from({ length: count }, (_, i) => {
     // Seeded pseudo-random using index
@@ -212,9 +212,9 @@ export default function GlitchView() {
     background: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, rgba(0,255,136,0.04) 0%, transparent 100%)`,
   }), [mousePos.x, mousePos.y]);
 
-  // Mouse parallax offset for entire field
-  const parallaxX = (mousePos.x / window.innerWidth - 0.5) * -15;
-  const parallaxY = (mousePos.y / window.innerHeight - 0.5) * -10;
+  // Mouse parallax offset for entire field — strong horizontal tracking
+  const parallaxX = (mousePos.x / window.innerWidth - 0.5) * -60;
+  const parallaxY = (mousePos.y / window.innerHeight - 0.5) * -25;
 
   return (
     <div className="fixed inset-0 overflow-hidden" style={{ background: '#020804', cursor: 'none' }}>
@@ -642,7 +642,7 @@ function ExpandedDetail({ project, onClose }: { project: Project; onClose: () =>
       {/* Close */}
       <button
         onClick={handleClose}
-        className="fixed top-6 right-6 z-[56] flex h-10 w-10 items-center justify-center rounded transition-colors"
+        className="fixed top-6 right-6 z-[65] flex h-10 w-10 items-center justify-center rounded transition-colors"
         style={{ border: '1px solid rgba(0,255,136,0.2)', background: 'rgba(0,255,136,0.05)' }}
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00ff88" strokeWidth="1.5">
