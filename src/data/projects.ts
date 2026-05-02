@@ -23,6 +23,7 @@ export interface Project {
   concept?: boolean;
   compact?: boolean;
   wide?: boolean;
+  imageLinks?: Record<string, string>;
 }
 
 export const projects: Project[] = generatedProjects as Project[];

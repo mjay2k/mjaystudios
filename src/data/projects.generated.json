@@ -303,9 +303,22 @@
     "captions": {
       "/portfolio/berry/reports/berry-impact-report-2023-1.jpg": "2023 Impact Report — At a Glance spread. Berry Global: $12.7B revenue, 40,000+ employees, 250+ manufacturing locations.",
       "/portfolio/berry/reports/berry-impact-report-2023-2.jpg": "2023 Impact Report — Energy & Climate section with emissions data visualization.",
+      "/portfolio/berry/reports/berry-impact-report-2023.jpg": "2023 Impact Report — cover design. 70 pages.",
       "/portfolio/berry/reports/berry-impact-report-2022-1.jpg": "2022 Impact Report — 119 pages, the largest edition. Co-art directed.",
-      "/portfolio/berry/reports/berry-impact-report-2021-1.jpg": "2021 Impact Report — Energy & Climate data spread.",
-      "/portfolio/berry/reports/berry-impact-report-2021-2.jpg": "2021 Impact Report — interior spread."
+      "/portfolio/berry/reports/berry-impact-report-2022-2.jpg": "2022 Impact Report — interior spread.",
+      "/portfolio/berry/reports/berry-impact-report-2021-1.jpg": "2021 Impact Report — Energy & Climate data spread. 82 pages.",
+      "/portfolio/berry/reports/berry-impact-report-2021-2.jpg": "2021 Impact Report — interior spread.",
+      "/portfolio/berry/reports/berry-impact-report-2021.jpg": "2021 Impact Report — cover design."
+    },
+    "imageLinks": {
+      "/portfolio/berry/reports/berry-impact-report-2023-1.jpg": "/portfolio/berry/reports/berry-impact-report-2023.pdf",
+      "/portfolio/berry/reports/berry-impact-report-2023-2.jpg": "/portfolio/berry/reports/berry-impact-report-2023.pdf",
+      "/portfolio/berry/reports/berry-impact-report-2023.jpg": "/portfolio/berry/reports/berry-impact-report-2023.pdf",
+      "/portfolio/berry/reports/berry-impact-report-2022-1.jpg": "/portfolio/berry/reports/berry-impact-report-2022.pdf",
+      "/portfolio/berry/reports/berry-impact-report-2022-2.jpg": "/portfolio/berry/reports/berry-impact-report-2022.pdf",
+      "/portfolio/berry/reports/berry-impact-report-2021-1.jpg": "/portfolio/berry/reports/berry-impact-report-2021.pdf",
+      "/portfolio/berry/reports/berry-impact-report-2021-2.jpg": "/portfolio/berry/reports/berry-impact-report-2021.pdf",
+      "/portfolio/berry/reports/berry-impact-report-2021.jpg": "/portfolio/berry/reports/berry-impact-report-2021.pdf"
     }
   },
   {
