@@ -661,13 +661,14 @@ function ExpandedDetail({
         {/* Images */}
         <div ref={imagesRef} className="mt-16 space-y-6">
           {project.images.map((src, i) => (
-            <div key={src} className="exp-img overflow-hidden rounded-xl">
+            <div key={src} className="exp-img overflow-hidden rounded-xl flex items-center justify-center">
               <Image
                 src={src}
                 alt={`${project.title} ${i + 1}`}
                 width={1200}
                 height={800}
-                className="h-auto w-full"
+                className="w-auto h-auto max-w-full"
+                style={{ maxHeight: '75vh', objectFit: 'contain' }}
                 sizes="(max-width: 1024px) 100vw, 900px"
               />
             </div>

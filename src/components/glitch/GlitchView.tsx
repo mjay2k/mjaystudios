@@ -707,7 +707,8 @@ function ExpandedDetail({ project, onClose }: { project: Project; onClose: () =>
                 alt={`${project.title} ${i + 1}`}
                 width={1200}
                 height={800}
-                className="h-auto w-full"
+                className="w-auto h-auto max-w-full mx-auto"
+                style={{ maxHeight: '75vh', objectFit: 'contain' }}
                 sizes="(max-width: 1024px) 100vw, 900px"
               />
             </div>

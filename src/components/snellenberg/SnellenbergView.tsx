@@ -195,7 +195,7 @@ export default function SnellenbergView() {
       {/* ═══════════════════ HERO ═══════════════════ */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+        className="relative min-h-screen flex flex-col justify-center"
       >
         <div className="hero-content relative z-10 px-6 md:px-12 lg:px-20 pb-20 pt-32">
           {/* Greeting ticker */}
@@ -205,8 +205,8 @@ export default function SnellenbergView() {
             </p>
           </div>
 
-          {/* Big name */}
-          <h1 className="reveal">
+          {/* Big name — mix-blend-mode difference creates the inverted effect over the blob */}
+          <h1 className="reveal" style={{ mixBlendMode: 'difference' }}>
             <span
               className="block text-[clamp(3rem,10vw,9rem)] font-black leading-[0.88] tracking-tighter text-white"
               style={{ fontFeatureSettings: '"ss01"' }}
@@ -234,8 +234,12 @@ export default function SnellenbergView() {
           </p>
         </div>
 
-        {/* 3D Sphere — right side on desktop, behind text on mobile */}
-        <div className="absolute right-0 top-0 bottom-0 w-full md:w-[55%] opacity-60 md:opacity-100 pointer-events-none md:pointer-events-auto">
+        {/* 3D Sphere — right side on desktop, behind text on mobile.
+            Intentionally overflows the hero section for organic feel */}
+        <div
+          className="absolute top-1/2 right-0 -translate-y-1/2 pointer-events-none md:pointer-events-auto"
+          style={{ width: '110vh', height: '110vh', maxWidth: '900px', maxHeight: '900px', right: '-10%' }}
+        >
           <Suspense fallback={null}>
             <NoiseSphere className="w-full h-full" />
           </Suspense>
@@ -391,14 +395,15 @@ export default function SnellenbergView() {
         style={{ opacity: 0, transform: 'scale(0.9)' }}
       >
         {hoveredProject && (
-          <div className="w-72 h-48 rounded-lg overflow-hidden shadow-2xl">
+          <div className="w-64 rounded-lg overflow-hidden shadow-2xl" style={{ background: '#111' }}>
             <Image
               src={hoveredProject.images[0]}
               alt={hoveredProject.title}
-              width={288}
-              height={192}
-              className="w-full h-full object-cover"
-              sizes="288px"
+              width={400}
+              height={400}
+              className="w-full h-auto"
+              style={{ objectFit: 'contain' }}
+              sizes="256px"
             />
           </div>
         )}
@@ -529,13 +534,14 @@ function ProjectDetail({ project, onClose }: { project: Project; onClose: () => 
 
         <div ref={imagesRef} className="space-y-6">
           {project.images.map((src, i) => (
-            <div key={src} className="detail-img overflow-hidden rounded-lg">
+            <div key={src} className="detail-img overflow-hidden rounded-lg flex items-center justify-center">
               <Image
                 src={src}
                 alt={`${project.title} ${i + 1}`}
                 width={1200}
                 height={800}
-                className="h-auto w-full"
+                className="w-auto h-auto max-w-full"
+                style={{ maxHeight: '75vh', objectFit: 'contain' }}
                 sizes="(max-width: 1024px) 100vw, 900px"
               />
             </div>
