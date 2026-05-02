@@ -1,5 +1,33 @@
 [
   {
+    "id": "album-covers",
+    "title": "Album Cover Art",
+    "description": "A decade of album cover design for Nkosi Records, a local Christian rap label. Pro-bono work spanning 2010–2020 — cover art, full CD packaging, disc art, and insert design across multiple artists and projects.",
+    "year": 2015,
+    "era": "agency",
+    "categories": [
+      "advertising"
+    ],
+    "images": [
+      "/portfolio/agency/album-covers/someFullCD_covers.jpg",
+      "/portfolio/agency/album-covers/BeamsAlbum1_bonusArt.jpg",
+      "/portfolio/agency/album-covers/BeamsAlbum_Final_Cover.jpg",
+      "/portfolio/agency/album-covers/Chosen_2014Reprint-front2.jpg",
+      "/portfolio/agency/album-covers/CowBoyHat3.jpg",
+      "/portfolio/agency/album-covers/CowfolkBougie_final_.jpg",
+      "/portfolio/agency/album-covers/ForeverLoved_Cover_Digital.jpg",
+      "/portfolio/agency/album-covers/NotSoYung_art_LARGE_CMYK.jpg",
+      "/portfolio/agency/album-covers/OnefortheCountry_Album.jpg",
+      "/portfolio/agency/album-covers/everything.jpg",
+      "/portfolio/agency/album-covers/followme.jpg",
+      "/portfolio/agency/album-covers/theadvance_beamz.jpg"
+    ],
+    "autoCycle": true,
+    "sortOrder": 11,
+    "client": "Nkosi Records",
+    "compact": true
+  },
+  {
     "id": "burnetts-vodka",
     "title": "Always Your Flavorite",
     "description": "Hero flavor bursts from the bottle, revealing ingredients. The lineup stretches behind it — there's always more. Ran nationally across print, outdoor, and digital.",
@@ -58,34 +86,6 @@
     "autoCycle": true,
     "sortOrder": 6,
     "client": "Hpnotiq"
-  },
-  {
-    "id": "album-covers",
-    "title": "Album Cover Art",
-    "description": "A decade of album cover design for Nkosi Records, a local Christian rap label. Pro-bono work spanning 2010–2020 — cover art, full CD packaging, disc art, and insert design across multiple artists and projects.",
-    "year": 2015,
-    "era": "agency",
-    "categories": [
-      "advertising"
-    ],
-    "images": [
-      "/portfolio/agency/album-covers/someFullCD_covers.jpg",
-      "/portfolio/agency/album-covers/BeamsAlbum_Final_Cover.jpg",
-      "/portfolio/agency/album-covers/CowBoyHat3.jpg",
-      "/portfolio/agency/album-covers/ForeverLoved_Cover_Digital.jpg",
-      "/portfolio/agency/album-covers/NotSoYung_art_LARGE_CMYK.jpg",
-      "/portfolio/agency/album-covers/CowfolkBougie_final_.jpg",
-      "/portfolio/agency/album-covers/Chosen_2014Reprint-front2.jpg",
-      "/portfolio/agency/album-covers/everything.jpg",
-      "/portfolio/agency/album-covers/followme.jpg",
-      "/portfolio/agency/album-covers/OnefortheCountry_Album.jpg",
-      "/portfolio/agency/album-covers/theadvance_beamz.jpg",
-      "/portfolio/agency/album-covers/BeamsAlbum1_bonusArt.jpg"
-    ],
-    "autoCycle": true,
-    "sortOrder": 11,
-    "client": "Nkosi Records",
-    "compact": true
   },
   {
     "id": "logo-designs",
@@ -220,6 +220,35 @@
     "client": "Berry Global"
   },
   {
+    "id": "more-campaigns",
+    "title": "Print & Trade Campaigns",
+    "description": "A collection of trade publication campaigns art directed for Berry Global. Each ran across industry publications like Plastics Industry Magazine and Plastics Today, with some extending into email, digital ads, and direct mail. From barrier packaging technology to recycled resin leadership to greenhouse film products — each campaign distills a complex B2B value proposition into a single, striking visual.",
+    "year": 2020,
+    "era": "berry",
+    "categories": [
+      "advertising"
+    ],
+    "images": [
+      "/portfolio/berry/more-campaigns/01-Protect.png",
+      "/portfolio/berry/more-campaigns/01-VerdantGoodbye.png",
+      "/portfolio/berry/more-campaigns/Tufflite_growingseason_BerryAd.jpg",
+      "/portfolio/berry/more-campaigns/lookingformore.jpg"
+    ],
+    "autoCycle": true,
+    "sortOrder": 2,
+    "caseStudy": {
+      "extendedDescription": "Four campaigns spanning Berry Global's diverse product portfolio, each tailored for trade publication audiences. The Protect campaign uses an oyster guarding its pearl as a visual metaphor for Berry's barrier packaging technology. Verdant Goodbye showcases premium packaging made with high post-consumer resin (PCR) content — the ad shows the product in a hero shot and being recycled simultaneously, selling the dual life of sustainable packaging. Looking for More targets the European market with Berry's CleanStream recycled resin technology, positioning Berry as offering more recycled content options than competitors. Growing Season Grows promotes Berry's Tufflite greenhouse films with a clever extended calendar — October stretching to day 71 — demonstrating that the product literally pays for itself through longer growing and harvesting seasons.",
+      "additionalImages": []
+    },
+    "client": "Berry Global",
+    "captions": {
+      "/portfolio/berry/more-campaigns/01-Protect.png": "Protect What's Inside — barrier packaging campaign. The oyster-and-pearl metaphor sells the technology before you read a word.",
+      "/portfolio/berry/more-campaigns/01-VerdantGoodbye.png": "Verdant Goodbye — premium packaging with high PCR content. Looks high-end, lives sustainably.",
+      "/portfolio/berry/more-campaigns/lookingformore.jpg": "Looking for More — European market campaign for Berry's CleanStream recycled resin technology. More recycled content options than the competition.",
+      "/portfolio/berry/more-campaigns/Tufflite_growingseason_BerryAd.jpg": "Growing Season Grows — Tufflite greenhouse films. The extended calendar concept shows the product's ROI at a glance."
+    }
+  },
+  {
     "id": "pack-expo-booths",
     "title": "Pack Expo Trade Show Booths",
     "description": "Large-scale booth design and environmental graphics for Pack Expo — the packaging industry's biggest trade show. Designed Berry's presence across 2018, 2019, and 2022 shows.",
@@ -265,43 +294,14 @@
     "sortOrder": 7,
     "client": "Berry Global",
     "captions": {
-      "packaging_delizioso.jpg": "Mockup product demonstrating Berry's in-mold labeling capabilities. The brand name is printed see-through, revealing the ice cream inside — every facing on the shelf shows a slightly different swirl of product through the text. A small detail that creates real shelf differentiation.",
-      "packaging_can.jpg": "Sample kit designed for the cannabis packaging market after multi-state legalization opened the door. Contains child-resistant packaging solutions, but the design leans into the new industry — cool, clean, green-themed. A fun nod to an emerging category without losing the professionalism.",
-      "packaging_jarcollection.jpg": "Sample kit built on a tight budget. Found a supplier that came in under cost, then designed the kit to punch above its weight — the result still feels premium despite the constraints.",
-      "packaging_resinite.jpg": "Packaging for Berry's Resinite stretch film brand. The design hides the cross-section of a film roll inside the box art, creating a striking shelf presence that still reads as industrial and trustworthy."
+      "/portfolio/berry/packaging/packaging_delizioso.jpg": "Mockup product demonstrating Berry's in-mold labeling capabilities. The brand name is printed see-through, revealing the ice cream inside — every facing on the shelf shows a slightly different swirl of product through the text. A small detail that creates real shelf differentiation.",
+      "/portfolio/berry/packaging/packaging_can.jpg": "Sample kit designed for the cannabis packaging market after multi-state legalization opened the door. Contains child-resistant packaging solutions, but the design leans into the new industry — cool, clean, green-themed. A fun nod to an emerging category without losing the professionalism.",
+      "/portfolio/berry/packaging/packaging_jarcollection.jpg": "Sample kit built on a tight budget. Found a supplier that came in under cost, then designed the kit to punch above its weight — the result still feels premium despite the constraints.",
+      "/portfolio/berry/packaging/packaging_resinite.jpg": "Packaging for Berry's Resinite stretch film brand. The design hides the cross-section of a film roll inside the box art, creating a striking shelf presence that still reads as industrial and trustworthy."
     }
   },
   {
-    "id": "more-campaigns",
-    "title": "Print & Trade Campaigns",
-    "description": "A collection of trade publication campaigns art directed for Berry Global. Each ran across industry publications like Plastics Industry Magazine and Plastics Today, with some extending into email, digital ads, and direct mail. From barrier packaging technology to recycled resin leadership to greenhouse film products — each campaign distills a complex B2B value proposition into a single, striking visual.",
-    "year": 2020,
-    "era": "berry",
-    "categories": [
-      "advertising"
-    ],
-    "images": [
-      "/portfolio/berry/more-campaigns/01-Protect.png",
-      "/portfolio/berry/more-campaigns/01-VerdantGoodbye.png",
-      "/portfolio/berry/more-campaigns/lookingformore.jpg",
-      "/portfolio/berry/more-campaigns/Tufflite_growingseason_BerryAd.jpg"
-    ],
-    "autoCycle": true,
-    "sortOrder": 2,
-    "client": "Berry Global",
-    "caseStudy": {
-      "extendedDescription": "Four campaigns spanning Berry Global's diverse product portfolio, each tailored for trade publication audiences. The Protect campaign uses an oyster guarding its pearl as a visual metaphor for Berry's barrier packaging technology. Verdant Goodbye showcases premium packaging made with high post-consumer resin (PCR) content — the ad shows the product in a hero shot and being recycled simultaneously, selling the dual life of sustainable packaging. Looking for More targets the European market with Berry's CleanStream recycled resin technology, positioning Berry as offering more recycled content options than competitors. Growing Season Grows promotes Berry's Tufflite greenhouse films with a clever extended calendar — October stretching to day 71 — demonstrating that the product literally pays for itself through longer growing and harvesting seasons.",
-      "additionalImages": []
-    },
-    "captions": {
-      "/portfolio/berry/more-campaigns/01-Protect.png": "Protect What's Inside — barrier packaging campaign. The oyster-and-pearl metaphor sells the technology before you read a word.",
-      "/portfolio/berry/more-campaigns/01-VerdantGoodbye.png": "Verdant Goodbye — premium packaging with high PCR content. Looks high-end, lives sustainably.",
-      "/portfolio/berry/more-campaigns/lookingformore.jpg": "Looking for More — European market campaign for Berry's CleanStream recycled resin technology. More recycled content options than the competition.",
-      "/portfolio/berry/more-campaigns/Tufflite_growingseason_BerryAd.jpg": "Growing Season Grows — Tufflite greenhouse films. The extended calendar concept shows the product's ROI at a glance."
-    }
-  },
-  {
-    "id": "impact-reports",
+    "id": "reports",
     "title": "Impact Reports",
     "description": "Four years of Berry Global's flagship Impact Report — large-scale interactive PDFs (43 to 119 pages) featuring custom data visualization, infographics, and editorial design. Each report includes a clickable table of contents for easy navigation across sections covering environmental, social, and governance initiatives.",
     "year": 2023,
@@ -311,22 +311,22 @@
       "advertising"
     ],
     "images": [
-      "/portfolio/berry/reports/berry-impact-report-2023-1.jpg",
-      "/portfolio/berry/reports/berry-impact-report-2023-2.jpg",
-      "/portfolio/berry/reports/berry-impact-report-2023.jpg",
-      "/portfolio/berry/reports/berry-impact-report-2022-1.jpg",
-      "/portfolio/berry/reports/berry-impact-report-2022-2.jpg",
       "/portfolio/berry/reports/berry-impact-report-2021-1.jpg",
       "/portfolio/berry/reports/berry-impact-report-2021-2.jpg",
-      "/portfolio/berry/reports/berry-impact-report-2021.jpg"
+      "/portfolio/berry/reports/berry-impact-report-2021.jpg",
+      "/portfolio/berry/reports/berry-impact-report-2022-1.jpg",
+      "/portfolio/berry/reports/berry-impact-report-2022-2.jpg",
+      "/portfolio/berry/reports/berry-impact-report-2023-1.jpg",
+      "/portfolio/berry/reports/berry-impact-report-2023-2.jpg",
+      "/portfolio/berry/reports/berry-impact-report-2023.jpg"
     ],
     "autoCycle": false,
     "sortOrder": 3,
-    "client": "Berry Global",
     "caseStudy": {
       "extendedDescription": "As Art Director, I designed and built the vast majority of Berry Global's annual Impact Report from 2020 through 2023. These are substantial corporate publications — ranging from 43 pages (2020) to 119 pages (2022) — combining data-heavy sustainability reporting with polished editorial design. Each report features custom infographics, data visualizations, photography direction, and a clickable table of contents for navigation. The 2022 edition was co-art directed with another designer, but I remained the primary designer who built the full project. The back half of each report is information-dense governance and data content, while the front sections showcase Berry's environmental and social impact through designed editorial spreads.",
       "additionalImages": []
     },
+    "client": "Berry Global",
     "link": "/portfolio/berry/reports/berry-impact-report-2023.pdf",
     "captions": {
       "/portfolio/berry/reports/berry-impact-report-2023-1.jpg": "2023 Impact Report — At a Glance spread. Berry Global: $12.7B revenue, 40,000+ employees, 250+ manufacturing locations.",

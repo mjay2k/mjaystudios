@@ -16,6 +16,7 @@ const OUTPUT_FILE = path.join(ROOT, 'src/data/projects.generated.json');
 
 const ERAS = ['agency', 'berry', 'afterberry'];
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
+const SYNC_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.pdf']);
 
 /**
  * Sync images from content/projects/{era}/{id}/ to public/portfolio/{era}/{id}/
@@ -27,16 +28,17 @@ function syncAndDiscoverImages(era, projectId, hero) {
 
   if (!fs.existsSync(contentImageDir)) return [];
 
-  // Find all images in the content folder
-  const files = fs.readdirSync(contentImageDir)
-    .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
+  // Find all images in the content folder (sync PDFs too but only return images)
+  const allFiles = fs.readdirSync(contentImageDir)
+    .filter((f) => SYNC_EXTENSIONS.has(path.extname(f).toLowerCase()))
     .sort();
+  const files = allFiles.filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()));
 
-  if (files.length === 0) return [];
+  if (allFiles.length === 0) return [];
 
-  // Ensure public dir exists and sync images
+  // Ensure public dir exists and sync all files (images + PDFs)
   fs.mkdirSync(publicImageDir, { recursive: true });
-  for (const file of files) {
+  for (const file of allFiles) {
     const src = path.join(contentImageDir, file);
     const dest = path.join(publicImageDir, file);
     // Only copy if source is newer or dest doesn't exist
@@ -61,6 +63,19 @@ function syncAndDiscoverImages(era, projectId, hero) {
   return images;
 }
 
+/**
+ * Resolve caption/imageLink keys from filenames to full URL paths.
+ * If key already starts with /, leave it. Otherwise prepend urlBase.
+ */
+function resolveKeys(obj, urlBase) {
+  const resolved = {};
+  for (const [key, value] of Object.entries(obj)) {
+    const fullKey = key.startsWith('/') ? key : `${urlBase}/${key}`;
+    resolved[fullKey] = value;
+  }
+  return resolved;
+}
+
 function parseProjectFile(filePath, era, projectId) {
   const raw = fs.readFileSync(filePath, 'utf-8');
   const { data, content } = matter(raw);
@@ -81,6 +96,7 @@ function parseProjectFile(filePath, era, projectId) {
     if (key === 'process') processNotes = value;
   }
 
+  const urlBase = `/portfolio/${era}/${projectId}`;
   const images = syncAndDiscoverImages(era, projectId, data.hero || undefined);
 
   let caseStudy = undefined;
@@ -105,10 +121,11 @@ function parseProjectFile(filePath, era, projectId) {
     ...(caseStudy ? { caseStudy } : {}),
     ...(data.client ? { client: data.client } : {}),
     ...(data.link ? { link: data.link } : {}),
-    ...(data.captions ? { captions: data.captions } : {}),
+    ...(data.captions ? { captions: resolveKeys(data.captions, urlBase) } : {}),
     ...(data.concept ? { concept: true } : {}),
     ...(data.compact ? { compact: true } : {}),
     ...(data.wide ? { wide: true } : {}),
+    ...(data.imageLinks ? { imageLinks: resolveKeys(data.imageLinks, urlBase) } : {}),
   };
 }
 
