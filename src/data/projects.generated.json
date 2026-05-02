@@ -60,6 +60,34 @@
     "client": "Hpnotiq"
   },
   {
+    "id": "album-covers",
+    "title": "Album Cover Art",
+    "description": "A decade of album cover design for Nkosi Records, a local Christian rap label. Pro-bono work spanning 2010–2020 — cover art, full CD packaging, disc art, and insert design across multiple artists and projects.",
+    "year": 2015,
+    "era": "agency",
+    "categories": [
+      "advertising"
+    ],
+    "images": [
+      "/portfolio/agency/album-covers/someFullCD_covers.jpg",
+      "/portfolio/agency/album-covers/BeamsAlbum_Final_Cover.jpg",
+      "/portfolio/agency/album-covers/CowBoyHat3.jpg",
+      "/portfolio/agency/album-covers/ForeverLoved_Cover_Digital.jpg",
+      "/portfolio/agency/album-covers/NotSoYung_art_LARGE_CMYK.jpg",
+      "/portfolio/agency/album-covers/CowfolkBougie_final_.jpg",
+      "/portfolio/agency/album-covers/Chosen_2014Reprint-front2.jpg",
+      "/portfolio/agency/album-covers/everything.jpg",
+      "/portfolio/agency/album-covers/followme.jpg",
+      "/portfolio/agency/album-covers/OnefortheCountry_Album.jpg",
+      "/portfolio/agency/album-covers/theadvance_beamz.jpg",
+      "/portfolio/agency/album-covers/BeamsAlbum1_bonusArt.jpg"
+    ],
+    "autoCycle": true,
+    "sortOrder": 11,
+    "client": "Nkosi Records",
+    "compact": true
+  },
+  {
     "id": "logo-designs",
     "title": "Logo Design Collection",
     "description": "Brand identity work across multiple industries — from healthcare to consumer products to startups. Each mark designed to communicate clearly at any scale.",
