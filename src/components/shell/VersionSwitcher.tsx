@@ -11,6 +11,7 @@ const experimentalVersions: { id: SiteVersion; label: string; tag: string }[] = 
   { id: 'cinematic', label: 'Cinematic Vault', tag: 'exp' },
   { id: 'glitch', label: 'Dimensional Glitch', tag: 'x1' },
   { id: 'magnetic', label: 'Magnetic', tag: 'x2' },
+  { id: 'snellenberg', label: 'Studio Noir', tag: 'x3' },
 ];
 
 const allVersions = [mainVersion, ...experimentalVersions];

@@ -13,6 +13,7 @@ import GlitchView from '@/components/glitch/GlitchView';
 import GlitchAbout from '@/components/glitch/GlitchAbout';
 import GlitchContact from '@/components/glitch/GlitchContact';
 import MagneticView from '@/components/magnetic/MagneticView';
+import SnellenbergView from '@/components/snellenberg/SnellenbergView';
 import type { Marker } from '@/components/shell/TimelineRail';
 
 const timelineMarkers: Marker[] = [
@@ -63,6 +64,7 @@ export default function Home() {
     </>
   );
   if (siteVersion === 'magnetic') return <MagneticView />;
+  if (siteVersion === 'snellenberg') return <SnellenbergView />;
 
   const markers = activeView === 'timeline' ? timelineMarkers : categoryMarkers;
 
