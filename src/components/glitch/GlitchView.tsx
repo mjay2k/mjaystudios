@@ -16,7 +16,7 @@ const GLITCH_CHARS = '!<>-_\\/[]{}—=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 // Deterministic scattered layout — each card gets a position in a large scrollable field
 // Some big, some small, overlapping, rotated — like a hacker's multi-monitor wall
-function generateLayout(count: number) {
+function generateDesktopLayout(count: number) {
   const cols = 5;
   const baseW = 320;
   const baseH = 220;
@@ -51,7 +51,82 @@ function generateLayout(count: number) {
   });
 }
 
-const layout = generateLayout(featured.length);
+// Mobile: staggered single-column stream — cards snake left/right like scattered polaroids
+function generateMobileLayout(count: number, vw: number) {
+  const padding = 16;
+  const maxCardW = vw - padding * 2;
+
+  return Array.from({ length: count }, (_, i) => {
+    const seed = (i * 7919 + 1301) % 1000 / 1000;
+    const seed2 = (i * 6271 + 947) % 1000 / 1000;
+    const seed3 = (i * 4391 + 2203) % 1000 / 1000;
+
+    // Width: 72%-90% of viewport
+    const isPrimary = i % 5 === 0 || i % 7 === 0;
+    const widthPct = isPrimary ? 0.9 : 0.72 + seed3 * 0.16;
+    const w = Math.round(maxCardW * widthPct);
+
+    // Height: proportional with variation
+    const baseH = isPrimary ? 200 : 150;
+    const h = Math.round(baseH * (0.8 + seed * 0.4));
+
+    // Horizontal stagger: alternate left/right with random nudge
+    const maxOffset = maxCardW - w;
+    let x: number;
+    if (i % 3 === 0) {
+      // Push left
+      x = padding + seed * maxOffset * 0.3;
+    } else if (i % 3 === 1) {
+      // Push right
+      x = padding + maxOffset - seed2 * maxOffset * 0.3;
+    } else {
+      // Center-ish with jitter
+      x = padding + maxOffset * 0.3 + seed3 * maxOffset * 0.4;
+    }
+
+    // Vertical: stack with varying gaps (40-80px)
+    // We'll compute y cumulatively after
+    const gap = 40 + seed2 * 40;
+
+    // Subtle rotation (less than desktop)
+    const rot = (seed - 0.5) * 3;
+
+    // Z-depth for scroll parallax
+    const z = seed2 * 0.6 + 0.4;
+
+    return { x, y: 0, w, h, rot, z, isPrimary, gap };
+  });
+}
+
+// Compute cumulative Y positions for mobile layout
+function finalizeMobileLayout(items: ReturnType<typeof generateMobileLayout>) {
+  let currentY = 100; // top padding
+  return items.map((item) => {
+    const y = currentY;
+    currentY += item.h + 40 + item.gap; // card height + footer (~40px) + gap
+    return { ...item, y };
+  });
+}
+
+const desktopLayout = generateDesktopLayout(featured.length);
+
+// Hook to track if we're on mobile — SSR-safe (always init false; updates in effect)
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+  const [vw, setVw] = useState(390);
+
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < breakpoint);
+      setVw(window.innerWidth);
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [breakpoint]);
+
+  return { isMobile, vw };
+}
 
 // ─── Main Component ─────────────────────────────────────────
 export default function GlitchView() {
@@ -63,6 +138,15 @@ export default function GlitchView() {
   const containerRef = useRef<HTMLDivElement>(null);
   const staticCanvasRef = useRef<HTMLCanvasElement>(null);
   const cardEls = useRef<(HTMLDivElement | null)[]>([]);
+  const { isMobile, vw } = useIsMobile();
+
+  // Choose layout based on viewport
+  const layout = useMemo(() => {
+    if (isMobile) {
+      return finalizeMobileLayout(generateMobileLayout(featured.length, vw));
+    }
+    return desktopLayout;
+  }, [isMobile, vw]);
 
   // Static noise canvas
   useEffect(() => {
@@ -106,9 +190,9 @@ export default function GlitchView() {
       });
   }, []);
 
-  // Stagger in cards after boot
+  // Stagger in cards after boot — desktop only; on mobile, rAF owns transform/opacity/filter
   useEffect(() => {
-    if (!booted) return;
+    if (!booted || isMobile) return;
     const cards = cardEls.current.filter(Boolean);
     gsap.fromTo(cards, {
       opacity: 0,
@@ -122,27 +206,90 @@ export default function GlitchView() {
       stagger: { each: 0.06, from: 'random' },
       ease: 'power2.out',
     });
-  }, [booted]);
+  }, [booted, isMobile]);
 
-  // Track scroll
+  // Track scroll — mobile uses rAF + direct DOM mutation (no per-frame React re-renders)
   useEffect(() => {
+    if (!booted) return;
     const container = containerRef.current;
     if (!container) return;
+
+    if (isMobile) {
+      const vh = window.innerHeight;
+      let rafId: number | null = null;
+      let pendingY = container.scrollTop;
+      let lastStateUpdate = 0;
+
+      const flush = () => {
+        rafId = null;
+        const sy = pendingY;
+
+        for (let i = 0; i < cardEls.current.length; i++) {
+          const el = cardEls.current[i];
+          const lay = layout[i];
+          if (!el || !lay) continue;
+
+          const cardScreenY = lay.y - sy;
+          const progress = cardScreenY / vh;
+          const center = (progress - 0.5) * 2;
+          const distFromCenter = Math.abs(center);
+
+          const rotShift = center * 4 * (i % 2 === 0 ? 1 : -1);
+          const rot = lay.rot + rotShift;
+          const drift = center * 12 * (i % 3 === 0 ? -1 : 1);
+          const scale = 1 - distFromCenter * 0.08;
+
+          let opacity: number;
+          if (progress < -0.3 || progress > 1.3) opacity = 0;
+          else if (progress < 0.1) opacity = Math.max(0, (progress + 0.3) / 0.4);
+          else if (progress > 1.0) opacity = Math.max(0, (1.3 - progress) / 0.3);
+          else opacity = 1;
+
+          const brightness = 1 + (1 - distFromCenter) * 0.1;
+
+          el.style.transform = `translate3d(${drift}px,0,0) rotate(${rot}deg) scale(${scale})`;
+          el.style.opacity = String(opacity);
+          el.style.filter = `brightness(${brightness})`;
+        }
+
+        // Throttle React state updates for status bar (max ~10fps)
+        const now = performance.now();
+        if (now - lastStateUpdate > 100) {
+          setScrollY(sy);
+          lastStateUpdate = now;
+        }
+      };
+
+      const handler = () => {
+        pendingY = container.scrollTop;
+        if (rafId === null) rafId = requestAnimationFrame(flush);
+      };
+
+      flush();
+      container.addEventListener('scroll', handler, { passive: true });
+      return () => {
+        container.removeEventListener('scroll', handler);
+        if (rafId !== null) cancelAnimationFrame(rafId);
+      };
+    }
+
+    // Desktop
     const handler = () => setScrollY(container.scrollTop);
     container.addEventListener('scroll', handler, { passive: true });
     return () => container.removeEventListener('scroll', handler);
-  }, []);
+  }, [isMobile, booted, layout]);
 
-  // Track mouse
+  // Track mouse (desktop only)
   useEffect(() => {
+    if (isMobile) return;
     const handler = (e: MouseEvent) => setMousePos({ x: e.clientX, y: e.clientY });
     window.addEventListener('mousemove', handler);
     return () => window.removeEventListener('mousemove', handler);
-  }, []);
+  }, [isMobile]);
 
-  // Random per-card glitch bursts
+  // Random per-card glitch bursts — desktop only (rAF owns mobile card styles)
   useEffect(() => {
-    if (!booted) return;
+    if (!booted || isMobile) return;
     const interval = setInterval(() => {
       const idx = Math.floor(Math.random() * featured.length);
       const card = cardEls.current[idx];
@@ -178,7 +325,7 @@ export default function GlitchView() {
       }
     }, 2500);
     return () => clearInterval(interval);
-  }, [booted, expandedId]);
+  }, [booted, expandedId, isMobile]);
 
   // Expand a project
   const handleExpand = useCallback((id: string) => {
@@ -202,23 +349,26 @@ export default function GlitchView() {
   // Calculate total field height
   const fieldHeight = useMemo(() => {
     let maxY = 0;
-    layout.forEach((l, i) => {
+    layout.forEach((l) => {
       const bottom = l.y + l.h;
       if (bottom > maxY) maxY = bottom;
     });
     return maxY + 200;
-  }, []);
+  }, [layout]);
 
-  const distortionStyle = useMemo(() => ({
-    background: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, rgba(0,255,136,0.04) 0%, transparent 100%)`,
-  }), [mousePos.x, mousePos.y]);
+  const distortionStyle = useMemo(() => {
+    if (isMobile) return { background: 'none' };
+    return {
+      background: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, rgba(0,255,136,0.04) 0%, transparent 100%)`,
+    };
+  }, [mousePos.x, mousePos.y, isMobile]);
 
-  // Mouse parallax offset for entire field — strong horizontal tracking
-  const parallaxX = (mousePos.x / window.innerWidth - 0.5) * -60;
-  const parallaxY = (mousePos.y / window.innerHeight - 0.5) * -25;
+  // Mouse parallax offset for entire field — desktop only
+  const parallaxX = isMobile ? 0 : (mousePos.x / (vw || 1) - 0.5) * -60;
+  const parallaxY = isMobile ? 0 : (mousePos.y / ((typeof window !== 'undefined' ? window.innerHeight : 800) || 1) - 0.5) * -25;
 
   return (
-    <div className="fixed inset-0 overflow-hidden" style={{ background: '#020804', cursor: 'none' }}>
+    <div className="fixed inset-0 overflow-hidden" style={{ background: '#020804', cursor: isMobile ? 'auto' : 'none' }}>
       {/* Static noise */}
       <canvas
         ref={staticCanvasRef}
@@ -300,14 +450,14 @@ export default function GlitchView() {
             style={{
               height: fieldHeight,
               minHeight: '100vh',
-              transform: `translate(${parallaxX}px, ${parallaxY}px)`,
-              transition: 'transform 0.3s ease-out',
+              transform: isMobile ? 'none' : `translate(${parallaxX}px, ${parallaxY}px)`,
+              transition: isMobile ? 'none' : 'transform 0.3s ease-out',
             }}
           >
             {featured.map((project, i) => {
               const l = layout[i];
               // Parallax: deeper cards (lower z) move slower on scroll
-              const parallaxOffset = scrollY * (1 - l.z) * 0.3;
+              const parallaxOffset = isMobile ? 0 : scrollY * (1 - l.z) * 0.3;
 
               return (
                 <TerminalCard
@@ -316,6 +466,7 @@ export default function GlitchView() {
                   index={i}
                   layout={l}
                   parallaxOffset={parallaxOffset}
+                  isMobile={isMobile}
                   onExpand={handleExpand}
                   ref={(el) => { cardEls.current[i] = el; }}
                 />
@@ -323,7 +474,7 @@ export default function GlitchView() {
             })}
 
             {/* Data streams — decorative vertical lines between cards */}
-            <DataStreams count={8} fieldHeight={fieldHeight} />
+            <DataStreams count={isMobile ? 3 : 8} fieldHeight={fieldHeight} />
           </div>
 
           {/* Bottom status bar — fixed */}
@@ -368,11 +519,12 @@ interface TerminalCardProps {
   index: number;
   layout: { x: number; y: number; w: number; h: number; rot: number; z: number; isPrimary: boolean };
   parallaxOffset: number;
+  isMobile: boolean;
   onExpand: (id: string) => void;
 }
 
 const TerminalCard = forwardRef<HTMLDivElement, TerminalCardProps>(
-  function Card({ project, index, layout: l, parallaxOffset, onExpand }, ref) {
+  function Card({ project, index, layout: l, parallaxOffset, isMobile, onExpand }, ref) {
     const [hovered, setHovered] = useState(false);
     const [titleText, setTitleText] = useState(project.title);
     const scrambleRef = useRef<ReturnType<typeof setInterval>>(undefined);
@@ -402,21 +554,30 @@ const TerminalCard = forwardRef<HTMLDivElement, TerminalCardProps>(
       return () => clearInterval(scrambleRef.current);
     }, [hovered, project.title]);
 
+    // Mobile: rAF in parent owns transform/opacity/filter — only set base layout here
+    const style = isMobile ? {
+      left: l.x,
+      top: l.y,
+      width: l.w,
+      zIndex: Math.round(l.z * 10),
+      willChange: 'transform, opacity' as const,
+    } : {
+      left: l.x,
+      top: l.y - parallaxOffset,
+      width: l.w,
+      transform: `rotate(${hovered ? 0 : l.rot}deg) scale(${hovered ? 1.08 : 1})`,
+      zIndex: hovered ? 30 : Math.round(l.z * 10),
+      transition: 'transform 0.4s cubic-bezier(0.19,1,0.22,1), z-index 0s',
+      willChange: 'transform' as const,
+    };
+
     return (
       <div
         ref={ref}
         className="absolute group"
-        style={{
-          left: l.x,
-          top: l.y - parallaxOffset,
-          width: l.w,
-          transform: `rotate(${hovered ? 0 : l.rot}deg) scale(${hovered ? 1.08 : 1})`,
-          zIndex: hovered ? 30 : Math.round(l.z * 10),
-          transition: 'transform 0.4s cubic-bezier(0.19,1,0.22,1), z-index 0s',
-          willChange: 'transform',
-        }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        style={style}
+        onMouseEnter={() => !isMobile && setHovered(true)}
+        onMouseLeave={() => !isMobile && setHovered(false)}
         onClick={() => onExpand(project.id)}
       >
         {/* Terminal window chrome */}

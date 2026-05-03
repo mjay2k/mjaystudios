@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   title: 'MJay Studios — Art Director Portfolio',
   description:
     'Portfolio of Matthew Johnson — Art Director, Designer, AI Developer.',
+  icons: {
+    icon: '/mjaystudios-logo.svg',
+    shortcut: '/mjaystudios-logo.svg',
+    apple: '/mjaystudios-logo.svg',
+  },
 };
 
 export default function RootLayout({
