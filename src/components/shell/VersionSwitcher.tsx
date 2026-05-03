@@ -63,6 +63,9 @@ export default function VersionSwitcher({ mobileInline = false, dark, onSelect }
   const current = allVersions.find((v) => v.id === siteVersion)!;
 
   const handlePick = (id: SiteVersion) => {
+    if (id !== siteVersion && typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
     setSiteVersion(id);
     setOpen(false);
     onSelect?.();
@@ -227,7 +230,7 @@ export default function VersionSwitcher({ mobileInline = false, dark, onSelect }
             version={mainVersion}
             isActive={siteVersion === mainVersion.id}
             isDark={isDark}
-            onClick={() => { setSiteVersion(mainVersion.id); setOpen(false); }}
+            onClick={() => handlePick(mainVersion.id)}
           />
 
           {/* ── Experimental section ── */}
@@ -249,7 +252,7 @@ export default function VersionSwitcher({ mobileInline = false, dark, onSelect }
               version={v}
               isActive={v.id === siteVersion}
               isDark={isDark}
-              onClick={() => { setSiteVersion(v.id); setOpen(false); }}
+              onClick={() => handlePick(v.id)}
             />
           ))}
         </div>
