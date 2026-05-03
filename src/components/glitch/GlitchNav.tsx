@@ -249,9 +249,8 @@ export default function GlitchNav() {
 
             {/* Version switcher */}
             <div className="mx-4 h-px" style={{ background: 'rgba(0,255,136,0.06)' }} />
-            <div className="menu-item px-4 py-4 flex items-center justify-between">
-              <span className="font-mono text-[9px] tracking-[0.15em]" style={{ color: 'rgba(0,255,136,0.2)' }}>VERSION</span>
-              <VersionSwitcher />
+            <div className="menu-item px-4 py-4">
+              <VersionSwitcher mobileInline dark onSelect={closeMenu} />
             </div>
 
             {/* Terminal prompt at bottom */}

@@ -182,12 +182,12 @@ export default function SnellenbergView() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 md:hidden" style={{ background: '#1a1a1a' }}>
+        <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 px-8 md:hidden" style={{ background: '#1a1a1a' }}>
           <button onClick={() => scrollTo(workRef)} className="text-3xl font-bold font-display text-white/80 hover:text-white">Work</button>
           <button onClick={() => scrollTo(aboutRef)} className="text-3xl font-bold font-display text-white/80 hover:text-white">About</button>
           <button onClick={() => scrollTo(contactRef)} className="text-3xl font-bold font-display text-white/80 hover:text-white">Contact</button>
-          <div className="mt-4">
-            <VersionSwitcher />
+          <div className="mt-4 w-full max-w-sm">
+            <VersionSwitcher mobileInline dark onSelect={() => setMenuOpen(false)} />
           </div>
         </div>
       )}
@@ -276,7 +276,21 @@ export default function SnellenbergView() {
               onMouseLeave={() => setHoveredProject(null)}
               onClick={() => setExpandedProject(project)}
             >
-              <div className="flex items-center gap-4 md:gap-8 flex-1 min-w-0">
+              <div className="flex items-center gap-3 sm:gap-4 md:gap-8 flex-1 min-w-0">
+                {/* Mobile-only inline preview thumbnail */}
+                <div
+                  className="md:hidden relative flex-shrink-0 w-14 h-14 overflow-hidden rounded-md"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+                >
+                  <Image
+                    src={project.images[0]}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    style={{ filter: 'grayscale(0.4) brightness(0.85) contrast(1.05)' }}
+                    sizes="56px"
+                  />
+                </div>
                 <span className="text-xs font-mono text-white/20 hidden sm:block w-8">
                   {String(i + 1).padStart(2, '0')}
                 </span>

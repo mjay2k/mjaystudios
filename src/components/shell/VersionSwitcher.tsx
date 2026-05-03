@@ -18,10 +18,11 @@ const allVersions = [mainVersion, ...experimentalVersions];
 
 interface VersionSwitcherProps {
   mobileInline?: boolean;
+  dark?: boolean;
   onSelect?: () => void;
 }
 
-export default function VersionSwitcher({ mobileInline = false, onSelect }: VersionSwitcherProps = {}) {
+export default function VersionSwitcher({ mobileInline = false, dark, onSelect }: VersionSwitcherProps = {}) {
   const siteVersion = useAppStore((s) => s.siteVersion);
   const setSiteVersion = useAppStore((s) => s.setSiteVersion);
   const theme = useAppStore((s) => s.theme);
@@ -68,25 +69,42 @@ export default function VersionSwitcher({ mobileInline = false, onSelect }: Vers
   };
 
   if (mobileInline) {
+    const inlineDark = dark ?? isDark;
+    const triggerBg = open
+      ? inlineDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)'
+      : 'transparent';
+    const triggerBorder = open
+      ? inlineDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)'
+      : inlineDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)';
+    const labelColor = inlineDark ? 'rgba(255,255,255,0.5)' : '#737373';
+    const valueColor = inlineDark ? '#ffffff' : '#262626';
+    const iconColor = inlineDark ? 'rgba(255,255,255,0.5)' : '#525252';
+    const chevronColor = inlineDark ? 'rgba(255,255,255,0.5)' : '#737373';
+    const listBg = inlineDark ? '#1a1a1a' : '#ffffff';
+    const listBorder = inlineDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
+    const sectionDivider = inlineDark ? 'rgba(255,255,255,0.06)' : '#f0f0f0';
+    const sectionLabel = inlineDark ? 'rgba(255,255,255,0.35)' : '#a3a3a3';
+    const helperText = inlineDark ? 'rgba(255,255,255,0.35)' : '#a3a3a3';
+
     return (
       <div className="w-full">
         <button
           onClick={() => setOpen(!open)}
-          className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors active:bg-neutral-200/50"
+          className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors"
           style={{
-            background: open ? 'rgba(0,0,0,0.04)' : 'transparent',
-            border: `1px solid ${open ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.06)'}`,
+            background: triggerBg,
+            border: `1px solid ${triggerBorder}`,
           }}
           aria-expanded={open}
         >
           <div className="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-600">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: iconColor }}>
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
               <line x1="8" y1="21" x2="16" y2="21" />
               <line x1="12" y1="17" x2="12" y2="21" />
             </svg>
-            <span className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-500">Theme</span>
-            <span className="text-sm font-bold font-display text-neutral-800">{current.label}</span>
+            <span className="text-xs font-bold uppercase tracking-[0.15em]" style={{ color: labelColor }}>Theme</span>
+            <span className="text-sm font-bold font-display" style={{ color: valueColor }}>{current.label}</span>
           </div>
           <svg
             width="14"
@@ -95,8 +113,8 @@ export default function VersionSwitcher({ mobileInline = false, onSelect }: Vers
             fill="none"
             stroke="currentColor"
             strokeWidth="2.5"
-            className="text-neutral-500"
             style={{
+              color: chevronColor,
               transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
               transition: 'transform 0.2s ease',
             }}
@@ -106,26 +124,29 @@ export default function VersionSwitcher({ mobileInline = false, onSelect }: Vers
         </button>
 
         {open && (
-          <div className="mt-2 overflow-hidden rounded-xl border border-neutral-200 bg-white">
+          <div
+            className="mt-2 overflow-hidden rounded-xl"
+            style={{ background: listBg, border: `1px solid ${listBorder}` }}
+          >
             <div
-              className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-400"
-              style={{ borderBottom: '1px solid #f0f0f0' }}
+              className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: sectionLabel, borderBottom: `1px solid ${sectionDivider}` }}
             >
               Portfolio
             </div>
             <VersionButton
               version={mainVersion}
               isActive={siteVersion === mainVersion.id}
-              isDark={false}
+              isDark={inlineDark}
               onClick={() => handlePick(mainVersion.id)}
             />
             <div
-              className="px-3 pt-3 pb-2 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-400"
-              style={{ borderTop: '1px solid #f0f0f0' }}
+              className="px-3 pt-3 pb-2 text-[9px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: sectionLabel, borderTop: `1px solid ${sectionDivider}` }}
             >
               Experimental
             </div>
-            <p className="px-4 pb-2 text-[10px] leading-relaxed text-neutral-400">
+            <p className="px-4 pb-2 text-[10px] leading-relaxed" style={{ color: helperText }}>
               Just for fun — not all features work in these views.
             </p>
             {experimentalVersions.map((v) => (
@@ -133,7 +154,7 @@ export default function VersionSwitcher({ mobileInline = false, onSelect }: Vers
                 key={v.id}
                 version={v}
                 isActive={v.id === siteVersion}
-                isDark={false}
+                isDark={inlineDark}
                 onClick={() => handlePick(v.id)}
               />
             ))}

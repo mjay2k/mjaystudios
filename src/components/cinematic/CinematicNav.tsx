@@ -171,9 +171,8 @@ export default function CinematicNav() {
 
             {/* Version switcher */}
             <div className="mx-4 h-px bg-white/5" />
-            <div className="menu-item px-4 py-4 flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/25">Version</span>
-              <VersionSwitcher />
+            <div className="menu-item px-4 py-4">
+              <VersionSwitcher mobileInline dark onSelect={closeMenu} />
             </div>
           </div>
         </>
