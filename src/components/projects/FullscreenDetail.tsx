@@ -158,7 +158,30 @@ function DetailContent({ project }: { project: Project }) {
                 </p>
               )}
 
-              {(() => {
+              {project.multiLinks && project.multiLinks.length > 0 ? (
+                <div className="mt-6 flex flex-col gap-2">
+                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                    Reports
+                  </div>
+                  {project.multiLinks.map((l) => (
+                    <a
+                      key={l.href}
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:border-[var(--color-brand)] hover:bg-white/10"
+                    >
+                      <span>{l.label}</span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+              ) : (() => {
                 const currentImage = allImages[activeIndex];
                 const dynamicLink = project.imageLinks?.[currentImage] || project.link;
                 if (!dynamicLink) return null;
@@ -282,7 +305,30 @@ function DetailContent({ project }: { project: Project }) {
                     {project.caseStudy.processNotes}
                   </p>
                 )}
-                {(() => {
+                {project.multiLinks && project.multiLinks.length > 0 ? (
+                  <div className="mt-4 flex flex-col gap-2">
+                    <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                      Reports
+                    </div>
+                    {project.multiLinks.map((l) => (
+                      <a
+                        key={l.href}
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center justify-between rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-white transition-colors active:border-[var(--color-brand)] active:bg-white/10"
+                      >
+                        <span>{l.label}</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                          <polyline points="15 3 21 3 21 9" />
+                          <line x1="10" y1="14" x2="21" y2="3" />
+                        </svg>
+                      </a>
+                    ))}
+                  </div>
+                ) : (() => {
                   const currentImage = allImages[activeIndex];
                   const dynamicLink = project.imageLinks?.[currentImage] || project.link;
                   if (!dynamicLink) return null;

@@ -126,6 +126,7 @@ function parseProjectFile(filePath, era, projectId) {
     ...(data.compact ? { compact: true } : {}),
     ...(data.wide ? { wide: true } : {}),
     ...(data.imageLinks ? { imageLinks: resolveKeys(data.imageLinks, urlBase) } : {}),
+    ...(Array.isArray(data.multiLinks) ? { multiLinks: data.multiLinks } : {}),
   };
 }
 

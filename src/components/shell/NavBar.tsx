@@ -110,9 +110,9 @@ export default function NavBar() {
             <ViewToggle size="large" onSelect={() => setMenuOpen(false)} />
           </div>
 
-          {/* Version switcher — centered */}
-          <div className="mb-6 flex justify-center">
-            <VersionSwitcher />
+          {/* Version switcher — inline expandable list (no popup-on-popup) */}
+          <div className="mb-6">
+            <VersionSwitcher mobileInline onSelect={() => setMenuOpen(false)} />
           </div>
 
           {/* Nav links — centered, large */}

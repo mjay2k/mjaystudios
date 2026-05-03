@@ -24,6 +24,7 @@ export interface Project {
   compact?: boolean;
   wide?: boolean;
   imageLinks?: Record<string, string>;
+  multiLinks?: { label: string; href: string }[];
 }
 
 export const projects: Project[] = generatedProjects as Project[];

@@ -229,8 +229,8 @@
       "advertising"
     ],
     "images": [
-      "/portfolio/berry/more-campaigns/01-Protect.png",
-      "/portfolio/berry/more-campaigns/01-VerdantGoodbye.png",
+      "/portfolio/berry/more-campaigns/01-Protect.jpg",
+      "/portfolio/berry/more-campaigns/01-VerdantGoodbye.jpg",
       "/portfolio/berry/more-campaigns/Tufflite_growingseason_BerryAd.jpg",
       "/portfolio/berry/more-campaigns/lookingformore.jpg"
     ],
@@ -242,8 +242,8 @@
     },
     "client": "Berry Global",
     "captions": {
-      "/portfolio/berry/more-campaigns/01-Protect.png": "Protect What's Inside — barrier packaging campaign. The oyster-and-pearl metaphor sells the technology before you read a word.",
-      "/portfolio/berry/more-campaigns/01-VerdantGoodbye.png": "Verdant Goodbye — premium packaging with high PCR content. Looks high-end, lives sustainably.",
+      "/portfolio/berry/more-campaigns/01-Protect.jpg": "Protect What's Inside — barrier packaging campaign. The oyster-and-pearl metaphor sells the technology before you read a word.",
+      "/portfolio/berry/more-campaigns/01-VerdantGoodbye.jpg": "Verdant Goodbye — premium packaging with high PCR content. Looks high-end, lives sustainably.",
       "/portfolio/berry/more-campaigns/lookingformore.jpg": "Looking for More — European market campaign for Berry's CleanStream recycled resin technology. More recycled content options than the competition.",
       "/portfolio/berry/more-campaigns/Tufflite_growingseason_BerryAd.jpg": "Growing Season Grows — Tufflite greenhouse films. The extended calendar concept shows the product's ROI at a glance."
     }
@@ -327,7 +327,6 @@
       "additionalImages": []
     },
     "client": "Berry Global",
-    "link": "/portfolio/berry/reports/berry-impact-report-2023.pdf",
     "captions": {
       "/portfolio/berry/reports/berry-impact-report-2023-1.jpg": "2023 Impact Report — At a Glance spread. Berry Global: $12.7B revenue, 40,000+ employees, 250+ manufacturing locations.",
       "/portfolio/berry/reports/berry-impact-report-2023-2.jpg": "2023 Impact Report — Energy & Climate section with emissions data visualization.",
@@ -347,7 +346,25 @@
       "/portfolio/berry/reports/berry-impact-report-2021-1.jpg": "/portfolio/berry/reports/berry-impact-report-2021.pdf",
       "/portfolio/berry/reports/berry-impact-report-2021-2.jpg": "/portfolio/berry/reports/berry-impact-report-2021.pdf",
       "/portfolio/berry/reports/berry-impact-report-2021.jpg": "/portfolio/berry/reports/berry-impact-report-2021.pdf"
-    }
+    },
+    "multiLinks": [
+      {
+        "label": "2023 Report",
+        "href": "/portfolio/berry/reports/berry-impact-report-2023.pdf"
+      },
+      {
+        "label": "2022 Report",
+        "href": "/portfolio/berry/reports/berry-impact-report-2022.pdf"
+      },
+      {
+        "label": "2021 Report",
+        "href": "/portfolio/berry/reports/berry-impact-report-2021.pdf"
+      },
+      {
+        "label": "2020 Report",
+        "href": "/portfolio/berry/reports/berry-impact-report-2020.pdf"
+      }
+    ]
   },
   {
     "id": "bible-warden",

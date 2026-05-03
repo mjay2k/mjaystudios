@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   description:
     'Portfolio of Matthew Johnson — Art Director, Designer, AI Developer.',
   icons: {
-    icon: '/mjaystudios-logo.svg',
-    shortcut: '/mjaystudios-logo.svg',
-    apple: '/mjaystudios-logo.svg',
+    icon: '/mjaystudios-logo-favi.svg',
+    shortcut: '/mjaystudios-logo-favi.svg',
+    apple: '/mjaystudios-logo-favi.svg',
   },
 };
 

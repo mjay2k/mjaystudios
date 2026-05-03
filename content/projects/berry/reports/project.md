@@ -7,7 +7,15 @@ autoCycle: false
 sortOrder: 3
 draft: false
 hero:
-link: /portfolio/berry/reports/berry-impact-report-2023.pdf
+multiLinks:
+  - label: "2023 Report"
+    href: /portfolio/berry/reports/berry-impact-report-2023.pdf
+  - label: "2022 Report"
+    href: /portfolio/berry/reports/berry-impact-report-2022.pdf
+  - label: "2021 Report"
+    href: /portfolio/berry/reports/berry-impact-report-2021.pdf
+  - label: "2020 Report"
+    href: /portfolio/berry/reports/berry-impact-report-2020.pdf
 captions:
   berry-impact-report-2023-1.jpg: "2023 Impact Report — At a Glance spread. Berry Global: $12.7B revenue, 40,000+ employees, 250+ manufacturing locations."
   berry-impact-report-2023-2.jpg: "2023 Impact Report — Energy & Climate section with emissions data visualization."

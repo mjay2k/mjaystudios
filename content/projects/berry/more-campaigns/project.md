@@ -9,8 +9,8 @@ draft: false
 hero:
 link:
 captions:
-  01-Protect.png: "Protect What's Inside — barrier packaging campaign. The oyster-and-pearl metaphor sells the technology before you read a word."
-  01-VerdantGoodbye.png: "Verdant Goodbye — premium packaging with high PCR content. Looks high-end, lives sustainably."
+  01-Protect.jpg: "Protect What's Inside — barrier packaging campaign. The oyster-and-pearl metaphor sells the technology before you read a word."
+  01-VerdantGoodbye.jpg: "Verdant Goodbye — premium packaging with high PCR content. Looks high-end, lives sustainably."
   lookingformore.jpg: "Looking for More — European market campaign for Berry's CleanStream recycled resin technology. More recycled content options than the competition."
   Tufflite_growingseason_BerryAd.jpg: "Growing Season Grows — Tufflite greenhouse films. The extended calendar concept shows the product's ROI at a glance."
 ---

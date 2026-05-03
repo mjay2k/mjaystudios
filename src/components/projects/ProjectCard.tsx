@@ -13,11 +13,25 @@ interface ProjectCardProps {
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const stackRef = useRef<HTMLDivElement>(null);
+  const pickerRef = useRef<HTMLDivElement>(null);
   const setDetailProject = useAppStore((s) => s.setDetailProject);
   const hasDetail = project.caseStudy || project.images.length > 1;
   const loadedHeights = useRef<number[]>([]);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Close picker on outside click
+  useEffect(() => {
+    if (!pickerOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
+        setPickerOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [pickerOpen]);
 
   const handleImageLoad = useCallback(
     (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -127,7 +141,52 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           />
         )}
 
-        {(() => {
+        {project.multiLinks && project.multiLinks.length > 0 ? (
+          <div ref={pickerRef} className="absolute top-3 left-3 z-10" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setPickerOpen((v) => !v)}
+              className="group/link flex h-9 items-center justify-center rounded-full text-white shadow-lg transition-all duration-300 w-9 hover:w-auto hover:px-4 hover:gap-2 overflow-hidden"
+              style={{ backgroundColor: '#F15A29' }}
+              aria-haspopup="menu"
+              aria-expanded={pickerOpen}
+            >
+              <svg className="flex-shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              <span className="whitespace-nowrap text-[11px] font-semibold max-w-0 overflow-hidden transition-all duration-300 group-hover/link:max-w-[100px]">View Report</span>
+            </button>
+            {pickerOpen && (
+              <div
+                role="menu"
+                className="absolute left-0 top-11 w-44 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-2xl"
+              >
+                <div className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-400 border-b border-neutral-100">
+                  Pick a year
+                </div>
+                {project.multiLinks.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setPickerOpen(false)}
+                    className="flex items-center justify-between px-4 py-2.5 text-xs font-bold font-display text-neutral-700 hover:bg-neutral-50 hover:text-[#F15A29] transition-colors"
+                    role="menuitem"
+                  >
+                    <span>{l.label}</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (() => {
           const currentImage = project.images[activeIndex];
           const dynamicLink = project.imageLinks?.[currentImage] || project.link;
           if (!dynamicLink) return null;

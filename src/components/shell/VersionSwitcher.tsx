@@ -16,7 +16,12 @@ const experimentalVersions: { id: SiteVersion; label: string; tag: string }[] = 
 
 const allVersions = [mainVersion, ...experimentalVersions];
 
-export default function VersionSwitcher() {
+interface VersionSwitcherProps {
+  mobileInline?: boolean;
+  onSelect?: () => void;
+}
+
+export default function VersionSwitcher({ mobileInline = false, onSelect }: VersionSwitcherProps = {}) {
   const siteVersion = useAppStore((s) => s.siteVersion);
   const setSiteVersion = useAppStore((s) => s.setSiteVersion);
   const theme = useAppStore((s) => s.theme);
@@ -25,9 +30,9 @@ export default function VersionSwitcher() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const isDark = theme === 'dark';
 
-  // Close on outside click
+  // Close on outside click — popover mode only
   useEffect(() => {
-    if (!open) return;
+    if (!open || mobileInline) return;
     const handler = (e: MouseEvent) => {
       if (
         menuRef.current &&
@@ -40,11 +45,11 @@ export default function VersionSwitcher() {
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [open]);
+  }, [open, mobileInline]);
 
-  // Animate menu
+  // Animate menu — popover mode only
   useEffect(() => {
-    if (!menuRef.current) return;
+    if (!menuRef.current || mobileInline) return;
     if (open) {
       gsap.fromTo(
         menuRef.current,
@@ -52,9 +57,91 @@ export default function VersionSwitcher() {
         { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: 'power3.out' }
       );
     }
-  }, [open]);
+  }, [open, mobileInline]);
 
   const current = allVersions.find((v) => v.id === siteVersion)!;
+
+  const handlePick = (id: SiteVersion) => {
+    setSiteVersion(id);
+    setOpen(false);
+    onSelect?.();
+  };
+
+  if (mobileInline) {
+    return (
+      <div className="w-full">
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors active:bg-neutral-200/50"
+          style={{
+            background: open ? 'rgba(0,0,0,0.04)' : 'transparent',
+            border: `1px solid ${open ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.06)'}`,
+          }}
+          aria-expanded={open}
+        >
+          <div className="flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-neutral-600">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
+            <span className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-500">Theme</span>
+            <span className="text-sm font-bold font-display text-neutral-800">{current.label}</span>
+          </div>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            className="text-neutral-500"
+            style={{
+              transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s ease',
+            }}
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+
+        {open && (
+          <div className="mt-2 overflow-hidden rounded-xl border border-neutral-200 bg-white">
+            <div
+              className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-400"
+              style={{ borderBottom: '1px solid #f0f0f0' }}
+            >
+              Portfolio
+            </div>
+            <VersionButton
+              version={mainVersion}
+              isActive={siteVersion === mainVersion.id}
+              isDark={false}
+              onClick={() => handlePick(mainVersion.id)}
+            />
+            <div
+              className="px-3 pt-3 pb-2 text-[9px] font-bold uppercase tracking-[0.2em] text-neutral-400"
+              style={{ borderTop: '1px solid #f0f0f0' }}
+            >
+              Experimental
+            </div>
+            <p className="px-4 pb-2 text-[10px] leading-relaxed text-neutral-400">
+              Just for fun — not all features work in these views.
+            </p>
+            {experimentalVersions.map((v) => (
+              <VersionButton
+                key={v.id}
+                version={v}
+                isActive={v.id === siteVersion}
+                isDark={false}
+                onClick={() => handlePick(v.id)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="relative">
