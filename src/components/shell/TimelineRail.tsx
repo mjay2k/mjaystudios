@@ -390,7 +390,11 @@ export default function TimelineRail({ markers }: TimelineRailProps) {
               key={i}
               className={`absolute right-0 flex items-center justify-end ${clickTarget ? 'cursor-pointer' : ''}`}
               style={{ top: `${tick.position * 100}%`, padding: '6px 0' }}
-              onClick={() => clickTarget && handleTickClick(clickTarget)}
+              onClick={(e) => {
+                if (!clickTarget) return;
+                e.stopPropagation();
+                handleTickClick(clickTarget);
+              }}
             >
               {/* Label */}
               {tick.isMarker && tick.label && (
