@@ -108,7 +108,7 @@ export default function TimelineView() {
           {/* Headshot */}
           <div className="reveal flex-shrink-0 relative">
             {/* Border accent — desktop only */}
-            <div className="hidden md:block absolute -inset-2 rounded-3xl opacity-20" style={{ border: '2px solid var(--color-brand)' }} />
+            <div className="hidden md:block absolute -inset-2 rounded-3xl" style={{ border: '2px solid var(--color-brand)' }} />
             <Image
               src={theme === 'dark' ? '/portfolio/headshot-dark.jpg' : '/portfolio/headshot.jpg'}
               alt="Matthew Johnson"
@@ -145,7 +145,12 @@ export default function TimelineView() {
       {/* Solid content panel — slides over bubbles with rounded top edge */}
       <div
         className="content-panel relative rounded-t-3xl"
-        style={{ backgroundColor: isDark ? '#111111' : '#f2f2f2' }}
+        style={{
+          backgroundColor: isDark ? '#111111' : '#f2f2f2',
+          boxShadow: isDark
+            ? '0 -12px 32px -8px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04)'
+            : '0 -12px 32px -8px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)',
+        }}
       >
         <div className="max-w-7xl mx-auto pl-4 pr-8 md:pl-10 md:pr-28 pt-8">
           {/* Timeline anchor — invisible marker for scroll tracking */}
