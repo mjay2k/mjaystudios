@@ -18,7 +18,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const pickerRef = useRef<HTMLDivElement>(null);
   const setDetailProject = useAppStore((s) => s.setDetailProject);
   const hasDetail = project.caseStudy || project.images.length > 1;
-  const loadedHeights = useRef<number[]>([]);
+  const aspectRatios = useRef<number[]>([]);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Close picker on outside click
@@ -33,19 +33,36 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     return () => document.removeEventListener('mousedown', handler);
   }, [pickerOpen]);
 
+  // Recompute minHeight from the tallest image's aspect ratio and the
+  // current container width — keeps the stack from leaving blank space
+  // when the viewport resizes after first load.
+  const recalcHeight = useCallback(() => {
+    if (!stackRef.current || aspectRatios.current.length === 0) return;
+    const w = stackRef.current.clientWidth;
+    if (w === 0) return;
+    const tallestRatio = Math.max(...aspectRatios.current);
+    setMaxHeight(w * tallestRatio);
+  }, []);
+
   const handleImageLoad = useCallback(
     (e: React.SyntheticEvent<HTMLImageElement>) => {
       const img = e.currentTarget;
-      const renderedHeight = img.offsetHeight;
-      loadedHeights.current.push(renderedHeight);
-
-      if (loadedHeights.current.length > 0) {
-        const tallest = Math.max(...loadedHeights.current);
-        setMaxHeight((prev) => (prev === undefined || tallest > prev ? tallest : prev));
+      if (img.naturalWidth > 0) {
+        aspectRatios.current.push(img.naturalHeight / img.naturalWidth);
       }
+      recalcHeight();
     },
-    []
+    [recalcHeight]
   );
+
+  // Watch container width — when viewport shrinks/grows, scale minHeight
+  useEffect(() => {
+    const el = stackRef.current;
+    if (!el || project.images.length <= 1) return;
+    const ro = new ResizeObserver(() => recalcHeight());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [project.images.length, recalcHeight]);
 
   // Preload all images
   useEffect(() => {
