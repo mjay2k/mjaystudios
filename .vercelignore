@@ -1,5 +1,6 @@
 _obsolete
 portfolio files
+Raw Files
 docs
 debug.js
-*.pdf
+content/**/*.pdf
