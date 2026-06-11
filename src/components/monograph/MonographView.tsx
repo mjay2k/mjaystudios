@@ -435,7 +435,7 @@ export default function MonographView() {
           <p className="mono-rise mt-7 max-w-md text-base leading-relaxed md:text-lg" style={{ color: PALETTE.muted, animationDelay: '0.28s' }}>
             Fifteen years turning brand strategy into work that ships, sells, and wins —
             from packaging on shelves nationwide to Fortune&nbsp;500 campaigns to
-            AI-built apps.
+            AI-built&nbsp;apps.
           </p>
 
           {/* credibility row — visible without a click */}
@@ -819,10 +819,14 @@ export default function MonographView() {
         <Reveal>
           <span className="mx-auto mb-8 block h-px w-12" style={{ background: PALETTE.brand }} />
           <h2 className="mono-serif mx-auto max-w-4xl px-6 text-4xl font-semibold leading-[1.02] tracking-tight md:text-7xl">
-            Let&apos;s make something that <span className="italic" style={{ color: PALETTE.brand }}>ships</span>.
+            Let&apos;s make something
+            <br />
+            that <span className="italic" style={{ color: PALETTE.brand }}>ships</span>.
           </h2>
           <p className="mx-auto mt-6 max-w-md px-6 text-base" style={{ color: PALETTE.muted }}>
-            Open to freelance, collaboration, and creative leadership.
+            Open to freelance, collaboration,
+            <br />
+            and creative leadership.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Magnetic>
