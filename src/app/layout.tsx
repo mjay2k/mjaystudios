@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Syne, Plus_Jakarta_Sans } from 'next/font/google';
+import { Syne, Plus_Jakarta_Sans, Fraunces, Cinzel, Playfair_Display } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
@@ -12,6 +12,27 @@ const syne = Syne({
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-jakarta',
+  display: 'swap',
+});
+
+// Expressive editorial serif — used by the Monograph version
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-editorial',
+  display: 'swap',
+  axes: ['opsz', 'SOFT', 'WONK'],
+});
+
+// App brand typefaces — used by the Warden product showcase
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  variable: '--font-cinzel',
+  display: 'swap',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
   display: 'swap',
 });
 
@@ -32,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${syne.variable} ${jakarta.variable}`}>
+    <html lang="en" className={`${syne.variable} ${jakarta.variable} ${fraunces.variable} ${cinzel.variable} ${playfair.variable}`}>
       <body className="text-neutral-900 antialiased font-body">
         {children}
         <Analytics />

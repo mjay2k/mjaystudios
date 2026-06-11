@@ -3,6 +3,7 @@
 @theme inline {
   --font-display: var(--font-syne), sans-serif;
   --font-body: var(--font-jakarta), sans-serif;
+  --font-serif: var(--font-editorial), Georgia, serif;
   --color-brand: #F15A29;
 }
 
@@ -264,4 +265,239 @@ html {
 
 .rift-border {
   animation: border-glow 3s ease-in-out infinite;
+}
+
+/* ─── Editorial Monograph (v2) ──────────────────────────── */
+
+@keyframes mono-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.mono-marquee-track {
+  animation: mono-marquee 38s linear infinite;
+  will-change: transform;
+}
+
+/* Scroll reveal — start hidden, .is-in toggles visible */
+.mono-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mono-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.mono-serif { font-family: var(--font-serif); }
+
+/* Orchestrated page-load entrance (above-the-fold hero) */
+@keyframes mono-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+.mono-rise {
+  animation: mono-rise 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes mono-hero-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.mono-hero-img {
+  animation: mono-hero-reveal 1.2s ease both;
+}
+
+/* Fine film grain — premium print-monograph texture */
+.mono-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Work-tile scroll rotation — incoming image wipes over the previous.
+   Direction alternates per tile (see WorkTile) so the grid feels alive. */
+@keyframes mono-tilewipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes mono-tilewipe-rev {
+  from { clip-path: inset(0 0 0 100%); }
+  to { clip-path: inset(0 0 0 0); }
+}
+.mono-tilewipe {
+  animation: mono-tilewipe 0.72s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+.mono-tilewipe-rev {
+  animation: mono-tilewipe-rev 0.72s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mono-tilewipe,
+  .mono-tilewipe-rev { animation: none; }
+}
+
+/* Corner plates — angled header pieces with a hover shine sweep.
+   NOTE: no `position` here — the hosts are positioned by their own
+   utilities, and setting `position: relative` out-cascades the plates'
+   `absolute`, knocking them out of the corners. */
+.mono-plate {
+  overflow: hidden;
+}
+
+/* Floating corner mark — no holder; the logo hangs free over a soft
+   corner scrim. Hover: the mark rocks and the name breathes wider. */
+.mono-mark .mono-mark-logo {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mono-mark:hover .mono-mark-logo {
+  transform: rotate(-7deg) scale(1.06);
+}
+.mono-mark .mono-mark-name {
+  color: var(--mg-fg); /* base color lives here so :hover can win */
+  transition: letter-spacing 0.45s ease, color 0.45s ease;
+}
+.mono-mark:hover .mono-mark-name {
+  letter-spacing: 0.3em;
+  color: var(--color-brand);
+}
+.mono-plate::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  transform: skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgba(241, 90, 41, 0.25), transparent);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+.mono-plate:hover::after,
+.mono-plate-host:hover .mono-plate::after { left: 130%; }
+.mono-plate-logo {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.mono-plate:hover .mono-plate-logo {
+  transform: rotate(-6deg) scale(1.05);
+}
+
+/* Roller nav links — hover rolls the label up to reveal an alternate word.
+   The link is exactly one row tall; the two-row stack slides inside it. */
+.mono-roller {
+  display: inline-block;
+  height: 1.5em;
+  overflow: hidden;
+  vertical-align: top;
+}
+.mono-roller .r-stack {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.mono-roller:hover .r-stack,
+.mono-roller:focus-visible .r-stack {
+  transform: translateY(-50%);
+}
+.mono-roller .r-row {
+  display: block;
+  height: 1.5em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* Touch devices: floating showcase elements bob gently on their own
+   (pointer parallax is disabled there — taps would jump it around) */
+@keyframes mono-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@media (hover: none) {
+  .mono-bob {
+    animation: mono-bob 6s ease-in-out infinite;
+  }
+}
+@media (hover: none) and (prefers-reduced-motion: reduce) {
+  .mono-bob { animation: none; }
+}
+
+/* Case-study preview cycling — simple crossfade */
+@keyframes mono-csfade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.mono-csfade {
+  animation: mono-csfade 0.8s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mono-plate::after { display: none; }
+  .mono-roller .r-stack { transition: none; }
+  .mono-csfade { animation: none; }
+}
+
+/* ── Mouse-reactive surfaces ────────────────────────────── */
+/* Pointer-follow spotlight glow — set --mx/--my on mousemove */
+.mono-spot { position: relative; isolation: isolate; }
+.mono-spot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(241, 90, 41, 0.16),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.mono-spot:hover::after { opacity: 1; }
+
+/* Subtle lift on hover */
+.mono-lift {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.5s ease;
+}
+.mono-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.7);
+}
+
+/* Reactive nav underline that grows from the left */
+.mono-navlink { position: relative; }
+.mono-navlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  height: 1px;
+  background: var(--color-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mono-navlink:hover::after { transform: scaleX(1); }
+
+/* Honor reduced-motion: no marquee, no reveal travel, no entrance */
+@media (prefers-reduced-motion: reduce) {
+  .mono-marquee-track { animation: none; }
+  .mono-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .mono-rise,
+  .mono-hero-img { animation: none; }
+  .mono-lift { transition: none; }
+  .mono-lift:hover { transform: none; box-shadow: none; }
+  .mono-spot::after { display: none; }
 }

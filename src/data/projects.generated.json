@@ -22,6 +22,8 @@
       "/portfolio/agency/album-covers/followme.jpg",
       "/portfolio/agency/album-covers/theadvance_beamz.jpg"
     ],
+    "coverW": 2500,
+    "coverH": 2500,
     "autoCycle": true,
     "sortOrder": 11,
     "client": "Nkosi Records",
@@ -45,6 +47,8 @@
       "/portfolio/agency/burnetts-vodka/6-burnettsCampaign_book.jpg",
       "/portfolio/agency/burnetts-vodka/7-burnettsCampaign_cit.jpg"
     ],
+    "coverW": 1169,
+    "coverH": 1349,
     "autoCycle": true,
     "sortOrder": 1,
     "caseStudy": {
@@ -67,6 +71,8 @@
       "/portfolio/agency/ellisParkBillboard/Ellis2011_goHorse2.jpg",
       "/portfolio/agency/ellisParkBillboard/Ellis2011_goHorse3.jpg"
     ],
+    "coverW": 900,
+    "coverH": 650,
     "autoCycle": true,
     "sortOrder": 5,
     "client": "Ellis Park",
@@ -122,6 +128,8 @@
       "/portfolio/agency/logo-designs/logos-2-27.jpg",
       "/portfolio/agency/logo-designs/logos-2-28.jpg"
     ],
+    "coverW": 834,
+    "coverH": 729,
     "autoCycle": false,
     "sortOrder": 10
   },
@@ -140,6 +148,8 @@
       "/portfolio/agency/pama-liqueur/01-PAMA_Ad_valin.jpg",
       "/portfolio/agency/pama-liqueur/01-PAMA_Ads_outdoor.jpg"
     ],
+    "coverW": 1114,
+    "coverH": 1500,
     "autoCycle": true,
     "sortOrder": 2,
     "caseStudy": {
@@ -164,6 +174,8 @@
       "/portfolio/agency/rittenhouse-rye/Rittenhouse-process.jpg",
       "/portfolio/agency/rittenhouse-rye/Rittenhouse_packaging.jpg"
     ],
+    "coverW": 1000,
+    "coverH": 1000,
     "autoCycle": true,
     "sortOrder": 3,
     "caseStudy": {
@@ -187,6 +199,8 @@
       "/portfolio/agency/sitex-corp/2-SiteX_sgs.jpg",
       "/portfolio/agency/sitex-corp/3-SiteX_sgs.jpg"
     ],
+    "coverW": 1296,
+    "coverH": 1004,
     "autoCycle": true,
     "sortOrder": 4,
     "caseStudy": {
@@ -211,6 +225,8 @@
       "/portfolio/berry/epic-campaign/03-EPIC-spec.png",
       "/portfolio/berry/epic-campaign/04-EPIC-unique.png"
     ],
+    "coverW": 2674,
+    "coverH": 3418,
     "autoCycle": true,
     "sortOrder": 1,
     "caseStudy": {
@@ -234,6 +250,8 @@
       "/portfolio/berry/more-campaigns/Tufflite_growingseason_BerryAd.jpg",
       "/portfolio/berry/more-campaigns/lookingformore.jpg"
     ],
+    "coverW": 2808,
+    "coverH": 3600,
     "autoCycle": true,
     "sortOrder": 2,
     "caseStudy": {
@@ -265,6 +283,8 @@
       "/portfolio/berry/pack-expo-booths/05-2022-booth.jpg",
       "/portfolio/berry/pack-expo-booths/07-Boothmockup.jpg"
     ],
+    "coverW": 2000,
+    "coverH": 1294,
     "autoCycle": true,
     "sortOrder": 5,
     "caseStudy": {
@@ -290,6 +310,8 @@
       "/portfolio/berry/packaging/packaging_jarcollection.jpg",
       "/portfolio/berry/packaging/packaging_resinite.jpg"
     ],
+    "coverW": 1500,
+    "coverH": 1285,
     "autoCycle": true,
     "sortOrder": 7,
     "client": "Berry Global",
@@ -320,6 +342,8 @@
       "/portfolio/berry/reports/berry-impact-report-2023-2.jpg",
       "/portfolio/berry/reports/berry-impact-report-2023.jpg"
     ],
+    "coverW": 2048,
+    "coverH": 1334,
     "autoCycle": false,
     "sortOrder": 3,
     "caseStudy": {
@@ -381,6 +405,8 @@
       "/portfolio/afterberry/bible-warden/3bibleWarden-shots.jpg",
       "/portfolio/afterberry/bible-warden/4bibleWarden-shots.jpg"
     ],
+    "coverW": 750,
+    "coverH": 750,
     "autoCycle": true,
     "sortOrder": 1,
     "caseStudy": {
@@ -405,6 +431,8 @@
       "/portfolio/afterberry/news-warden/newwarden-shots-home.jpg",
       "/portfolio/afterberry/news-warden/newwarden-shots-iranwar.jpg"
     ],
+    "coverW": 750,
+    "coverH": 750,
     "autoCycle": true,
     "sortOrder": 2,
     "caseStudy": {

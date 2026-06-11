@@ -5,7 +5,11 @@ import { gsap } from '@/lib/gsap';
 import { useAppStore } from '@/stores/useAppStore';
 import type { SiteVersion } from '@/stores/useAppStore';
 
-const mainVersion = { id: 'classic' as SiteVersion, label: 'Timeline', tag: 'v1' };
+const mainVersion = { id: 'monograph' as SiteVersion, label: 'Editorial Monograph', tag: 'v2' };
+
+const featuredVersions: { id: SiteVersion; label: string; tag: string }[] = [
+  { id: 'classic', label: 'Timeline', tag: 'v1' },
+];
 
 const experimentalVersions: { id: SiteVersion; label: string; tag: string }[] = [
   { id: 'cinematic', label: 'Cinematic Vault', tag: 'exp' },
@@ -14,7 +18,7 @@ const experimentalVersions: { id: SiteVersion; label: string; tag: string }[] = 
   { id: 'snellenberg', label: 'Studio Noir', tag: 'x3' },
 ];
 
-const allVersions = [mainVersion, ...experimentalVersions];
+const allVersions = [mainVersion, ...featuredVersions, ...experimentalVersions];
 
 interface VersionSwitcherProps {
   mobileInline?: boolean;
@@ -143,6 +147,15 @@ export default function VersionSwitcher({ mobileInline = false, dark, onSelect }
               isDark={inlineDark}
               onClick={() => handlePick(mainVersion.id)}
             />
+            {featuredVersions.map((v) => (
+              <VersionButton
+                key={v.id}
+                version={v}
+                isActive={v.id === siteVersion}
+                isDark={inlineDark}
+                onClick={() => handlePick(v.id)}
+              />
+            ))}
             <div
               className="px-3 pt-3 pb-2 text-[9px] font-bold uppercase tracking-[0.2em]"
               style={{ color: sectionLabel, borderTop: `1px solid ${sectionDivider}` }}
@@ -232,6 +245,15 @@ export default function VersionSwitcher({ mobileInline = false, dark, onSelect }
             isDark={isDark}
             onClick={() => handlePick(mainVersion.id)}
           />
+          {featuredVersions.map((v) => (
+            <VersionButton
+              key={v.id}
+              version={v}
+              isActive={v.id === siteVersion}
+              isDark={isDark}
+              onClick={() => handlePick(v.id)}
+            />
+          ))}
 
           {/* ── Experimental section ── */}
           <div

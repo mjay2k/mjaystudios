@@ -8,6 +8,7 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import sharp from 'sharp';
 
 const ROOT = process.cwd();
 const CONTENT_DIR = path.join(ROOT, 'content/projects');
@@ -76,7 +77,19 @@ function resolveKeys(obj, urlBase) {
   return resolved;
 }
 
-function parseProjectFile(filePath, era, projectId) {
+/** Real pixel dimensions of a public image URL (for natural-aspect layout). */
+async function imageSize(urlPath) {
+  try {
+    const file = path.join(ROOT, 'public', urlPath);
+    const m = await sharp(file).metadata();
+    if (m.width && m.height) return { w: m.width, h: m.height };
+  } catch {
+    /* non-fatal — gallery falls back to a default aspect */
+  }
+  return null;
+}
+
+async function parseProjectFile(filePath, era, projectId) {
   const raw = fs.readFileSync(filePath, 'utf-8');
   const { data, content } = matter(raw);
 
@@ -98,6 +111,7 @@ function parseProjectFile(filePath, era, projectId) {
 
   const urlBase = `/portfolio/${era}/${projectId}`;
   const images = syncAndDiscoverImages(era, projectId, data.hero || undefined);
+  const cover = images[0] ? await imageSize(images[0]) : null;
 
   let caseStudy = undefined;
   if (extendedDescription) {
@@ -116,6 +130,7 @@ function parseProjectFile(filePath, era, projectId) {
     era,
     categories: data.categories,
     images,
+    ...(cover ? { coverW: cover.w, coverH: cover.h } : {}),
     autoCycle: data.autoCycle,
     sortOrder: data.sortOrder,
     ...(caseStudy ? { caseStudy } : {}),
@@ -130,7 +145,7 @@ function parseProjectFile(filePath, era, projectId) {
   };
 }
 
-function loadAllProjects() {
+async function loadAllProjects() {
   const projects = [];
 
   for (const era of ERAS) {
@@ -144,7 +159,7 @@ function loadAllProjects() {
       const mdPath = path.join(eraDir, dir.name, 'project.md');
       if (!fs.existsSync(mdPath)) continue;
 
-      const project = parseProjectFile(mdPath, era, dir.name);
+      const project = await parseProjectFile(mdPath, era, dir.name);
       if (project) projects.push(project);
     }
   }
@@ -152,7 +167,41 @@ function loadAllProjects() {
   return projects;
 }
 
+/**
+ * Generate small webp thumbnails for every project image. The hero wall
+ * renders tiles at ~300px, so feeding it the full-res sources (~43MB total)
+ * is wasted bandwidth and causes texture-minification aliasing.
+ */
+const THUMB_DIR = path.join(ROOT, 'public/portfolio-thumbs');
+const THUMB_WIDTH = 640;
+
+async function generateThumbs(projects) {
+  let made = 0;
+  let total = 0;
+  for (const p of projects) {
+    const imgs = [...(p.images || []), ...(p.caseStudy?.additionalImages || [])];
+    for (const url of imgs) {
+      total++;
+      const src = path.join(ROOT, 'public', url);
+      if (!fs.existsSync(src)) continue;
+      const rel = url.replace(/^\/portfolio\//, '');
+      const dest = path
+        .join(THUMB_DIR, rel)
+        .replace(/\.(jpe?g|png|webp|avif)$/i, '.webp');
+      if (fs.existsSync(dest) && fs.statSync(dest).mtimeMs >= fs.statSync(src).mtimeMs) continue;
+      fs.mkdirSync(path.dirname(dest), { recursive: true });
+      await sharp(src)
+        .resize({ width: THUMB_WIDTH, withoutEnlargement: true })
+        .webp({ quality: 72 })
+        .toFile(dest);
+      made++;
+    }
+  }
+  console.log(`Thumbnails: ${made} generated, ${total} total → public/portfolio-thumbs`);
+}
+
 // Run
-const projects = loadAllProjects();
+const projects = await loadAllProjects();
 fs.writeFileSync(OUTPUT_FILE, JSON.stringify(projects, null, 2));
+await generateThumbs(projects);
 console.log(`Generated ${projects.length} projects → ${OUTPUT_FILE}`);

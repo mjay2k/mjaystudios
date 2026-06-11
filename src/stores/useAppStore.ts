@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 type ActiveView = 'timeline' | 'category';
 type ThemeMode = 'light' | 'dark';
-type SiteVersion = 'classic' | 'cinematic' | 'glitch' | 'magnetic' | 'snellenberg';
+type SiteVersion = 'classic' | 'monograph' | 'cinematic' | 'glitch' | 'magnetic' | 'snellenberg';
 
 interface Section {
   id: string;
@@ -71,7 +71,7 @@ export const useAppStore = create<AppState>((set) => ({
       return { theme: next };
     }),
 
-  siteVersion: 'classic',
+  siteVersion: 'monograph',
   setSiteVersion: (version) => set({ siteVersion: version }),
 }));
 

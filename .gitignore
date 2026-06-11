@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 portfolio files/
 Raw Files/
+
+# generated at build by scripts/build-content.mjs
+/public/portfolio-thumbs/

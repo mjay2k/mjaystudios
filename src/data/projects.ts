@@ -14,6 +14,8 @@ export interface Project {
   era: 'agency' | 'berry' | 'afterberry';
   categories: string[];
   images: string[];
+  coverW?: number;
+  coverH?: number;
   autoCycle: boolean;
   caseStudy?: CaseStudy;
   sortOrder: number;

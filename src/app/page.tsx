@@ -12,6 +12,7 @@ import CinematicContact from '@/components/cinematic/CinematicContact';
 import GlitchView from '@/components/glitch/GlitchView';
 import GlitchAbout from '@/components/glitch/GlitchAbout';
 import GlitchContact from '@/components/glitch/GlitchContact';
+import MonographView from '@/components/monograph/MonographView';
 import MagneticView from '@/components/magnetic/MagneticView';
 import SnellenbergView from '@/components/snellenberg/SnellenbergView';
 import type { Marker } from '@/components/shell/TimelineRail';
@@ -32,10 +33,22 @@ const categoryMarkers: Marker[] = [
   { id: 'digital', label: 'Digital', tooltip: 'Digital & Apps', position: 0.9 },
 ];
 
+const VALID_VERSIONS = ['classic', 'monograph', 'cinematic', 'glitch', 'magnetic', 'snellenberg'];
+
 export default function Home() {
   const activeView = useAppStore((s) => s.activeView);
   const siteVersion = useAppStore((s) => s.siteVersion);
+  const setSiteVersion = useAppStore((s) => s.setSiteVersion);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  // Deep-link support: ?v=monograph loads that version directly (shareable).
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get('v');
+    if (v && VALID_VERSIONS.includes(v)) {
+      setSiteVersion(v as typeof siteVersion);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!contentRef.current || siteVersion !== 'classic') return;
@@ -48,7 +61,8 @@ export default function Home() {
     );
   }, [activeView, siteVersion]);
 
-  // Experimental versions take over the entire page
+  // Alternate full-page versions take over the entire page
+  if (siteVersion === 'monograph') return <MonographView />;
   if (siteVersion === 'cinematic') return (
     <>
       <CinematicView />
