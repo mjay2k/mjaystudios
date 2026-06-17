@@ -1,0 +1,75 @@
+/* Jesus Anoints Ministries — brand tokens, scoped to .ja so nothing leaks into the portfolio.
+   Palette derived from the 2025 logo: gold gradient + slate-blue wordmark. */
+
+.ja {
+  /* Brand gold */
+  --ja-gold-1: #c09e5f;
+  --ja-gold-2: #e5c965;
+  --ja-gold-deep: #a8854a;
+  --ja-gold-grad: linear-gradient(120deg, #c09e5f 0%, #e5c965 60%, #f0dd92 100%);
+
+  /* Slate / ink */
+  --ja-slate: #3b445a;
+  --ja-slate-deep: #2a3142;
+  --ja-ink: #1b2030;
+  --ja-ink-900: #11141f;
+
+  /* Paper / light */
+  --ja-cream: #f7f2e8;
+  --ja-paper: #fffdf8;
+  --ja-sand: #efe7d6;
+
+  /* Typography (loaded by the layout) */
+  --ja-serif: var(--font-ja-serif), 'Baskerville', Georgia, serif;
+  --ja-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  font-family: var(--ja-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Reusable brand primitives */
+.ja-serif { font-family: var(--ja-serif); }
+.ja-sans { font-family: var(--ja-sans); }
+
+.ja-gold-text {
+  background: var(--ja-gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ja-gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ja-gold-1), transparent);
+}
+
+/* Subtle paper grain usable as a background layer */
+.ja-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* Shared entrance animation */
+@keyframes ja-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.ja-rise { animation: ja-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes ja-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.ja-fade { animation: ja-fade 1.2s ease both; }
+
+/* Smooth anchored scrolling within the preview */
+.ja { scroll-behavior: smooth; }
+
+/* Recolor the brand SVG logo to relevant tones where needed via filter (used on dark heroes) */
+.ja-logo-light { filter: brightness(0) invert(1); }

@@ -44,3 +44,6 @@ Raw Files/
 
 # generated at build by scripts/build-content.mjs
 /public/portfolio-thumbs/
+
+# JA ministries raw scrape (dev-only; pages use curated/ + brand/)
+/public/jaministries/scraped/
