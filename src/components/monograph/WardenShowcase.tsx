@@ -400,7 +400,7 @@ export default function WardenShowcase() {
                   Story tracking
                 </p>
                 <p className="mt-1 text-[11px] leading-snug" style={{ color: NW.inkSoft, fontFamily: 'var(--font-playfair)' }}>
-                  Follows developing stories so you don&apos;t re-read the news.
+                  Follows developing stories so you don’t re-read the news.
                 </p>
               </div>
             </Float>
@@ -440,7 +440,7 @@ export default function WardenShowcase() {
               The news, without the noise.
             </h3>
             <p className="mb-4 max-w-md text-sm leading-relaxed md:text-base" style={{ color: NW.inkSoft }}>
-              A snapshot of everything happening right now — the day&apos;s headlines
+              A snapshot of everything happening right now — the day’s headlines
               gathered, organized, and set in one quick, readable place. Ongoing
               stories are tracked as they develop, with every side of the coverage
               shown, so you see the whole picture at a glance.

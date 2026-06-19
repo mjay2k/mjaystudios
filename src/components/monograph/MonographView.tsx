@@ -776,7 +776,7 @@ export default function MonographView() {
               About
             </p>
             <h2 className="mono-serif mb-7 max-w-2xl text-3xl font-semibold leading-[1.12] tracking-tight md:text-5xl">
-              The art director&apos;s eye, the brand leader&apos;s strategy, the builder&apos;s hands.
+              The art director’s eye, the brand leader’s strategy, the builder’s hands.
             </h2>
             <div className="max-w-2xl space-y-4 text-sm leading-[1.8] md:text-base" style={{ color: PALETTE.muted }}>
               <p>
@@ -819,7 +819,7 @@ export default function MonographView() {
         <Reveal>
           <span className="mx-auto mb-8 block h-px w-12" style={{ background: PALETTE.brand }} />
           <h2 className="mono-serif mx-auto max-w-4xl px-6 text-4xl font-semibold leading-[1.02] tracking-tight md:text-7xl">
-            Let&apos;s make something
+            Let’s make something
             <br />
             that <span className="italic" style={{ color: PALETTE.brand }}>ships</span>.
           </h2>
