@@ -940,9 +940,11 @@ function CaseImage({
       className={`mono-spot mono-lift group relative aspect-[4/3] overflow-hidden rounded-sm ring-1 ${className}`}
       style={{ background: PALETTE.bg, ['--tw-ring-color' as string]: PALETTE.hair }}
     >
+      {/* Same stable-index keying as WorkTile: reuse the painted element on
+          current→previous so the crossfade never starts from a blank frame. */}
       {prev !== null && (
         <Image
-          key={`p${prev}`}
+          key={prev}
           src={tileThumb(project.images[prev])}
           alt=""
           fill
@@ -951,7 +953,7 @@ function CaseImage({
         />
       )}
       <Image
-        key={`c${curr}`}
+        key={curr}
         src={tileThumb(project.images[curr])}
         alt={project.title}
         fill
@@ -1022,9 +1024,13 @@ function WorkTile({ project, index, onClick }: { project: Project; index: number
         className="mono-spot mono-lift relative w-full overflow-hidden rounded-sm"
         style={{ background: 'var(--mg-surface)', aspectRatio: `${project.coverW ?? 1000} / ${project.coverH ?? 1250}` }}
       >
+        {/* Key each layer by its stable image index (not a p/c role prefix) so a
+            tile going current→previous reuses the SAME painted element instead of
+            remounting — otherwise the freshly-mounted base is blank for one frame
+            while the incoming layer is still clip-wiped, which reads as a flash. */}
         {prev !== null && (
           <Image
-            key={`p${prev}`}
+            key={prev}
             src={tileThumb(project.images[prev])}
             alt=""
             fill
@@ -1033,7 +1039,7 @@ function WorkTile({ project, index, onClick }: { project: Project; index: number
           />
         )}
         <Image
-          key={`c${curr}`}
+          key={curr}
           src={tileThumb(project.images[curr])}
           alt={project.title}
           fill
