@@ -39,9 +39,9 @@ export default async function AnointedConcept() {
             <Image
               src={site.brand.logoHorizontalRev}
               alt={site.name}
-              width={167}
-              height={50}
-              className="h-14 w-auto md:h-16"
+              width={154}
+              height={37}
+              className="h-11 w-auto md:h-16"
               priority
             />
           </a>
@@ -99,8 +99,8 @@ export default async function AnointedConcept() {
           <Image
             src={site.brand.logoStackedRev}
             alt={site.name}
-            width={176}
-            height={120}
+            width={114}
+            height={78}
             priority
             className="ja-fade mx-auto w-[clamp(220px,34vw,340px)] drop-shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
           />
@@ -607,8 +607,8 @@ export default async function AnointedConcept() {
             <Image
               src={site.brand.logoHorizontalRev}
               alt={site.name}
-              width={167}
-              height={50}
+              width={154}
+              height={37}
               className="h-14 w-auto"
             />
             <p className="ja-serif max-w-md text-xl font-light italic text-white/70">

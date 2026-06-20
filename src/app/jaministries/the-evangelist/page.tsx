@@ -55,9 +55,9 @@ export default async function TheEvangelistPage() {
             <Image
               src={site.brand.logoHorizontal}
               alt={site.name}
-              width={167}
-              height={50}
-              className="h-14 w-auto md:h-16"
+              width={154}
+              height={37}
+              className="h-11 w-auto md:h-16"
               priority
             />
           </Link>
@@ -261,8 +261,8 @@ export default async function TheEvangelistPage() {
               <Image
                 src={site.brand.logoHorizontalRev}
                 alt={site.name}
-                width={167}
-                height={50}
+                width={154}
+                height={37}
                 className="h-14 w-auto"
               />
               <p className="ja-sans mt-6 max-w-md text-base leading-relaxed text-white/70">
@@ -498,8 +498,8 @@ export default async function TheEvangelistPage() {
             <Image
               src={site.brand.logoHorizontalRev}
               alt={site.name}
-              width={167}
-              height={50}
+              width={154}
+              height={37}
               className="h-14 w-auto opacity-95"
             />
             <p className="ja-serif text-xl italic" style={{ color: 'var(--ja-gold-2)' }}>

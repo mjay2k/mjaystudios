@@ -88,9 +88,9 @@ export default async function PostPage({
           <Image
             src={site.brand.logoHorizontalRev}
             alt="Jesus Anoints Ministries"
-            width={167}
-            height={50}
-            className="h-14 w-auto md:h-16"
+            width={154}
+            height={37}
+            className="h-11 w-auto md:h-16"
             priority
           />
         </Link>
