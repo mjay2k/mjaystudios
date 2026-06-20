@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clabber Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --felt:#14432A;
+    --felt-edge:#0C2E1B;
+    --card:#F7F3E8;
+    --ink:#1C1B19;
+    --red:#C8102E;
+    --brass:#B8923C;
+    --brass-soft:#E9DDBD;
+    --muted:#6E6757;
+    --rule:#D8CFB8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--felt);
+    background-image:radial-gradient(circle at 50% 0%, #1A5234 0%, var(--felt) 45%, var(--felt-edge) 100%);
+    font-family:"Libre Franklin",system-ui,sans-serif;
+    color:var(--ink);
+    line-height:1.45;
+    padding:32px 16px 56px;
+    min-height:100vh;
+  }
+  .sheet{
+    max-width:920px;
+    margin:0 auto;
+    background:var(--card);
+    border:1px solid var(--brass);
+    box-shadow:0 24px 60px rgba(0,0,0,.45), inset 0 0 0 6px var(--card), inset 0 0 0 7px var(--brass-soft);
+    padding:38px 40px 30px;
+    animation:rise .5s ease both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  @media (prefers-reduced-motion:reduce){.sheet{animation:none;}}
+
+  /* Masthead */
+  .masthead{text-align:center;border-bottom:3px double var(--brass);padding-bottom:16px;margin-bottom:22px;}
+  .eyebrow{font-family:"Libre Franklin";font-weight:600;letter-spacing:.32em;text-transform:uppercase;font-size:11px;color:var(--brass);}
+  .title{font-family:"Zilla Slab";font-weight:700;font-size:clamp(48px,11vw,86px);line-height:.92;letter-spacing:-.01em;color:var(--ink);margin:4px 0 2px;}
+  .title .pip{color:var(--red);}
+  .tagline{font-family:"Zilla Slab";font-weight:500;font-size:clamp(15px,2.4vw,19px);color:var(--ink);}
+  .aka{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic;}
+
+  /* Quick setup chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:26px;}
+  .chip{background:var(--felt);color:var(--card);border-radius:2px;padding:7px 13px;font-size:12px;font-weight:500;display:flex;gap:7px;align-items:baseline;}
+  .chip b{font-family:"Zilla Slab";font-weight:700;font-size:14px;color:#fff;}
+
+  /* Section scaffolding */
+  .section{margin-bottom:26px;break-inside:avoid;}
+  .s-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .s-head .num{font-family:"Zilla Slab";font-weight:700;font-size:13px;color:var(--card);background:var(--red);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;flex:none;}
+  .s-head h2{font-family:"Zilla Slab";font-weight:700;font-size:21px;letter-spacing:-.01em;}
+  .s-head .line{flex:1;height:1px;background:var(--rule);}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  @media (max-width:680px){.grid2{grid-template-columns:1fr;gap:22px;}}
+
+  /* Value tables */
+  .vtable{width:100%;border-collapse:collapse;font-size:13.5px;}
+  .vtable caption{text-align:left;font-family:"Zilla Slab";font-weight:600;font-size:14px;margin-bottom:6px;padding:3px 0;}
+  .vtable caption.trump{color:var(--red);}
+  .vtable th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 0 5px;border-bottom:1px solid var(--rule);}
+  .vtable td{padding:5px 0;border-bottom:1px solid #ECE5D2;}
+  .vtable td.rank{font-weight:600;}
+  .vtable td.val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:500;}
+  .vtable tr.boss td{color:var(--red);}
+  .vtable tr:last-child td{border-bottom:none;}
+
+  .note{font-size:12px;color:var(--muted);margin-top:8px;}
+  .note b{color:var(--ink);}
+
+  /* Signature trump strip */
+  .signature{background:var(--felt);border-radius:4px;padding:20px 18px 16px;margin-top:4px;background-image:radial-gradient(circle at 50% -20%, #1C5836, var(--felt));}
+  .sig-label{text-align:center;color:var(--brass-soft);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;margin-bottom:14px;}
+  .sig-label b{color:#fff;}
+  .cards{display:flex;justify-content:center;align-items:flex-end;gap:9px;flex-wrap:wrap;}
+  .pc{width:54px;height:74px;background:var(--card);border-radius:5px;position:relative;box-shadow:0 4px 10px rgba(0,0,0,.3);display:flex;flex-direction:column;justify-content:space-between;padding:5px 6px;}
+  .pc .r{font-family:"Zilla Slab";font-weight:700;font-size:19px;line-height:1;}
+  .pc .s{font-size:14px;align-self:flex-end;}
+  .pc .pts{position:absolute;bottom:-19px;left:0;right:0;text-align:center;font-size:11px;color:var(--brass-soft);font-weight:600;}
+  .pc.red .r,.pc.red .s{color:var(--red);}
+  .pc.boss{transform:translateY(-16px);box-shadow:0 10px 18px rgba(0,0,0,.4),0 0 0 2px var(--brass);}
+  .pc.boss .crown{position:absolute;top:-16px;left:0;right:0;text-align:center;font-size:10px;color:var(--brass);font-weight:700;letter-spacing:.08em;}
+  .sig-foot{text-align:center;color:var(--brass-soft);font-size:11.5px;margin-top:30px;}
+
+  /* Meld + lingo lists */
+  .mtable{width:100%;border-collapse:collapse;font-size:13.5px;}
+  .mtable td{padding:6px 0;border-bottom:1px solid #ECE5D2;vertical-align:baseline;}
+  .mtable td.name b{font-weight:600;}
+  .mtable td.name span{color:var(--muted);font-size:12px;}
+  .mtable td.pts{text-align:right;font-family:"Zilla Slab";font-weight:700;white-space:nowrap;padding-left:14px;}
+  .mtable tr:last-child td{border-bottom:none;}
+
+  .callout{border-left:3px solid var(--red);background:#FBF7EC;padding:10px 14px;margin-top:12px;font-size:13px;}
+  .callout b{color:var(--red);}
+
+  /* Steps */
+  .steps{counter-reset:step;display:grid;gap:12px;}
+  .step{display:flex;gap:12px;}
+  .step .b{counter-increment:step;font-family:"Zilla Slab";font-weight:700;color:var(--brass);font-size:22px;line-height:1;flex:none;width:26px;}
+  .step .b::before{content:counter(step);}
+  .step h3{font-size:14px;font-weight:600;margin-bottom:1px;}
+  .step p{font-size:12.5px;color:var(--muted);}
+  .step p b{color:var(--ink);}
+
+  .rules{font-size:13px;display:grid;gap:9px;}
+  .rules li{list-style:none;padding-left:18px;position:relative;}
+  .rules li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;background:var(--red);border-radius:50%;}
+  .rules li b{font-weight:600;}
+
+  /* Lingo */
+  .lingo{display:grid;grid-template-columns:1fr 1fr;gap:9px 26px;font-size:13px;}
+  @media (max-width:680px){.lingo{grid-template-columns:1fr;}}
+  .lingo dt{font-family:"Zilla Slab";font-weight:700;color:var(--red);display:inline;}
+  .lingo dd{display:inline;color:var(--ink);margin-left:6px;}
+  .lingo .row{border-bottom:1px solid #ECE5D2;padding-bottom:8px;}
+
+  footer{text-align:center;border-top:3px double var(--brass);margin-top:26px;padding-top:14px;font-size:11px;color:var(--muted);}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .sheet{box-shadow:none;border:none;max-width:100%;padding:24px 26px;}
+    .signature{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .chip,.s-head .num,.pc.boss{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <div class="eyebrow">Evansville's Four-Handed Trick Game</div>
+    <h1 class="title">CL<span class="pip">A</span>BBER</h1>
+    <div class="tagline">A new player's table reference</div>
+    <div class="aka">Also called Klob, Clob, Clobber, or just Dad &middot; pronounced "klubber"</div>
+  </header>
+
+  <div class="chips">
+    <span class="chip"><b>4</b> players, partners opposite</span>
+    <span class="chip"><b>24</b> cards (A K Q J 10 9, all suits)</span>
+    <span class="chip"><b>6</b> cards dealt each</span>
+    <span class="chip">Play <b>clockwise</b></span>
+    <span class="chip">Game to <b>500</b></span>
+  </div>
+
+  <!-- CARD VALUES -->
+  <section class="section">
+    <div class="s-head"><span class="num">1</span><h2>What the cards are worth</h2><span class="line"></span></div>
+    <div class="grid2">
+      <table class="vtable">
+        <caption class="trump">In the TRUMP suit</caption>
+        <thead><tr><th>Rank (high to low)</th><th style="text-align:right">Points</th></tr></thead>
+        <tbody>
+          <tr class="boss"><td class="rank">Jack &mdash; "the jass"</td><td class="val">20</td></tr>
+          <tr class="boss"><td class="rank">Nine &mdash; "the menel"</td><td class="val">14</td></tr>
+          <tr><td class="rank">Ace</td><td class="val">11</td></tr>
+          <tr><td class="rank">Ten</td><td class="val">10</td></tr>
+          <tr><td class="rank">King</td><td class="val">4</td></tr>
+          <tr><td class="rank">Queen</td><td class="val">3</td></tr>
+        </tbody>
+      </table>
+      <table class="vtable">
+        <caption>In NON-TRUMP suits</caption>
+        <thead><tr><th>Rank (high to low)</th><th style="text-align:right">Points</th></tr></thead>
+        <tbody>
+          <tr><td class="rank">Ace</td><td class="val">11</td></tr>
+          <tr><td class="rank">Ten</td><td class="val">10</td></tr>
+          <tr><td class="rank">King</td><td class="val">4</td></tr>
+          <tr><td class="rank">Queen</td><td class="val">3</td></tr>
+          <tr><td class="rank">Jack</td><td class="val">2</td></tr>
+          <tr><td class="rank">Nine</td><td class="val">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>162 points are on the table each hand</b> when no melds are in play (152 in cards, plus 10 for winning the last trick).</p>
+
+    <div class="signature">
+      <div class="sig-label">The one thing that trips up newcomers: in trump, the <b>Jack and Nine jump to the top</b></div>
+      <div class="cards">
+        <div class="pc red boss"><span class="crown">BOSS</span><span class="r">J</span><span class="s">&hearts;</span><span class="pts">20</span></div>
+        <div class="pc red boss"><span class="crown">BOSS</span><span class="r">9</span><span class="s">&hearts;</span><span class="pts">14</span></div>
+        <div class="pc red"><span class="r">A</span><span class="s">&hearts;</span><span class="pts">11</span></div>
+        <div class="pc red"><span class="r">10</span><span class="s">&hearts;</span><span class="pts">10</span></div>
+        <div class="pc red"><span class="r">K</span><span class="s">&hearts;</span><span class="pts">4</span></div>
+        <div class="pc red"><span class="r">Q</span><span class="s">&hearts;</span><span class="pts">3</span></div>
+      </div>
+      <div class="sig-foot">In every <b>other</b> suit the Ace is boss and the order is plain: A &middot; 10 &middot; K &middot; Q &middot; J &middot; 9</div>
+    </div>
+  </section>
+
+  <!-- MELDS -->
+  <section class="section">
+    <div class="s-head"><span class="num">2</span><h2>Melds &mdash; bonus combos in your hand</h2><span class="line"></span></div>
+    <div class="grid2">
+      <div>
+        <table class="mtable">
+          <tbody>
+            <tr><td class="name"><b>Four Jacks</b> <span>"mule"</span></td><td class="pts">200</td></tr>
+            <tr><td class="name"><b>Four of a kind</b> <span>9s, As, 10s, Ks, or Qs</span></td><td class="pts">100</td></tr>
+            <tr><td class="name"><b>Run of five</b> <span>one suit, in order</span></td><td class="pts">100</td></tr>
+            <tr><td class="name"><b>Run of four</b> <span>"fifty"</span></td><td class="pts">50</td></tr>
+            <tr><td class="name"><b>Run of three</b> <span>"dad"</span></td><td class="pts">20</td></tr>
+          </tbody>
+        </table>
+        <p class="note">Sequence order for runs is <b>A&nbsp;K&nbsp;Q&nbsp;J&nbsp;10&nbsp;9</b>. A card can only be used in one meld.</p>
+      </div>
+      <div>
+        <div class="callout">
+          <b>Bell</b> = King + Queen of trumps, worth <b>20</b>. It is special: it always scores, even if the other team out-melds you.
+        </div>
+        <div class="callout" style="margin-top:10px;">
+          <b>Dad 'n' Bell</b> = a trump run of three that contains the K-Q (A-K-Q or K-Q-J). The dad and the bell stack for <b>40</b>.
+        </div>
+        <p class="note" style="margin-top:12px;">Announce meld <b>just before you play to the first trick</b>. Only the team with the single highest meld scores their melds; the other team scores none (Bell excepted).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW A HAND GOES -->
+  <section class="section">
+    <div class="s-head"><span class="num">3</span><h2>How a hand plays out</h2><span class="line"></span></div>
+    <div class="steps">
+      <div class="step"><span class="b"></span><div><h3>Deal</h3><p>Six cards to each player. The dealer's last card is turned face up to propose trump.</p></div></div>
+      <div class="step"><span class="b"></span><div><h3>Bid</h3><p>Starting left of dealer, each player says <b>"I play"</b> to take the up-card's suit as trump, or passes. First "I play" ends bidding.</p></div></div>
+      <div class="step"><span class="b"></span><div><h3>Meld</h3><p>On the first trick, announce your scoring combos before playing a card.</p></div></div>
+      <div class="step"><span class="b"></span><div><h3>Play six tricks</h3><p>Follow suit, win tricks with valuable cards. Winner of last trick earns +10.</p></div></div>
+      <div class="step"><span class="b"></span><div><h3>Score</h3><p>Add card points, melds, and Bell. First team to 500 wins.</p></div></div>
+    </div>
+  </section>
+
+  <div class="grid2">
+    <!-- BIDDING -->
+    <section class="section" style="margin-bottom:0;">
+      <div class="s-head"><span class="num">4</span><h2>Bidding</h2><span class="line"></span></div>
+      <ul class="rules">
+        <li>You must hold <b>at least one card of the suit</b> you name as trump.</li>
+        <li>If everyone passes, the dealer takes the up-card and a <b>second round</b> opens: now you may name <b>any other</b> suit as trump.</li>
+        <li>All pass twice &rarr; no score, redeal to the next dealer.</li>
+        <li>Whoever says "I play" makes the <b>contract</b>: their team must out-score the other.</li>
+      </ul>
+    </section>
+
+    <!-- PLAY RULES -->
+    <section class="section" style="margin-bottom:0;">
+      <div class="s-head"><span class="num">5</span><h2>Following suit &amp; trumping</h2><span class="line"></span></div>
+      <ul class="rules">
+        <li><b>Always follow the suit led</b> if you can.</li>
+        <li>Can't follow? You <b>must play a trump</b> if you hold one.</li>
+        <li>Once trumps are in the trick, you must <b>play a higher trump</b> if able &mdash; even when your partner is winning.</li>
+        <li>Following a plain-suit lead, you do <b>not</b> have to beat it.</li>
+        <li>Highest trump wins; with no trump, highest card of the led suit wins.</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- SCORING -->
+  <section class="section" style="margin-top:26px;">
+    <div class="s-head"><span class="num">6</span><h2>Scoring &amp; getting "set"</h2><span class="line"></span></div>
+    <div class="grid2">
+      <ul class="rules">
+        <li>Each team totals their <b>card points + melds + Bell</b>, and the last-trick team adds 10.</li>
+        <li>If the trump-making team scores <b>more</b> than their opponents, both teams keep what they earned.</li>
+      </ul>
+      <ul class="rules">
+        <li>If the makers <b>tie or fall short</b>, they score <b>zero</b> and the opponents take everything. The makers are <b>"set"</b> or <b>"hicked."</b></li>
+        <li>With no melds in play, the makers need <b>82+</b> of the 162 points to stay safe.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- LINGO -->
+  <section class="section">
+    <div class="s-head"><span class="num">7</span><h2>Talk like a local</h2><span class="line"></span></div>
+    <dl class="lingo">
+      <div class="row"><dt>Dad</dt><dd>a run of three in one suit (20).</dd></div>
+      <div class="row"><dt>Fifty</dt><dd>a run of four (50).</dd></div>
+      <div class="row"><dt>Bell</dt><dd>King + Queen of trumps (20).</dd></div>
+      <div class="row"><dt>Dad 'n' Bell</dt><dd>trump run of three holding the K-Q (40).</dd></div>
+      <div class="row"><dt>Mule</dt><dd>four Jacks, the top meld (200).</dd></div>
+      <div class="row"><dt>The jass</dt><dd>the Jack of trumps, highest card.</dd></div>
+      <div class="row"><dt>Set / hicked</dt><dd>makers failed; they score nothing.</dd></div>
+      <div class="row"><dt>Turkey tracks</dt><dd>the "XX" marked when a team is set.</dd></div>
+    </dl>
+  </section>
+
+  <footer>
+    Clabber &middot; the Evansville, Indiana member of the worldwide Jack-Nine family (cousins: Klaberjass, Klaverjas, Belote) &middot; rules per pagat.com
+  </footer>
+
+</div>
+</body>
+</html>

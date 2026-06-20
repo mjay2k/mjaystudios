@@ -29,7 +29,7 @@ export default async function AnointedConcept() {
       {/* Back to concepts */}
       <Link
         href="/jaministries"
-        className="ja-sans fixed left-5 top-5 z-50 rounded-full border border-white/15 bg-black/30 px-4 py-2 text-[0.7rem] uppercase tracking-[0.25em] text-white/70 backdrop-blur-md transition-colors hover:border-[color:var(--ja-gold-1)] hover:text-[color:var(--ja-gold-2)]"
+        className="ja-sans fixed bottom-5 left-5 z-50 rounded-full border border-white/15 bg-black/30 px-4 py-2 text-[0.7rem] uppercase tracking-[0.25em] text-white/70 backdrop-blur-md transition-colors hover:border-[color:var(--ja-gold-1)] hover:text-[color:var(--ja-gold-2)]"
       >
         ← Concepts
       </Link>
@@ -40,9 +40,9 @@ export default async function AnointedConcept() {
           <Image
             src={site.brand.logoHorizontalRev}
             alt={site.name}
-            width={210}
-            height={48}
-            className="h-9 w-auto"
+            width={163}
+            height={70}
+            className="h-12 w-auto md:h-14"
             priority
           />
           <ul className="ja-sans hidden items-center gap-7 text-[0.72rem] uppercase tracking-[0.18em] text-white/65 lg:flex">

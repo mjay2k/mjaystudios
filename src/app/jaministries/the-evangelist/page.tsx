@@ -32,7 +32,7 @@ export default async function TheEvangelistPage() {
       {/* Back to concept chooser */}
       <Link
         href="/jaministries"
-        className="ja-sans fixed left-4 top-4 z-50 rounded-full border px-4 py-2 text-xs tracking-wide backdrop-blur-md transition-colors"
+        className="ja-sans fixed bottom-4 left-4 z-50 rounded-full border px-4 py-2 text-xs tracking-wide backdrop-blur-md transition-colors"
         style={{
           borderColor: 'rgba(60,68,89,0.15)',
           background: 'rgba(255,253,248,0.7)',
@@ -55,9 +55,9 @@ export default async function TheEvangelistPage() {
             <Image
               src={site.brand.logoHorizontal}
               alt={site.name}
-              width={190}
-              height={44}
-              className="h-9 w-auto"
+              width={163}
+              height={70}
+              className="h-12 w-auto md:h-14"
               priority
             />
           </Link>
