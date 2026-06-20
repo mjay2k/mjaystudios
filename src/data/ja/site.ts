@@ -127,8 +127,18 @@ export const site = {
   },
 
   brand: {
-    logo: '/jaministries/brand/ja-logo.svg',
-    icon: '/jaministries/brand/ja-icon.svg',
+    // 2026 brand system. *Rev variants are for dark (#3c4459 slate) surfaces;
+    // the plain variants are for light. iconGhost is a faint watermark dove.
+    logoHorizontal: '/jaministries/brand/logo-horizontal.svg',
+    logoHorizontalRev: '/jaministries/brand/logo-horizontal-rev.svg',
+    logoStacked: '/jaministries/brand/logo-stacked.svg',
+    logoStackedRev: '/jaministries/brand/logo-stacked-rev.svg',
+    iconGold: '/jaministries/brand/icon-gold.svg',
+    iconLight: '/jaministries/brand/icon-light.svg',
+    iconGhost: '/jaministries/brand/icon-ghost.svg',
+    // back-compat aliases (used by older concept code)
+    logo: '/jaministries/brand/logo-horizontal-rev.svg',
+    icon: '/jaministries/brand/icon-gold.svg',
   },
 
   social: {

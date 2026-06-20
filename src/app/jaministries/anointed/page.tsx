@@ -1,12 +1,26 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { site } from '@/data/ja/site';
+import { getAllPosts, formatPostDate } from '@/lib/ja/posts';
 
 export const metadata = {
   title: 'Jesus Anoints Ministries — Anointed',
 };
 
-export default function AnointedConcept() {
+// nav adds the blog ("Teachings") link alongside the section anchors
+const NAV = [
+  { label: 'Welcome', href: '#welcome' },
+  { label: 'About', href: '#about' },
+  { label: 'Beliefs', href: '#beliefs' },
+  { label: 'Programs', href: '#programs' },
+  { label: 'Teachings', href: '/jaministries/blog' },
+  { label: 'Books', href: '#books' },
+  { label: 'Contact', href: '#contact' },
+];
+
+export default async function AnointedConcept() {
+  const posts = (await getAllPosts()).slice(0, 3);
+
   return (
     <main
       className="relative overflow-hidden"
@@ -24,15 +38,15 @@ export default function AnointedConcept() {
       <header className="absolute inset-x-0 top-0 z-40">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
           <Image
-            src={site.brand.logo}
+            src={site.brand.logoHorizontalRev}
             alt={site.name}
-            width={200}
-            height={46}
-            className="ja-logo-light h-9 w-auto opacity-95"
+            width={210}
+            height={48}
+            className="h-9 w-auto"
             priority
           />
           <ul className="ja-sans hidden items-center gap-7 text-[0.72rem] uppercase tracking-[0.18em] text-white/65 lg:flex">
-            {site.nav.map((n) => (
+            {NAV.map((n) => (
               <li key={n.label}>
                 <a
                   href={n.href}
@@ -45,8 +59,8 @@ export default function AnointedConcept() {
           </ul>
           <a
             href="#give"
-            className="ja-sans rounded-full px-5 py-2.5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[#1b2030] transition-transform hover:scale-105"
-            style={{ background: 'var(--ja-gold-grad)' }}
+            className="ja-sans rounded-full px-5 py-2.5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] transition-transform hover:scale-105"
+            style={{ background: 'var(--ja-gold-grad)', color: 'var(--ja-ink-900)' }}
           >
             Give
           </a>
@@ -63,12 +77,12 @@ export default function AnointedConcept() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        {/* Cinematic darkening */}
+        {/* Cinematic slate darkening (brand surface, not flat black) */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(17,20,31,0.72) 0%, rgba(17,20,31,0.45) 40%, rgba(17,20,31,0.85) 100%)',
+              'linear-gradient(180deg, rgba(32,38,47,0.78) 0%, rgba(44,51,63,0.48) 42%, rgba(22,27,34,0.92) 100%)',
           }}
         />
         {/* Gold light break */}
@@ -76,52 +90,45 @@ export default function AnointedConcept() {
           className="pointer-events-none absolute left-1/2 top-1/3 h-[55vh] w-[55vw] -translate-x-1/2 rounded-full blur-[130px]"
           style={{
             background:
-              'radial-gradient(circle, rgba(229,201,101,0.30), transparent 70%)',
+              'radial-gradient(circle, rgba(228,200,108,0.30), transparent 70%)',
           }}
         />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          {/* the brand lockup itself carries the wordmark */}
           <Image
-            src={site.brand.icon}
-            alt=""
-            width={72}
-            height={72}
-            className="ja-fade mx-auto mb-8 h-16 w-16 drop-shadow-[0_0_25px_rgba(229,201,101,0.5)]"
+            src={site.brand.logoStackedRev}
+            alt={site.name}
+            width={420}
+            height={300}
+            priority
+            className="ja-fade mx-auto w-[clamp(240px,42vw,400px)] drop-shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
           />
           <p
-            className="ja-rise ja-sans text-[0.7rem] uppercase tracking-[0.5em]"
+            className="ja-rise ja-sans mt-8 text-[0.7rem] uppercase tracking-[0.5em]"
             style={{ color: 'var(--ja-gold-2)', animationDelay: '0.1s' }}
           >
             Holy Spirit · Christian Ministry
           </p>
-          <h1
-            className="ja-rise ja-serif mt-6 text-6xl font-light leading-[0.95] md:text-8xl"
-            style={{ animationDelay: '0.2s', letterSpacing: '-0.015em' }}
-          >
-            Jesus <span className="ja-gold-text italic">Anoints</span>
-            <span className="mt-2 block text-3xl font-light tracking-[0.3em] text-white/80 md:text-4xl">
-              MINISTRIES
-            </span>
-          </h1>
           <div
-            className="ja-rise ja-gold-rule mx-auto mt-8 w-48"
-            style={{ animationDelay: '0.35s' }}
+            className="ja-rise ja-gold-rule mx-auto mt-7 w-48"
+            style={{ animationDelay: '0.25s' }}
           />
           <p
-            className="ja-rise ja-serif mx-auto mt-8 max-w-2xl text-2xl font-light italic leading-snug text-white/85 md:text-3xl"
-            style={{ animationDelay: '0.45s' }}
+            className="ja-rise ja-serif mx-auto mt-8 max-w-2xl text-2xl font-light italic leading-snug text-white/90 md:text-3xl"
+            style={{ animationDelay: '0.35s' }}
           >
             “{site.verse.text}”
           </p>
           <p
             className="ja-rise ja-sans mt-4 text-xs uppercase tracking-[0.35em]"
-            style={{ color: 'var(--ja-gold-1)', animationDelay: '0.5s' }}
+            style={{ color: 'var(--ja-gold-1)', animationDelay: '0.45s' }}
           >
             {site.verse.ref}
           </p>
           <p
-            className="ja-rise ja-sans mt-10 text-sm uppercase tracking-[0.3em] text-white/50"
-            style={{ animationDelay: '0.6s' }}
+            className="ja-rise ja-sans mt-10 text-sm uppercase tracking-[0.3em] text-white/55"
+            style={{ animationDelay: '0.55s' }}
           >
             {site.tagline}
           </p>
@@ -137,10 +144,17 @@ export default function AnointedConcept() {
       {/* ───────────────────────── WELCOME ───────────────────────── */}
       <section
         id="welcome"
-        className="ja-grain relative px-6 py-28"
+        className="ja-grain ja-dove-watermark relative px-6 py-28"
         style={{ background: 'var(--ja-ink)' }}
       >
-        <div className="relative mx-auto max-w-4xl text-center">
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
+          <Image
+            src={site.brand.iconGold}
+            alt=""
+            width={64}
+            height={64}
+            className="mx-auto mb-7 h-14 w-14"
+          />
           <p
             className="ja-sans text-[0.7rem] uppercase tracking-[0.45em]"
             style={{ color: 'var(--ja-gold-1)' }}
@@ -156,6 +170,32 @@ export default function AnointedConcept() {
               <p key={i}>{p}</p>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ─────────────────── CREDIBILITY BAND (new) ─────────────────── */}
+      <section
+        className="ja-slate-fill relative border-y border-white/10 px-6 py-14"
+      >
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-10 text-center md:grid-cols-4">
+          {[
+            { k: '501(c)(3)', v: 'Registered Non-Profit' },
+            { k: 'Platinum', v: 'Candid Transparency Seal' },
+            { k: 'Worldwide', v: 'Broadcasts · YouTube & Facebook' },
+            { k: 'Spirit-Led', v: site.pillars },
+          ].map((s) => (
+            <div key={s.k} className="px-3">
+              <p
+                className="ja-serif text-3xl font-light italic md:text-4xl"
+                style={{ color: 'var(--ja-gold-2)' }}
+              >
+                {s.k}
+              </p>
+              <p className="ja-sans mt-2 text-[0.72rem] uppercase tracking-[0.2em] text-white/55">
+                {s.v}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -184,7 +224,7 @@ export default function AnointedConcept() {
                 className="absolute inset-0"
                 style={{
                   background:
-                    'linear-gradient(180deg, transparent 60%, rgba(17,20,31,0.6) 100%)',
+                    'linear-gradient(180deg, transparent 60%, rgba(22,27,34,0.6) 100%)',
                 }}
               />
             </div>
@@ -227,7 +267,7 @@ export default function AnointedConcept() {
           className="pointer-events-none absolute left-1/2 top-1/2 h-[40vh] w-[60vw] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
           style={{
             background:
-              'radial-gradient(circle, rgba(192,158,95,0.18), transparent 70%)',
+              'radial-gradient(circle, rgba(228,200,108,0.16), transparent 70%)',
           }}
         />
         <div className="relative mx-auto max-w-4xl space-y-16">
@@ -324,7 +364,7 @@ export default function AnointedConcept() {
                   className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
                   style={{
                     background:
-                      'radial-gradient(circle, rgba(229,201,101,0.3), transparent 70%)',
+                      'radial-gradient(circle, rgba(228,200,108,0.3), transparent 70%)',
                   }}
                 />
                 <span
@@ -392,11 +432,86 @@ export default function AnointedConcept() {
         </div>
       </section>
 
+      {/* ─────────────────── BLOG TEASER (new) ─────────────────── */}
+      <section
+        className="relative px-6 py-28"
+        style={{ background: 'var(--ja-ink)' }}
+      >
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p
+                className="ja-sans text-[0.7rem] uppercase tracking-[0.45em]"
+                style={{ color: 'var(--ja-gold-1)' }}
+              >
+                From the Journal
+              </p>
+              <h2 className="ja-serif mt-4 text-5xl font-light md:text-6xl">
+                Latest <span className="ja-gold-text italic">Teachings</span>
+              </h2>
+            </div>
+            <Link
+              href="/jaministries/blog"
+              className="ja-sans text-xs font-semibold uppercase tracking-[0.2em] transition-transform hover:translate-x-1"
+              style={{ color: 'var(--ja-gold-2)' }}
+            >
+              Read all →
+            </Link>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {posts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/jaministries/blog/${post.slug}`}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition-all duration-500 hover:border-[color:var(--ja-gold-1)]/50 hover:bg-white/[0.05]"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  {post.cover && (
+                    <Image
+                      src={post.cover}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover opacity-85 transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        'linear-gradient(180deg, transparent 40%, rgba(22,27,34,0.9))',
+                    }}
+                  />
+                  <span
+                    className="ja-sans absolute left-4 top-4 rounded-full px-3 py-1 text-[0.6rem] font-bold uppercase tracking-[0.2em]"
+                    style={{ background: 'rgba(22,27,34,0.65)', color: 'var(--ja-gold-2)' }}
+                  >
+                    {post.tag}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-7">
+                  <span className="ja-sans text-[0.65rem] uppercase tracking-[0.2em] text-white/45">
+                    {formatPostDate(post.date)} · {post.readingMinutes} min
+                  </span>
+                  <h3 className="ja-serif mt-2 text-2xl font-medium leading-snug transition-colors group-hover:text-[color:var(--ja-gold-2)]">
+                    {post.title}
+                  </h3>
+                  <p className="ja-sans mt-3 text-sm leading-relaxed text-white/60">
+                    {post.excerpt}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ───────────────────────── BOOKS ───────────────────────── */}
       <section
         id="books"
         className="relative px-6 py-28"
-        style={{ background: 'var(--ja-ink)' }}
+        style={{ background: 'var(--ja-slate-deep)' }}
       >
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
@@ -429,7 +544,7 @@ export default function AnointedConcept() {
                   className="absolute inset-0"
                   style={{
                     background:
-                      'linear-gradient(180deg, transparent 30%, rgba(17,20,31,0.95) 100%)',
+                      'linear-gradient(180deg, transparent 30%, rgba(22,27,34,0.95) 100%)',
                   }}
                 />
                 <div className="absolute inset-x-0 bottom-0 p-7">
@@ -457,9 +572,9 @@ export default function AnointedConcept() {
           style={{ background: 'var(--ja-gold-grad)' }}
         />
         <div className="ja-grain absolute inset-0 opacity-30" />
-        <div className="relative mx-auto max-w-3xl text-center text-[#1b2030]">
+        <div className="relative mx-auto max-w-3xl text-center" style={{ color: 'var(--ja-ink-900)' }}>
           <Image
-            src={site.brand.icon}
+            src={site.brand.iconLight}
             alt=""
             width={56}
             height={56}
@@ -468,12 +583,13 @@ export default function AnointedConcept() {
           <h2 className="ja-serif text-5xl font-medium md:text-6xl">
             {site.give.heading}
           </h2>
-          <p className="ja-sans mx-auto mt-6 max-w-xl text-base leading-relaxed text-[#1b2030]/80">
+          <p className="ja-sans mx-auto mt-6 max-w-xl text-base leading-relaxed" style={{ color: 'rgba(22,27,34,0.82)' }}>
             {site.give.body}
           </p>
           <a
             href={site.social.facebook}
-            className="ja-sans mt-9 inline-block rounded-full bg-[#1b2030] px-10 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-[color:var(--ja-gold-2)] transition-transform hover:scale-105"
+            className="ja-sans mt-9 inline-block rounded-full px-10 py-4 text-sm font-semibold uppercase tracking-[0.2em] transition-transform hover:scale-105"
+            style={{ background: 'var(--ja-ink-900)', color: 'var(--ja-gold-2)' }}
           >
             {site.give.cta}
           </a>
@@ -483,17 +599,17 @@ export default function AnointedConcept() {
       {/* ───────────────────────── FOOTER ───────────────────────── */}
       <footer
         id="contact"
-        className="relative px-6 py-20"
+        className="ja-dove-watermark relative px-6 py-20"
         style={{ background: 'var(--ja-ink-900)' }}
       >
-        <div className="mx-auto max-w-6xl">
+        <div className="relative z-10 mx-auto max-w-6xl">
           <div className="flex flex-col items-center gap-8 text-center">
             <Image
-              src={site.brand.logo}
+              src={site.brand.logoHorizontalRev}
               alt={site.name}
-              width={240}
-              height={56}
-              className="ja-logo-light h-12 w-auto opacity-90"
+              width={250}
+              height={58}
+              className="h-12 w-auto"
             />
             <p className="ja-serif max-w-md text-xl font-light italic text-white/70">
               {site.tagline}
@@ -517,6 +633,12 @@ export default function AnointedConcept() {
               >
                 Amazon
               </a>
+              <Link
+                href="/jaministries/blog"
+                className="transition-colors hover:text-[color:var(--ja-gold-2)]"
+              >
+                Teachings
+              </Link>
             </div>
             <div className="ja-gold-rule w-40" />
             <p className="ja-sans text-[0.65rem] uppercase tracking-[0.3em] text-white/35">

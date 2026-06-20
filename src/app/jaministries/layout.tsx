@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description:
     'A non-denominational, Holy Spirit–filled Christian ministry — touching the world, one soul at a time.',
   icons: {
-    icon: '/jaministries/brand/ja-icon.svg',
+    icon: '/jaministries/brand/icon-gold.svg',
   },
 };
 

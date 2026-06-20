@@ -1,18 +1,25 @@
 /* Jesus Anoints Ministries — brand tokens, scoped to .ja so nothing leaks into the portfolio.
-   Palette derived from the 2025 logo: gold gradient + slate-blue wordmark. */
+   Palette from the 2026 brand system: gold-gradient dove + slate (#3c4459) surface.
+   Gold gradient stops + slate are taken directly from the supplied brand SVGs. */
 
 .ja {
-  /* Brand gold */
-  --ja-gold-1: #c09e5f;
-  --ja-gold-2: #e5c965;
+  /* Brand gold (2026 dove gradient) */
+  --ja-gold-1: #bf9e63;
+  --ja-gold-2: #e4c86c;
+  --ja-gold-3: #ecdd98;
   --ja-gold-deep: #a8854a;
-  --ja-gold-grad: linear-gradient(120deg, #c09e5f 0%, #e5c965 60%, #f0dd92 100%);
+  --ja-gold-grad: linear-gradient(120deg, #bf9e63 0%, #e4c86c 55%, #ecdd98 100%);
+  /* warmer "tile" gradient used behind the dove icon */
+  --ja-gold-tile: linear-gradient(150deg, #d9b977 0%, #e4c86c 45%, #f0e3a6 100%);
 
-  /* Slate / ink */
-  --ja-slate: #3b445a;
-  --ja-slate-deep: #2a3142;
-  --ja-ink: #1b2030;
-  --ja-ink-900: #11141f;
+  /* Slate / ink — #3c4459 is the canonical brand surface */
+  --ja-slate: #3c4459;
+  --ja-slate-deep: #2c333f;
+  --ja-ink: #20262f;
+  --ja-ink-900: #161b22;
+  /* slight gradient on the slate fill (brand guide invites this) */
+  --ja-slate-grad: linear-gradient(160deg, #424b62 0%, #3c4459 50%, #2f3645 100%);
+  --ja-slate-grad-soft: linear-gradient(165deg, #3c4459 0%, #343c4f 100%);
 
   /* Paper / light */
   --ja-cream: #f7f2e8;
@@ -73,3 +80,42 @@
 
 /* Recolor the brand SVG logo to relevant tones where needed via filter (used on dark heroes) */
 .ja-logo-light { filter: brightness(0) invert(1); }
+
+/* ── 2026 brand surfaces ─────────────────────────────────────────────
+   Slate is the primary brand fill; the guide invites a slight gradient.
+   Use .ja-slate-fill for panels/heroes; .ja-slate-fill-soft for cards.  */
+.ja-slate-fill { background: var(--ja-slate-grad); }
+.ja-slate-fill-soft { background: var(--ja-slate-grad-soft); }
+.ja-gold-fill { background: var(--ja-gold-grad); }
+.ja-tile-fill { background: var(--ja-gold-tile); }
+
+/* Faint upward-dove watermark for dark slate sections (uses the Rev icon).
+   Apply to a positioned container; it lays a large, low-opacity dove behind. */
+.ja-dove-watermark {
+  position: relative;
+}
+.ja-dove-watermark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('/jaministries/brand/icon-ghost.svg');
+  background-repeat: no-repeat;
+  background-position: right -4% top 50%;
+  background-size: min(46vw, 560px);
+  opacity: 0.5; /* the ghost icon is already low-opacity white */
+}
+
+/* Gold gradient hairline for the divider under "MINISTRIES"-style labels. */
+.ja-gold-hr {
+  height: 2px;
+  width: 100%;
+  background: var(--ja-gold-grad);
+  border-radius: 2px;
+}
+
+/* Soft gold glow used behind dove icons / hero focal points. */
+.ja-gold-glow {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ja-gold-2) 30%, transparent),
+    0 18px 60px -20px color-mix(in srgb, var(--ja-gold-2) 45%, transparent);
+}
