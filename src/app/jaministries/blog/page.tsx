@@ -31,9 +31,9 @@ export default async function BlogIndex() {
           <Image
             src={site.brand.logoHorizontalRev}
             alt="Jesus Anoints Ministries"
-            width={240}
-            height={56}
-            className="h-11 w-auto"
+            width={167}
+            height={50}
+            className="h-12 w-auto"
             priority
           />
         </Link>

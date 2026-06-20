@@ -55,9 +55,9 @@ export default async function TheEvangelistPage() {
             <Image
               src={site.brand.logoHorizontal}
               alt={site.name}
-              width={163}
-              height={70}
-              className="h-12 w-auto md:h-14"
+              width={167}
+              height={50}
+              className="h-11 w-auto md:h-12"
               priority
             />
           </Link>
@@ -173,12 +173,12 @@ export default async function TheEvangelistPage() {
                 <div className="ja-gold-rule mt-2 w-24" />
               </div>
             </div>
-            {/* gold dove tile seal */}
+            {/* slate-gradient dove tile seal — gold dove on a blue-gradient tile */}
             <div
-              className="ja-fade ja-gold-glow absolute -left-5 -top-5 grid h-20 w-20 place-items-center rounded-[1.2rem]"
-              style={{ background: 'var(--ja-gold-tile)', animationDelay: '0.5s' }}
+              className="ja-fade ja-gold-glow absolute -left-6 -top-6 grid h-24 w-24 place-items-center rounded-[1.4rem]"
+              style={{ background: 'var(--ja-slate-grad)', animationDelay: '0.5s' }}
             >
-              <Image src={site.brand.iconLight} alt="" width={44} height={44} className="h-11 w-11" />
+              <Image src={site.brand.iconGold} alt="" width={80} height={80} className="h-20 w-20" />
             </div>
           </div>
         </div>
@@ -261,8 +261,8 @@ export default async function TheEvangelistPage() {
               <Image
                 src={site.brand.logoHorizontalRev}
                 alt={site.name}
-                width={300}
-                height={70}
+                width={167}
+                height={50}
                 className="h-14 w-auto"
               />
               <p className="ja-sans mt-6 max-w-md text-base leading-relaxed text-white/70">
@@ -498,9 +498,9 @@ export default async function TheEvangelistPage() {
             <Image
               src={site.brand.logoHorizontalRev}
               alt={site.name}
-              width={240}
-              height={56}
-              className="h-11 w-auto opacity-95"
+              width={167}
+              height={50}
+              className="h-14 w-auto opacity-95"
             />
             <p className="ja-serif text-xl italic" style={{ color: 'var(--ja-gold-2)' }}>
               {site.tagline}

@@ -40,9 +40,9 @@ export default async function AnointedConcept() {
           <Image
             src={site.brand.logoHorizontalRev}
             alt={site.name}
-            width={163}
-            height={70}
-            className="h-12 w-auto md:h-14"
+            width={167}
+            height={50}
+            className="h-11 w-auto md:h-12"
             priority
           />
           <ul className="ja-sans hidden items-center gap-7 text-[0.72rem] uppercase tracking-[0.18em] text-white/65 lg:flex">
@@ -99,10 +99,10 @@ export default async function AnointedConcept() {
           <Image
             src={site.brand.logoStackedRev}
             alt={site.name}
-            width={420}
-            height={300}
+            width={176}
+            height={120}
             priority
-            className="ja-fade mx-auto w-[clamp(240px,42vw,400px)] drop-shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
+            className="ja-fade mx-auto w-[clamp(220px,34vw,340px)] drop-shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
           />
           <p
             className="ja-rise ja-sans mt-8 text-[0.7rem] uppercase tracking-[0.5em]"
@@ -607,9 +607,9 @@ export default async function AnointedConcept() {
             <Image
               src={site.brand.logoHorizontalRev}
               alt={site.name}
-              width={250}
-              height={58}
-              className="h-12 w-auto"
+              width={167}
+              height={50}
+              className="h-14 w-auto"
             />
             <p className="ja-serif max-w-md text-xl font-light italic text-white/70">
               {site.tagline}

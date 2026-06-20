@@ -39,6 +39,20 @@
 .ja-serif { font-family: var(--ja-serif); }
 .ja-sans { font-family: var(--ja-sans); }
 
+/* Typographic polish — kill orphans/widows. `balance` evens out short
+   headings/quotes; `pretty` prevents a lone last word on body copy. */
+.ja h1,
+.ja h2,
+.ja h3,
+.ja h4,
+.ja blockquote {
+  text-wrap: balance;
+}
+.ja p,
+.ja li {
+  text-wrap: pretty;
+}
+
 .ja-gold-text {
   background: var(--ja-gold-grad);
   -webkit-background-clip: text;
