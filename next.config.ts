@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [390, 640, 750, 828, 1080, 1200, 1440, 1920, 2048],
   },
+  async rewrites() {
+    return [
+      // Serve the standalone Clabber cheat sheet at a clean /clabber URL.
+      { source: "/clabber", destination: "/clabber/clabber-cheat-sheet.html" },
+    ];
+  },
 };
 
 export default nextConfig;
