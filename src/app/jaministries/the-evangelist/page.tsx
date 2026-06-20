@@ -50,23 +50,23 @@ export default async function TheEvangelistPage() {
           background: 'rgba(247,242,232,0.82)',
         }}
       >
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="#top" className="flex items-center gap-3">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+          <Link href="#top" aria-label={`${site.name} — back to top`} className="flex items-center transition-transform duration-300 hover:scale-[1.03]">
             <Image
               src={site.brand.logoHorizontal}
               alt={site.name}
               width={167}
               height={50}
-              className="h-11 w-auto md:h-12"
+              className="h-14 w-auto md:h-16"
               priority
             />
           </Link>
-          <ul className="ja-sans hidden items-center gap-7 text-[0.8rem] font-medium lg:flex">
+          <ul className="ja-sans hidden items-center gap-8 text-[0.8rem] font-medium lg:flex">
             {site.nav.map((n) => (
               <li key={n.href}>
                 <Link
                   href={n.href}
-                  className="transition-colors hover:text-[color:var(--ja-gold-deep)]"
+                  className="ja-navlink hover:text-[color:var(--ja-gold-deep)]"
                   style={{ color: 'var(--ja-slate)' }}
                 >
                   {n.label}
@@ -76,7 +76,7 @@ export default async function TheEvangelistPage() {
             <li>
               <Link
                 href="/jaministries/blog"
-                className="transition-colors hover:text-[color:var(--ja-gold-deep)]"
+                className="ja-navlink hover:text-[color:var(--ja-gold-deep)]"
                 style={{ color: 'var(--ja-slate)' }}
               >
                 Journal

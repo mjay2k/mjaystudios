@@ -120,6 +120,41 @@
   opacity: 0.5; /* the ghost icon is already low-opacity white */
 }
 
+/* Animated nav link — a gold underline draws in from the left on hover and
+   retracts to the right on leave, with a hairline lift. Pair with a Tailwind
+   `hover:text-…` for the colour shift (this rule supplies the transition). */
+.ja-navlink {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.ja-navlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  border-radius: 2px;
+  background: var(--ja-gold-grad);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.42s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.ja-navlink:hover::after,
+.ja-navlink:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.ja-navlink:hover {
+  transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ja-navlink::after { transition: none; }
+  .ja-navlink:hover { transform: none; }
+}
+
 /* Gold gradient hairline for the divider under "MINISTRIES"-style labels. */
 .ja-gold-hr {
   height: 2px;

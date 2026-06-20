@@ -32,14 +32,12 @@ export const site = {
 
   // Primary navigation (matches the existing site's information architecture).
   nav: [
-    { label: 'Welcome', href: '#welcome' },
     { label: 'About', href: '#about' },
     { label: 'Beliefs', href: '#beliefs' },
     { label: 'Programs', href: '#programs' },
     { label: 'Prophecies', href: '#prophecies' },
     { label: 'Books', href: '#books' },
     { label: 'Give', href: '#give' },
-    { label: 'Contact', href: '#contact' },
   ],
 
   welcome: {

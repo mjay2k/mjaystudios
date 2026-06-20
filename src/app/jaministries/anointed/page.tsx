@@ -9,13 +9,11 @@ export const metadata = {
 
 // nav adds the blog ("Teachings") link alongside the section anchors
 const NAV = [
-  { label: 'Welcome', href: '#welcome' },
   { label: 'About', href: '#about' },
   { label: 'Beliefs', href: '#beliefs' },
   { label: 'Programs', href: '#programs' },
   { label: 'Teachings', href: '/jaministries/blog' },
   { label: 'Books', href: '#books' },
-  { label: 'Contact', href: '#contact' },
 ];
 
 export default async function AnointedConcept() {
@@ -36,21 +34,23 @@ export default async function AnointedConcept() {
 
       {/* ───────────────────────── NAV ───────────────────────── */}
       <header className="absolute inset-x-0 top-0 z-40">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-          <Image
-            src={site.brand.logoHorizontalRev}
-            alt={site.name}
-            width={167}
-            height={50}
-            className="h-11 w-auto md:h-12"
-            priority
-          />
-          <ul className="ja-sans hidden items-center gap-7 text-[0.72rem] uppercase tracking-[0.18em] text-white/65 lg:flex">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+          <a href="#top" aria-label={`${site.name} — back to top`} className="transition-transform duration-300 hover:scale-[1.03]">
+            <Image
+              src={site.brand.logoHorizontalRev}
+              alt={site.name}
+              width={167}
+              height={50}
+              className="h-14 w-auto md:h-16"
+              priority
+            />
+          </a>
+          <ul className="ja-sans hidden items-center gap-8 text-[0.72rem] uppercase tracking-[0.18em] text-white/70 lg:flex">
             {NAV.map((n) => (
               <li key={n.label}>
                 <a
                   href={n.href}
-                  className="transition-colors hover:text-[color:var(--ja-gold-2)]"
+                  className="ja-navlink hover:text-[color:var(--ja-gold-2)]"
                 >
                   {n.label}
                 </a>
@@ -68,7 +68,7 @@ export default async function AnointedConcept() {
       </header>
 
       {/* ───────────────────────── HERO ───────────────────────── */}
-      <section className="relative flex min-h-screen items-center justify-center">
+      <section id="top" className="relative flex min-h-screen items-center justify-center">
         <Image
           src={site.images.familyCross}
           alt=""

@@ -90,7 +90,7 @@ export default async function PostPage({
             alt="Jesus Anoints Ministries"
             width={167}
             height={50}
-            className="h-12 w-auto"
+            className="h-14 w-auto md:h-16"
             priority
           />
         </Link>
