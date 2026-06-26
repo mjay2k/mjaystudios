@@ -133,10 +133,16 @@
   .frame .fcap{font-family:var(--mono);text-transform:uppercase;letter-spacing:.2em;font-size:.6rem;margin-top:10px;opacity:.85}
   .frame.before{z-index:1}
   .has-img .ft{background:rgba(8,6,12,.34);backdrop-filter:blur(3px);padding:9px 13px;border-radius:3px;display:inline-block;align-self:flex-start}
+  /* backdrop-filter repaints its backdrop on every scroll frame — brutal on touch
+     GPUs and a prime cause of scroll judder; use a solid panel on touch devices */
+  @media (hover: none){ .has-img .ft{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(8,6,12,.58)} }
   .frame.before .ftag{color:#fff;text-shadow:0 0 22px rgba(255,46,126,.7)}
   .frame.before .fcap{color:var(--neon-cyan)}
-  .frame.after{z-index:2;opacity:0;will-change:opacity,clip-path,transform,filter}
-  .frame.before{will-change:transform}
+  .frame.after{z-index:2;opacity:0}
+  /* promote to a GPU layer ONLY while the card is on-screen & animating — keeping
+     every card's layer alive at once exhausts mobile GPU memory and jitters scroll */
+  .crossover.live .frame.after{will-change:opacity,clip-path,transform,filter}
+  .crossover.live .frame.before{will-change:transform}
   .frame.after .ftag{color:#fff;text-shadow:0 0 22px rgba(255,46,126,.7)}
   .frame.after .fcap{color:var(--neon-cyan)}
 
@@ -544,7 +550,11 @@
   // cycling through a different transition style each round.
   // order matters: dissolve-style (fade, focus) alternate with wipe-style (wipe, shimmer)
   // so adjacent cards never show two similar transitions at once
-  var METHODS = ['fade','wipe','focus','shimmer'];
+  var touch = window.matchMedia && window.matchMedia('(hover: none)').matches;
+  // On touch GPUs, restrict to compositor-only effects (opacity + clip-path).
+  // 'focus' animates blur() per frame and 'shimmer' animates a mask + brightness —
+  // both repaint every frame and are the main cause of the on-card / scroll judder.
+  var METHODS = touch ? ['fade','wipe'] : ['fade','wipe','focus','shimmer'];
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var cards = [];
 
@@ -645,20 +655,24 @@
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
         var c = en.target._cx;
-        if (en.isIntersecting){
+        var vis = en.isIntersecting;
+        en.target.classList.toggle('live', vis);   // scope will-change to on-screen cards only
+        if (vis){
           en.target.classList.add('in');
-          if(c){ c.t0 = null; c.live = true; }   // restart clean from "before" on entry
-        } else if(c){ c.live = false; }          // off-screen (invisible) — just stop
-
+          if(c){ if(!c.live) c.t0 = null; c.live = true; }   // restart clean from "before" on entry
+        } else if(c){ c.live = false; }            // off-screen — stop animating AND drop the layer
       });
-    }, { threshold: 0 });
+    }, { threshold: 0, rootMargin: '150px 0px' });
     figs.forEach(function(f){ io.observe(f); });
-    // safety net: never leave a card hidden
+    // safety net: ensure every card is REVEALED (visible). Crucially it must NOT mark
+    // off-screen cards live — doing so keeps all ~17 cards animating at once and chokes
+    // the mobile compositor, which is what made scroll shake worse further down the page.
     setTimeout(function(){
-      figs.forEach(function(f){ if(!f.classList.contains('in')){ f.classList.add('in'); if(f._cx) f._cx.live = true; } });
+      figs.forEach(function(f){ f.classList.add('in'); });
     }, 2500);
   } else {
     cards.forEach(function(c){ c.live = true; });
+    figs.forEach(function(f){ f.classList.add('live'); });
   }
 })();
 </script>
