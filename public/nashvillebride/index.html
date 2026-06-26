@@ -568,6 +568,13 @@
   // both repaint every frame and are the main cause of the on-card / scroll judder.
   var METHODS = touch ? ['fade','wipe'] : ['fade','wipe','focus','shimmer'];
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // BISECTION: on touch devices, run the page fully STATIC — no rAF loop, no scroll
+  // listener, no will-change layer toggling, no entrance transforms. Cards just show
+  // their finished "after" frame. This isolates whether the animation engine is what
+  // makes real iPhones shake (the simulator never reproduced it). Force-enable the
+  // full animation on a phone for testing with ?anim=1 in the URL.
+  var forceAnim = /[?&]anim=1\b/.test(window.location.search);
+  var staticMode = (reduce || touch) && !forceAnim;
   var cards = [];
 
   function smooth(x){ return x<=0?0:(x>=1?1:x*x*(3-2*x)); }
@@ -639,7 +646,7 @@
     };
     cards.push(c); fig._cx = c;
 
-    if(reduce){ render(c, 'fade', 1); return; }      // static "after", no motion
+    if(staticMode){ render(c, 'fade', 1); return; }  // static "after", no motion at all
     render(c, METHODS[c.baseMi], 0);                 // start on the clean "before" frame
   }
 
@@ -648,14 +655,16 @@
   // delivering scroll positions unevenly — that irregular delivery is the "shake",
   // and it's worse further down where more cards are on-screen repainting at once.
   var scrolling = false, scrollTO = null;
-  window.addEventListener('scroll', function(){
-    scrolling = true;
-    if(scrollTO) clearTimeout(scrollTO);
-    scrollTO = setTimeout(function(){
-      scrolling = false;
-      for(var k=0;k<cards.length;k++){ if(cards[k].live) cards[k].t0 = null; } // resume clean
-    }, 160);
-  }, { passive: true });
+  if(!staticMode){
+    window.addEventListener('scroll', function(){
+      scrolling = true;
+      if(scrollTO) clearTimeout(scrollTO);
+      scrollTO = setTimeout(function(){
+        scrolling = false;
+        for(var k=0;k<cards.length;k++){ if(cards[k].live) cards[k].t0 = null; } // resume clean
+      }, 160);
+    }, { passive: true });
+  }
 
   function tick(now){
     if(!scrolling){                            // no per-frame paint while the user scrolls
@@ -675,10 +684,13 @@
   var figs = Array.prototype.slice.call(document.querySelectorAll('.crossover'));
   figs.forEach(function(f, i){ try { setup(f, i); } catch(e){} });
 
-  if(!reduce) requestAnimationFrame(tick);
+  if(!staticMode) requestAnimationFrame(tick);
 
   // Entrance fade-in + only animate cards that are on-screen (saves mobile battery).
-  if('IntersectionObserver' in window){
+  if(staticMode){
+    // fully static: just make every card visible, no transforms / will-change / observer
+    figs.forEach(function(f){ f.classList.add('in'); });
+  } else if('IntersectionObserver' in window){
     figs.forEach(function(f){ f.classList.add('reveal'); });
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
