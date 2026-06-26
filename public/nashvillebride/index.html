@@ -229,8 +229,11 @@
     .act-num{font-size:clamp(3rem,18vw,4.6rem);line-height:.86}
     .act-titles .sub{font-size:.94rem}
     .crossgrid{gap:38px;margin-top:42px}
-    .frame{padding:15px 17px}
-    .frame .ftag{font-size:clamp(1rem,5.4vw,1.5rem)}
+    .frame{padding:12px 13px}
+    /* keep the overlay small on mobile so it doesn't cover the image */
+    .frame .ftag{font-size:clamp(.8rem,3.2vw,1.05rem)}
+    .frame .fcap{display:none}                 /* drop the small blue caption on mobile */
+    .has-img .ft{padding:6px 10px}             /* tighter panel */
     .slate{gap:6px 14px}
     .slate .num{font-size:1.25rem}
     .slate .story{margin-left:0;flex-basis:100%;font-size:1rem}
