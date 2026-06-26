@@ -47,3 +47,6 @@ Raw Files/
 
 # JA ministries raw scrape (dev-only; pages use curated/ + brand/)
 /public/jaministries/scraped/
+
+# macOS
+.DS_Store

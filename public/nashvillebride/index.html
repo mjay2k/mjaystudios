@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<base href="/nashvillebride/" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NASHVILLE BRIDE — The Crossover · Series Open</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Space+Mono:wght@400;700&family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* night / neon — the BEFORE world */
+    --ink:#07060c; --ink-2:#0c0916; --ink-3:#120a1c;
+    --neon-pink:#ff2e7e; --neon-magenta:#ff3d9a; --neon-cyan:#27e7ff;
+    --neon-violet:#8b3bff; --neon-amber:#ffb24c;
+    /* dawn / sacred — the AFTER world */
+    --gold:#f4d49a; --champagne:#f8ead0; --amber:#ef9f5e; --rose:#ecb6a2; --warm-white:#fff5e6;
+    /* ui */
+    --mist:rgba(248,234,208,.74); --mist-dim:rgba(248,234,208,.4); --line:rgba(248,234,208,.14);
+    --display:'Bodoni Moda',serif; --mono:'Space Mono',monospace; --sans:'Archivo',sans-serif;
+    --max:1180px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink); color:var(--champagne); font-family:var(--sans); font-weight:400;
+    overflow-x:hidden; -webkit-font-smoothing:antialiased; line-height:1.55;
+  }
+  /* film grain + vignette overlays */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  body::after{
+    content:""; position:fixed; inset:0; z-index:9998; pointer-events:none;
+    background:radial-gradient(120% 90% at 50% 35%,transparent 55%,rgba(0,0,0,.55) 100%);
+  }
+  ::selection{background:var(--neon-magenta);color:#fff}
+
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.22em;font-size:.66rem}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; min-height:100svh; display:flex; flex-direction:column; justify-content:center;
+    padding:120px 28px 80px; overflow:hidden;
+  }
+  .hero .atmos{position:absolute;inset:0;z-index:0}
+  .hero .atmos::before{ /* neon honky-tonk haze, left */
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(40% 55% at 8% 78%, rgba(255,46,126,.42), transparent 60%),
+      radial-gradient(36% 48% at 26% 92%, rgba(139,59,255,.40), transparent 62%),
+      radial-gradient(30% 40% at 2% 30%, rgba(39,231,255,.22), transparent 60%);
+    filter:blur(6px);
+  }
+  .hero .atmos::after{ /* sacred dawn glow, right */
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(46% 60% at 96% 26%, rgba(244,212,154,.34), transparent 60%),
+      radial-gradient(34% 44% at 80% 8%, rgba(239,159,94,.30), transparent 62%);
+    filter:blur(4px);
+  }
+  .hero-inner{position:relative;z-index:2;max-width:var(--max);margin:0 auto;width:100%}
+  .kicker{display:flex;gap:18px;align-items:center;color:var(--mist);margin-bottom:34px;opacity:0;animation:rise .9s .1s forwards}
+  .kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--neon-magenta);box-shadow:0 0 12px var(--neon-magenta)}
+  .wordmark{
+    font-family:var(--display); font-weight:900; line-height:.82; letter-spacing:-.01em;
+    font-size:clamp(3.4rem,13.5vw,11rem); text-transform:uppercase;
+  }
+  .wordmark .l1{display:block;
+    background:linear-gradient(92deg,#fff 0%,var(--neon-cyan) 28%,var(--neon-magenta) 60%,var(--neon-violet) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 26px rgba(255,61,154,.35));
+    opacity:0;animation:rise 1s .22s forwards;
+  }
+  .wordmark .l2{display:block;font-style:italic;font-weight:500;
+    background:linear-gradient(92deg,var(--neon-violet) 0%,var(--rose) 34%,var(--amber) 64%,var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 26px rgba(244,212,154,.3));
+    opacity:0;animation:rise 1s .36s forwards;
+  }
+  .manifesto{
+    font-family:var(--display);font-style:italic;font-weight:500;
+    font-size:clamp(1.1rem,2.4vw,1.75rem);line-height:1.4;color:var(--warm-white);
+    max-width:30ch;margin-top:38px;opacity:0;animation:rise 1s .52s forwards;
+  }
+  .manifesto b{font-style:normal;font-weight:700;background:linear-gradient(90deg,var(--neon-magenta),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:14px 34px;margin-top:46px;color:var(--mist-dim);opacity:0;animation:rise 1s .66s forwards}
+  .hero-meta span{display:flex;gap:9px;align-items:center}
+  .hero-meta span::before{content:"";width:5px;height:5px;background:var(--gold);transform:rotate(45deg)}
+  .scrollcue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:3;color:var(--mist-dim);text-align:center;opacity:0;animation:rise 1s 1s forwards}
+  .scrollcue .bar{width:1px;height:46px;margin:10px auto 0;background:linear-gradient(var(--gold),transparent);animation:pulse 2.2s ease-in-out infinite}
+
+  @keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+
+  /* ---------- DEVICE / INTRO SECTION ---------- */
+  section{position:relative;padding:120px 0}
+  .lead{max-width:760px}
+  .eyebrow{color:var(--neon-magenta);margin-bottom:22px}
+  .eyebrow.gold{color:var(--gold)}
+  .lead h2{font-family:var(--display);font-weight:600;font-size:clamp(1.9rem,4.6vw,3.4rem);line-height:1.08;letter-spacing:-.005em;margin-bottom:24px}
+  .lead h2 em{font-style:italic;color:var(--gold)}
+  .lead p{color:var(--mist);font-size:1.05rem;max-width:60ch}
+  .lead p + p{margin-top:16px}
+
+  /* ---------- CROSSOVER VIEWER ---------- */
+  .crossgrid{display:grid;grid-template-columns:1fr;gap:64px;margin-top:64px}
+  .crossover{transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+  .crossover.reveal{opacity:0;transform:translateY(40px)}
+  .crossover.reveal.in{opacity:1;transform:none}
+  .viewer{
+    position:relative; width:100%; aspect-ratio:16/9; border-radius:4px; overflow:hidden;
+    box-shadow:0 40px 90px -40px rgba(0,0,0,.9),0 0 0 1px var(--line); user-select:none;
+    background:#000; transform:translateZ(0);
+  }
+  @media(max-width:680px){.viewer{aspect-ratio:16/9}}
+  .frame{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:26px 30px}
+  .frame .scene{position:absolute;inset:0;background:var(--g);background-size:cover;background-position:center}
+  .frame .scene .plate-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
+  .frame .scene::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(transparent 40%,rgba(0,0,0,.55))}
+  /* empty slots read as intentional "awaiting plate" frames, not broken images */
+  .frame .scene.awaiting{box-shadow:inset 0 0 0 1px rgba(248,234,208,.09)}
+  .frame .scene.awaiting::before{content:"⊕ awaiting " attr(data-side);position:absolute;top:12px;left:12px;z-index:3;font-family:var(--mono);font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(248,234,208,.5);border:1px dashed rgba(248,234,208,.2);padding:5px 9px;border-radius:3px;background:rgba(8,6,12,.22)}
+  .frame .ft{position:relative;z-index:2}
+  .frame .ftag{font-family:var(--display);font-weight:700;font-size:clamp(1.1rem,2.4vw,1.9rem);line-height:1;text-transform:uppercase;letter-spacing:.01em}
+  .frame .fcap{font-family:var(--mono);text-transform:uppercase;letter-spacing:.2em;font-size:.6rem;margin-top:10px;opacity:.85}
+  .frame.before{z-index:1}
+  .has-img .ft{background:rgba(8,6,12,.34);backdrop-filter:blur(3px);padding:9px 13px;border-radius:3px;display:inline-block;align-self:flex-start}
+  .frame.before .ftag{color:#fff;text-shadow:0 0 22px rgba(255,46,126,.7)}
+  .frame.before .fcap{color:var(--neon-cyan)}
+  .frame.after{z-index:2;opacity:0;will-change:opacity,clip-path,transform,filter}
+  .frame.before{will-change:transform}
+  .frame.after .ftag{color:#fff;text-shadow:0 0 22px rgba(255,46,126,.7)}
+  .frame.after .fcap{color:var(--neon-cyan)}
+
+  .seam{position:absolute;top:0;bottom:0;left:0;z-index:5;width:2px;opacity:0;
+    background:linear-gradient(transparent,var(--warm-white),transparent);
+    box-shadow:0 0 18px 2px rgba(255,245,230,.8),0 0 40px 6px rgba(244,212,154,.45);
+    transform:translateX(-1px);pointer-events:none}
+  .grip{display:none}
+
+  .slate{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 26px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .slate .num{font-family:var(--display);font-style:italic;font-weight:500;font-size:1.5rem;color:var(--gold);line-height:1}
+  .slate .tag{font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;font-size:.62rem;color:var(--mist-dim)}
+  .slate .tag b{color:var(--champagne);font-weight:700}
+  .slate .story{font-family:var(--display);font-style:italic;font-weight:500;font-size:1.05rem;color:var(--champagne);margin-left:auto}
+  .slate .story i{font-style:normal;color:var(--gold)}
+
+  /* ---------- ACT HEADERS ---------- */
+  .act-head{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:end;padding-top:30px;border-top:1px solid var(--line)}
+  .act-num{font-family:var(--display);font-weight:900;font-size:clamp(3.4rem,9vw,7.5rem);line-height:.8;
+    background:linear-gradient(150deg,var(--neon-magenta),var(--neon-violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .act-num.b{background:linear-gradient(150deg,var(--rose),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .act-num.c{background:linear-gradient(150deg,var(--amber),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .act-titles h3{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,3.6vw,2.8rem);line-height:1;text-transform:uppercase;letter-spacing:.02em}
+  .act-titles .sub{color:var(--mist);margin-top:10px;max-width:54ch;font-size:.98rem}
+  .swell{display:inline-flex;align-items:center;gap:9px;margin-top:16px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.2em;font-size:.6rem;color:var(--gold)}
+  .swell .wave{display:inline-flex;gap:3px;align-items:flex-end;height:14px}
+  .swell .wave i{width:3px;background:var(--gold);border-radius:2px;animation:eq 1.1s ease-in-out infinite}
+  .swell .wave i:nth-child(2){animation-delay:.15s}.swell .wave i:nth-child(3){animation-delay:.3s}.swell .wave i:nth-child(4){animation-delay:.45s}
+  @keyframes eq{0%,100%{height:4px}50%{height:14px}}
+
+  /* extra crossovers strip */
+  .more{display:flex;flex-wrap:wrap;gap:10px;margin-top:44px}
+  .more .chip{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;
+    border:1px solid var(--line);border-radius:999px;padding:9px 16px;color:var(--mist);transition:.3s}
+  .more .chip:hover{border-color:var(--gold);color:var(--gold)}
+  .more .chip i{font-style:normal;color:var(--neon-magenta)}
+
+  /* ---------- ENGINE / WHY AI ---------- */
+  .engine{background:linear-gradient(180deg,var(--ink),var(--ink-2));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}}
+  .step{border:1px solid var(--line);border-radius:4px;padding:30px;position:relative;overflow:hidden;background:rgba(255,245,230,.012)}
+  .step .n{font-family:var(--display);font-style:italic;font-weight:500;font-size:2.4rem;color:var(--gold);line-height:1}
+  .step h4{font-family:var(--display);font-weight:500;font-size:1.3rem;margin:14px 0 10px}
+  .step p{color:var(--mist);font-size:.94rem}
+  .step::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--neon-magenta),var(--gold))}
+  .specbar{display:flex;flex-wrap:wrap;gap:12px 14px;margin-top:48px}
+  .specbar .s{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;color:var(--champagne);
+    border:1px solid var(--line);padding:10px 15px;border-radius:3px}
+  .specbar .s b{color:var(--gold)}
+  .specnote{margin-top:18px;color:var(--mist-dim);font-size:.82rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em}
+
+  /* ---------- CLOSING ---------- */
+  .closing{text-align:center;padding:160px 28px}
+  .closing .vow{font-family:var(--display);font-style:italic;font-weight:500;font-size:clamp(1.6rem,5vw,3.6rem);line-height:1.15;max-width:18ch;margin:0 auto 50px;
+    background:linear-gradient(100deg,var(--neon-magenta),var(--rose) 45%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .closing .end{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(2.4rem,8vw,6rem);line-height:.85;letter-spacing:-.01em}
+  .closing .end .a{color:#fff}
+  .closing .end .b{font-style:italic;font-weight:500;color:var(--gold)}
+  .closing .tagline{margin-top:26px;color:var(--mist);font-family:var(--mono);text-transform:uppercase;letter-spacing:.26em;font-size:.66rem}
+
+  .hint{display:inline-flex;gap:10px;align-items:center;margin-top:30px;color:var(--mist-dim);font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;font-size:.6rem}
+  .hint .k{border:1px solid var(--line);border-radius:4px;padding:4px 9px;color:var(--champagne)}
+
+  /* ---------- MOBILE ---------- */
+  @media(max-width:680px){
+    section{padding:68px 0}
+    .wrap{padding:0 18px}
+    .hero{padding:90px 18px 60px;min-height:92svh}
+    .hero-meta{gap:8px 14px;margin-top:34px}
+    .manifesto{margin-top:28px}
+    .lead h2{font-size:clamp(1.55rem,7vw,2.2rem)}
+    .lead p{font-size:.98rem}
+    .act-head{grid-template-columns:1fr;gap:6px;align-items:start;padding-top:24px}
+    .act-num{font-size:clamp(3rem,18vw,4.6rem);line-height:.86}
+    .act-titles .sub{font-size:.94rem}
+    .crossgrid{gap:38px;margin-top:42px}
+    .frame{padding:15px 17px}
+    .frame .ftag{font-size:clamp(1rem,5.4vw,1.5rem)}
+    .slate{gap:6px 14px}
+    .slate .num{font-size:1.25rem}
+    .slate .story{margin-left:0;flex-basis:100%;font-size:1rem}
+    .steps{margin-top:32px;gap:16px}
+    .step{padding:22px}
+    .specbar{gap:9px}
+    .closing{padding:100px 20px}
+    .scrollcue{display:none}
+  }
+
+  @media(prefers-reduced-motion:reduce){.swell .wave i{animation:none!important}.crossover{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="atmos"></div>
+  <div class="hero-inner">
+    <div class="kicker mono"><span class="dot"></span>Intro Cinematic · Series Open · 60 Seconds</div>
+    <h1 class="wordmark"><span class="l1">Nashville</span><span class="l2">Bride</span></h1>
+    <p class="manifesto">Every great city show makes the place a character. We go one further — we make <b>transformation itself</b> the character.</p>
+    <div class="hero-meta mono">
+      <span>The Crossover — two realities, one frame</span>
+      <span>City → People → Marriage</span>
+      <span>Shot like luxury</span>
+    </div>
+  </div>
+  <div class="scrollcue"><div class="mono">Drag a seam — or watch it cross</div><div class="bar"></div></div>
+</header>
+
+<!-- ============ THE DEVICE ============ -->
+<section class="wrap" id="device">
+  <div class="lead">
+    <div class="eyebrow mono">The Device</div>
+    <h2>One device no bridal show has ever owned. We call it <em>The Crossover.</em></h2>
+    <p>In every shot, two realities live inside a single frame. As the camera moves — panning, booming, pushing in — it reveals the second. This is not a cut between clips. The Crossover <em>is</em> the wedding: the moment wild becomes committed, single becomes paired, neon becomes sacred — performed in one unbroken move.</p>
+    <p>Below is the whole open, frame by frame. Drag any seam to cross it yourself.</p>
+  </div>
+
+  <!-- DEMO crossover -->
+  <div class="crossgrid" style="margin-top:48px">
+    <figure class="crossover">
+      <div class="viewer" data-pos="50">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(60% 80% at 30% 90%,rgba(255,46,126,.55),transparent 60%),radial-gradient(50% 70% at 80% 80%,rgba(139,59,255,.5),transparent 60%),radial-gradient(40% 60% at 60% 20%,rgba(39,231,255,.35),transparent 60%),linear-gradient(160deg,#150a1f,#07060c)"></div>
+          <div class="ft"><div class="ftag">Wild</div><div class="fcap">Single · Neon · 1 AM</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(70% 90% at 70% 15%,rgba(248,234,208,.95),transparent 65%),radial-gradient(50% 70% at 30% 80%,rgba(236,182,162,.8),transparent 60%),linear-gradient(160deg,#f8ead0,#ecb6a2)"></div>
+          <div class="ft"><div class="ftag">Committed</div><div class="fcap">Paired · Sacred · Dawn</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></button></div>
+      </div>
+      <figcaption class="slate">
+        <span class="num">00</span>
+        <span class="tag">The Device — <b>any move, any seam</b></span>
+        <span class="story">wild <i>→</i> committed, in one breath</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ ACT I — THE CITY ============ -->
+<section class="wrap" id="act1">
+  <div class="act-head">
+    <div class="act-num">I</div>
+    <div class="act-titles">
+      <h3>The City</h3>
+      <p class="sub">We open on what everyone already loves. The first Crossovers are literal: the city revealing both its faces. The audience isn't asked to think yet — they're seduced by a town they recognize.</p>
+      <div class="swell"><span class="wave"><i></i><i></i><i></i><i></i></span>Anthem in — first gear</div>
+    </div>
+  </div>
+
+  <div class="crossgrid">
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(45% 70% at 20% 95%,rgba(255,46,126,.6),transparent 60%),radial-gradient(45% 65% at 75% 90%,rgba(39,231,255,.45),transparent 60%),radial-gradient(40% 55% at 50% 30%,rgba(255,178,76,.3),transparent 60%),linear-gradient(165deg,#180b22,#07060c)"></div>
+          <div class="ft"><div class="ftag">Broadway · 1 AM</div><div class="fcap">Neon · Honky-Tonk Glow</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(80% 100% at 80% 10%,rgba(255,245,230,.95),transparent 70%),radial-gradient(50% 60% at 20% 70%,rgba(239,159,94,.7),transparent 60%),linear-gradient(165deg,#f8ead0,#e8b98a)"></div>
+          <div class="ft"><div class="ftag">Same Block · Sunrise</div><div class="fcap">Golden · Quiet · Awake</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">01</span><span class="tag">Move / <b>Slow Push-In</b></span><span class="tag">Transition / <b>Light Sweep</b></span><span class="story">night life <i>→</i> day life</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(50% 70% at 50% 50%,rgba(255,178,76,.5),transparent 55%),radial-gradient(40% 60% at 15% 80%,rgba(255,46,126,.45),transparent 60%),linear-gradient(160deg,#1a0d10,#08060a)"></div>
+          <div class="ft"><div class="ftag">Honky-Tonk Window</div><div class="fcap">Band · Bottles · Roar</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(70% 90% at 60% 20%,rgba(248,234,208,.95),transparent 65%),linear-gradient(160deg,#f7e7c8,#eab98f)"></div>
+          <div class="ft"><div class="ftag">Same Window · Dawn</div><div class="fcap">Empty Stools · Soft Light</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">02</span><span class="tag">Move / <b>Pan Left</b></span><span class="tag">Transition / <b>Morph</b></span><span class="story">the roar <i>→</i> the hush</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(60% 50% at 50% 80%,rgba(39,231,255,.45),transparent 60%),radial-gradient(50% 50% at 50% 30%,rgba(139,59,255,.45),transparent 60%),linear-gradient(180deg,#0c0a1e,#07060c)"></div>
+          <div class="ft"><div class="ftag">Pedestrian Bridge · Night</div><div class="fcap">River Lights · Skyline</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(90% 70% at 50% 5%,rgba(255,245,230,.95),transparent 70%),radial-gradient(60% 50% at 50% 90%,rgba(236,182,162,.6),transparent 60%),linear-gradient(180deg,#f8ead0,#edc59a)"></div>
+          <div class="ft"><div class="ftag">Same River · Sunrise</div><div class="fcap">Gold On The Water</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">03</span><span class="tag">Move / <b>Boom Up</b></span><span class="tag">Transition / <b>Focus Pull</b></span><span class="story">two faces of one city</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ ACT II — THE PEOPLE ============ -->
+<section class="wrap" id="act2">
+  <div class="act-head">
+    <div class="act-num b">II</div>
+    <div class="act-titles">
+      <h3>The People</h3>
+      <p class="sub">The device turns symbolic. The audience feels the message before they can name it. We've left landmarks behind — the city has quietly become a life.</p>
+      <div class="swell"><span class="wave"><i></i><i></i><i></i><i></i></span>Anthem swells — second gear</div>
+    </div>
+  </div>
+
+  <div class="crossgrid">
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(50% 60% at 50% 55%,rgba(255,178,76,.55),transparent 55%),radial-gradient(40% 50% at 80% 30%,rgba(255,46,126,.35),transparent 60%),linear-gradient(160deg,#1c1206,#08060a)"></div>
+          <div class="ft"><div class="ftag">Whiskey Glass Rim</div><div class="fcap">Amber · Last Call</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(45% 55% at 50% 50%,rgba(255,245,230,1),transparent 55%),radial-gradient(70% 70% at 50% 50%,rgba(244,212,154,.9),transparent 60%),linear-gradient(160deg,#f4d49a,#e0ad6e)"></div>
+          <div class="ft"><div class="ftag">A Wedding Band</div><div class="fcap">Gold · Forever</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">04</span><span class="tag">Move / <b>Push-In</b></span><span class="tag">Transition / <b>Focus Pull</b></span><span class="story">the rim <i>→</i> the ring</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(70% 50% at 50% 25%,rgba(255,225,180,.6),transparent 60%),linear-gradient(180deg,#2a1c0c,#0a0708)"></div>
+          <div class="ft"><div class="ftag">Beer Foam, Spilling</div><div class="fcap">Over The Pour</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(80% 70% at 50% 20%,rgba(255,250,242,.98),transparent 70%),linear-gradient(180deg,#fff5e6,#f0dcc2)"></div>
+          <div class="ft"><div class="ftag">A Veil, Falling</div><div class="fcap">Over A Shoulder</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">05</span><span class="tag">Move / <b>Tilt Down</b></span><span class="tag">Transition / <b>Morph</b></span><span class="story">foam <i>→</i> veil</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(40% 40% at 50% 50%,rgba(39,231,255,.6),transparent 55%),radial-gradient(60% 60% at 50% 50%,rgba(139,59,255,.5),transparent 60%),radial-gradient(30% 30% at 30% 30%,rgba(255,46,126,.5),transparent 60%),linear-gradient(160deg,#100a22,#07060c)"></div>
+          <div class="ft"><div class="ftag">Disco Ball</div><div class="fcap">A Thousand Lights</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(38% 42% at 50% 48%,rgba(255,255,255,1),transparent 50%),radial-gradient(60% 60% at 50% 50%,rgba(248,234,208,.9),transparent 60%),linear-gradient(160deg,#f6e6cb,#e6c79b)"></div>
+          <div class="ft"><div class="ftag">A Diamond</div><div class="fcap">One Light, Cut To Last</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">06</span><span class="tag">Move / <b>Slow Rotate</b></span><span class="tag">Transition / <b>Light Sweep</b></span><span class="story">the floor <i>→</i> the finger</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(50% 60% at 45% 60%,rgba(255,150,90,.4),transparent 60%),linear-gradient(160deg,#1a1208,#08060a)"></div>
+          <div class="ft"><div class="ftag">A Bare Ring Finger</div><div class="fcap">Single</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(50% 60% at 50% 55%,rgba(255,245,230,.98),transparent 60%),radial-gradient(40% 40% at 55% 50%,rgba(244,212,154,1),transparent 55%),linear-gradient(160deg,#f3d294,#dcaa6a)"></div>
+          <div class="ft"><div class="ftag">Fills With Gold</div><div class="fcap">Spoken For</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">07</span><span class="tag">Move / <b>Push-In</b></span><span class="tag">Transition / <b>Light Sweep</b></span><span class="story">bare <i>→</i> gold</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(38% 58% at 50% 40%,rgba(228,218,234,.28),transparent 62%),linear-gradient(160deg,#2e2a37,#15111b)"></div>
+          <div class="ft"><div class="ftag">A Gown, Waiting</div><div class="fcap">On The Form · Empty</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(62% 80% at 50% 26%,rgba(255,245,230,.96),transparent 66%),radial-gradient(50% 60% at 50% 72%,rgba(236,182,162,.55),transparent 60%),linear-gradient(160deg,#f8ead0,#eac39a)"></div>
+          <div class="ft"><div class="ftag">The Bride, Wearing It</div><div class="fcap">One Dress At A Time</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">14</span><span class="tag">Move / <b>Slow Push-In</b></span><span class="tag">Transition / <b>Morph</b></span><span class="story">empty gown <i>→</i> a bride</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="more">
+    <span class="chip">One toothbrush <i>→</i> two</span>
+    <span class="chip">Table for one <i>→</i> table for two</span>
+    <span class="chip">A single pillow <i>→</i> a shared bed</span>
+    <span class="chip">+ the device scales to any object</span>
+  </div>
+</section>
+
+<!-- ============ ACT III — THE MARRIAGE ============ -->
+<section class="wrap" id="act3">
+  <div class="act-head">
+    <div class="act-num c">III</div>
+    <div class="act-titles">
+      <h3>The Marriage</h3>
+      <p class="sub">Now it's undeniable. The Crossover dresses them in white as we watch — and gives them the wedding they never thought they could afford: the dream chapel, the dress, the song, surrounded by everyone who loves them, straight to the altar.</p>
+      <div class="swell"><span class="wave"><i></i><i></i><i></i><i></i></span>Anthem peaks — final gear</div>
+    </div>
+  </div>
+
+  <div class="crossgrid">
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(55% 60% at 50% 60%,rgba(255,46,126,.55),transparent 60%),radial-gradient(40% 40% at 80% 20%,rgba(39,231,255,.35),transparent 60%),linear-gradient(160deg,#180b1c,#08060a)"></div>
+          <div class="ft"><div class="ftag">Bachelorette Sash</div><div class="fcap">"Bride To Be" · Neon Bar</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(80% 80% at 50% 25%,rgba(255,250,242,.98),transparent 70%),linear-gradient(160deg,#fff5e6,#efdcc4)"></div>
+          <div class="ft"><div class="ftag">A Bride's Veil</div><div class="fcap">White · Backlit · Still</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">08</span><span class="tag">Move / <b>Pan</b></span><span class="tag">Transition / <b>Morph</b></span><span class="story">sash <i>→</i> veil</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(50% 50% at 50% 75%,rgba(255,178,76,.4),transparent 60%),linear-gradient(180deg,#1c1206,#08060a)"></div>
+          <div class="ft"><div class="ftag">Cowboy Boots</div><div class="fcap">Scuffed · On The Bar Rail</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(60% 60% at 50% 70%,rgba(255,245,230,.95),transparent 65%),linear-gradient(180deg,#f6e6cb,#e9c7a0)"></div>
+          <div class="ft"><div class="ftag">Bridal Heels</div><div class="fcap">Ivory · On The Aisle</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">09</span><span class="tag">Move / <b>Tilt Down</b></span><span class="tag">Transition / <b>Morph</b></span><span class="story">boots <i>→</i> heels</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(30% 30% at 62% 62%,rgba(255,180,90,.28),transparent 55%),linear-gradient(180deg,#1d2230,#0e1118)"></div>
+          <div class="ft"><div class="ftag">A Modest Home</div><div class="fcap">Dusk · Heartland</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(70% 80% at 50% 35%,rgba(255,238,205,.9),transparent 65%),radial-gradient(50% 50% at 50% 82%,rgba(239,159,94,.5),transparent 60%),linear-gradient(180deg,#f6e6cb,#e3b482)"></div>
+          <div class="ft"><div class="ftag">The Dream Venue</div><div class="fcap">Golden Hour · String Lights</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">13</span><span class="tag">Move / <b>Push-In</b></span><span class="tag">Transition / <b>Morph</b></span><span class="story">home <i>→</i> the venue</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(50% 55% at 40% 45%,rgba(139,59,255,.45),transparent 60%),radial-gradient(40% 40% at 75% 70%,rgba(255,46,126,.4),transparent 60%),linear-gradient(160deg,#120a1a,#07060c)"></div>
+          <div class="ft"><div class="ftag">A Leather Jacket</div><div class="fcap">Worn · Easy · His</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(70% 70% at 55% 30%,rgba(255,245,230,.9),transparent 70%),linear-gradient(160deg,#efdcc4,#d8b98f)"></div>
+          <div class="ft"><div class="ftag">A Groom's Coat</div><div class="fcap">Tailored · Pressed · Ready</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">10</span><span class="tag">Move / <b>Push-In</b></span><span class="tag">Transition / <b>Light Sweep</b></span><span class="story">leather <i>→</i> tailored</span></figcaption>
+    </figure>
+
+    <figure class="crossover">
+      <div class="viewer">
+        <div class="frame before"><div class="scene" style="--g:radial-gradient(60% 60% at 50% 60%,rgba(255,46,126,.45),transparent 60%),radial-gradient(50% 50% at 30% 30%,rgba(39,231,255,.3),transparent 60%),linear-gradient(160deg,#160a1c,#07060c)"></div>
+          <div class="ft"><div class="ftag">Hands, Reaching</div><div class="fcap">Across A Loud Bar</div></div></div>
+        <div class="frame after"><div class="scene" style="--g:radial-gradient(80% 90% at 50% 18%,rgba(255,250,242,1),transparent 70%),radial-gradient(50% 50% at 50% 80%,rgba(244,212,154,.7),transparent 60%),linear-gradient(160deg,#fff5e6,#ebcfa6)"></div>
+          <div class="ft"><div class="ftag">Hands, Clasped · "I…"</div><div class="fcap">At The Altar · Vows Mid-Sentence</div></div></div>
+        <div class="seam"><button class="grip" aria-label="Cross the frame" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></button></div>
+      </div>
+      <figcaption class="slate"><span class="num">11</span><span class="tag">Move / <b>Boom Up & Out</b></span><span class="tag">Transition / <b>The Last Crossover</b></span><span class="story">reaching <i>→</i> "I do"</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ THE ENGINE ============ -->
+<section class="engine">
+  <div class="wrap">
+    <div class="lead">
+      <div class="eyebrow gold mono">The Engine · Why AI Makes It Achievable</div>
+      <h2>The Crossover looks impossible to shoot. It isn't — because we <em>never shoot the second reality.</em></h2>
+      <p>Perfect-match plates are normally the most expensive thing in a sequence like this. Here they're nearly free — and that's the whole unlock.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h4>Generate the "before."</h4><p>One clip — the same street, the same glass, the same hand — shot like luxury, lit and framed exactly as the open demands.</p></div>
+      <div class="step"><div class="n">02</div><h4>Birth its married twin.</h4><p>Feed that exact plate back in. Same framing, same light direction — now at dawn; the glass, now a ring. Because the "after" is born from the "before," the two line up perfectly.</p></div>
+      <div class="step"><div class="n">03</div><h4>Cross it, any way we want.</h4><p>Matched plates mean every transition registers — wipe, morph, light sweep, focus pull. And one long shot can cascade into a whole transforming world: bar → bridal shop, in one breath.</p></div>
+    </div>
+
+    <div class="specbar">
+      <span class="s">Engine / <b>Seedance 2.0</b></span>
+      <span class="s"><b>Start / End-Frame</b> to Video</span>
+      <span class="s"><b>Subject + Object Replacement</b></span>
+      <span class="s">Native <b>4K</b></span>
+      <span class="s"><b>4–15s</b> Continuous Shots</span>
+      <span class="s">Up to <b>4</b> Reference Plates</span>
+    </div>
+    <p class="specnote">Built on shipping, documented features — not a hope. A returning-series engine, stamped on every promo and every bride's reveal at the mirror.</p>
+  </div>
+</section>
+
+<!-- ============ CLOSING ============ -->
+<section class="closing">
+  <p class="vow">An entire love story, told in transitions — learned in sixty seconds flat.</p>
+  <div class="end"><span class="a">Nashville</span> <span class="b">Bride</span></div>
+  <p class="tagline">It crosses the contrast — frame by frame, all the way to "I do."</p>
+  <div class="hint"><span>Drag</span><span class="k">⟨ ⟩</span><span>or use</span><span class="k">← →</span><span>to cross any frame</span></div>
+</section>
+
+<script>
+(function(){
+  // Sets are matched to .crossover cards in document order.
+  // Drop "before.(png|jpg|webp)" and "after.(png|jpg|webp)" into each folder and the page uses them automatically.
+  var SETS = [
+    '00-thesis-rose',
+    '01-broadway-sunrise','02-honkytonk-window','03-pedestrian-bridge',
+    '04-whiskey-ring','05-foam-veil','06-discoball-diamond','07-bare-finger-gold','14-dressform-bride',
+    '08-sash-veil','09-boots-heels','13-home-venue','10-leather-groom','11-hands-altar'
+  ];
+  function loadPlate(scene, base){
+    if(!scene) return;
+    scene.classList.add('awaiting');
+    scene.setAttribute('data-side', base.split('/').pop());   // "before" / "after"
+    var exts = ['png','jpg','jpeg','webp','avif'];
+    var i = 0;
+    var img = document.createElement('img');
+    img.className = 'plate-img';
+    img.alt = '';
+    img.decoding = 'async';
+    img.onload = function(){
+      // only attach once it has truly decoded — a failed load can never black out the card
+      scene.appendChild(img);
+      scene.classList.remove('awaiting');
+      scene.parentElement.classList.add('has-img');
+    };
+    img.onerror = function(){
+      i++;
+      if(i < exts.length){ img.src = base + '.' + exts[i]; } // try next extension
+      // else: give up silently, the designed gradient + "awaiting" badge stay
+    };
+    img.src = base + '.' + exts[0];
+  }
+
+  // ---------- auto-play transition engine ----------
+  // Each card holds on "before", crosses to "after", holds, crosses back — forever —
+  // cycling through a different transition style each round.
+  // order matters: dissolve-style (fade, focus) alternate with wipe-style (wipe, shimmer)
+  // so adjacent cards never show two similar transitions at once
+  var METHODS = ['fade','wipe','focus','shimmer'];
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cards = [];
+
+  function smooth(x){ return x<=0?0:(x>=1?1:x*x*(3-2*x)); }
+  // cycle progress u(0..1) -> p(0..1): hold before, ease to after, hold, ease back
+  function pingpong(u){
+    if(u < 0.16) return 0;
+    if(u < 0.42) return smooth((u-0.16)/0.26);
+    if(u < 0.58) return 1;
+    if(u < 0.84) return 1 - smooth((u-0.58)/0.26);
+    return 0;
+  }
+  function resetVisual(c){
+    var a=c.after,b=c.before,s=c.seam;
+    a.style.opacity=''; a.style.clipPath=''; a.style.webkitClipPath='';
+    a.style.transform=''; a.style.filter='';
+    a.style.webkitMaskImage=''; a.style.maskImage='';
+    a.style.webkitMaskPosition=''; a.style.maskPosition='';
+    if(b) b.style.transform='';
+    if(s){ s.style.opacity='0'; s.style.left='0%'; }
+    c._maskSet=false;
+  }
+  function render(c, method, p){
+    var a=c.after,b=c.before,s=c.seam;
+    if(method==='fade'){
+      a.style.opacity=p;
+    } else if(method==='wipe'){
+      a.style.opacity=1;
+      a.style.clipPath=a.style.webkitClipPath='inset(0 '+((1-p)*100)+'% 0 0)';
+      if(s){ s.style.opacity=(p>0.004&&p<0.996)?'1':'0'; s.style.left=(p*100)+'%'; }
+    } else if(method==='shimmer'){
+      // soft-edged reveal — clean endpoints: fully hidden at p=0, fully shown at p=1
+      a.style.opacity=1;
+      if(!c._maskSet){
+        a.style.webkitMaskImage=a.style.maskImage='linear-gradient(to right, transparent 0%, transparent 34%, #000 40%, #000 100%)';
+        a.style.webkitMaskSize=a.style.maskSize='300% 100%';
+        a.style.webkitMaskRepeat=a.style.maskRepeat='no-repeat';
+        c._maskSet=true;
+      }
+      a.style.webkitMaskPosition=a.style.maskPosition=(p*100)+'% 0';
+      a.style.filter='brightness('+(1+0.08*Math.sin(p*Math.PI))+')';
+    } else if(method==='iris'){
+      a.style.opacity=1;
+      a.style.clipPath=a.style.webkitClipPath='circle('+(p*78)+'% at 50% 50%)';
+    } else if(method==='push'){
+      a.style.opacity=1;
+      a.style.transform='translateX('+((1-p)*100)+'%)';
+      if(b) b.style.transform='translateX('+(-p*100)+'%)';
+    } else if(method==='focus'){
+      a.style.opacity=p;
+      a.style.filter='blur('+((1-p)*16)+'px)';
+    }
+  }
+
+  function setup(fig, index){
+    var viewer = fig.querySelector('.viewer');
+    var set = SETS[index];
+    if(set){
+      loadPlate(fig.querySelector('.frame.before .scene'), 'plates/' + set + '/before');
+      loadPlate(fig.querySelector('.frame.after .scene'),  'plates/' + set + '/after');
+    }
+    var c = {
+      viewer:viewer,
+      after:fig.querySelector('.frame.after'),
+      before:fig.querySelector('.frame.before'),
+      seam:fig.querySelector('.seam'),
+      dur: 7000 + (index % 4) * 700,        // ~7.0s – 9.1s, varied per card (slower, calmer)
+      baseMi: index % METHODS.length,       // staggered starting style
+      t0:null, live:false, lastMethod:null, _maskSet:false
+    };
+    cards.push(c); fig._cx = c;
+
+    if(reduce){ render(c, 'fade', 1); return; }      // static "after", no motion
+    render(c, METHODS[c.baseMi], 0);                 // start on the clean "before" frame
+  }
+
+  function tick(now){
+    for(var k=0;k<cards.length;k++){
+      var c=cards[k];
+      if(!c.live){ continue; }
+      if(c.t0==null) c.t0=now;                 // (re)start cleanly on the "before" frame
+      var e=now-c.t0;                          // pure clock — can never freeze mid-transition
+      var method=METHODS[(c.baseMi + Math.floor(e/c.dur)) % METHODS.length];   // next style each round
+      if(method!==c.lastMethod){ resetVisual(c); c.lastMethod=method; }
+      render(c, method, pingpong((e % c.dur)/c.dur));
+    }
+    requestAnimationFrame(tick);
+  }
+
+  var figs = Array.prototype.slice.call(document.querySelectorAll('.crossover'));
+  figs.forEach(function(f, i){ try { setup(f, i); } catch(e){} });
+
+  if(!reduce) requestAnimationFrame(tick);
+
+  // Entrance fade-in + only animate cards that are on-screen (saves mobile battery).
+  if('IntersectionObserver' in window){
+    figs.forEach(function(f){ f.classList.add('reveal'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var c = en.target._cx;
+        if (en.isIntersecting){
+          en.target.classList.add('in');
+          if(c){ c.t0 = null; c.live = true; }   // restart clean from "before" on entry
+        } else if(c){ c.live = false; }          // off-screen (invisible) — just stop
+
+      });
+    }, { threshold: 0 });
+    figs.forEach(function(f){ io.observe(f); });
+    // safety net: never leave a card hidden
+    setTimeout(function(){
+      figs.forEach(function(f){ if(!f.classList.contains('in')){ f.classList.add('in'); if(f._cx) f._cx.live = true; } });
+    }, 2500);
+  } else {
+    cards.forEach(function(c){ c.live = true; });
+  }
+})();
+</script>
+</body>
+</html>

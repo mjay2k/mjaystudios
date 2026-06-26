@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
     return [
       // Serve the standalone Clabber cheat sheet at a clean /clabber URL.
       { source: "/clabber", destination: "/clabber/clabber-cheat-sheet.html" },
+      // Serve the standalone Nashville Bride site at a clean /nashvillebride URL.
+      { source: "/nashvillebride", destination: "/nashvillebride/index.html" },
     ];
   },
 };
