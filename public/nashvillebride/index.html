@@ -233,9 +233,9 @@
     .specbar{gap:9px}
     .closing{padding:100px 20px}
     .scrollcue{display:none}
-    /* the fixed full-screen grain is imperceptible on a phone and the single
-       biggest source of scroll judder — drop it on small screens entirely */
-    body::before{display:none}
+    /* drop BOTH fixed full-viewport overlays on phones — a position:fixed layer
+       is repainted on every iOS scroll frame and feeds the scroll judder */
+    body::before,body::after{display:none}
   }
 
   @media(prefers-reduced-motion:reduce){.swell .wave i{animation:none!important}.crossover{opacity:1!important;transform:none!important}}
@@ -633,15 +633,31 @@
     render(c, METHODS[c.baseMi], 0);                 // start on the clean "before" frame
   }
 
+  // While the page is scrolling, FREEZE every crossover. Animating opacity/clip-path
+  // each frame during an iOS momentum scroll competes with the scroll for paint time,
+  // delivering scroll positions unevenly — that irregular delivery is the "shake",
+  // and it's worse further down where more cards are on-screen repainting at once.
+  var scrolling = false, scrollTO = null;
+  window.addEventListener('scroll', function(){
+    scrolling = true;
+    if(scrollTO) clearTimeout(scrollTO);
+    scrollTO = setTimeout(function(){
+      scrolling = false;
+      for(var k=0;k<cards.length;k++){ if(cards[k].live) cards[k].t0 = null; } // resume clean
+    }, 160);
+  }, { passive: true });
+
   function tick(now){
-    for(var k=0;k<cards.length;k++){
-      var c=cards[k];
-      if(!c.live){ continue; }
-      if(c.t0==null) c.t0=now;                 // (re)start cleanly on the "before" frame
-      var e=now-c.t0;                          // pure clock — can never freeze mid-transition
-      var method=METHODS[(c.baseMi + Math.floor(e/c.dur)) % METHODS.length];   // next style each round
-      if(method!==c.lastMethod){ resetVisual(c); c.lastMethod=method; }
-      render(c, method, pingpong((e % c.dur)/c.dur));
+    if(!scrolling){                            // no per-frame paint while the user scrolls
+      for(var k=0;k<cards.length;k++){
+        var c=cards[k];
+        if(!c.live){ continue; }
+        if(c.t0==null) c.t0=now;               // (re)start cleanly on the "before" frame
+        var e=now-c.t0;                        // pure clock — can never freeze mid-transition
+        var method=METHODS[(c.baseMi + Math.floor(e/c.dur)) % METHODS.length];   // next style each round
+        if(method!==c.lastMethod){ resetVisual(c); c.lastMethod=method; }
+        render(c, method, pingpong((e % c.dur)/c.dur));
+      }
     }
     requestAnimationFrame(tick);
   }
