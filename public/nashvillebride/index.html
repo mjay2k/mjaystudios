@@ -25,7 +25,10 @@
   html{scroll-behavior:smooth}
   body{
     background:var(--ink); color:var(--champagne); font-family:var(--sans); font-weight:400;
-    overflow-x:hidden; -webkit-font-smoothing:antialiased; line-height:1.55;
+    /* `overflow-x: clip` — NOT `hidden`. On iOS, overflow-x:hidden turns <body>
+       into a scroll container, which makes momentum scrolling jitter worse the
+       further you scroll. `clip` prevents horizontal overflow without that. */
+    overflow-x:clip; -webkit-font-smoothing:antialiased; line-height:1.55;
   }
   /* film grain + vignette overlays */
   /* NOTE: no mix-blend-mode here — a fixed, full-viewport blend layer forces the
@@ -508,7 +511,6 @@
   <p class="vow">An entire love story, told in transitions — learned in sixty seconds flat.</p>
   <div class="end"><span class="a">Nashville</span> <span class="b">Bride</span></div>
   <p class="tagline">It crosses the contrast — frame by frame, all the way to "I do."</p>
-  <div class="hint"><span>Drag</span><span class="k">⟨ ⟩</span><span>or use</span><span class="k">← →</span><span>to cross any frame</span></div>
 </section>
 
 <script>
