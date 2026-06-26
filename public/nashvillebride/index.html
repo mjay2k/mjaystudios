@@ -121,7 +121,10 @@
   .viewer{
     position:relative; width:100%; aspect-ratio:16/9; border-radius:4px; overflow:hidden;
     box-shadow:0 40px 90px -40px rgba(0,0,0,.9),0 0 0 1px var(--line); user-select:none;
-    background:#000; transform:translateZ(0);
+    /* NOTE: no translateZ(0) here — it force-promoted all 14 viewers to permanent
+       GPU layers, holding their backing stores resident at once. On-screen cards are
+       promoted on demand via .crossover.live instead, so off-screen layers are freed. */
+    background:#000;
   }
   @media(max-width:680px){.viewer{aspect-ratio:16/9}}
   .frame{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:26px 30px}
@@ -523,11 +526,18 @@
     '04-whiskey-ring','05-foam-veil','06-discoball-diamond','07-bare-finger-gold','14-dressform-bride',
     '08-sash-veil','09-boots-heels','13-home-venue','10-leather-groom','11-hands-altar'
   ];
+  // On phones, load 1200px plates instead of the 1920px originals. A real iPhone's
+  // GPU memory budget can't hold ~28 full-size decoded textures (~8MB each); the
+  // overflow thrashes tiles during scroll — the device-only shake. (Macs/simulators
+  // have plenty of VRAM, which is why it never reproduced in the simulator.)
+  var mobilePlates = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
   function loadPlate(scene, base){
     if(!scene) return;
     scene.classList.add('awaiting');
     scene.setAttribute('data-side', base.split('/').pop());   // "before" / "after"
-    var exts = ['png','jpg','jpeg','webp','avif'];
+    var cands = mobilePlates
+      ? [base + '-m.jpg', base + '.jpg', base + '.webp', base + '.png']
+      : [base + '.jpg', base + '.webp', base + '.png', base + '.jpeg'];
     var i = 0;
     var img = document.createElement('img');
     img.className = 'plate-img';
@@ -541,10 +551,10 @@
     };
     img.onerror = function(){
       i++;
-      if(i < exts.length){ img.src = base + '.' + exts[i]; } // try next extension
+      if(i < cands.length){ img.src = cands[i]; }   // try next candidate source
       // else: give up silently, the designed gradient + "awaiting" badge stay
     };
-    img.src = base + '.' + exts[0];
+    img.src = cands[0];
   }
 
   // ---------- auto-play transition engine ----------
