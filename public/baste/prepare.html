@@ -1,0 +1,695 @@
+<title>Baste — Presenter's Study Companion</title>
+<style>
+  :root{
+    --ink:#06110F; --panel:#0C1B19; --panel-2:#0F2320;
+    --teal:#1FD1C1; --teal-deep:#0C837A; --teal-dim:#12655E;
+    --paper:#F1F6F4; --muted:#7C9C96; --line:#183630; --hot:#F2A65A;
+    --fdisp:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --fbody:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --fmono:ui-monospace,"SF Mono","Menlo","Consolas",monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--ink); color:var(--paper); font-family:var(--fbody); -webkit-font-smoothing:antialiased; line-height:1.6;
+    text-rendering:optimizeLegibility; font-kerning:normal; font-feature-settings:"kern" 1,"liga" 1,"calt" 1}
+  h1.title,.card h4,.cheat .k{font-kerning:normal; font-feature-settings:"kern" 1,"liga" 1}
+  a{color:var(--teal); text-decoration:none}
+
+  /* top bar */
+  .topbar{position:sticky; top:0; z-index:30; background:rgba(4,12,10,.94); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap:16px; padding:13px clamp(18px,4vw,48px); flex-wrap:wrap}
+  .topbar .brand{font-family:var(--fmono); font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:9px}
+  .topbar .brand b{color:var(--paper)}
+  .topbar .sig{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+  .jump{font-family:var(--fmono); font-size:12px; letter-spacing:.06em; background:var(--panel); color:var(--paper); border:1px solid var(--teal-dim); border-radius:3px; padding:8px 11px}
+
+  .wrap{max-width:820px; margin:0 auto; padding:clamp(28px,5vw,64px) clamp(18px,4vw,40px) 120px}
+
+  .lede-block{border:1px solid var(--teal-dim); border-radius:6px; background:linear-gradient(180deg,var(--panel),var(--panel-2)); padding:clamp(22px,4vw,34px); margin-bottom:14px}
+  h1.title{font-family:var(--fdisp); font-weight:800; font-size:clamp(30px,6vw,54px); line-height:1; letter-spacing:-.03em; margin:0 0 8px}
+  h1.title .t{color:var(--teal)}
+  .sub{font-family:var(--fmono); font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin:0 0 22px}
+  .primer h3{font-family:var(--fmono); text-transform:uppercase; letter-spacing:.16em; color:var(--teal); font-size:12px; margin:22px 0 10px}
+  .primer p{margin:0 0 12px; font-size:15.5px; color:var(--paper)}
+  .primer p .m{color:var(--muted)}
+  .primer strong{color:var(--teal); font-weight:600}
+  ul.plain{margin:0; padding-left:20px; font-size:15px}
+  ul.plain li{margin-bottom:8px}
+  ul.plain li b{color:var(--teal)}
+
+  .cheat{display:grid; grid-template-columns:1fr; gap:0; margin-top:6px; border:1px solid var(--line); border-radius:6px; overflow:hidden}
+  .cheat .row{display:grid; grid-template-columns:150px 1fr; gap:14px; padding:11px 15px; border-bottom:1px solid var(--line); font-size:14.5px}
+  .cheat .row:last-child{border-bottom:none}
+  .cheat .k{font-family:var(--fmono); font-size:13px; color:var(--teal); font-variant-numeric:tabular-nums}
+  .cheat .v{color:var(--paper)}
+  .cheat .v .m{color:var(--muted)}
+
+  .flag-legend{font-family:var(--fmono); font-size:12.5px; color:var(--muted); margin-top:14px; line-height:1.9}
+  .flag-legend b{color:var(--teal)}
+
+  /* section header */
+  .sec{font-family:var(--fmono); text-transform:uppercase; letter-spacing:.22em; font-size:13px; color:var(--ink);
+    background:var(--teal); border-radius:3px; padding:9px 14px; margin:44px 0 4px; scroll-margin-top:70px}
+
+  /* slide card */
+  .card{border-left:2px solid var(--teal-dim); background:linear-gradient(180deg,rgba(12,27,25,.6),rgba(15,35,32,.35));
+    border-radius:0 6px 6px 0; padding:16px 20px 20px; margin-top:14px}
+  .card .num{font-family:var(--fmono); font-size:12px; letter-spacing:.14em; color:var(--teal)}
+  .card .num .sct{color:var(--muted)}
+  .card h4{font-family:var(--fdisp); font-weight:700; font-size:20px; letter-spacing:-.01em; margin:5px 0 12px}
+  .onscreen{font-size:14px; color:var(--muted); border-left:2px solid var(--line); padding:2px 0 2px 12px; margin:0 0 14px}
+  .onscreen b{font-family:var(--fmono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:3px}
+  .talk{font-size:15.5px; color:var(--paper)}
+  .talk .lbl{font-family:var(--fmono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:5px}
+  .talk .say{font-style:italic; color:var(--paper); border-left:2px solid var(--teal-dim); padding-left:12px; margin:0 0 10px; display:block}
+  .talk p{margin:0 0 10px}
+  .talk strong{color:var(--teal); font-weight:600}
+  .talk .warn{color:var(--hot)}
+
+  footer{font-family:var(--fmono); font-size:12px; letter-spacing:.14em; color:var(--muted); text-align:center; margin-top:56px; text-transform:uppercase}
+
+  @media (max-width:600px){
+    .cheat .row{grid-template-columns:1fr; gap:3px}
+    .card h4{font-size:18px}
+  }
+  @media print{
+    body{background:#fff; color:#111}
+    .topbar{display:none}
+    .card{border-left:2px solid #0C837A; background:none; page-break-inside:avoid}
+    .sec{background:#0C837A; color:#fff}
+    h1.title .t,.talk strong,.card .num,.talk .lbl,.primer strong{color:#0C837A!important}
+    .onscreen,.talk,.primer p{color:#222!important}
+  }
+</style>
+
+<div class="topbar">
+  <div class="brand"><span class="sig"></span><b>PRESENTER'S COMPANION</b> // MJ — EYES ONLY</div>
+  <select class="jump" id="jump" aria-label="Jump to section">
+    <option value="">Jump to…</option>
+    <option value="primer">Before you walk in</option>
+    <option value="cheat">Numbers to know cold</option>
+    <option value="s-signal">Signal</option>
+    <option value="s-role">The Role</option>
+    <option value="s-opp">Opportunity</option>
+    <option value="s-strat">Strategy</option>
+    <option value="s-play">Playbook</option>
+    <option value="s-live">Live Events</option>
+    <option value="s-machine">The Machine</option>
+    <option value="s-cal">Calendar</option>
+    <option value="s-targets">Targets &amp; Close</option>
+    <option value="s-brief">Briefing Book</option>
+  </select>
+</div>
+
+<div class="wrap">
+
+  <div class="lede-block" id="primer">
+    <h1 class="title">The <span class="t">Talk Track</span>.</h1>
+    <p class="sub">Study companion · matches the deck slide-for-slide · for MJ only</p>
+    <div class="primer">
+      <p>This is your rehearsal script — one talk-track per slide, in deck order. The deck's own hidden notes are written neutrally in case Matthew reads them; <strong>these are the real coaching notes, just for you.</strong> Read it top to bottom a few times, then run the deck with this open on a second screen or printed beside you.</p>
+
+      <h3>The posture — hold this the whole way through</h3>
+      <ul class="plain">
+        <li><b>Confident menu, not a mandate.</b> You're showing everything Baste <em>could</em> do and where you'd bet first — not dictating. "Here's my read, I want yours."</li>
+        <li><b>Frame first, machine second.</b> Open on the identity ("The Anti-Label Label" — real artists, not packaged product), then earn it with the operator's plan. Never let it float as pure vision.</li>
+        <li><b>Honesty is a weapon.</b> The moments you admit a gap (PR) or flag a ⚠ number land as confidence, not weakness. Lean into them.</li>
+        <li><b>Slow down.</b> These are billboards. Let each one sit for a beat before you talk. Silence reads as command.</li>
+      </ul>
+
+      <h3 id="cheat">Numbers to know cold</h3>
+      <div class="cheat">
+        <div class="row"><span class="k">~100K</span><span class="v">The email list. Bigger than every social channel combined (~70× the IG). <span class="m">Owner-confirmed. ✓</span></span></div>
+        <div class="row"><span class="k">981K / 544K / 130K</span><span class="v">Prather FB · Hi-Rez monthly Spotify · Holt FB — vs the label IG at <b>1,454</b>. <span class="m">The asymmetry.</span></span></div>
+        <div class="row"><span class="k">#9</span><span class="v">Rachel's "I Was Gonna Be" — Billboard Country Digital Song Sales. <span class="m">Use #9, never "#1." ⚠</span></span></div>
+        <div class="row"><span class="k">1K → 108K</span><span class="v">Aldean's daily sales after CMT pulled the video. <span class="m">The ban was the marketing.</span></span></div>
+        <div class="row"><span class="k">5M / 3 days</span><span class="v">Oliver Anthony's YouTube views — first-ever no-history #1 debut. <span class="m">YouTube = the engine.</span></span></div>
+        <div class="row"><span class="k">$64 · 23%</span><span class="v">Avg merch spend / purchase · share of attendees who buy. <span class="m">atVenu 2025.</span></span></div>
+        <div class="row"><span class="k">2–5× · 70%</span><span class="v">One VIP vs one GA · VIP bundle margin. <span class="m">Small crowd, big revenue.</span></span></div>
+        <div class="row"><span class="k">500 = $3–15K/mo</span><span class="v">Superfan members → recurring revenue. One superfan &gt; 10,000 streamers.</span></div>
+      </div>
+      <p class="flag-legend"><b>✓</b> verified — say it flat &nbsp;·&nbsp; <b>○</b> single-source — "roughly/reportedly" &nbsp;·&nbsp; <b class="warn" style="color:var(--hot)">⚠</b> confirm before stating as fact</p>
+    </div>
+  </div>
+
+  <!-- ============ SIGNAL ============ -->
+  <div class="sec" id="s-signal">Signal — the movement</div>
+
+  <div class="card">
+    <div class="num">01 · <span class="sct">SIGNAL</span></div><h4>Title</h4>
+    <p class="onscreen"><b>On screen</b>BASTE. · The Year-One Community Plan · MJ — Matthew Johnson, Community Manager · Candidate</p>
+    <div class="talk"><span class="lbl">Open low and warm</span>
+      <span class="say">"Matthew — thanks for this. You asked what I'd do in year one. So I built you the year one."</span>
+      <p>Let the blinking signal and the wordmark do the drama. Don't rush off it — a two-second hold sets the tone that this is a produced thing, not a chat.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">02 · <span class="sct">SIGNAL</span></div><h4>The Anti-Label Label</h4>
+    <p class="onscreen"><b>On screen</b>"The Anti-Label Label." + subline: in the Charter 77 tradition.</p>
+    <div class="talk"><span class="lbl">Lead with Baste's own pitch line</span>
+      <p><em>"Most labels prune and package their artists — plastic, focus-grouped, pre-approved. Baste doesn't. We stand for truth: our artists speak for themselves, and we cheer them on."</em> This is instantly gettable and populist. <span class="warn">On Charter 77 (the subline): it's a press framing, not a confirmed direct quote from him — so hold it lightly.</span> If he engages, you've got the history: Charter 77 was catalyzed by the arrest of an underground rock band (The Plastic People of the Universe) — so "music seeded a freedom movement" is literally true. It's also worth confirming with him whether the Charter 77 frame is his or the press's.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">03 · <span class="sct">SIGNAL</span></div><h4>Real people, real soul, real music</h4>
+    <p class="onscreen"><b>On screen</b>"Real people. Real soul. Real music." — artists speak for themselves; free speech.</p>
+    <div class="talk"><span class="lbl">The payoff of the anti-label frame</span>
+      <p><em>"Not pre-packaged, focus-grouped garbage — real people with real soul, encouraged to say what they believe out loud. Free speech. The American way."</em> This is also your answer to the "political novelty act" dismissal: it's truth and craft, not costume. Tie the name in: <em>"Baste is based — say what you believe, whatever the cost."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">04 · <span class="sct">SIGNAL</span></div><h4>Authenticity is everything</h4>
+    <p class="onscreen"><b>On screen</b>"Authenticity is everything… we are always unashamed to say what we believe to be true."</p>
+    <div class="talk"><span class="lbl">Your first principle — say it with conviction</span>
+      <p>This is the rule that governs every other choice. <em>"If Baste wants to look based, it has to operate based."</em> No manufactured moments, no borrowed scripts, no hounding the list. Every idea later passes one test: is it real? Land this — it's the value system the whole plan runs on.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">05 · <span class="sct">SIGNAL</span></div><h4>The plan</h4>
+    <p class="onscreen"><b>On screen</b>"So here's the year I'd build."</p>
+    <div class="talk"><span class="lbl">Confident pivot into the plan</span>
+      <p>The turn from "who Baste is" into "here's what I'd do." Say it with ownership, then soften: <em>"This is a menu of what we could do, with my read on where I'd start — and I want your read as we go."</em> Confident and collaborative, never presumptuous.</p>
+    </div>
+  </div>
+
+  <!-- ============ THE ROLE ============ -->
+  <div class="sec" id="s-role">The Role</div>
+
+  <div class="card">
+    <div class="num">06 · <span class="sct">THE ROLE</span></div><h4>What I'd Own</h4>
+    <p class="onscreen"><b>On screen</b>12-cell grid of every function; several tagged ⟠ HUB.</p>
+    <div class="talk"><span class="lbl">Kill the "who runs the day-to-day?" worry</span>
+      <p>This shows you see the <strong>whole</strong> job, not just the fun parts. Point at the ⟠ HUB tags: <em>"Half of these run through one system I'd build — I'll show you."</em> Note support is AI-handled on purpose. Then: <em>"The rest of this deck is how I'd prioritize this map."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">07 · <span class="sct">THE ROLE</span></div><h4>Why me</h4>
+    <p class="onscreen"><b>On screen</b>"A designer who wields AI so well you'd never know it's AI." + NewsWarden.</p>
+    <div class="talk"><span class="lbl">Your core value prop — state it flat, don't oversell</span>
+      <p>AI is mandatory now, but most people ship slop. The edge is a <strong>designer at the controls</strong> with the taste to make it invisible. Then the proof, understated: <em>"I don't just use the tools — I already built one. NewsWarden."</em> Let it land; don't pile on.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">08 · <span class="sct">THE ROLE</span></div><h4>Min-max everything</h4>
+    <p class="onscreen"><b>On screen</b>"Maximum return, minimum input."</p>
+    <div class="talk"><span class="lbl">Your operating discipline</span>
+      <p>Frame it as how you think: relentlessly hunt the biggest return from the smallest input, with AI as the lever. <em>"The tools to move like a whole team exist right now — the time to use them is now."</em> End on the rule: everything earns its place or it's cut.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">09 · <span class="sct">THE ROLE</span></div><h4>Strengths &amp; growing edge</h4>
+    <p class="onscreen"><b>On screen</b>Two cards: "Day one" strengths / "Where I'll grow" (PR).</p>
+    <div class="talk"><span class="lbl">The honesty move — deliver with a smile</span>
+      <p>Be candid: strong day-one on building, design, AI systems, owned growth, execution. Growing edge = PR/press, and you have a plan for it (slide 47). The closer: <em>"I'll get there, or die trying."</em> Said lightly, it reads as confidence. Founders trust the person who names their own gap.</p>
+    </div>
+  </div>
+
+  <!-- ============ OPPORTUNITY ============ -->
+  <div class="sec" id="s-opp">Opportunity</div>
+
+  <div class="card">
+    <div class="num">10 · <span class="sct">OPPORTUNITY</span></div><h4>The biggest asset we own</h4>
+    <p class="onscreen"><b>On screen</b>~100K — bigger than every social channel combined.</p>
+    <div class="talk"><span class="lbl">The most important number in the room</span>
+      <p>You already own ~100K emails — ~70× the label IG, and the one channel fully in Baste's control. <em>"At normal music-email rates, each send can reach 20–30K engaged fans — enough to move an iTunes chart by itself."</em> <span class="warn">Don't claim it's underused — we don't know their current cadence, and they may be leveraging it hard already. Frame it as the biggest lever, and make measuring the baseline step one.</span> <strong>✓ the ~100K itself is owner-confirmed</strong> — say the number with total confidence.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">11 · <span class="sct">OPPORTUNITY</span></div><h4>Borrowed reach</h4>
+    <p class="onscreen"><b>On screen</b>981K / 544K / 130K vs the label IG at 1,454.</p>
+    <div class="talk"><span class="lbl">The asymmetry</span>
+      <p>The roster's reach dwarfs the label's own channels. Read the contrast out loud, then land the setup line: <em>"The reach already exists. It just isn't ours yet."</em> Don't resolve it here — the next slide is the honest catch.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">12 · <span class="sct">OPPORTUNITY</span></div><h4>Borrowed vs owned</h4>
+    <p class="onscreen"><b>On screen</b>"We don't control our artists. So we build what we own."</p>
+    <div class="talk"><span class="lbl">Turn the constraint into the brand — callback to Anti-Label</span>
+      <p>This is where the anti-label frame pays off strategically. <em>"We wouldn't control our artists even if we could — that's the whole promise. And practically, they own their own channels anyway."</em> So the plan never depends on borrowed reach: make posting effortless, align incentives, own our own channels. Flag the open item: <span class="warn">"What the agreements actually obligate is something I'd want to confirm with you."</span></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">13 · <span class="sct">OPPORTUNITY</span></div><h4>This fanbase BUYS</h4>
+    <p class="onscreen"><b>On screen</b>Rachel → Billboard #9; passed Zach Bryan &amp; Luke Combs.</p>
+    <div class="talk"><span class="lbl">The strategic hinge</span>
+      <p>This audience <strong>buys</strong>, it doesn't stream — every win lands on a <em>sales</em> chart. <span class="warn">Use #9, not "#1" — the verified number is unassailable.</span> Conclusion: we sell downloads, physical, merch, tickets, memberships. We don't play the playlist lottery.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">14 · <span class="sct">OPPORTUNITY</span></div><h4>This audience shows up</h4>
+    <p class="onscreen"><b>On screen</b>Oliver Anthony · Jason Aldean · Tom MacDonald.</p>
+    <div class="talk"><span class="lbl">Proof it's mobilizable — then the lesson</span>
+      <p>Three fast hits: Anthony (no-history #1, YouTube engine), Aldean (1K→108K/day after the ban), MacDonald (no label, fan-army #1s). Then the line that shows sophistication: <em>"Catalog depth beats a one-week outrage spike — we build fandom, not just a moment."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">15 · <span class="sct">OPPORTUNITY</span></div><h4>The tailwind</h4>
+    <p class="onscreen"><b>On screen</b>Country +23.8% · 2→36% of Spotify Top 50 · faith +209%.</p>
+    <div class="talk"><span class="lbl">Keep it brief</span>
+      <p><em>"We're not fighting the current — the genre and the values audience are both surging."</em> Don't linger; it's a confidence-builder between the big beats.</p>
+    </div>
+  </div>
+
+  <!-- ============ STRATEGY ============ -->
+  <div class="sec" id="s-strat">Strategy</div>
+
+  <div class="card">
+    <div class="num">16 · <span class="sct">STRATEGY</span></div><h4>The one move</h4>
+    <p class="onscreen"><b>On screen</b>Aggregate the reach. Own the audience. Convert the buyers.</p>
+    <div class="talk"><span class="lbl">Say it slowly — three beats</span>
+      <p>This is the whole strategy in one line. Pause between each verb. <em>"Every single tactic after this is one of those three words."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">17 · <span class="sct">STRATEGY</span></div><h4>North Star KPI</h4>
+    <p class="onscreen"><b>On screen</b>"One number rules them all: owned audience → purchase."</p>
+    <div class="talk"><span class="lbl">Name the metric you'll be judged on</span>
+      <p><em>"Followers are borrowed and vain. An owned list that buys is the business."</em> Then the discipline: if a tactic doesn't move that number, it's decoration. This signals you'll manage to a number, which founders love.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">18 · <span class="sct">STRATEGY</span></div><h4>Three layers</h4>
+    <p class="onscreen"><b>On screen</b>Own it · Activate it · Monetize it.</p>
+    <div class="talk"><span class="lbl">The operating model</span>
+      <p>Own the pipe (email/SMS, app, YouTube, site) → Activate it (authentic cadence, fan-army, community) → Monetize it (downloads, physical, merch, tickets, members, sponsors). <em>"Everything I show you next slots into one of these three."</em></p>
+    </div>
+  </div>
+
+  <!-- ============ PLAYBOOK ============ -->
+  <div class="sec" id="s-play">Playbook</div>
+
+  <div class="card">
+    <div class="num">19 · <span class="sct">PLAYBOOK</span></div><h4>The playbook (divider)</h4>
+    <p class="onscreen"><b>On screen</b>"First, the playbook."</p>
+    <div class="talk"><span class="lbl">Transition</span>
+      <p><em>"Before the wild swings — here's the foundation. The stuff that proves I'm an operator, not just a dreamer."</em> Sets up that the sexy stuff sits on solid ground.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">20 · <span class="sct">PLAYBOOK</span></div><h4>The list at full power</h4>
+    <p class="onscreen"><b>On screen</b>Measure baseline · segment · SMS tier · "not weekly."</p>
+    <div class="talk"><span class="lbl">Quick win + the cadence philosophy</span>
+      <p>Lead with humility: <em>"First I'd measure where the list stands today — open rates, click, list-to-purchase."</em> Then segment, add SMS, grow it. Then the authenticity point: <em>"We considered a weekly send and chose against it — hounding fatigues a list. We email when we have something real to say."</em> Ties back to slide 4. <span class="warn">Don't imply they're mismanaging it — you're maximizing an asset, not fixing a mistake.</span></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">21 · <span class="sct">PLAYBOOK</span></div><h4>YouTube-first engine</h4>
+    <p class="onscreen"><b>On screen</b>Podcast · premieres · Shorts · songwriter rooms.</p>
+    <div class="talk"><span class="lbl">Why YouTube over TikTok</span>
+      <p><em>"This audience discovers on YouTube — Anthony hit 5M views in three days there. So we go YouTube-first."</em> It's the top of the funnel that pours into everything you own.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">22 · <span class="sct">PLAYBOOK</span></div><h4>Creator partnerships</h4>
+    <p class="onscreen"><b>On screen</b>DeVory Darkins example · "never hand them a script."</p>
+    <div class="talk"><span class="lbl">Sponsorship, the Baste way</span>
+      <p>Tap on-brand creators — <em>e.g. DeVory Darkins, daily right-leaning news, ~100–400K/video</em> <span class="warn">(gut-check that number before the room — it names a real person)</span>. The philosophy: a relationship of like minds, they craft the message authentically, we don't dictate; their audience and credibility carry over to our artists. <span class="warn">Don't mention the app or "Baste Video News" here — the app isn't introduced until The Machine section. That tie-in lands later, on the App slide.</span></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">23 · <span class="sct">PLAYBOOK</span></div><h4>Podcasts</h4>
+    <p class="onscreen"><b>On screen</b>"Podcasts, backed properly." — branding + production; Dom's show first.</p>
+    <div class="talk"><span class="lbl">Your honest take</span>
+      <p>Podcasts only pay off with commitment and real production — a half-kept show isn't worth it. So don't pitch reviving the old Baste Records Podcast (it stalled, low reach). Instead: <em>"I believe in backing podcasts with real branding and production — making them look and sound like a real show. The one with a driver right now is Kentucky Dom's, and I'd brand and produce it."</em> Keeps you out of competing with Dom over a host.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">24 · <span class="sct">PLAYBOOK</span></div><h4>Content that isn't slop</h4>
+    <p class="onscreen"><b>On screen</b>"Machine speed. Hand-made look." + the artist edit engine.</p>
+    <div class="talk"><span class="lbl">Where your design edge gets concrete</span>
+      <p>AI makes the volume; a designer sets the bar so nothing reads as AI. The testable idea: <em>"A branded template Dom shoots straight into — out pops a post-ready cut with overlays and a punchier edit, my design eye baked in. We test it with Rachel too."</em> Close on min-max: if views go up, it stays; if not, we cut it.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">25 · <span class="sct">PLAYBOOK</span></div><h4>Release-campaign execution</h4>
+    <p class="onscreen"><b>On screen</b>"Every release, executed with zero holes."</p>
+    <div class="talk"><span class="lbl">The unglamorous part he'll expect</span>
+      <p>Plug into tools for the mechanics; your value is being the designer who <strong>builds</strong> the campaign and stands over every rollout so nothing slips. <em>"Whatever campaign we run, I make sure it's executed perfectly — pre-save to follow-up, no holes."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">26 · <span class="sct">PLAYBOOK</span></div><h4>Fan-army release day</h4>
+    <p class="onscreen"><b>On screen</b>Systematize the MacDonald model; Baste did it once with "Hunter Got High."</p>
+    <div class="talk"><span class="lbl">Make the one-off repeatable</span>
+      <p><em>"Baste already ran this once, to get 'Hunter Got High' to #1. I make it a system."</em> Rally list + superfans to buy on release day → chart headline → press → new fans. This is the engine behind "this fanbase buys."</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">27 · <span class="sct">PLAYBOOK</span></div><h4>Paid media</h4>
+    <p class="onscreen"><b>On screen</b>"Research the dollars before they go out." Open: budget.</p>
+    <div class="talk"><span class="lbl">Discipline, not "give me a budget"</span>
+      <p>You believe in advertising — but sell it as discipline: <em>"I research the best use of every dollar before it goes out. Start cheap on owned channels, scale paid only where it provably grows the list and app."</em> Flag budget as an open question, don't guess it.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">28 · <span class="sct">PLAYBOOK</span></div><h4>Sponsor-funded releases</h4>
+    <p class="onscreen"><b>On screen</b>Patriot Mobile × Rachel, scaled across parallel-economy brands.</p>
+    <div class="talk"><span class="lbl">Releases that pay for themselves</span>
+      <p><em>"You already proved this with Patriot Mobile and Rachel. I'd scale it — ammo, coffee, gold, mobile, meat-box brands underwrite the single, cross-promote, and run a promo code."</em> De-risked A&R with built-in reach.</p>
+    </div>
+  </div>
+
+  <!-- ============ LIVE ============ -->
+  <div class="sec" id="s-live">Live Events</div>
+
+  <div class="card">
+    <div class="num">29 · <span class="sct">LIVE</span></div><h4>Concert-goers → lifelong fans (divider)</h4>
+    <p class="onscreen"><b>On screen</b>"How do we turn concert-goers into lifelong Baste fans?"</p>
+    <div class="talk"><span class="lbl">The question straight from his brief</span>
+      <p>Frame the whole section as the answer to his own question. <em>"Every activation funnels to owned audience — QR, free-download cards, VIP registration, photo-by-email. A ticket buyer becomes owned audience becomes a superfan becomes a member."</em> Events aren't revenue nights — they're superfan factories.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">30 · <span class="sct">LIVE</span></div><h4>Evansville — hometown hero</h4>
+    <p class="onscreen"><b>On screen</b>Rachel · three generations · Milan, IN.</p>
+    <div class="talk"><span class="lbl">The emotional centerpiece</span>
+      <p>Third-generation musician; grandfather founded The Boys From Indiana. <em>"Three generations on one bill, local radio that already claims her as legacy, church/veteran/county-fair tie-ins."</em> Tri-state draw that's also Dom's market. This is the story-rich show.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">31 · <span class="sct">LIVE</span></div><h4>Nashville — industry statement</h4>
+    <p class="onscreen"><b>On screen</b>Wallin songwriter round + roster showcase.</p>
+    <div class="talk"><span class="lbl">The credibility room</span>
+      <p><em>"The show where Baste stops reading as a political novelty and reads as craft."</em> Music Row press, John Rich network, podcast row. Wallin's pedigree is the anchor.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">32 · <span class="sct">LIVE</span></div><h4>Palm Beach — high-ticket</h4>
+    <p class="onscreen"><b>On screen</b>Donor-rich · premium VIP/fundraiser · Hi-Rez local.</p>
+    <div class="talk"><span class="lbl">The money room</span>
+      <p><em>"Small crowd, outsized revenue — this is where the VIP math does the work."</em> Hi-Rez is Broward-born, a natural local hook.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">33 · <span class="sct">LIVE</span></div><h4>California — behind enemy lines</h4>
+    <p class="onscreen"><b>On screen</b>Deep-red pocket OR contrarian LA/OC content show.</p>
+    <div class="talk"><span class="lbl">The content play</span>
+      <p><em>"A dissident label in the belly of the beast is a story that travels — the footage is worth as much as the gate."</em> Either a red pocket (Bakersfield, Redding) or a contrarian LA show.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">34 · <span class="sct">LIVE</span></div><h4>Event economics</h4>
+    <p class="onscreen"><b>On screen</b>$64 · +31% · 2–5× · 70%.</p>
+    <div class="talk"><span class="lbl">Make events pencil</span>
+      <p>Run the numbers, then the real point: <em>"The gate isn't the ROI — every buyer scans a QR and becomes owned audience we can sell to for years. The show pays once; the list pays forever."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">35 · <span class="sct">LIVE</span></div><h4>Baste Fest</h4>
+    <p class="onscreen"><b>On screen</b>The north-star event — a Baste-branded festival.</p>
+    <div class="talk"><span class="lbl">The vision the four shows build toward</span>
+      <p><em>"The four shows are rehearsals. The real vision is Baste Fest — the whole roster, the community in one place, a dissident-music gathering in the Charter 77 tradition. We earn our way there market by market."</em> Deliver it as aspiration, grounded.</p>
+    </div>
+  </div>
+
+  <!-- ============ THE MACHINE ============ -->
+  <div class="sec" id="s-machine">The Machine</div>
+
+  <div class="card">
+    <div class="num">36 · <span class="sct">THE MACHINE</span></div><h4>The machine (divider)</h4>
+    <p class="onscreen"><b>On screen</b>"A normal label needs 50 people and 2 years."</p>
+    <div class="talk"><span class="lbl">Gear-change — say it with a grin</span>
+      <p><em>"A normal label needs a 50-person team and two years to build what I'm about to show you. We ship it this year — because we're AI-native."</em> This is the crown-jewel section; it sits on the foundation you just laid.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">37 · <span class="sct">THE MACHINE</span></div><h4>I already built one</h4>
+    <p class="onscreen"><b>On screen</b>"I already built one. It's called NewsWarden."</p>
+    <div class="talk"><span class="lbl">Kill the objection before it forms</span>
+      <p>The reflex when anyone pitches "build an app" is "can this guy actually ship it?" You answer before he asks. Say it flat and confident, then move straight into the Stack. Don't over-explain — the fact does the work.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">38 · <span class="sct">THE MACHINE</span></div><h4>The Baste Stack</h4>
+    <p class="onscreen"><b>On screen</b>The App · The Hub · The War Room.</p>
+    <div class="talk"><span class="lbl">The overview</span>
+      <p>Three pieces, one idea: <em>"Build the parallel institution so no one can turn us off — Charter 77 made literal, owning the pipe end to end."</em> App = distribution, Hub = production, War Room = rapid response.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">39 · <span class="sct">THE MACHINE</span></div><h4>The Hub</h4>
+    <p class="onscreen"><b>On screen</b>"Autofill for engagement." AI proposes → human disposes.</p>
+    <div class="talk"><span class="lbl">This may impress him most — it's your core build</span>
+      <p>The operating system of the job: AI surfaces the best post/interaction opportunities and drafts the calendar; a human moves items Maybe→Draft→Scheduled; artists + team log in; analytics close the loop. <em>"It's the core project I'd propose we build first. It's a bit experimental — but it's exactly the kind of thing I've built before."</em> Own the word: <strong>autofill for engagement.</strong></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">40 · <span class="sct">THE MACHINE</span></div><h4>The App</h4>
+    <p class="onscreen"><b>On screen</b>"Push beats email. And no one can turn it off."</p>
+    <div class="talk"><span class="lbl">Reframe the whole owned-audience thesis</span>
+      <p>Email opens at 20–30%; push is instant, near-100%, un-deplatformable. NewsWarden formula — fast, no-BS, include the contrasting left for credibility + retention. Artist news is the trojan horse. <em>"Membership, premieres, Baste Video News, and the giveaway all live here — email-as-sleeping-giant becomes app-as-owned-empire."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">41 · <span class="sct">THE MACHINE</span></div><h4>The War Room</h4>
+    <p class="onscreen"><b>On screen</b>"Staffed for cancellation."</p>
+    <div class="talk"><span class="lbl">Turn suppression into a launch</span>
+      <p>Suppression is the most reliable sales catalyst there is (CMT → 108K/day). <em>"We don't fear cancellation — we're staffed for it."</em> Pre-built asset kits, a primed fan-army SMS list, the Hub flagging the moment in real time. The next ban becomes the next launch.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">42 · <span class="sct">THE MACHINE</span></div><h4>Superfan community</h4>
+    <p class="onscreen"><b>On screen</b>Named inner circle · $5–15/mo · 500 = $3–15K/mo.</p>
+    <div class="talk"><span class="lbl">Recurring revenue + mobilization in one</span>
+      <p><em>"One superfan beats 10,000 casual streamers."</em> A paid tier with listening parties + early access — and they <strong>are</strong> the release-day army. Note it's a separate platform from the internal Hub (don't conflate the two if he asks).</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">43 · <span class="sct">THE MACHINE</span></div><h4>Build-in-public A&R</h4>
+    <p class="onscreen"><b>On screen</b>Dom "watch us build him" + Holt legacy docuseries.</p>
+    <div class="talk"><span class="lbl">Make fans root for the label</span>
+      <p><em>"A&R becomes content. Fans stop rooting for a song and start rooting for Baste."</em> Dom is the underdog arc (he's tiny now — that's the point); Rachel is the legacy film. YouTube-first.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">44 · <span class="sct">THE MACHINE</span></div><h4>We Are Baste — the anthem</h4>
+    <p class="onscreen"><b>On screen</b>"The manifesto is a song." Whole roster, Wallin-written.</p>
+    <div class="talk"><span class="lbl">Your Q1 launch flare</span>
+      <p><em>"A label's mission statement shouldn't be a billboard — it should be a song. The whole roster on one track, written by the man who wrote 'Don't Blink.'"</em> A release, a roster showcase, and a manifesto in one shareable artifact — the declaration of independence.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">45 · <span class="sct">THE MACHINE</span></div><h4>Win a Cybertruck</h4>
+    <p class="onscreen"><b>On screen</b>The viral acquisition rocket. Open: budget + legal.</p>
+    <div class="talk"><span class="lbl">Frame it so a "miss" can't hurt</span>
+      <p>The prize isn't the point — the entry is. <em>"Entry = download the app + refer friends for bonus entries. Win or lose on buzz, we bank hundreds of thousands of installs we keep forever — that's what de-risks it."</em> On-brand, and the left mocking it is free media. <span class="warn">Flag honestly: prize budget + sweepstakes legal compliance are must-dos.</span></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">46 · <span class="sct">THE MACHINE</span></div><h4>The Big Bang</h4>
+    <p class="onscreen"><b>On screen</b>Anthem + App + Cybertruck = ONE campaign.</p>
+    <div class="talk"><span class="lbl">The climax — and your PR answer</span>
+      <p>Don't fire the three swings separately — fuse them. <em>"One campaign, one moment, six months of hype pointing at it."</em> Then connect it to your gap: <em>"This is also how I solve PR without being a veteran — you don't need connections to get covered when you build a spectacle they can't ignore."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">47 · <span class="sct">THE MACHINE</span></div><h4>PR — the growing edge</h4>
+    <p class="onscreen"><b>On screen</b>Two-part plan: media-spend-to-partners + unmissable moments.</p>
+    <div class="talk"><span class="lbl">Turn the weakness into a plan</span>
+      <p>Name it honestly, then show the plan: <em>"Baste's allied-media rolodex — Timcast, OAN, Post Millennial, John Rich — is a rare asset. While I sharpen this muscle: one, deepen those relationships by pointing some media spend their way; two, build moments big enough that they cover them on their own."</em> Honesty + a plan beats a bluff.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">48 · <span class="sct">THE MACHINE</span></div><h4>Where I'd bet first</h4>
+    <p class="onscreen"><b>On screen</b>NOW: list · Q1: anthem · BUILD: Hub+App · MID: Big Bang.</p>
+    <div class="talk"><span class="lbl">Your recommendation, his call</span>
+      <p><em>"If it were up to me, here's the order I'd place the chips."</em> Wake the list now (revenue), anthem in Q1 (cheap, unites the roster), Hub + App as infrastructure, Big Bang mid-year once the app exists. End on the posture: <em>"That's my bet — but no bad ideas at this table. I want your read."</em></p>
+    </div>
+  </div>
+
+  <!-- ============ CALENDAR ============ -->
+  <div class="sec" id="s-cal">Calendar</div>
+
+  <div class="card">
+    <div class="num">49 · <span class="sct">CALENDAR</span></div><h4>Year one (divider)</h4>
+    <p class="onscreen"><b>On screen</b>"Twelve months, sequenced."</p>
+    <div class="talk"><span class="lbl">Transition</span>
+      <p><em>"So how does it actually sequence across a year?"</em> Keep each quarter to its headline — the month-by-month detail is in the briefing book if he wants it.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">50 · <span class="sct">CALENDAR</span></div><h4>Q1 — Foundation &amp; Flare</h4>
+    <p class="onscreen"><b>On screen</b>Wake the list · anthem · Hub MVP · lock Evansville.</p>
+    <div class="talk"><span class="lbl">Fast</span><p>Foundation and the opening statement. Don't dwell on any one card — the quarters are a rhythm, not a deep-dive.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="num">51 · <span class="sct">CALENDAR</span></div><h4>Q2 — Build &amp; Prove</h4>
+    <p class="onscreen"><b>On screen</b>Ship the app · Evansville show · superfan tier · first sponsor release.</p>
+    <div class="talk"><span class="lbl">Fast</span><p>The app lands and the first hometown show runs with full data capture. This is the "prove it" quarter.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="num">52 · <span class="sct">CALENDAR</span></div><h4>Q3 — The Big Bang</h4>
+    <p class="onscreen"><b>On screen</b>Cybertruck · Nashville · docuseries · allied-media push.</p>
+    <div class="talk"><span class="lbl">Land this one</span><p>The six months of hype pay off. This is the peak of the year — say it like it.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="num">53 · <span class="sct">CALENDAR</span></div><h4>Q4 — Monetize &amp; Scale</h4>
+    <p class="onscreen"><b>On screen</b>Palm Beach + CA · holiday D2C · year report · set year two.</p>
+    <div class="talk"><span class="lbl">Fast</span><p>Cash in the activated audience, report the year with real numbers, set year two. Ends the year on discipline.</p></div>
+  </div>
+
+  <!-- ============ TARGETS ============ -->
+  <div class="sec" id="s-targets">Targets &amp; Close</div>
+
+  <div class="card">
+    <div class="num">54 · <span class="sct">TARGETS</span></div><h4>Year-one targets</h4>
+    <p class="onscreen"><b>On screen</b>List 100K→150K · authentic cadence · 500+ members · 4 events · ≥1 chart · app shipped.</p>
+    <div class="talk"><span class="lbl">The scoreboard — ambitious but defensible</span>
+      <p>Lead with the list (the North Star). <em>"These are grounded in the benchmarks — the full basis is in the briefing book."</em> <span class="warn">Flag that app installs and the giveaway scale with budget — you're not guessing a number you can't back.</span></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">55 · <span class="sct">TARGETS</span></div><h4>North Star restated</h4>
+    <p class="onscreen"><b>On screen</b>"Everything serves one number: owned audience that buys."</p>
+    <div class="talk"><span class="lbl">Bring it home</span><p>Everything — list, app, events, machine — exists to grow owned audience that buys. Pause here before the close.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="num">56 · <span class="sct">TARGETS</span></div><h4>Close</h4>
+    <p class="onscreen"><b>On screen</b>"We're Baste. Let's build the year."</p>
+    <div class="talk"><span class="lbl">The mic drop — then stop talking</span>
+      <p>Let the wordmark and the blinking signal do the work. <em>"That's the year. I'd love to build it with you."</em> Then <strong>stop.</strong> The confidence is in the silence — don't fill it.</p>
+    </div>
+  </div>
+
+  <!-- ============ BRIEFING ============ -->
+  <div class="sec" id="s-brief">Briefing Book — the appendix (mostly for Q&amp;A)</div>
+
+  <div class="card">
+    <div class="num">57 · <span class="sct">BRIEFING</span></div><h4>How to use this</h4>
+    <p class="onscreen"><b>On screen</b>Confidence-flag legend; "know how we know."</p>
+    <div class="talk"><span class="lbl">You probably don't present these live</span>
+      <p>The briefing book is the leave-behind and your evidence base. If Matthew wants to go deep or you get a hard question, this is where you turn. Tell him: <em>"Everything on the slides is traced and confidence-flagged in the back — it's yours to keep."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">58 · <span class="sct">BRIEFING</span></div><h4>Targets &amp; basis</h4>
+    <p class="onscreen"><b>On screen</b>Table: every target → benchmark → confidence flag.</p>
+    <div class="talk"><span class="lbl">Your defense if he pushes a number</span>
+      <p>Know that list +50% leans on ORCA's +44%/2yr benchmark plus the giveaway funnel, and that installs/giveaway are explicitly budget-set. If challenged, point here rather than improvising.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">59 · <span class="sct">BRIEFING</span></div><h4>The calendar in detail</h4>
+    <p class="onscreen"><b>On screen</b>Month-by-month grid, Q1–Q4.</p>
+    <div class="talk"><span class="lbl">If he wants specifics</span><p>Proposed sequencing that flexes to real release/venue dates. Use it if he asks "what happens in month four?"</p></div>
+  </div>
+
+  <div class="card">
+    <div class="num">60 · <span class="sct">BRIEFING</span></div><h4>Event economics model</h4>
+    <p class="onscreen"><b>On screen</b>A 500-cap show, modeled line by line.</p>
+    <div class="talk"><span class="lbl">Your proof events pay</span><p>~$7K merch alone at a 500-cap show, VIP the real margin, every attendee captured. Reach for this if he questions whether events are worth it.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="num">61 · <span class="sct">BRIEFING</span></div><h4>Stack build phasing</h4>
+    <p class="onscreen"><b>On screen</b>MVP → V1 → V2 for Hub, App, War Room.</p>
+    <div class="talk"><span class="lbl">If he worries about scope</span><p><em>"We don't boil the ocean — thin useful version first, prove it, then layer. NewsWarden is why the timeline is credible."</em></p></div>
+  </div>
+
+  <div class="card">
+    <div class="num">62 · <span class="sct">BRIEFING</span></div><h4>Proof-point glossary</h4>
+    <p class="onscreen"><b>On screen</b>Anthony, Aldean, MacDonald, Daily Wire, superfan math, Wallin.</p>
+    <div class="talk"><span class="lbl">Your fluency cheat-sheet</span><p>Memorize the one-line framing for each. This is what makes you sound like you live in this world if any of them come up.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="num">63 · <span class="sct">BRIEFING</span></div><h4>Questions we're ready for</h4>
+    <p class="onscreen"><b>On screen</b>5 anticipated questions + straight answers.</p>
+    <div class="talk"><span class="lbl">Rehearse these five hard</span>
+      <p>The artist cross-promo question, the "can you build an app," the Cybertruck cost/risk, the "wasn't it #1," and "where are you weak." The winning move in all five: <strong>when you don't know, say so and say how you'd find out.</strong> That beats a bluff every time.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">64 · <span class="sct">BRIEFING</span></div><h4>Assumptions &amp; open questions</h4>
+    <p class="onscreen"><b>On screen</b>The honesty ledger of what you need from him.</p>
+    <div class="talk"><span class="lbl">Turn this into your first agenda</span>
+      <p>Bringing this list unprompted reads as discipline. Consider closing the meeting by walking it: <em>"Here's what I'd need from you to lock the numbers — think of it as our first working agenda."</em></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="num">65 · <span class="sct">BRIEFING</span></div><h4>Sources</h4>
+    <p class="onscreen"><b>On screen</b>The 22-source index.</p>
+    <div class="talk"><span class="lbl">The receipts</span><p>You don't present this — it's there so that if he asks "where's that from," you point to it. Compiled from a verified July 2026 research run.</p></div>
+  </div>
+
+  <footer>// END OF COMPANION · REHEARSE UNTIL THE SLIDES ARE JUST CUES</footer>
+
+</div>
+
+<script>
+  // typographic quotes (foot-marks -> curly)
+  (function(){
+    function educate(s){
+      return s
+        .replace(/(^|[\s(\[{—– ])"/g,'$1“')
+        .replace(/"/g,'”')
+        .replace(/(^|[\s(\[{—– ])'/g,'$1‘')
+        .replace(/'/g,'’');
+    }
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+      var p=n.parentNode&&n.parentNode.nodeName;
+      if(p==='SCRIPT'||p==='STYLE'||p==='OPTION'||p==='SELECT') return NodeFilter.FILTER_REJECT;
+      return n.nodeValue&&/["']/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+    }});
+    var arr=[],n; while(n=w.nextNode()) arr.push(n);
+    arr.forEach(function(t){ t.nodeValue=educate(t.nodeValue); });
+  })();
+
+  document.getElementById('jump').addEventListener('change',function(e){
+    var id=e.target.value; if(!id) return;
+    var el=document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    e.target.selectedIndex=0;
+  });
+</script>
