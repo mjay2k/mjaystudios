@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Baste — Presenter's Study Companion</title>
 <style>
   :root{
@@ -69,8 +71,27 @@
   footer{font-family:var(--fmono); font-size:12px; letter-spacing:.14em; color:var(--muted); text-align:center; margin-top:56px; text-transform:uppercase}
 
   @media (max-width:600px){
-    .cheat .row{grid-template-columns:1fr; gap:3px}
-    .card h4{font-size:18px}
+    body{line-height:1.62}
+    .topbar{padding:11px 16px; gap:9px}
+    .topbar .brand{font-size:11px; letter-spacing:.12em}
+    /* full-width, 16px select — big tap target + stops iOS zoom-on-focus */
+    .jump{flex:1 1 100%; padding:12px; font-size:16px}
+    .wrap{padding:22px 18px 90px}
+    .lede-block{padding:20px 18px}
+    h1.title{font-size:clamp(30px,9vw,44px)}
+    .sub{font-size:11px; letter-spacing:.16em}
+    .primer p{font-size:16.5px}
+    .primer h3{margin-top:26px}
+    ul.plain{font-size:16px; padding-left:18px}
+    ul.plain li{margin-bottom:11px}
+    .cheat .row{grid-template-columns:1fr; gap:4px; font-size:15.5px; padding:13px 15px}
+    .cheat .k{font-size:14px}
+    .flag-legend{font-size:13px; line-height:2}
+    .sec{font-size:12px; letter-spacing:.16em; padding:10px 13px}
+    .card{padding:15px 16px 18px}
+    .card h4{font-size:19px}
+    .onscreen{font-size:15px}
+    .talk{font-size:16.5px; line-height:1.66}
   }
   @media print{
     body{background:#fff; color:#111}
