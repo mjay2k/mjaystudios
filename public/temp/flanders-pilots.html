@@ -131,9 +131,9 @@ a{color:inherit}
 @media(max-width:860px){.b-two{grid-template-columns:1fr}}
 .b-two h3{font-family:var(--disp);font-weight:500;font-size:30px;text-transform:uppercase;color:var(--cream);margin-bottom:18px}
 
-/* reveal */
-.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
-.rv.in{opacity:1;transform:none}
+/* reveal — hidden state only applies once JS confirms it can animate (html.anim) */
+.anim .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.anim .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 :focus-visible{outline:2px solid var(--rust);outline-offset:2px}
 </style>
@@ -494,6 +494,10 @@ a{color:inherit}
 
 <script>
 (function(){
+  // enable scroll-reveal only where it can actually run; otherwise content stays visible
+  if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.documentElement.classList.add('anim');
+  }
   var tabs=document.querySelectorAll('.proto-tabs button');
   tabs.forEach(function(b){b.addEventListener('click',function(){
     tabs.forEach(function(x){x.classList.remove('on')});b.classList.add('on');
