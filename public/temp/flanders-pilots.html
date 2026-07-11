@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>FLANDERS — Interior Page Pilots (Design Review)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g0:#161b19; --g1:#1e2422; --g2:#242c29; --g3:#2a332f;
+  --line:#37423d; --line-soft:#2c3531;
+  --cream:#ece5d7; --mut:#aeb6af; --dim:#7e8781;
+  --rust:#b0654a; --rust2:#8f4e37;
+  --mono:'Roboto Mono',ui-monospace,monospace;
+  --disp:'Teko',sans-serif;
+  --body:'Roboto',-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#0f1312;color:var(--mut);font-family:var(--body);font-size:16.5px;line-height:1.65}
+img{max-width:100%;display:block}
+a{color:inherit}
+
+/* ============ REVIEW CHROME (not part of the design) ============ */
+.proto-bar{position:sticky;top:0;z-index:50;background:#0b0e0d;border-bottom:1px solid #232a27;
+  display:flex;align-items:center;gap:18px;padding:10px 20px;flex-wrap:wrap}
+.proto-bar .pb-note{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#5c655f;text-transform:uppercase}
+.proto-tabs{display:flex;gap:6px;margin-left:auto}
+.proto-tabs button{font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding:8px 16px;cursor:pointer;
+  background:none;border:1px solid #2c3531;color:#8b948d;border-radius:2px}
+.proto-tabs button.on{background:var(--rust);border-color:var(--rust);color:#fff}
+.vtag{background:#e9e4d8;color:#4c4335;padding:14px 20px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;
+  border-top:3px solid #c9bfa8;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.vtag b{font-size:15px;letter-spacing:.12em;color:#20242c}
+.pilot{display:none}
+.pilot.show{display:block}
+
+/* ============ VARIANT A — faithful sketch of the current site ============ */
+.varA{background:#fff;color:#3c3f42;font-family:var(--body)}
+.varA .a-wrap{max-width:1080px;margin:0 auto;padding:64px 5vw}
+.varA h1{font-size:38px;font-weight:700;color:#22262a;margin-bottom:6px}
+.varA .a-kicker{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#9aa0a6;margin-bottom:26px}
+.varA p{max-width:70ch;margin-bottom:16px;color:#4d5257}
+.varA h3{font-size:21px;color:#22262a;margin:34px 0 12px}
+.varA .a-cols{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:8px}
+.varA ul{padding-left:20px}
+.varA li{margin-bottom:9px}
+.varA .a-imgs{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:44px}
+.varA .a-imgs img{border-radius:4px;width:100%;height:300px;object-fit:cover}
+@media(max-width:760px){.varA .a-cols,.varA .a-imgs{grid-template-columns:1fr}}
+
+/* ============ SHARED DARK SYSTEM (variants B & C) ============ */
+.dk{background:var(--g1);color:var(--mut)}
+.dk .sec{max-width:1280px;margin:0 auto;padding:110px 5vw}
+.dk .sec.tight{padding-top:80px;padding-bottom:80px}
+.eyebrow{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12.5px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--rust);margin-bottom:26px}
+.eyebrow::before{content:'';width:44px;height:1px;background:var(--rust)}
+.dk h1,.dk h2{font-family:var(--disp);font-weight:600;color:var(--cream);text-transform:uppercase;line-height:.92;letter-spacing:.005em}
+.dk h1{font-size:clamp(56px,7.2vw,104px)}
+.dk h2{font-size:clamp(38px,4.4vw,60px);margin-bottom:20px}
+.dk h1 .em,.dk h2 .em{color:var(--rust)}
+.dk .lede{font-size:18px;max-width:62ch;color:var(--mut)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:70px;align-items:end}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+
+/* signature: spec plate */
+.plate{border:1px solid var(--line);outline:1px solid var(--line);outline-offset:3px;background:var(--g2);position:relative}
+.plate::before,.plate::after,.plate .riv::before,.plate .riv::after{content:'';position:absolute;width:6px;height:6px;border-radius:50%;
+  background:var(--g0);border:1px solid var(--line)}
+.plate::before{top:8px;left:8px}.plate::after{top:8px;right:8px}
+.plate .riv::before{bottom:8px;left:8px}.plate .riv::after{bottom:8px;right:8px}
+.plate-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.plate-cell{padding:30px 26px 24px;border-right:1px solid var(--line-soft)}
+.plate-cell:last-child{border-right:none}
+.plate-cell .v{font-family:var(--disp);font-weight:600;font-size:52px;line-height:.9;color:var(--cream)}
+.plate-cell .v span{color:var(--rust)}
+.plate-cell .l{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:8px}
+@media(max-width:700px){.plate-cell{border-right:none;border-bottom:1px solid var(--line-soft)}.plate-cell:last-child{border-bottom:none}}
+
+/* cards / lists */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+.card{background:var(--g2);padding:36px 32px;transition:background .3s}
+.card:hover{background:var(--g3)}
+.card .ic{width:44px;height:44px;background:var(--rust);display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+.card .ic svg{width:20px;height:20px;stroke:#f2ece0;fill:none;stroke-width:1.8}
+.card h4{font-family:var(--disp);font-weight:500;font-size:26px;letter-spacing:.02em;text-transform:uppercase;color:var(--cream);margin-bottom:8px}
+.card p{font-size:15px;color:var(--mut)}
+.rail-list{border-top:1px solid var(--line-soft)}
+.rail-list li{list-style:none;display:grid;grid-template-columns:1fr;padding:16px 0 16px 20px;border-bottom:1px solid var(--line-soft);
+  border-left:2px solid var(--rust);margin-bottom:0;max-width:72ch}
+.split{display:grid;grid-template-columns:5fr 7fr;gap:70px;align-items:start}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.split .sticky-h{position:sticky;top:80px}
+
+/* rust band + cta */
+.band{background:linear-gradient(100deg,var(--rust) 0%,var(--rust2) 100%);color:#f6f0e6}
+.band .sec{padding:84px 5vw}
+.band h2{color:#fbf6ec}
+.band p{color:#f3e3d8;max-width:64ch;font-size:18px}
+.cta-strip{display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap;border:1px solid var(--line);
+  outline:1px solid var(--line);outline-offset:3px;background:var(--g2);padding:44px 48px}
+.cta-strip h3{font-family:var(--disp);font-weight:600;font-size:38px;text-transform:uppercase;color:var(--cream);line-height:.95}
+.btn{display:inline-block;font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  background:var(--rust);color:#fff;padding:16px 34px;transition:background .25s}
+.btn:hover{background:var(--rust2)}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--cream)}
+.btn.ghost:hover{border-color:var(--rust);color:var(--rust)}
+
+/* imagery */
+.ph{position:relative;overflow:hidden;background:var(--g3)}
+.ph img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) contrast(1.04);opacity:.92}
+.ph .cap{position:absolute;left:0;bottom:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cream);background:rgba(15,19,18,.78);padding:7px 12px}
+.figrow{display:grid;grid-template-columns:7fr 5fr;gap:24px;margin-top:70px}
+.figrow .ph{height:420px}
+@media(max-width:760px){.figrow{grid-template-columns:1fr}.figrow .ph{height:260px}}
+
+/* process (repair page only — real sequence) */
+.proc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);counter-reset:step}
+.proc .step{background:var(--g2);padding:34px 30px 38px;position:relative}
+.proc .step .n{font-family:var(--disp);font-weight:600;font-size:64px;line-height:.85;color:transparent;-webkit-text-stroke:1px var(--rust);margin-bottom:16px}
+.proc .step h4{font-family:var(--disp);font-weight:500;font-size:24px;text-transform:uppercase;color:var(--cream);margin-bottom:8px}
+.proc .step p{font-size:14.5px}
+
+/* B-variant blocky lists */
+.b-two{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px}
+@media(max-width:860px){.b-two{grid-template-columns:1fr}}
+.b-two h3{font-family:var(--disp);font-weight:500;font-size:30px;text-transform:uppercase;color:var(--cream);margin-bottom:18px}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="proto-bar">
+  <span class="pb-note">Flanders · interior page pilots · internal design review</span>
+  <nav class="proto-tabs" aria-label="Pilot pages">
+    <button class="on" data-p="mining">Mining</button>
+    <button data-p="repair">Repair Services</button>
+    <button data-p="drives">Drive Systems</button>
+  </nav>
+</div>
+
+<!-- ================================================================ MINING -->
+<article class="pilot show" id="p-mining">
+
+  <div class="vtag"><b>VARIANT A</b> the page as it exists on the live site today (faithful sketch)</div>
+  <section class="varA"><div class="a-wrap">
+    <div class="a-kicker">Mining</div>
+    <h1>Powering Productivity For Mining Machines</h1>
+    <p>From Motors to Automation — FLANDERS supports surface and underground mining operations with rugged electrical systems, advanced automation, and full-lifecycle services designed to keep critical equipment moving. From drills, shovels, and draglines to haul trucks and auxiliary systems, our engineered and purpose-built motors, drives, control platforms, and fleet technologies are engineered to withstand extreme loads, harsh conditions, and continuous duty cycles — improving uptime, safety, and operational efficiency across the mine site.</p>
+    <div class="a-cols">
+      <div><h3>Equipment We Support</h3><ul>
+        <li>Electric motors and drive systems for drills, shovels, draglines, and crushers</li>
+        <li>Haul truck electrification and hybrid drive systems for surface mining fleets</li>
+        <li>Fleet monitoring and control platforms for performance, diagnostics, and safety</li>
+        <li>Auxiliary electrical systems supporting pumps, conveyors, fans, and ventilation</li>
+        <li>Power distribution equipment including switchgear, transformers, and MCCs</li>
+      </ul></div>
+      <div><h3>Challenges We Solve</h3><ul>
+        <li>Unplanned downtime from motor, drive, or electrical system failures</li>
+        <li>Equipment stress caused by extreme loads, shock, dust, heat, and vibration</li>
+        <li>Aging electrical infrastructure reducing reliability and production capacity</li>
+        <li>Energy inefficiency increasing operating and fuel costs</li>
+        <li>Safety risks tied to manual processes or outdated control systems</li>
+        <li>Difficulty maintaining uptime during continuous, 24/7 operations</li>
+        <li>OEM obsolescence impacting long-term serviceability and parts availability</li>
+      </ul></div>
+    </div>
+    <div class="a-imgs">
+      <img src="https://static.wixstatic.com/media/11062b_528077500cf14dd5946aecae3fa48e55~mv2.jpg/v1/fill/w_900,h_620,al_c,q_82/m.jpg" alt="Mining site equipment">
+      <img src="https://static.wixstatic.com/media/11062b_95646bf440ed4c758a0ed094e11b446f~mv2.jpg/v1/fill/w_900,h_620,al_c,q_82/m.jpg" alt="Construction site aerial">
+    </div>
+  </div></section>
+
+  <div class="vtag"><b>VARIANT B</b> identical copy, recomposed in the new design language — nothing rewritten</div>
+  <section class="dk">
+    <div class="sec">
+      <div class="hero-grid rv">
+        <div>
+          <div class="eyebrow">Industries · Mining</div>
+          <h2 style="font-size:clamp(44px,5.4vw,76px)">Powering productivity for mining machines<span class="em">.</span></h2>
+        </div>
+        <p class="lede">From motors to automation — FLANDERS supports surface and underground mining operations with rugged electrical systems, advanced automation, and full-lifecycle services designed to keep critical equipment moving.</p>
+      </div>
+      <p class="lede rv" style="margin-top:34px;max-width:76ch">From drills, shovels, and draglines to haul trucks and auxiliary systems, our purpose-built motors, drives, control platforms, and fleet technologies are engineered to withstand extreme loads, harsh conditions, and continuous duty cycles — improving uptime, safety, and operational efficiency across the mine site.</p>
+      <div class="b-two rv">
+        <div><h3>Equipment we support</h3>
+          <ul class="rail-list">
+            <li>Electric motors and drive systems for drills, shovels, draglines, and crushers</li>
+            <li>Haul truck electrification and hybrid drive systems for surface mining fleets</li>
+            <li>Fleet monitoring and control platforms for performance, diagnostics, and safety</li>
+            <li>Auxiliary electrical systems supporting pumps, conveyors, fans, and ventilation</li>
+            <li>Power distribution equipment including switchgear, transformers, and MCCs</li>
+          </ul></div>
+        <div><h3>Challenges we solve</h3>
+          <ul class="rail-list">
+            <li>Unplanned downtime from motor, drive, or electrical system failures</li>
+            <li>Equipment stress caused by extreme loads, shock, dust, heat, and vibration</li>
+            <li>Aging electrical infrastructure reducing reliability and production capacity</li>
+            <li>Energy inefficiency increasing operating and fuel costs</li>
+            <li>Safety risks tied to manual processes or outdated control systems</li>
+            <li>Difficulty maintaining uptime during continuous, 24/7 operations</li>
+            <li>OEM obsolescence impacting long-term serviceability and parts availability</li>
+          </ul></div>
+      </div>
+      <div class="figrow rv">
+        <div class="ph"><img src="https://static.wixstatic.com/media/11062b_528077500cf14dd5946aecae3fa48e55~mv2.jpg/v1/fill/w_1400,h_840,al_c,q_82/m.jpg" alt=""><span class="cap">Surface operations — haul fleet</span></div>
+        <div class="ph"><img src="https://static.wixstatic.com/media/11062b_95646bf440ed4c758a0ed094e11b446f~mv2.jpg/v1/fill/w_1000,h_840,al_c,q_82/m.jpg" alt=""><span class="cap">Mine site aerial</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="vtag"><b>VARIANT C</b> reimagined — upgraded copy, infographic sections, spec-plate stats</div>
+  <section class="dk" style="background:var(--g0)">
+    <div class="sec">
+      <div class="eyebrow rv">Industries · Mining</div>
+      <h1 class="rv">Power for the hardest-<br>working machines <span class="em">on earth.</span></h1>
+      <p class="lede rv" style="margin-top:30px">Drills, shovels, draglines, haul trucks — FLANDERS engineers the motors, drives, and control systems that keep them digging through dust, shock, heat, and 24/7 duty cycles.</p>
+      <div class="plate rv" style="margin-top:64px"><span class="riv"></span>
+        <div class="plate-row">
+          <div class="plate-cell"><div class="v">75<span>+</span></div><div class="l">Years in operation</div></div>
+          <div class="plate-cell"><div class="v">24/7</div><div class="l">Field response</div></div>
+          <div class="plate-cell"><div class="v">4</div><div class="l">Continents serviced</div></div>
+          <div class="plate-cell"><div class="v">15K<span>+</span></div><div class="l">HP capability</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec tight">
+      <div class="eyebrow rv">What we keep moving</div>
+      <h2 class="rv">Every machine on the pattern<span class="em">.</span></h2>
+      <div class="card-grid rv" style="margin-top:46px">
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M2 12h4m12 0h4M5 5l3 3m8 8l3 3M19 5l-3 3M8 16l-3 3"/><circle cx="12" cy="12" r="3.5"/></svg></div>
+          <h4>Drills &amp; autonomy</h4><p>Retrofit control and ARDVARC® autonomy on any OEM's drill fleet — from operator-assist to fully autonomous cycles.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 17h13l4-6-4-6H3"/><path d="M7 21v-4M12 21v-4"/></svg></div>
+          <h4>Shovels &amp; draglines</h4><p>Control modernization and complete DC-to-AC conversions — including the first purpose-built dragline upgrade in North America.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="8" width="15" height="9"/><path d="M17 11h4l1 3v3h-5zM6 21a2 2 0 100-4 2 2 0 000 4zm10 0a2 2 0 100-4 2 2 0 000 4z"/></svg></div>
+          <h4>Haul trucks</h4><p>Electrification, hybrid drive systems, and machine-health monitoring across mixed OEM fleets.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></div>
+          <h4>Power distribution</h4><p>Switchgear, transformers, and MCCs engineered for the pit — arc-resistant, serviceable, built to spec.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <h4>Auxiliaries</h4><p>Pumps, conveyors, fans, and ventilation — the systems that quietly decide whether the site makes rate.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V5m0 10l5-4 4 3 7-6"/><path d="M16 8h4v4"/></svg></div>
+          <h4>Fleet intelligence</h4><p>WISDOM® remote diagnostics watches temperature, vibration, and load — so failures announce themselves early.</p></div>
+      </div>
+    </div>
+    <div class="band"><div class="sec tight">
+      <div class="split">
+        <h2 class="rv">Downtime is the most expensive machine on site<span style="color:#3d221a">.</span></h2>
+        <p class="rv">A stalled dragline doesn't just stop digging — it stalls the schedule, the crew, and the quarter. FLANDERS builds for the failure modes mining actually has: extreme load, shock, dust, heat, vibration, and OEM parts that stopped shipping a decade ago.</p>
+      </div>
+    </div></div>
+    <div class="sec tight">
+      <div class="split">
+        <div class="sticky-h">
+          <div class="eyebrow rv">How we take on risk</div>
+          <h2 class="rv">Engineered against the real failure modes<span class="em">.</span></h2>
+        </div>
+        <div>
+          <ul class="rail-list rv" style="border-top:none">
+            <li><strong style="color:var(--cream)">Uptime engineering.</strong>&nbsp; Condition-based monitoring and reliability programs replace run-to-failure maintenance — issues get found before they cost a shift.</li>
+            <li><strong style="color:var(--cream)">Built for abuse.</strong>&nbsp; Severe-duty motors and drives rated for continuous 24/7 cycles under extreme mechanical and thermal stress.</li>
+            <li><strong style="color:var(--cream)">No orphaned assets.</strong>&nbsp; When the OEM walks away, we don't — custom manufacturing keeps obsolete-but-critical machines serviceable for decades.</li>
+            <li><strong style="color:var(--cream)">Safety by control.</strong>&nbsp; Automation and stop-work-capable control systems take people out of the highest-risk interactions.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cta-strip rv" style="margin-top:90px"><span class="riv"></span>
+        <h3>Talk to a mining<br>systems engineer.</h3>
+        <div style="display:flex;gap:14px;flex-wrap:wrap"><a class="btn" href="#">Request a consult</a><a class="btn ghost" href="#">Emergency 24/7 line</a></div>
+      </div>
+    </div>
+  </section>
+</article>
+
+<!-- ================================================================ REPAIR -->
+<article class="pilot" id="p-repair">
+
+  <div class="vtag"><b>VARIANT A</b> the page as it exists on the live site today (faithful sketch)</div>
+  <section class="varA"><div class="a-wrap">
+    <div class="a-kicker">Repair Services</div>
+    <h1>Motor Repair &amp; Rebuild Services</h1>
+    <p><strong>Restore Performance. Extend Service Life.</strong></p>
+    <p>Motor failures disrupt production fast. FLANDERS provides in-shop repair and rebuild services for industrial AC and DC motors from fractional horsepower to 15,000+ HP — inspecting, repairing, and testing every unit before it returns to service.</p>
+    <div class="a-cols">
+      <div><h3>Motors and Equipment We Support</h3><ul>
+        <li>AC motors</li><li>DC motors</li><li>High-voltage motors</li>
+        <li>Large industrial process motors</li><li>Critical production equipment</li>
+      </ul></div>
+      <div><h3>Repair and Rebuild Services</h3><ul>
+        <li>Complete motor teardown and inspection</li><li>Electrical and mechanical repairs</li>
+        <li>Precision rewinds and winding repair</li><li>Bearing, shaft, and component replacement</li>
+        <li>Rebuilds to original or upgraded specifications</li><li>Electrical and performance testing</li>
+      </ul></div>
+    </div>
+    <h3>Testing Before Return to Service</h3>
+    <p>Repaired motors undergo electrical and mechanical testing to verify insulation integrity, electrical balance, and mechanical condition before returning to operation. Warranty options are available for many repair services.</p>
+    <div class="a-imgs">
+      <img src="https://static.wixstatic.com/media/e5fb4d_e12d86a40fb34e10b0d94d6fd2367dc5~mv2.jpg/v1/crop/x_0,y_548,w_3734,h_2748/fill/w_900,h_660,al_c,q_82/m.jpg" alt="Motor repair shop">
+      <img src="https://static.wixstatic.com/media/0fb64f_9ed2c2c565b540b1a6ac9f8aef5f92c9~mv2.jpg/v1/fill/w_900,h_660,al_c,q_82/m.jpg" alt="Shop floor">
+    </div>
+  </div></section>
+
+  <div class="vtag"><b>VARIANT B</b> identical copy, recomposed in the new design language — nothing rewritten</div>
+  <section class="dk">
+    <div class="sec">
+      <div class="hero-grid rv">
+        <div>
+          <div class="eyebrow">Services · Motor repair &amp; rebuild</div>
+          <h2 style="font-size:clamp(44px,5.4vw,76px)">Restore performance. Extend service life<span class="em">.</span></h2>
+        </div>
+        <p class="lede">Motor failures disrupt production fast. FLANDERS provides in-shop repair and rebuild services for industrial AC and DC motors from fractional horsepower to 15,000+ HP — inspecting, repairing, and testing every unit before it returns to service.</p>
+      </div>
+      <div class="b-two rv">
+        <div><h3>Motors &amp; equipment we support</h3>
+          <ul class="rail-list">
+            <li>AC motors</li><li>DC motors</li><li>High-voltage motors</li>
+            <li>Large industrial process motors</li><li>Critical production equipment</li>
+          </ul></div>
+        <div><h3>Repair &amp; rebuild services</h3>
+          <ul class="rail-list">
+            <li>Complete motor teardown and inspection</li><li>Electrical and mechanical repairs</li>
+            <li>Precision rewinds and winding repair</li><li>Bearing, shaft, and component replacement</li>
+            <li>Rebuilds to original or upgraded specifications</li><li>Electrical and performance testing</li>
+          </ul></div>
+      </div>
+      <div class="figrow rv">
+        <div class="ph"><img src="https://static.wixstatic.com/media/e5fb4d_e12d86a40fb34e10b0d94d6fd2367dc5~mv2.jpg/v1/crop/x_0,y_548,w_3734,h_2748/fill/w_1400,h_840,al_c,q_82/m.jpg" alt=""><span class="cap">In-shop rebuild bay</span></div>
+        <div class="ph"><img src="https://static.wixstatic.com/media/0fb64f_9ed2c2c565b540b1a6ac9f8aef5f92c9~mv2.jpg/v1/fill/w_1000,h_840,al_c,q_82/m.jpg" alt=""><span class="cap">Winding shop</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="vtag"><b>VARIANT C</b> reimagined — upgraded copy, real 4-step process, spec-plate stats</div>
+  <section class="dk" style="background:var(--g0)">
+    <div class="sec">
+      <div class="eyebrow rv">Services · Motor repair &amp; rebuild</div>
+      <h1 class="rv">Every motor leaves tested<span class="em">.</span><br>Or it doesn't leave<span class="em">.</span></h1>
+      <p class="lede rv" style="margin-top:30px">Since 1947, FLANDERS shops have torn down, rewound, and rebuilt the motors heavy industry can't run without — and certified every one of them before it went back to work.</p>
+      <div class="plate rv" style="margin-top:64px"><span class="riv"></span>
+        <div class="plate-row">
+          <div class="plate-cell"><div class="v">15K<span>+</span></div><div class="l">HP — fractional to max</div></div>
+          <div class="plate-cell"><div class="v">EASA</div><div class="l">Certified shops</div></div>
+          <div class="plate-cell"><div class="v">3</div><div class="l">Shifts, around the clock</div></div>
+          <div class="plate-cell"><div class="v">100<span>%</span></div><div class="l">Tested before despatch</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec tight">
+      <div class="eyebrow rv">The process</div>
+      <h2 class="rv">Four steps. No surprises<span class="em">.</span></h2>
+      <div class="proc rv" style="margin-top:46px">
+        <div class="step"><div class="n">01</div><h4>Intake &amp; assessment</h4><p>Motor is received, cleaned, and fully assessed. You get a written condition report and quote before any work proceeds.</p></div>
+        <div class="step"><div class="n">02</div><h4>Repair &amp; rebuild</h4><p>Work to approved scope only — precision rewinds, mechanical repairs, and component replacement, all in-house.</p></div>
+        <div class="step"><div class="n">03</div><h4>Test &amp; certify</h4><p>Electrical and mechanical testing on every unit, with full documentation delivered alongside the motor.</p></div>
+        <div class="step"><div class="n">04</div><h4>Return to service</h4><p>Despatched or ready for collection — with warranty support available on qualifying work.</p></div>
+      </div>
+    </div>
+    <div class="band"><div class="sec tight">
+      <div class="split">
+        <h2 class="rv">A rebuilt motor should outlast the repair invoice<span style="color:#3d221a">.</span></h2>
+        <p class="rv">Rebuilds to original spec are the floor, not the ceiling. Where duty cycles demand it, we upgrade insulation systems, cooling, and mechanical components during the rebuild — so the motor going back in is tougher than the one that came out.</p>
+      </div>
+    </div></div>
+    <div class="sec tight">
+      <div class="split">
+        <div class="sticky-h">
+          <div class="eyebrow rv">Technical capability</div>
+          <h2 class="rv">From fractional HP to the ones with their own nameplates<span class="em">.</span></h2>
+        </div>
+        <ul class="rail-list rv" style="border-top:none">
+          <li><strong style="color:var(--cream)">AC &amp; DC, all voltages.</strong>&nbsp; Complete teardown, inspection, and rewind capability for AC, DC, and high-voltage machines.</li>
+          <li><strong style="color:var(--cream)">Precision rewinds.</strong>&nbsp; Winding repair and full rewinds to IEEE standards, in-house.</li>
+          <li><strong style="color:var(--cream)">Mechanical restoration.</strong>&nbsp; Bearings, shafts, and components replaced and laser-aligned.</li>
+          <li><strong style="color:var(--cream)">Documented verification.</strong>&nbsp; Insulation integrity, electrical balance, and load performance — measured, recorded, delivered.</li>
+        </ul>
+      </div>
+      <div class="cta-strip rv" style="margin-top:90px"><span class="riv"></span>
+        <h3>Motor down?<br>Start the intake.</h3>
+        <div style="display:flex;gap:14px;flex-wrap:wrap"><a class="btn" href="#">Request a condition report</a><a class="btn ghost" href="#">24/7 emergency</a></div>
+      </div>
+    </div>
+  </section>
+</article>
+
+<!-- ================================================================ DRIVES -->
+<article class="pilot" id="p-drives">
+
+  <div class="vtag"><b>VARIANT A</b> the page as it exists on the live site today (faithful sketch)</div>
+  <section class="varA"><div class="a-wrap">
+    <div class="a-kicker">Drive Systems</div>
+    <h1>Industrial Drive Systems: AC &amp; DC</h1>
+    <p><strong>High-Power Drive Systems, Engineered In-House</strong></p>
+    <p>FLANDERS designs, repairs, and supports high-power AC and DC drive systems for critical industrial machinery, all in-house.</p>
+    <div class="a-cols">
+      <div><h3>Why Customers Choose FLANDERS</h3><ul>
+        <li>Fast, accurate technical solutions</li>
+        <li>Experts who understand the machine, not just the spec</li>
+        <li>Systems that perform as intended from startup</li>
+      </ul></div>
+      <div><h3>Performance Benchmarks</h3><ul>
+        <li>14.5 MW+ peak power — dragline AC drive upgrades</li>
+        <li>3.2 MW+ peak power — haul truck AC drive upgrades</li>
+        <li>Unity (1.0) power factor — AC dragline systems</li>
+      </ul></div>
+    </div>
+    <h3>One Integrated System</h3>
+    <p>Motors, drives, and controls function as a single system. FLANDERS engineers and supports all three in-house, reducing risk and unplanned downtime. Most large AC and DC motors are rated for 25–30 years. FLANDERS specializes in repairs, modernization, and DC-to-AC conversions that defer replacement and reduce capital spend.</p>
+    <div class="a-imgs">
+      <img src="https://static.wixstatic.com/media/e5fb4d_149c4b5d6dfc4a3ca41da16f81567a47~mv2.jpg/v1/fill/w_900,h_640,al_c,q_82/m.jpg" alt="AC DC repair">
+      <img src="https://static.wixstatic.com/media/e5fb4d_a59be29cdaf64e95b8b4c0718aae2d5f~mv2.jpg/v1/fill/w_900,h_640,al_c,q_82/m.jpg" alt="Drive cabinet">
+    </div>
+  </div></section>
+
+  <div class="vtag"><b>VARIANT B</b> identical copy, recomposed in the new design language — nothing rewritten</div>
+  <section class="dk">
+    <div class="sec">
+      <div class="hero-grid rv">
+        <div>
+          <div class="eyebrow">Technology · Drive systems AC &amp; DC</div>
+          <h2 style="font-size:clamp(44px,5.4vw,76px)">High-power drive systems, engineered in-house<span class="em">.</span></h2>
+        </div>
+        <p class="lede">FLANDERS designs, repairs, and supports high-power AC and DC drive systems for critical industrial machinery — all in-house. Motors, drives, and controls function as a single system; FLANDERS engineers and supports all three, reducing risk and unplanned downtime.</p>
+      </div>
+      <div class="b-two rv">
+        <div><h3>Why customers choose FLANDERS</h3>
+          <ul class="rail-list">
+            <li>Fast, accurate technical solutions</li>
+            <li>Experts who understand the machine, not just the spec</li>
+            <li>Systems that perform as intended from startup</li>
+          </ul></div>
+        <div><h3>Performance benchmarks</h3>
+          <ul class="rail-list">
+            <li>14.5 MW+ peak power — dragline AC drive upgrades</li>
+            <li>3.2 MW+ peak power — haul truck AC drive upgrades</li>
+            <li>Unity (1.0) power factor — AC dragline systems</li>
+          </ul></div>
+      </div>
+      <div class="figrow rv">
+        <div class="ph"><img src="https://static.wixstatic.com/media/e5fb4d_149c4b5d6dfc4a3ca41da16f81567a47~mv2.jpg/v1/fill/w_1400,h_840,al_c,q_82/m.jpg" alt=""><span class="cap">Drive rebuild — shop floor</span></div>
+        <div class="ph"><img src="https://static.wixstatic.com/media/e5fb4d_a59be29cdaf64e95b8b4c0718aae2d5f~mv2.jpg/v1/fill/w_1000,h_840,al_c,q_82/m.jpg" alt=""><span class="cap">AC drive cabinet</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="vtag"><b>VARIANT C</b> reimagined — upgraded copy, milestone band, spec-plate stats</div>
+  <section class="dk" style="background:var(--g0)">
+    <div class="sec">
+      <div class="eyebrow rv">Technology · Drive systems AC &amp; DC</div>
+      <h1 class="rv">14.5 megawatts<br>of <span class="em">proof.</span></h1>
+      <p class="lede rv" style="margin-top:30px">That's the peak power of a FLANDERS dragline AC drive upgrade — designed, built, and commissioned in-house. When the machine is critical and the numbers are big, this is the drive shop industry calls.</p>
+      <div class="plate rv" style="margin-top:64px"><span class="riv"></span>
+        <div class="plate-row">
+          <div class="plate-cell"><div class="v">14.5<span>MW</span></div><div class="l">Dragline peak power</div></div>
+          <div class="plate-cell"><div class="v">3.2<span>MW</span></div><div class="l">Haul truck peak power</div></div>
+          <div class="plate-cell"><div class="v">1.0</div><div class="l">Unity power factor</div></div>
+          <div class="plate-cell"><div class="v">30<span>YR</span></div><div class="l">Asset life extended</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="band"><div class="sec tight">
+      <div class="split">
+        <h2 class="rv">First DC-to-AC dragline upgrade in North America<span style="color:#3d221a">.</span></h2>
+        <p class="rv">Purpose-built, not adapted. When no OEM offered a path off aging DC drives, FLANDERS engineered one — and the playbook now modernizes draglines, shovels, and haul fleets without replacing the machine.</p>
+      </div>
+    </div></div>
+    <div class="sec tight">
+      <div class="eyebrow rv">One integrated system</div>
+      <h2 class="rv">Motor. Drive. Control.<br>One accountable engineer<span class="em">.</span></h2>
+      <div class="card-grid rv" style="margin-top:46px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 4v-2M12 22v-2M4 12H2m20 0h-2"/></svg></div>
+          <h4>Motors</h4><p>Severe-duty AC and DC machines — repaired, rewound, upgraded, or custom-built for the application.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></div>
+          <h4>Drives</h4><p>Low- and medium-voltage AC/DC drive systems engineered for continuous duty at multi-megawatt scale.</p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="7" cy="18" r="2"/></svg></div>
+          <h4>Controls</h4><p>Custom control logic, operator interfaces, and diagnostics integration — validated before commissioning.</p></div>
+      </div>
+      <p class="lede rv" style="margin-top:40px;max-width:76ch">When one team engineers all three, there's no integration finger-pointing — and no component that wasn't designed for the system it lives in. Most large motors are rated for 25–30 years; FLANDERS modernization defers replacement and reduces capital spend.</p>
+      <div class="cta-strip rv" style="margin-top:90px"><span class="riv"></span>
+        <h3>Scope a drive<br>modernization.</h3>
+        <div style="display:flex;gap:14px;flex-wrap:wrap"><a class="btn" href="#">Request an engineering review</a><a class="btn ghost" href="#">See dragline case study</a></div>
+      </div>
+    </div>
+  </section>
+</article>
+
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.proto-tabs button');
+  tabs.forEach(function(b){b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+    document.querySelectorAll('.pilot').forEach(function(p){p.classList.remove('show')});
+    document.getElementById('p-'+b.dataset.p).classList.add('show');
+    window.scrollTo({top:0,behavior:'auto'});
+    obsAll();
+  })});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  function obsAll(){document.querySelectorAll('.pilot.show .rv:not(.in)').forEach(function(el){io.observe(el)})}
+  obsAll();
+})();
+</script>
+</body>
+</html>
