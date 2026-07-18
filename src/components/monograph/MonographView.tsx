@@ -282,7 +282,7 @@ export default function MonographView() {
             priority
           />
           <span
-            className="mono-mark-name text-[13px] font-bold uppercase tracking-[0.22em]"
+            className="mono-mark-name hidden text-[13px] font-bold uppercase tracking-[0.22em] lg:inline"
             style={{
               fontFamily: 'var(--font-display)',
               textShadow: '0 2px 10px rgba(0,0,0,0.45)',
@@ -295,7 +295,13 @@ export default function MonographView() {
         {/* right plate: roller nav — labels roll up to reveal an alternate word.
             The plate visuals live on a background layer so the nav itself has
             no overflow clipping (the version dropdown must escape the plate). */}
-        <nav className="mono-plate-host pointer-events-auto absolute right-0 top-0 hidden items-center gap-8 py-4 pl-14 pr-6 md:flex md:pr-10">
+        <nav
+          className="mono-plate-host pointer-events-auto absolute right-0 top-0 hidden items-center py-4 pr-6 md:flex md:pr-10"
+          style={{
+            columnGap: 'clamp(1.15rem, 2.4vw, 2rem)',
+            paddingLeft: 'clamp(2rem, 4.5vw, 3.5rem)',
+          }}
+        >
           <span
             aria-hidden
             className="mono-plate absolute inset-0 -z-10"
@@ -318,8 +324,8 @@ export default function MonographView() {
             <a
               key={href}
               href={href}
-              className="mono-roller text-[11px] font-bold uppercase tracking-[0.2em]"
-              style={{ fontFamily: 'var(--font-display)' }}
+              className="mono-roller font-bold uppercase tracking-[0.2em]"
+              style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(10px, 1vw, 11px)' }}
             >
               <span className="r-stack">
                 <span className="r-row" style={{ color: PALETTE.muted }}>{label}</span>
