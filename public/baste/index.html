@@ -152,6 +152,10 @@
   .index{position:fixed; inset:0; z-index:60; background:rgba(4,11,16,.98); color:#EAF4F7; display:none; padding:clamp(28px,5vw,64px); overflow:auto}
   .index.open{display:block}
   .index h3{font-family:var(--fmono); letter-spacing:.24em; text-transform:uppercase; color:var(--dark-teal); font-size:13px; margin:0 0 22px}
+  .index .idx-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:22px}
+  .index .idx-head h3{margin:0}
+  .idx-notes{background:transparent; border:1px solid var(--dark-teal); color:var(--dark-teal); border-radius:6px; width:40px; height:34px; font-size:15px; cursor:pointer; font-family:var(--fmono); line-height:1}
+  .idx-notes:hover{background:rgba(1,184,199,.12)}
   .idx-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:9px}
   .idx-grid button{text-align:left; background:var(--dark-2); border:1px solid var(--dark-line); color:#EAF4F7; border-radius:5px; padding:12px 13px; cursor:pointer; font-family:var(--fbody); display:flex; gap:11px; align-items:baseline}
   .idx-grid button:hover{border-color:var(--dark-teal)}
@@ -175,12 +179,11 @@
 <div class="progress" id="progress"></div>
 <div class="hud tl"><span class="b1">MJ</span> · BASTE — YEAR ONE</div>
 <div class="hud br"><b id="hudNow">01</b> / <span id="hudTotal">12</span></div>
-<button class="toc-btn" id="notesBtn" style="right:120px">◈ Notes</button>
 <button class="toc-btn" id="tocBtn">☰ Contents</button>
 <div class="hint" id="hint">← → &nbsp; · &nbsp; <b>Contents</b> &nbsp; · &nbsp; <b>N</b> notes</div>
 <div class="nav"><button id="prevBtn" aria-label="Previous">‹</button><button id="nextBtn" aria-label="Next">›</button></div>
 
-<div class="index" id="index"><h3>Contents</h3><div class="idx-grid" id="idxGrid"></div></div>
+<div class="index" id="index"><div class="idx-head"><h3>Contents</h3><button class="idx-notes" id="notesBtn" title="Speaker notes" aria-label="Toggle speaker notes">◈</button></div><div class="idx-grid" id="idxGrid"></div></div>
 <div class="notes-panel" id="notes"><h4>◈ Notes — press N to hide</h4><div class="body" id="notesBody"></div></div>
 
 <div class="deck" id="deck">
@@ -571,7 +574,7 @@
   document.getElementById('nextBtn').addEventListener('click',next);
   document.getElementById('prevBtn').addEventListener('click',prev);
   document.getElementById('tocBtn').addEventListener('click',toggleIndex);
-  document.getElementById('notesBtn').addEventListener('click',toggleNotes);
+  document.getElementById('notesBtn').addEventListener('click',function(){index.classList.remove('open');toggleNotes();});
   deck.addEventListener('click',function(e){if(index.classList.contains('open'))return;if(e.target.closest('a,button'))return;var s=slides[cur];if(s.classList.contains('dark'))return;var x=e.clientX,w=window.innerWidth;if(x<w*0.28)prev();else if(x>w*0.5)next();});
   setTimeout(function(){hint.style.opacity='0';},5000);
   var h=parseInt((location.hash||'').replace('#',''),10); if(h&&h>=1&&h<=total)cur=h-1;
