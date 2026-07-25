@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       { source: "/clabber", destination: "/clabber/clabber-cheat-sheet.html" },
       // Serve the standalone Nashville Bride site at a clean /nashvillebride URL.
       { source: "/nashvillebride", destination: "/nashvillebride/index.html" },
+      // Project Isles — the browser RPG. Built out of the the-isles-web repo
+      // (`npm run deploy:site` there) into public/projectisles.
+      { source: "/projectisles", destination: "/projectisles/index.html" },
     ];
   },
 };

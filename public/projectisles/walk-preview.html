@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Warrior walk-cycle preview</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font: 14px/1.4 system-ui, sans-serif;
+        background: #14161b;
+        color: #e7edf3;
+        padding: 20px 20px 60px;
+      }
+      h1 { font-size: 18px; margin: 0 0 4px; }
+      .sub { color: #9aa4b0; margin: 0 0 18px; }
+      .controls {
+        position: sticky; top: 0; z-index: 5;
+        display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+        background: #14161bee; backdrop-filter: blur(4px);
+        padding: 12px 4px; margin-bottom: 12px; border-bottom: 1px solid #262b33;
+      }
+      .controls label { display: flex; align-items: center; gap: 8px; }
+      input[type='range'] { width: 200px; }
+      h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: #8b95a1; margin: 24px 0 10px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+      .card {
+        background: #1b1e25; border: 1px solid #2a2f38; border-radius: 10px;
+        padding: 10px; text-align: center;
+      }
+      .stage {
+        height: 210px; display: flex; align-items: flex-end; justify-content: center;
+        border-bottom: 2px solid #3a4150; position: relative; overflow: hidden;
+        background: radial-gradient(120% 80% at 50% 100%, #232833 0%, #1b1e25 70%);
+      }
+      .stage img { height: 190px; image-rendering: auto; filter: drop-shadow(0 6px 6px #0007); }
+      .label { margin-top: 8px; font-weight: 600; }
+      .frames { color: #7f8996; font-size: 12px; }
+      .ref .stage { height: 240px; }
+      .ref .stage img { height: 220px; }
+      .tag { font-size: 11px; color: #ffd76a; }
+    </style>
+  </head>
+  <body>
+    <h1>Warrior walk-cycle preview</h1>
+    <p class="sub">
+      Pick the cycle that reads best. <b>F1–F3</b> are from the walk sheet, <b>F4</b> is the right-hand pose from the
+      attack sheet. Tell me the winning set (e.g. “F1+F3” or “F1,F4,F2”).
+    </p>
+
+    <div class="controls">
+      <label>Speed <input id="fps" type="range" min="2" max="16" value="8" /> <span id="fpsv">8</span> fps</label>
+      <label><input id="pingpong" type="checkbox" /> ping-pong</label>
+    </div>
+
+    <h2>Reference frames</h2>
+    <div class="grid" id="refs"></div>
+
+    <h2>2-frame cycles</h2>
+    <div class="grid" id="two"></div>
+
+    <h2>3-frame cycles</h2>
+    <div class="grid" id="three"></div>
+
+    <h2>4-frame cycle</h2>
+    <div class="grid" id="four"></div>
+
+    <script>
+      const SRC = {
+        1: 'sprites/warrior/walk1.png',
+        2: 'sprites/warrior/walk2.png',
+        3: 'sprites/warrior/walk3.png',
+        4: 'sprites/warrior/walk4.png',
+      };
+      // preload
+      Object.values(SRC).forEach((s) => (new Image().src = s));
+
+      const players = []; // { img, frames }
+      function makeCard(parent, frames, cls) {
+        const card = document.createElement('div');
+        card.className = 'card' + (cls ? ' ' + cls : '');
+        const stage = document.createElement('div');
+        stage.className = 'stage';
+        const img = document.createElement('img');
+        img.src = SRC[frames[0]];
+        stage.appendChild(img);
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.textContent = frames.map((f) => 'F' + f).join(' + ');
+        const fr = document.createElement('div');
+        fr.className = 'frames';
+        fr.textContent = frames.length + ' frame' + (frames.length > 1 ? 's' : '');
+        card.append(stage, label, fr);
+        parent.appendChild(card);
+        if (frames.length > 1) players.push({ img, frames });
+      }
+
+      // reference frames
+      [1, 2, 3, 4].forEach((f) => {
+        makeCard(document.getElementById('refs'), [f], 'ref');
+        const cards = document.querySelectorAll('#refs .card');
+        const last = cards[cards.length - 1];
+        last.querySelector('.label').innerHTML = 'F' + f + (f === 4 ? ' <span class="tag">attack sheet</span>' : '');
+        last.querySelector('.frames').textContent = 'static';
+      });
+
+      const pairs = [
+        [1, 2], [1, 3], [2, 3],
+        [1, 4], [2, 4], [3, 4],
+      ];
+      const triples = [
+        [1, 2, 3], [1, 2, 4], [1, 3, 4], [2, 3, 4],
+      ];
+      pairs.forEach((f) => makeCard(document.getElementById('two'), f));
+      triples.forEach((f) => makeCard(document.getElementById('three'), f));
+      makeCard(document.getElementById('four'), [1, 2, 3, 4]);
+
+      const fpsEl = document.getElementById('fps');
+      const fpsv = document.getElementById('fpsv');
+      const pp = document.getElementById('pingpong');
+      fpsEl.oninput = () => (fpsv.textContent = fpsEl.value);
+
+      let t0 = performance.now();
+      function tick(now) {
+        const fps = +fpsEl.value;
+        const step = Math.floor(((now - t0) / 1000) * fps);
+        for (const p of players) {
+          const n = p.frames.length;
+          let idx;
+          if (pp.checked && n > 1) {
+            const period = 2 * n - 2; // ping-pong triangle
+            const m = step % period;
+            idx = m < n ? m : period - m;
+          } else {
+            idx = step % n;
+          }
+          const src = SRC[p.frames[idx]];
+          if (p.img.getAttribute('src') !== src) p.img.setAttribute('src', src);
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    </script>
+  </body>
+</html>
