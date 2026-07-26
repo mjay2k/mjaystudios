@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
       // Project Isles — the browser RPG. Built out of the the-isles-web repo
       // (`npm run deploy:site` there) into public/projectisles.
       { source: "/projectisles", destination: "/projectisles/index.html" },
+      // Project Isles — the character builder. One self-contained file, authored
+      // in the-isles-web under "Class Design/" and copied here by its deploy script.
+      { source: "/projectisles-charbuilder", destination: "/projectisles-charbuilder/index.html" },
     ];
   },
 };

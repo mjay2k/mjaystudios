@@ -1,0 +1,1745 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Isles — Character Builder</title>
+<style>
+/* ============================================================
+   THE ISLES — CHARACTER BUILDER
+   A planning instrument, not a game. Two axes govern everything:
+   PRACTICE (earned by use, gates what you may buy) and
+   BUDGET (granted by level, gates how much you may own at once).
+   Palette is lifted from the archetype diagram: Innate green,
+   Fighter blue, Vagabond purple, over ink and brass.
+   ============================================================ */
+
+:root{
+  --ink:      #0f1117;
+  --ink-2:    #161a23;
+  --ink-3:    #1d2230;
+  --ink-4:    #252b3b;
+  --line:     #2b3242;
+  --line-hi:  #3d4658;
+
+  --parch:    #e6e2d6;
+  --parch-2:  #a8aebc;
+  --parch-3:  #6d7484;
+
+  --brass:    #d4a72c;
+  --brass-2:  #8a6d1a;
+  --brass-3:  #4a3a0e;
+
+  --innate:   #3f9c46;
+  --fighter:  #4a6fc4;
+  --vagabond: #a049b8;
+  --rust:     #c04a30;
+
+  --accent:   var(--brass);
+
+  --display: 'Avenir Next Condensed','Oswald','Arial Narrow',Impact,sans-serif;
+  --body: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+  --mono: ui-monospace,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;
+
+  --r: 2px;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--ink);
+  color:var(--parch);
+  font-family:var(--body);
+  font-size:13px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+button{font-family:inherit;color:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;font-size:inherit;color:inherit;}
+a{color:var(--brass);}
+
+/* ---------- masthead + direction tabs ---------- */
+.masthead{
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#12151d,#0f1117);
+  padding:0 18px;
+  display:flex;align-items:flex-end;gap:26px;flex-wrap:wrap;
+  position:sticky;top:0;z-index:40;
+}
+.wordmark{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:19px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  padding:14px 0 12px;
+  white-space:nowrap;
+}
+.wordmark .the{color:var(--parch-3);}
+.wordmark .cb{color:var(--brass);}
+.tabs{display:flex;gap:0;align-items:flex-end;margin-left:auto;}
+.tab{
+  background:none;border:0;border-bottom:2px solid transparent;
+  padding:14px 16px 11px;
+  font-family:var(--display);
+  font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;
+  color:var(--parch-3);
+  transition:color .12s,border-color .12s;
+}
+.tab:hover{color:var(--parch-2);}
+.tab[aria-selected="true"]{color:var(--brass);border-bottom-color:var(--brass);}
+.tab .dot{
+  display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:var(--parch-3);margin-right:7px;vertical-align:2px;
+}
+.tab[aria-selected="true"] .dot{background:var(--brass);}
+.tab.stub .dot{background:none;border:1px solid var(--parch-3);}
+
+/* ---------- the budget beam: the signature element ---------- */
+.beam{
+  border-bottom:1px solid var(--line);
+  background:var(--ink-2);
+  padding:9px 18px 11px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  position:sticky;top:47px;z-index:39;
+}
+.beam-label{
+  font-family:var(--display);font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--parch-3);white-space:nowrap;
+}
+.beam-track{
+  flex:1;min-width:200px;height:14px;
+  background:#0a0c11;
+  border:1px solid var(--line);
+  position:relative;overflow:hidden;
+}
+.beam-fill{
+  position:absolute;inset:0 auto 0 0;
+  background:linear-gradient(180deg,#e8bd41,#b3891f);
+  transition:width .22s cubic-bezier(.2,.8,.3,1);
+}
+.beam-fill.over{background:linear-gradient(180deg,#d8563a,#8f3220);}
+/* tick marks every 10 points so the bar reads as an instrument, not a loader */
+.beam-ticks{position:absolute;inset:0;pointer-events:none;}
+.beam-ticks i{position:absolute;top:0;bottom:0;width:1px;background:#0a0c1188;}
+.beam-num{
+  font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.beam-num b{color:var(--brass);font-weight:600;}
+.beam-num.over b{color:var(--rust);}
+.beam-num span{color:var(--parch-3);}
+.beam-note{
+  font-size:11px;color:var(--parch-3);white-space:nowrap;
+  font-family:var(--mono);
+}
+.beam-note b{color:var(--parch-2);font-weight:500;}
+
+/* ---------- three-column frame ---------- */
+.frame{
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr) 310px;
+  align-items:start;
+  min-height:calc(100vh - 120px);
+}
+.col{padding:16px;}
+.col-funnel{border-right:1px solid var(--line);}
+.col-sheet{border-left:1px solid var(--line);background:#0d0f15;}
+
+.legend{
+  font-family:var(--display);
+  font-size:10.5px;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--parch-3);
+  margin:18px 0 9px;
+  display:flex;align-items:center;gap:9px;
+}
+.legend:first-child{margin-top:0;}
+.legend::after{content:"";flex:1;height:1px;background:var(--line);}
+
+/* ---------- funnel: race > archetype > class ---------- */
+.step{margin-bottom:16px;}
+.step-head{
+  display:flex;align-items:baseline;gap:7px;margin-bottom:6px;
+}
+.step-rank{
+  font-family:var(--mono);font-size:10px;color:var(--parch-3);
+  border:1px solid var(--line);padding:0 4px;border-radius:var(--r);
+}
+.step-name{
+  font-family:var(--display);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--parch-2);
+}
+.step-lv{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--parch-3);}
+
+.pickers{display:flex;flex-direction:column;gap:3px;}
+.pick{
+  display:flex;align-items:center;gap:8px;
+  background:var(--ink-2);border:1px solid var(--line);border-radius:var(--r);
+  padding:6px 9px;text-align:left;width:100%;
+  transition:border-color .12s,background .12s;
+}
+.pick:hover:not(:disabled){border-color:var(--line-hi);background:var(--ink-3);}
+.pick[aria-pressed="true"]{
+  border-color:var(--pc,var(--brass));
+  background:color-mix(in srgb,var(--pc,var(--brass)) 12%,var(--ink-2));
+}
+.pick:disabled{opacity:.3;cursor:not-allowed;}
+.pick-swatch{width:3px;align-self:stretch;background:var(--pc,var(--line-hi));border-radius:1px;flex:none;}
+.pick-name{font-weight:600;font-size:12.5px;}
+.pick-sub{font-size:10.5px;color:var(--parch-3);margin-left:auto;font-family:var(--mono);white-space:nowrap;}
+.pick-blurb{font-size:10.5px;color:var(--parch-3);line-height:1.35;margin:2px 0 0;}
+.pick-body{min-width:0;flex:1;}
+
+.gate-note{
+  font-size:10.5px;color:var(--parch-3);font-style:italic;
+  margin:6px 0 0;padding-left:10px;border-left:1px solid var(--line);
+}
+
+/* level slider */
+.lvwrap{display:flex;align-items:center;gap:12px;margin-top:4px;}
+.lvnum{
+  font-family:var(--display);font-size:30px;font-weight:700;
+  color:var(--brass);line-height:1;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;flex:none;
+}
+.lvnum small{font-size:12px;color:var(--parch-3);font-weight:400;letter-spacing:.04em;}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:18px;background:none;
+}
+input[type=range]::-webkit-slider-runnable-track{
+  height:3px;background:var(--line);border-radius:2px;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:13px;height:13px;margin-top:-5px;border-radius:2px;
+  background:var(--brass);border:1px solid #0a0c11;cursor:grab;
+}
+input[type=range]::-moz-range-track{height:3px;background:var(--line);border-radius:2px;}
+input[type=range]::-moz-range-thumb{
+  width:12px;height:12px;border-radius:2px;background:var(--brass);
+  border:1px solid #0a0c11;cursor:grab;
+}
+
+/* ---------- the three trees ---------- */
+.trees{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.tree{
+  border:1px solid var(--line);border-radius:var(--r);
+  background:var(--ink-2);
+  display:flex;flex-direction:column;
+  position:relative;
+}
+.tree-head{
+  padding:9px 10px 8px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,var(--ink-3),var(--ink-2));
+}
+.tree-name{
+  font-family:var(--display);font-size:14px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:700;
+  color:var(--tc,var(--parch));
+  display:flex;align-items:center;gap:7px;
+}
+.tree-spent{
+  margin-left:auto;font-family:var(--mono);font-size:10.5px;
+  color:var(--parch-3);font-weight:400;letter-spacing:0;
+}
+.tree-spent b{color:var(--brass);font-weight:600;}
+.tree-blurb{font-size:10.5px;color:var(--parch-3);margin:3px 0 0;line-height:1.35;}
+
+/* practice control */
+.practice{
+  padding:7px 10px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:8px;background:#0d0f15;
+}
+.practice-lab{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--parch-3);white-space:nowrap;
+}
+.practice-val{
+  font-family:var(--mono);font-size:12px;color:var(--parch);
+  font-variant-numeric:tabular-nums;min-width:18px;text-align:right;
+}
+.practice input[type=range]{flex:1;min-width:0;}
+.practice-max{
+  background:none;border:1px solid var(--line);border-radius:var(--r);
+  font-family:var(--mono);font-size:9.5px;color:var(--parch-3);
+  padding:1px 5px;flex:none;
+}
+.practice-max:hover{border-color:var(--brass-2);color:var(--brass);}
+
+/* rungs */
+.rungs{padding:4px;display:flex;flex-direction:column;gap:2px;position:relative;}
+.rung{
+  display:flex;align-items:stretch;gap:0;width:100%;text-align:left;
+  background:var(--ink-3);border:1px solid transparent;border-radius:var(--r);
+  padding:0;overflow:hidden;
+  transition:background .12s,border-color .12s,opacity .12s;
+}
+.rung:hover:not(.locked){border-color:var(--line-hi);}
+.rung-req{
+  font-family:var(--mono);font-size:10px;color:var(--parch-3);
+  background:#0c0e14;
+  padding:6px 5px;min-width:24px;text-align:center;
+  display:flex;align-items:center;justify-content:center;flex:none;
+  border-right:1px solid var(--ink);
+}
+.rung-body{padding:5px 7px;flex:1;min-width:0;display:block;}
+.rung-name{
+  font-size:12px;font-weight:600;line-height:1.2;
+  display:flex;align-items:center;gap:5px;
+}
+.rung-text{display:block;font-size:10px;color:var(--parch-3);line-height:1.3;margin-top:1px;}
+.rung-cost{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  padding:6px 7px;display:flex;align-items:center;flex:none;
+  color:var(--parch-3);border-left:1px solid var(--ink);
+  background:#0c0e14;
+}
+
+/* rung states */
+.rung.owned{
+  background:color-mix(in srgb,var(--tc,var(--brass)) 16%,var(--ink-3));
+  border-color:color-mix(in srgb,var(--tc,var(--brass)) 55%,transparent);
+}
+.rung.owned .rung-cost{color:var(--brass);background:transparent;}
+.rung.owned .rung-req{color:var(--parch-2);}
+.rung.affordable .rung-cost{color:var(--parch-2);}
+.rung.unaffordable{opacity:.4;}
+.rung.unaffordable .rung-cost{color:var(--rust);}
+.rung.locked{opacity:.26;cursor:not-allowed;}
+.rung.needs-prev{opacity:.4;}
+.rung.draft .rung-name::after{
+  content:"draft";
+  font-family:var(--mono);font-size:8px;letter-spacing:.08em;
+  color:var(--parch-3);border:1px dashed var(--line-hi);
+  padding:0 3px;border-radius:2px;text-transform:uppercase;font-weight:400;
+}
+/* a filled dot means the rung came out of the existing docs or source */
+.rung.grounded .rung-name::after{
+  content:"";display:inline-block;width:4px;height:4px;border-radius:50%;
+  background:var(--tc,var(--brass));opacity:.75;flex:none;
+}
+
+/* The practice waterline. Its own row rather than a zero-height rule, so the
+   label never lands on top of the rung beneath it. */
+.waterline{
+  height:13px;margin:2px 2px;
+  display:flex;align-items:center;gap:6px;pointer-events:none;
+}
+.waterline::before{
+  content:"";flex:1;height:0;border-top:1px dashed var(--brass-2);
+}
+.waterline span{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--brass-2);white-space:nowrap;
+}
+
+.tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;}
+.tag{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.05em;
+  color:var(--parch-3);background:#0c0e14;border:1px solid var(--line);
+  padding:0 4px;border-radius:2px;
+}
+
+/* ---------- build sheet ---------- */
+.sheet-name{
+  font-family:var(--display);font-size:22px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;line-height:1.05;
+  margin:0 0 2px;
+}
+.sheet-name input{
+  background:none;border:0;border-bottom:1px dashed var(--line);
+  font:inherit;letter-spacing:inherit;text-transform:inherit;
+  width:100%;padding:0 0 2px;
+}
+.sheet-name input:focus{outline:none;border-bottom-color:var(--brass);}
+.sheet-sub{
+  font-family:var(--mono);font-size:10.5px;color:var(--parch-3);
+  letter-spacing:.05em;margin:0 0 14px;
+}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:6px;}
+.stat{background:var(--ink-2);padding:7px 8px;}
+.stat-k{font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--parch-3);}
+.stat-v{font-family:var(--display);font-size:19px;font-weight:700;line-height:1.1;
+  font-variant-numeric:tabular-nums;}
+.stat-v small{font-size:10px;color:var(--parch-3);font-weight:400;}
+
+/* shape bars */
+.shape{display:flex;flex-direction:column;gap:5px;}
+.shape-row{display:flex;align-items:center;gap:8px;}
+.shape-k{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--parch-3);width:62px;flex:none;
+}
+.shape-bar{
+  flex:1;height:7px;background:#0a0c11;border:1px solid var(--line);
+  border-radius:1px;overflow:hidden;
+}
+.shape-fill{height:100%;background:var(--tc,var(--brass));transition:width .22s;}
+.shape-v{font-family:var(--mono);font-size:9.5px;color:var(--parch-3);width:20px;
+  text-align:right;flex:none;font-variant-numeric:tabular-nums;}
+
+.owned-list{display:flex;flex-direction:column;gap:1px;}
+.owned-row{
+  display:flex;align-items:baseline;gap:7px;padding:3px 0;
+  border-bottom:1px solid var(--ink-3);font-size:11.5px;
+}
+.owned-row .ln{width:3px;align-self:stretch;background:var(--tc);flex:none;border-radius:1px;}
+.owned-row .nm{font-weight:600;}
+.owned-row .tr{
+  margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--parch-3);
+  white-space:nowrap;
+}
+.empty{
+  font-size:11px;color:var(--parch-3);font-style:italic;
+  border:1px dashed var(--line);border-radius:var(--r);padding:12px;text-align:center;
+}
+
+.diag{
+  border:1px solid var(--line);border-radius:var(--r);
+  background:var(--ink-2);padding:9px 10px;font-size:11px;line-height:1.5;
+}
+.diag b{color:var(--brass);font-family:var(--mono);font-weight:600;}
+.diag .warn{color:var(--rust);}
+
+/* ---------- footer bar ---------- */
+.footbar{
+  position:sticky;bottom:0;z-index:38;
+  border-top:1px solid var(--line);background:var(--ink-2);
+  padding:8px 18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+}
+.btn{
+  background:var(--ink-3);border:1px solid var(--line);border-radius:var(--r);
+  padding:6px 12px;font-family:var(--display);font-size:11px;
+  letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--parch-2);
+  transition:border-color .12s,color .12s,background .12s;
+}
+.btn:hover{border-color:var(--line-hi);color:var(--parch);background:var(--ink-4);}
+.btn.primary{border-color:var(--brass-2);color:var(--brass);}
+.btn.primary:hover{background:color-mix(in srgb,var(--brass) 14%,var(--ink-3));border-color:var(--brass);}
+.btn[aria-pressed="true"]{background:color-mix(in srgb,var(--brass) 18%,var(--ink-3));
+  border-color:var(--brass);color:var(--brass);}
+.btn.danger:hover{border-color:var(--rust);color:var(--rust);}
+.foot-note{
+  margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--parch-3);
+}
+
+/* ---------- modal ---------- */
+.scrim{
+  position:fixed;inset:0;background:#05060acc;z-index:60;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  backdrop-filter:blur(2px);
+}
+.modal{
+  background:var(--ink-2);border:1px solid var(--line-hi);border-radius:var(--r);
+  width:100%;max-width:680px;max-height:86vh;display:flex;flex-direction:column;
+  box-shadow:0 24px 60px #000a;
+}
+.modal-head{
+  padding:12px 14px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:10px;
+}
+.modal-title{
+  font-family:var(--display);font-size:14px;letter-spacing:.13em;
+  text-transform:uppercase;font-weight:700;
+}
+.modal-body{padding:14px;overflow:auto;}
+.modal-foot{
+  padding:10px 14px;border-top:1px solid var(--line);
+  display:flex;gap:8px;align-items:center;
+}
+.x{background:none;border:0;color:var(--parch-3);font-size:18px;
+  margin-left:auto;line-height:1;padding:0 4px;}
+.x:hover{color:var(--parch);}
+
+/* forms */
+.field{margin-bottom:10px;}
+.field label{
+  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--parch-3);margin-bottom:3px;
+}
+.field input[type=text],.field input[type=number],.field select,.field textarea{
+  width:100%;background:#0c0e14;border:1px solid var(--line);border-radius:var(--r);
+  padding:6px 8px;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--brass-2);
+}
+.field textarea{resize:vertical;min-height:56px;line-height:1.45;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.checks{display:flex;flex-wrap:wrap;gap:8px;}
+.checks label{
+  display:flex;align-items:center;gap:5px;font-family:var(--body);
+  font-size:11.5px;letter-spacing:0;text-transform:none;color:var(--parch-2);
+  background:var(--ink-3);border:1px solid var(--line);border-radius:var(--r);
+  padding:4px 8px;cursor:pointer;margin:0;
+}
+.checks input{accent-color:var(--brass);margin:0;}
+
+pre.dump{
+  background:#0a0c11;border:1px solid var(--line);border-radius:var(--r);
+  padding:10px;font-family:var(--mono);font-size:10.5px;line-height:1.5;
+  max-height:340px;overflow:auto;white-space:pre-wrap;word-break:break-word;
+  color:var(--parch-2);
+}
+
+/* ---------- edit mode ---------- */
+body.editing .rung{cursor:context-menu;}
+body.editing .rung.locked{opacity:.55;cursor:context-menu;}
+.editbadge{
+  background:var(--brass);color:#0a0c11;font-family:var(--display);
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  padding:2px 7px;border-radius:var(--r);
+}
+.addrow{display:flex;gap:6px;padding:4px;}
+.addrow .btn{flex:1;font-size:10px;padding:4px;}
+
+/* ---------- stub tabs ---------- */
+.stubwrap{max-width:760px;margin:0 auto;padding:48px 24px 64px;}
+.stub-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--parch-3);margin-bottom:10px;
+}
+.stub-h{
+  font-family:var(--display);font-size:38px;font-weight:700;letter-spacing:.03em;
+  text-transform:uppercase;line-height:1;margin:0 0 14px;
+}
+.stub-lede{font-size:15px;line-height:1.6;color:var(--parch-2);margin:0 0 26px;max-width:60ch;}
+.stub-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px;}
+.stub-card{border:1px solid var(--line);border-radius:var(--r);background:var(--ink-2);padding:12px 14px;}
+.stub-card h4{
+  font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--parch-3);margin:0 0 6px;font-weight:600;
+}
+.stub-card p{margin:0;font-size:12px;line-height:1.5;color:var(--parch-2);}
+.stub-card ul{margin:0;padding-left:16px;font-size:12px;line-height:1.6;color:var(--parch-2);}
+.stub-status{
+  border:1px dashed var(--line-hi);border-radius:var(--r);
+  padding:16px;text-align:center;color:var(--parch-3);font-size:12.5px;
+}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+:focus-visible{outline:2px solid var(--brass);outline-offset:1px;}
+
+@media (max-width:1180px){
+  .frame{grid-template-columns:1fr;}
+  .col-funnel{border-right:0;border-bottom:1px solid var(--line);}
+  .col-sheet{border-left:0;border-top:1px solid var(--line);}
+  .trees{grid-template-columns:1fr;}
+  .stub-grid{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wordmark"><span class="the">The Isles</span> <span class="cb">Character Builder</span></div>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+</header>
+
+<div id="app"></div>
+
+<div id="modalHost"></div>
+
+<script>
+/* ============================================================
+   PART 1 — THE RULESET
+   Every number and every word below is data, and every one of
+   them is editable in the app. `draft:true` marks content I
+   invented to fill the shape; the rest is drawn from the
+   existing design docs and source.
+   ============================================================ */
+/* The eight-rung ladder, lifted unchanged from sim/styles.ts so this tool and
+   the game agree on what "tier 5" means. Practice gates WHICH rungs you may
+   buy; the budget gates HOW MANY you may own at once. */
+const LADDER = [1, 3, 5, 7, 10, 13, 16, 20];
+const COSTS  = [2, 3, 4, 5,  6,  7,  8, 10];   // 45 to max one tree, 135 for all three
+
+/* r(name, tags, text, grounded) — one rung. `grounded` means it came out of
+   MAGIC-DESIGN.md, MAGIC-OPTIONS.md or src/sim; everything else is invented
+   scaffolding and renders with a dashed "draft" flag so you can see the
+   difference at a glance. */
+function r(name, tags, text, grounded){ return { name, tags, text, grounded: !!grounded }; }
+
+function tree(id, name, ownerClass, blurb, rows){
+  return {
+    id, name, blurb,
+    ownerClasses: [ownerClass],   // an array on purpose: flip a tree to shared later without a rebuild
+    nodes: rows.map((row, i) => ({
+      id: id + '_' + (i + 1),
+      name: row.name,
+      tier: i + 1,
+      reqSkill: LADDER[i],
+      cost: COSTS[i],
+      requires: [],               // empty = you may skip rungs; practice still gates depth
+      tags: row.tags.split(' ').filter(Boolean),
+      text: row.text,
+      draft: !row.grounded,
+    })),
+  };
+}
+
+const DEFAULT_RULESET = {
+  meta: {
+    name: 'Trees & Budget',
+    version: 1,
+    notes: '',
+  },
+
+  /* spendable = base + perLevel × (level − 1) */
+  budget: { base: 5, perLevel: 2, levelCap: 50 },
+
+  /* Which axes the Shape read-out reports, and what each tag contributes.
+     No combat sim — this is an honest weighted rollup of what you bought.
+     If a build reads wrong here, the weights are the thing to argue with. */
+  shapeAxes: ['burst', 'sustain', 'survive', 'control', 'mobility', 'support'],
+  tagWeights: {
+    burst:        { burst: 3 },
+    sustain:      { sustain: 3 },
+    dot:          { sustain: 3, control: 1 },
+    area:         { burst: 2, control: 1 },
+    control:      { control: 3 },
+    root:         { control: 2 },
+    interrupt:    { control: 2 },
+    defense:      { survive: 3 },
+    heal:         { survive: 2, support: 2 },
+    buff:         { support: 3 },
+    debuff:       { control: 2, support: 1 },
+    mobility:     { mobility: 3 },
+    stealth:      { mobility: 2, burst: 1 },
+    summon:       { support: 2, sustain: 1 },
+    leech:        { survive: 2, sustain: 1 },
+    taunt:        { survive: 1, support: 2 },
+    'armor-ignore': { burst: 1, sustain: 1 },
+    reach:        { control: 1, survive: 1 },
+    utility:      { support: 1 },
+    positional:   { burst: 2, mobility: 1 },
+    terrain:      { control: 2, survive: 1 },
+  },
+
+  /* ---- races -------------------------------------------------------------
+     Multipliers and blurbs come straight from src/sim/races.ts. What is NEW
+     is `allows`: races.ts gates two classes (warrior/mage) and there are now
+     six, so this gating is a first cut to argue with, not a port. Human opens
+     every door and stays the measuring stick, exactly as races.ts intends. */
+  races: {
+    human:   { name: 'Human',    hpMult: 1,    manaMult: 1,    stamMult: 1,
+               blurb: 'No bonuses, no penalties, every door open.',
+               allows: ['mage','mystic','pally','ninja','rogue','warlock'] },
+    elf:     { name: 'Elf',      hpMult: 0.85, manaMult: 1.25, stamMult: 1,
+               blurb: 'Frail and luminous. The softest body in the game.',
+               allows: ['mage','mystic','ninja'] },
+    darkelf: { name: 'Dark Elf', hpMult: 0.9,  manaMult: 1.15, stamMult: 1,
+               blurb: 'Quick hands and old grudges. No stranger to the knife.',
+               allows: ['mage','rogue','warlock'] },
+    dwarf:   { name: 'Dwarf',    hpMult: 1.15, manaMult: 0.5,  stamMult: 1.1,
+               blurb: 'Stone-built and stubborn. Allergic to spellbooks.',
+               allows: ['pally','rogue'] },
+    firbolg: { name: 'Firbolg',  hpMult: 1.25, manaMult: 0.75, stamMult: 1.2,
+               blurb: 'A gentle giant with enormous health behind slow first swings.',
+               allows: ['pally','mystic'] },
+    undead:  { name: 'Undead',   hpMult: 0.9,  manaMult: 1.1,  stamMult: 1.1,
+               blurb: 'Already dead, mildly inconvenienced by magic.',
+               allows: ['warlock','mystic','pally'] },
+  },
+  raceOrder: ['human','elf','darkelf','dwarf','firbolg','undead'],
+
+  /* ---- archetypes --------------------------------------------------------
+     The middle rung of the funnel. You commit here first, then to a class.
+     Colours are lifted from the archetype diagram. */
+  archetypes: {
+    innate:   { name: 'Innate',   color: '#3f9c46', atLevel: 5,
+                grants: 'A mana pool and the right to cast at all. No armour heavier than cloth.' },
+    fighter:  { name: 'Fighter',  color: '#4a6fc4', atLevel: 5,
+                grants: 'Heavy armour, the deepest stamina pool, and every weapon family.' },
+    vagabond: { name: 'Vagabond', color: '#a049b8', atLevel: 5,
+                grants: 'Light armour, stealth, and the fastest movement on the isle.' },
+  },
+  archetypeOrder: ['innate','fighter','vagabond'],
+
+  /* ---- classes -----------------------------------------------------------
+     Base numbers extend the shape of src/sim/classes.ts to six classes.
+     Growth is per level above 1. */
+  classes: {
+    mage:    { name: 'Mage',    archetype: 'innate',   role: 'DPS attack magic',
+               hp: 24, mana: 34, stam: 0,  hpLv: 3,   manaLv: 4,   stamLv: 0,
+               blurb: 'Fragile glass cannon. The highest raw damage in the game and no defence whatsoever.',
+               trees: ['fire','ice','earth'] },
+    mystic:  { name: 'Mystic',  archetype: 'innate',   role: 'Healing / buffs',
+               hp: 30, mana: 30, stam: 2,  hpLv: 3.5, manaLv: 3.5, stamLv: 0.3,
+               blurb: 'Prevention over reaction. Keeps a party standing without ever watching a health bar.',
+               trees: ['buffs','ccm','pets'] },
+    pally:   { name: 'Pally',   archetype: 'fighter',  role: 'Well-rounded tank',
+               hp: 48, mana: 6,  stam: 10, hpLv: 6,   manaLv: 0.5, stamLv: 1,
+               blurb: 'Holds the ground everyone else is standing on. Slow to kill, very hard to move.',
+               trees: ['weapons_pally','auras','taunts'] },
+    ninja:   { name: 'Ninja',   archetype: 'fighter',  role: 'High DPS',
+               hp: 38, mana: 4,  stam: 12, hpLv: 4.5, manaLv: 0.3, stamLv: 1.2,
+               blurb: 'A fighter who refuses to stand still. Unarmed, staff, and the discipline to vanish.',
+               trees: ['handskills','staff','arts'] },
+    rogue:   { name: 'Rogue',   archetype: 'vagabond', role: 'High DPS + DOTs + stealth',
+               hp: 34, mana: 4,  stam: 11, hpLv: 4,   manaLv: 0.3, stamLv: 1.1,
+               blurb: 'Opens from the dark and leaves something in the wound. Dagger and bow.',
+               trees: ['weapons_rogue','poison','speed'] },
+    warlock: { name: 'Warlock', archetype: 'vagabond', role: 'Control',
+               hp: 28, mana: 30, stam: 4,  hpLv: 3.2, manaLv: 3.8, stamLv: 0.4,
+               blurb: 'Wins long fights by making the enemy worse rather than by hitting harder.',
+               trees: ['vampirism','dots','debuffs'] },
+  },
+  classOrder: ['mage','mystic','pally','ninja','rogue','warlock'],
+
+  /* ---- the eighteen trees ------------------------------------------------ */
+  trees: [
+
+    /* === MAGE — from MAGIC-DESIGN.md §5, near enough verbatim ============ */
+    tree('fire','Fire','mage','Burst, area, and burn. The highest raw damage on the isle.',[
+      r('Ember','burst','Cheap bolt. Adds 1 burning. Your filler.',1),
+      r('Scorch','burst dot','Heavy single target. Adds 2 burning.',1),
+      r('Wildfire','area dot','Spreads the target’s burning to everything within 2 tiles.',1),
+      r('Immolate','burst','Needs a burning target. Spends every stack at once.',1),
+      r('Firewall','terrain area','A line of burning tiles for 4 rounds. Anything crossing catches.',1),
+      r('Backdraft','control interrupt','Moderate damage, knocks back 2 tiles, interrupts. The panic button.',1),
+      r('Conflagration','area dot burst','Everything within 3 tiles. Adds 2 burning to all of it.',1),
+      r('Cataclysm','area burst','Everything within 3 tiles, and spends every stack of burning on all of them.',1),
+    ]),
+    tree('ice','Ice','mage','Control and staying alive. Decides when the fight happens.',[
+      r('Ice Lance','burst','Cheap bolt, long reach. Adds 1 chilled.',1),
+      r('Frost Armor','defense','Self, 5 rounds. Reduces incoming damage; anything that melees you is chilled.',1),
+      r('Rime','area control','Low damage in a cone. Adds 1 chilled to everything in it.',1),
+      r('Shatter','burst','Needs a chilled target. Spends every stack for burst.',1),
+      r('Frost Nova','root area','Roots everything within 2 tiles.',1),
+      r('Glacial Ward','defense','Self. The next 3 projectiles or bolts aimed at you are stopped dead.',1),
+      r('Flash Freeze','control','One target frozen 3 rounds. The next hit on it lands for half again.',1),
+      r('Winter’s Hold','root area control','Roots everything within 3 tiles for 2 rounds and chills it 3 deep. The reset button.',1),
+    ]),
+    tree('earth','Earth','mage','Damage that rearranges the board. The only line that changes the ground itself.',[
+      r('Shardspit','burst armor-ignore','Cheap bolt of splintered stone. Lands whole whatever the target is wearing.'),
+      r('Tremor','area control','Small area. Everything caught loses its footing and its next action.'),
+      r('Stoneskin','defense','Self, 5 rounds. Flat reduction on every blow rather than a percentage.'),
+      r('Rockfall','burst','Heavy single target from directly above. Cannot be blocked or parried.'),
+      r('Sunder Ground','terrain control','Tiles within 2 become rubble for 4 rounds. Crossing them costs a full round.'),
+      r('Pillar','terrain defense','Raises stone on one tile. It blocks movement and line of sight until broken.'),
+      r('Quake','area control','Everything within 3 tiles is knocked down and loses a round.'),
+      r('Cave-In','area burst terrain','Enormous area damage, and every Pillar you have raised collapses for its own damage again.'),
+    ]),
+
+    /* === MYSTIC ========================================================== */
+    tree('buffs','Buffs','mystic','Prevention, not reaction — and nothing here can be delivered by a parked alt.',[
+      r('Ward','buff defense','An ally adjacent to you takes less damage. Drops the moment they walk away.'),
+      r('Kindle','buff','Allies adjacent to you hit harder. Proximity, so there is nothing to pre-cast.'),
+      r('Steady Hand','buff','Combat only. Allies within 2 tiles miss less. Expires when the fight ends.'),
+      r('Second Wind','heal sustain','Restores stamina or mana to one ally over 3 rounds.'),
+      r('Aegis','defense buff','Absorbs the next chunk of damage aimed at an ally. Cast before the blow, not after.'),
+      r('Bulwark Song','buff sustain','Upkeep every round. Party-wide damage reduction. Only one song plays at a time.'),
+      r('Cleanse','heal utility','Strips one debuff and heals for a portion of what it stripped.'),
+      r('Benediction','buff area support','Every song you know plays at once for 3 rounds, on everyone within 3 tiles.'),
+    ]),
+    tree('ccm','Crowd Control','mystic','Taking the enemy’s turn away without ever dealing damage.',[
+      r('Daze','control','The target loses its next action. Cheap, short, always available.'),
+      r('Root','root','The target cannot move for 2 rounds. It can still swing at what is next to it.'),
+      r('Silence','control debuff','The target cannot cast for 3 rounds.'),
+      r('Ward Off','control','Pushes one target back 2 tiles and interrupts whatever it was winding up.'),
+      r('Mesmerize','control','The target leaves the fight entirely until something damages it. Double-edged on purpose.'),
+      r('Sanctuary','terrain control','One tile enemies simply cannot enter, for 4 rounds.'),
+      r('Bind','root area','Roots everything within 2 tiles.'),
+      r('Stillness','control area','Everything within 3 tiles loses its next action. The group reset.'),
+    ]),
+    tree('pets','Pets','mystic','Bodies on the board. Stationary where possible, because a summon that walks is a summon that gets stuck.',[
+      r('Wisp','summon utility','A fragile light. Barely fights, but it sees — it extends your field of view.',1),
+      r('Bind Spirit','summon utility','Sets your summons’ stance: Follow, Attack, or Hold this tile.',1),
+      r('Stone Sentinel','summon defense','Slow, high health, hits weakly. The corridor plug.',1),
+      r('Feed','summon heal','Pour your own health or mana into a summon to heal it.',1),
+      r('Grove Totem','summon heal terrain','Stationary. Heals allies within 2 tiles every round. No legs, no pathfinding.'),
+      r('Sacrifice','summon burst','Destroy a summon: it bursts for damage, and you take back half its remaining health.',1),
+      r('Bound Elemental','summon burst','One strong summon that takes the element of your highest other line.',1),
+      r('Legion','summon area','For 6 rounds your summon cap triples. Everything you can call, at once.',1),
+    ]),
+
+    /* === PALLY — weapons drawn from src/sim/styles.ts ==================== */
+    tree('weapons_pally','Weapons','pally','Sword, mace and halberd. Reads the fight rather than remembering a sequence.',[
+      r('Quick Cut','sustain','Sword. The most reliable hit in the game, and it opens a bleed.',1),
+      r('Rend','sustain dot','Sword. Heavy, and adds 2 bleed.',1),
+      r('Crush','armor-ignore','Mace. Lands whole whatever the target is wearing, and leaves it sundered.',1),
+      r('Riposte','burst positional','Reacts to a parry. Free damage for standing your ground.',1),
+      r('Ward Breaker','interrupt control','Mace. Pushes any action back a round and breaks boss wind-ups.',1),
+      r('Crimson Arc','burst','Sword. Spends every stack of bleed on the target at once.',1),
+      r('Sweep','area reach','Halberd. Hits everything within reach 2 at half again the cost.',1),
+      r('Executioner','burst','Needs a wounded target. The largest single blow a fighter can throw.',1),
+    ]),
+    tree('auras','Auras','pally','Everything here works on the people standing next to you, and stops when they leave.',[
+      r('Vigil','buff defense','Allies adjacent to you take less damage.'),
+      r('Zeal','buff','Allies adjacent to you deal more damage.'),
+      r('Bulwark','defense taunt','You absorb a share of every blow aimed at an adjacent ally.'),
+      r('Steadfast','defense','You cannot be knocked back, rooted or pulled. Permanent, no upkeep.'),
+      r('Sanctified Ground','terrain heal','The tile you stand on heals slowly. Step off and it fades over 2 rounds.'),
+      r('Retribution','defense burst','Anything that hits you takes back a portion of what it dealt.'),
+      r('Unyielding','defense buff','Below half health, every aura you have doubles its radius.'),
+      r('Last Light','support defense','On your death, allies within 3 tiles are shielded for 3 rounds.'),
+    ]),
+    tree('taunts','CC / Taunts','pally','Deciding who the enemy is allowed to attack.',[
+      r('Taunt','taunt control','Forces one enemy to target you for 3 rounds.',1),
+      r('Shield Bash','interrupt control','Interrupts a cast and staggers the target for a round.'),
+      r('Challenge','taunt area','Every enemy within 2 tiles targets you instead.'),
+      r('Immovable','defense terrain','You cannot be moved, and your tile is impassable to everything.'),
+      r('Disarm','debuff control','The target deals half damage for 3 rounds.'),
+      r('Rally','support utility','Clears fear and mesmerise from allies within 2 tiles.'),
+      r('Grapple','control','Pull one enemy to a tile adjacent to you, wherever it was standing.'),
+      r('Line in the Sand','terrain control area','For 3 rounds nothing hostile may pass through your tile or the ones beside it.'),
+    ]),
+
+    /* === NINJA =========================================================== */
+    tree('handskills','Handskills','ninja','Unarmed. No weapon to disarm, nothing to parry, and the fastest strikes on the isle.',[
+      r('Palm Strike','burst','Fast and unarmed. Cannot be parried.'),
+      r('Sweep Kick','control','Knocks the target down. It loses its next action.'),
+      r('Flurry','burst','Three quick strikes inside a single round.'),
+      r('Pressure Point','debuff control','The target’s swings and casts cost half again as much for 3 rounds.'),
+      r('Iron Body','armor-ignore defense','Your unarmed damage is no longer reduced by armour, and neither is theirs by yours.'),
+      r('Counter Throw','burst positional','Reacts to a dodge. Throws the attacker to a tile of your choosing.'),
+      r('Seven Star','area burst','One strike against every enemy adjacent to you.'),
+      r('Death Touch','burst','Enormous damage to a target already below a fifth of its health.'),
+    ]),
+    tree('staff','Staff','ninja','Reach and refusal. A staff turns blows aside rather than absorbing them.',[
+      r('Staff Guard','defense','Passive. A real chance to parry anything while a staff is in your hands.'),
+      r('Whirl','area','Hits every enemy adjacent to you.'),
+      r('Vault','mobility','Leap 3 tiles, over occupied ground and over anything in the way.'),
+      r('Crane Stance','reach defense','Reach 2 while it holds — but you may not move.'),
+      r('Deflect','defense','The next projectile aimed at you is turned aside entirely.'),
+      r('Wind Cut','area reach','Strikes everything in a straight line 3 tiles long.'),
+      r('Still Water','defense burst','For 3 rounds, everything that misses you is answered immediately.'),
+      r('Mountain Falls','burst','One blow at triple damage. Costs 3 rounds to wind up and can be interrupted.'),
+    ]),
+    tree('arts','Arts','ninja','Stealth and misdirection. The line that decides whether a fight happens at all.',[
+      r('Shadowstep','mobility stealth','Move 2 tiles without breaking stealth.'),
+      r('Conceal','stealth','Enter stealth out of combat.'),
+      r('Ambush','burst stealth','The first strike out of stealth lands for double.'),
+      r('Smoke','terrain control','A 2-tile cloud that blocks line of sight for 3 rounds. Works on both sides.'),
+      r('Vanish','stealth mobility','Leave combat and re-enter stealth. Once per fight.'),
+      r('Mark','debuff burst','One target takes a quarter more from you until it dies.'),
+      r('Mirror Step','stealth control','Leave a decoy standing on your tile whenever you move. It occupies the tile.'),
+      r('Shadow’s Hour','stealth mobility','For 4 rounds stealth never breaks, whatever you do.'),
+    ]),
+
+    /* === ROGUE =========================================================== */
+    tree('weapons_rogue','Weapons','rogue','Dagger and bow. Neither wants a fair fight.',[
+      r('Slip','burst','Dagger. Fast, low damage, and it cannot be blocked.'),
+      r('Snapshot','mobility','Bow. Fire without ending your movement for the round.'),
+      r('Backstab','positional burst','From behind only. Triple damage.'),
+      r('Pinning Shot','root','Bow. Roots the target where it stands for 2 rounds.'),
+      r('Twin Fangs','burst dot','Dagger. Two strikes, each applying poison in its own right.'),
+      r('Volley','area reach','Bow. Hits every enemy in a line 4 tiles long.'),
+      r('Throat Cut','burst','Needs a bleeding target. Spends every stack at once.'),
+      r('Heartseeker','burst armor-ignore','Bow. Ignores armour and cover. Three rounds to draw.'),
+    ]),
+    tree('poison','Poison','rogue','Damage you applied several rounds ago, arriving now.',[
+      r('Coat Blade','dot','Your next 5 hits each apply poison.'),
+      r('Weakening Draught','debuff','The target deals less damage for 4 rounds.'),
+      r('Creeping Venom','dot sustain','Poison ticks harder for every round it has held.'),
+      r('Blind','debuff control','The target misses far more often for 3 rounds.'),
+      r('Contagion','dot area','When a poisoned enemy dies, its poison jumps to the nearest one.',1),
+      r('Paralytic','debuff control','The target’s swing and cast costs double.'),
+      r('Purge Ward','defense utility','You become immune to poison and disease outright.'),
+      r('Killing Jar','burst area','Spends every stack of poison on every poisoned enemy on the board at once.'),
+    ]),
+    tree('speed','Speed','rogue','Being somewhere else. The whole line is tempo.',[
+      r('Fleet','mobility','Two tiles a round out of combat.'),
+      r('Tumble','mobility','Disengage without giving anyone a free swing.'),
+      r('Quickstep','burst mobility','Your first attack in any fight costs no round at all.'),
+      r('Second Skin','defense','A standing chance to dodge anything aimed at you.'),
+      r('Sprint','mobility','Three tiles a round for 4 rounds. You may not attack while it runs.'),
+      r('Blur','defense','The first attack against you each round simply misses.'),
+      r('Relentless','mobility sustain','Every kill refunds the round you spent on it.'),
+      r('Unbound','mobility','For 4 rounds, movement costs nothing whatsoever.'),
+    ]),
+
+    /* === WARLOCK — DOTs drawn from MAGIC-DESIGN.md §6 (Mentalism) ======== */
+    tree('vampirism','Vampirism','warlock','Your health bar is a resource and a weapon at the same time.',[
+      r('Siphon','leech burst','Small damage, and it heals you for half of what it dealt.'),
+      r('Blood Price','leech utility','Cast using health instead of mana, at a rate you will feel.',1),
+      r('Drain Vigor','leech debuff','Steals stamina. The target slows as it empties.'),
+      r('Leech Ward','leech sustain','While it holds, everything you damage heals you a little.'),
+      r('Corpse Feast','leech sustain','Consume a corpse on the ground for health and mana.',1),
+      r('Blood Bond','leech control','Link to one enemy. Every point of damage it takes from anyone heals you.'),
+      r('Exsanguinate','burst leech','Needs a bleeding target. Spends every stack and heals you for all of it.'),
+      r('Crimson Ascendance','leech sustain','For 4 rounds every point of damage you deal comes back as health.'),
+    ]),
+    tree('dots','DOTs','warlock','Damage over time, built so it still does something in a fight that only lasts three rounds.',[
+      r('Mind Spike','burst dot','Small damage. Adds 1 withering.',1),
+      r('Wither','dot debuff','Adds 2 withering, and while it holds the target cannot heal or regenerate.',1),
+      r('Rot','dot area','The disease jumps to whatever is standing adjacent to the victim.',1),
+      r('Enfeeble','debuff','The target deals a quarter less damage for 4 rounds.',1),
+      r('Plague','dot area','Everything within 2 tiles gains withering.'),
+      r('Anguish','burst dot','Spends every stack. If it kills, the withering leaps to the nearest enemy.',1),
+      r('Consumption','dot debuff','Withering you applied can no longer be cleansed or dispelled.'),
+      r('Unravel','debuff dot','Strips every buff off the target and turns each one into a stack of withering.',1),
+    ]),
+    tree('debuffs','Debuffs','warlock','Winning by subtraction. Nothing here deals damage on its own.',[
+      r('Curse of Weight','debuff control','Movement costs the target double.'),
+      r('Hex','debuff','The target’s resistances drop across the board.'),
+      r('Doom','debuff sustain','The target takes more damage for every round the fight has run.'),
+      r('Silence','debuff control','The target cannot cast for 3 rounds.'),
+      r('Shatter Ward','debuff control','Strips one buff and prevents it being recast for 3 rounds.'),
+      r('Mark of Ruin','debuff support','Everything that hits the target — anyone’s — hits harder.'),
+      r('Despair','debuff','Healing the target receives is halved.'),
+      r('Nightfall','debuff area','Every enemy within 3 tiles takes every debuff you know, at half duration.'),
+    ]),
+  ],
+};
+</script>
+<script>
+/* ============================================================
+   PART 2 — THE APPLICATION
+   ============================================================ */
+const LS_RULES = 'isles.charbuilder.ruleset.v1';
+const LS_STATE = 'isles.charbuilder.state.v1';
+
+let RS = load(LS_RULES) || structuredClone(DEFAULT_RULESET);
+let S  = load(LS_STATE) || {
+  tab: 'trees',
+  name: 'Unnamed',
+  race: 'human',
+  archetype: 'innate',
+  cls: 'mage',
+  level: 10,
+  practice: {},
+  owned: [],
+  editing: false,
+  notes: '',
+};
+
+function load(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch { return null; } }
+function save(){
+  try {
+    localStorage.setItem(LS_RULES, JSON.stringify(RS));
+    localStorage.setItem(LS_STATE, JSON.stringify(S));
+  } catch { /* private browsing — the tool still works, it just won't remember */ }
+}
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ---------- derived ---------- */
+const treeById = id => RS.trees.find(t => t.id === id);
+const ownedSet = () => new Set(S.owned);
+
+function classTrees(){
+  const c = RS.classes[S.cls];
+  if (!c) return [];
+  return c.trees.map(treeById).filter(Boolean);
+}
+function archColor(clsId){
+  const c = RS.classes[clsId];
+  const a = c && RS.archetypes[c.archetype];
+  return (a && a.color) || 'var(--brass)';
+}
+function budgetTotal(lv){
+  return Math.round(RS.budget.base + RS.budget.perLevel * ((lv ?? S.level) - 1));
+}
+function nodeById(id){
+  for (const t of RS.trees){ const n = t.nodes.find(n => n.id === id); if (n) return { tree: t, node: n }; }
+  return null;
+}
+/* Owned nodes that still belong to the current class — the source of truth for
+   every number on the build sheet. */
+function ownedNodes(){
+  const ids = ownedSet();
+  const out = [];
+  for (const t of classTrees()) for (const n of t.nodes) if (ids.has(n.id)) out.push({ tree: t, node: n });
+  return out;
+}
+function spent(){ return ownedNodes().reduce((a, x) => a + (+x.node.cost || 0), 0); }
+function practiceOf(treeId){ return S.practice[treeId] ?? 1; }
+
+function stats(){
+  const c = RS.classes[S.cls], race = RS.races[S.race];
+  if (!c || !race) return { hp: 0, mana: 0, stam: 0 };
+  const lv = S.level - 1;
+  return {
+    hp:   Math.round((c.hp   + c.hpLv   * lv) * race.hpMult),
+    mana: Math.round((c.mana + c.manaLv * lv) * race.manaMult),
+    stam: Math.round((c.stam + c.stamLv * lv) * race.stamMult),
+  };
+}
+
+/* The Shape read-out: a weighted rollup of the tags on what you actually
+   bought. No combat simulation — if a build reads wrong here, argue with the
+   weights in Rules, not with the bars. */
+function shape(){
+  const axes = {}; RS.shapeAxes.forEach(a => axes[a] = 0);
+  for (const { node } of ownedNodes()){
+    for (const tag of node.tags){
+      const w = RS.tagWeights[tag]; if (!w) continue;
+      for (const [axis, v] of Object.entries(w)) if (axis in axes) axes[axis] += v;
+    }
+  }
+  const max = Math.max(1, ...Object.values(axes));
+  return { axes, max };
+}
+
+/* ---------- gating ---------- */
+function classesFor(raceId, archId){
+  const race = RS.races[raceId]; if (!race) return [];
+  return RS.classOrder.filter(id => {
+    const c = RS.classes[id];
+    return c && race.allows.includes(id) && (!archId || c.archetype === archId);
+  });
+}
+function archetypesFor(raceId){
+  return RS.archetypeOrder.filter(a => classesFor(raceId, a).length > 0);
+}
+/* Keep the funnel legal after any change upstream of it. */
+function reconcile(){
+  if (!RS.races[S.race]) S.race = RS.raceOrder[0];
+  const archs = archetypesFor(S.race);
+  if (!archs.includes(S.archetype)) S.archetype = archs[0] || null;
+  const cls = classesFor(S.race, S.archetype);
+  if (!cls.includes(S.cls)) setClass(cls[0] || null, true);
+  S.level = Math.max(1, Math.min(RS.budget.levelCap, S.level));
+}
+function setClass(id, quiet){
+  if (S.cls === id && quiet) return;
+  S.cls = id;
+  S.owned = [];          // a different class is a different sheet of paper
+  S.practice = {};
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const app = document.getElementById('app');
+const tabsEl = document.getElementById('tabs');
+
+const TABS = [
+  { id: 'trees', label: 'Trees & Budget', stub: false },
+  { id: 'lok',   label: 'Legends of Kesmai', stub: true },
+  { id: 'cap',   label: 'Total Cap', stub: true },
+];
+
+function renderTabs(){
+  tabsEl.innerHTML = TABS.map(t => `
+    <button class="tab${t.stub ? ' stub' : ''}" role="tab" data-tab="${t.id}"
+            aria-selected="${S.tab === t.id}"><span class="dot"></span>${esc(t.label)}</button>
+  `).join('');
+}
+
+function render(){
+  reconcile();
+  renderTabs();
+  document.body.classList.toggle('editing', !!S.editing);
+  app.innerHTML = S.tab === 'trees' ? viewTrees() : viewStub(S.tab);
+  save();
+}
+
+/* ---------- the budget beam ---------- */
+function viewBeam(){
+  const total = budgetTotal(), sp = spent();
+  const over = sp > total;
+  const pct = total > 0 ? Math.min(100, (sp / total) * 100) : 0;
+  const capTotal = budgetTotal(RS.budget.levelCap);
+  const classCost = classTrees().reduce((a, t) => a + t.nodes.reduce((b, n) => b + (+n.cost || 0), 0), 0);
+  const ownPct = classCost > 0 ? Math.round((capTotal / classCost) * 100) : 0;
+
+  const ticks = [];
+  for (let i = 10; i < total; i += 10) ticks.push(`<i style="left:${(i / total) * 100}%"></i>`);
+
+  return `
+  <div class="beam">
+    <span class="beam-label">Budget</span>
+    <div class="beam-track" role="img" aria-label="${sp} of ${total} points spent">
+      <div class="beam-fill${over ? ' over' : ''}" style="width:${pct}%"></div>
+      <div class="beam-ticks">${ticks.join('')}</div>
+    </div>
+    <span class="beam-num${over ? ' over' : ''}"><b>${sp}</b> <span>/ ${total} spent</span></span>
+    <span class="beam-note">at level <b>${RS.budget.levelCap}</b> you can own <b>${ownPct}%</b> of this class</span>
+  </div>`;
+}
+
+/* ---------- funnel ---------- */
+function viewFunnel(){
+  const race = RS.races[S.race];
+  const archs = archetypesFor(S.race);
+  const cls = classesFor(S.race, S.archetype);
+
+  const raceBtns = RS.raceOrder.map(id => {
+    const rr = RS.races[id];
+    return `<button class="pick" data-pick="race" data-id="${id}" aria-pressed="${S.race === id}">
+      <span class="pick-swatch"></span>
+      <span class="pick-body"><span class="pick-name">${esc(rr.name)}</span>
+        <span class="pick-blurb">${esc(rr.blurb)}</span></span>
+    </button>`;
+  }).join('');
+
+  const archBtns = RS.archetypeOrder.map(id => {
+    const a = RS.archetypes[id], ok = archs.includes(id);
+    return `<button class="pick" data-pick="arch" data-id="${id}" style="--pc:${a.color}"
+      aria-pressed="${S.archetype === id}" ${ok ? '' : 'disabled'}>
+      <span class="pick-swatch"></span>
+      <span class="pick-body"><span class="pick-name">${esc(a.name)}</span>
+        <span class="pick-blurb">${esc(a.grants)}</span></span>
+    </button>`;
+  }).join('');
+
+  const clsBtns = RS.classOrder.map(id => {
+    const c = RS.classes[id];
+    const ok = cls.includes(id);
+    const why = !race.allows.includes(id) ? `Closed to ${race.name}` : 'A different archetype';
+    return `<button class="pick" data-pick="cls" data-id="${id}" style="--pc:${archColor(id)}"
+      aria-pressed="${S.cls === id}" ${ok ? '' : 'disabled'} title="${ok ? esc(c.role) : esc(why)}">
+      <span class="pick-swatch"></span>
+      <span class="pick-body"><span class="pick-name">${esc(c.name)}</span>
+        <span class="pick-blurb">${esc(c.role)}</span></span>
+      ${ok ? '' : `<span class="pick-sub">—</span>`}
+    </button>`;
+  }).join('');
+
+  const locked = RS.classOrder.filter(id => !race.allows.includes(id)).map(id => RS.classes[id].name);
+
+  return `
+  <div class="col col-funnel">
+    <p class="legend">The funnel</p>
+
+    <div class="step">
+      <div class="step-head"><span class="step-rank">1</span><span class="step-name">Race</span>
+        <span class="step-lv">at creation</span></div>
+      <div class="pickers">${raceBtns}</div>
+      ${locked.length ? `<p class="gate-note">${esc(race.name)} may not play: ${esc(locked.join(', '))}.</p>` : ''}
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-rank">2</span><span class="step-name">Archetype</span>
+        <span class="step-lv">level ${RS.archetypes[S.archetype] ? RS.archetypes[S.archetype].atLevel : 5}</span></div>
+      <div class="pickers">${archBtns}</div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="step-rank">3</span><span class="step-name">Class</span>
+        <span class="step-lv">level 10</span></div>
+      <div class="pickers">${clsBtns}</div>
+    </div>
+
+    <p class="legend">Level</p>
+    <div class="lvwrap">
+      <span class="lvnum">${S.level}<small> / ${RS.budget.levelCap}</small></span>
+      <input type="range" id="lv" min="1" max="${RS.budget.levelCap}" value="${S.level}"
+             aria-label="Character level">
+    </div>
+  </div>`;
+}
+
+/* The rungs of one line. Kept separate from the tree shell so a slider drag
+   can replace the rungs without replacing the slider it is dragging. */
+function rungsHtml(t, remaining, ids){
+  const prac = practiceOf(t.id);
+  let waterlinePlaced = false;
+
+  return t.nodes.map(n => {
+    const own = ids.has(n.id);
+    const locked = n.reqSkill > prac;
+    const afford = own || (+n.cost || 0) <= remaining;
+
+    let cls = 'rung ' + (n.draft ? 'draft' : 'grounded');
+    if (own) cls += ' owned';
+    else if (locked) cls += ' locked';
+    else if (!afford) cls += ' unaffordable';
+    else cls += ' affordable';
+
+    /* The waterline sits between the last rung practice has earned and the
+       first it has not. Everything above it is visible and unreachable. */
+    let pre = '';
+    if (locked && !waterlinePlaced){
+      waterlinePlaced = true;
+      pre = `<div class="waterline"><span>practice ${prac}</span></div>`;
+    }
+
+    return pre + `
+      <button class="${cls}" data-node="${n.id}" data-tree="${t.id}"
+              ${locked && !S.editing ? 'aria-disabled="true"' : ''}
+              title="${esc(n.text)}">
+        <span class="rung-req">${n.reqSkill}</span>
+        <span class="rung-body">
+          <span class="rung-name">${esc(n.name)}</span>
+          <span class="rung-text">${esc(n.text)}</span>
+          ${S.editing && n.tags.length ? `<span class="tags">${n.tags.map(x => `<span class="tag">${esc(x)}</span>`).join('')}</span>` : ''}
+        </span>
+        <span class="rung-cost">${n.cost}</span>
+      </button>`;
+  }).join('');
+}
+
+function treeSpentHtml(t){
+  const ids = ownedSet();
+  const s = t.nodes.reduce((a, n) => a + (ids.has(n.id) ? (+n.cost || 0) : 0), 0);
+  const m = t.nodes.reduce((a, n) => a + (+n.cost || 0), 0);
+  return `<b>${s}</b>/${m}`;
+}
+
+/* ---------- trees ---------- */
+function viewTrees(){
+  const c = RS.classes[S.cls];
+  if (!c) return viewBeam() + `<div class="col"><p class="empty">No class is legal for this race. Open Rules and widen a race’s allowances.</p></div>`;
+
+  const total = budgetTotal(), remaining = total - spent();
+  const ids = ownedSet();
+  const color = archColor(S.cls);
+
+  const treesHtml = classTrees().map(t => `
+    <section class="tree" data-treeid="${t.id}" style="--tc:${color}">
+      <header class="tree-head">
+        <div class="tree-name">${esc(t.name)}
+          <span class="tree-spent">${treeSpentHtml(t)}</span></div>
+        <p class="tree-blurb">${esc(t.blurb)}</p>
+      </header>
+      <div class="practice">
+        <span class="practice-lab">Practice</span>
+        <input type="range" min="1" max="20" value="${practiceOf(t.id)}" data-prac="${t.id}"
+               aria-label="${esc(t.name)} practice">
+        <span class="practice-val">${practiceOf(t.id)}</span>
+        <button class="practice-max" data-pracmax="${t.id}" title="Assume this line fully trained">20</button>
+      </div>
+      <div class="rungs">${rungsHtml(t, remaining, ids)}</div>
+      ${S.editing ? `<div class="addrow">
+        <button class="btn" data-addnode="${t.id}">+ Rung</button>
+        <button class="btn" data-edittree="${t.id}">Tree…</button>
+      </div>` : ''}
+    </section>`).join('');
+
+  return viewBeam() + `
+  <div class="frame">
+    ${viewFunnel()}
+    <div class="col">
+      <p class="legend">${esc(c.name)} — three lines</p>
+      <div class="trees">${treesHtml}</div>
+    </div>
+    ${viewSheet()}
+  </div>
+  ${viewFoot()}`;
+}
+
+/* ---------- build sheet ---------- */
+function viewSheet(){
+  const c = RS.classes[S.cls], race = RS.races[S.race];
+  const st = stats(), sh = shape();
+  const owned = ownedNodes();
+  const total = budgetTotal(), sp = spent();
+  const color = archColor(S.cls);
+
+  const rows = owned
+    .sort((a, b) => a.tree.name.localeCompare(b.tree.name) || a.node.tier - b.node.tier)
+    .map(({ tree, node }) => `
+      <div class="owned-row">
+        <span class="ln"></span>
+        <span class="nm">${esc(node.name)}</span>
+        <span class="tr">${esc(tree.name)} · t${node.tier}</span>
+      </div>`).join('');
+
+  const bars = RS.shapeAxes.map(a => {
+    const v = sh.axes[a] || 0;
+    return `<div class="shape-row">
+      <span class="shape-k">${esc(a)}</span>
+      <div class="shape-bar"><div class="shape-fill" style="width:${(v / sh.max) * 100}%"></div></div>
+      <span class="shape-v">${v}</span>
+    </div>`;
+  }).join('');
+
+  const drafts = owned.filter(x => x.node.draft).length;
+
+  return `
+  <div class="col col-sheet" style="--tc:${color}">
+    <h2 class="sheet-name"><input id="charname" value="${esc(S.name)}" aria-label="Character name"
+      spellcheck="false"></h2>
+    <p class="sheet-sub">${esc(race.name)} ${esc(c.name)} · ${esc(RS.archetypes[c.archetype].name)} · level ${S.level}</p>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-k">Health</div><div class="stat-v">${st.hp}</div></div>
+      <div class="stat"><div class="stat-k">Mana</div><div class="stat-v">${st.mana}</div></div>
+      <div class="stat"><div class="stat-k">Stamina</div><div class="stat-v">${st.stam}</div></div>
+    </div>
+
+    <p class="legend">Shape</p>
+    <div class="shape">${bars}</div>
+
+    <p class="legend">Unlocked · ${owned.length}</p>
+    ${owned.length ? `<div class="owned-list">${rows}</div>`
+      : `<p class="empty">Nothing bought yet. Raise a line’s practice, then click a rung.</p>`}
+
+    <p class="legend">Reading</p>
+    <div class="diag">
+      ${sp > total
+        ? `<span class="warn">Over budget by ${sp - total}.</span> Sell something back before this build means anything.<br>`
+        : `<b>${total - sp}</b> points still to spend.<br>`}
+      ${drafts ? `<b>${drafts}</b> of these are draft content I invented — treat the names as placeholders.<br>` : ''}
+      Practice gates what you may buy; the budget gates how much you may own at once.
+    </div>
+  </div>`;
+}
+
+function viewFoot(){
+  return `
+  <div class="footbar">
+    <button class="btn" id="editToggle" aria-pressed="${!!S.editing}">${S.editing ? '● Editing' : 'Edit mode'}</button>
+    <button class="btn" id="rulesBtn">Rules…</button>
+    <button class="btn primary" id="exportBtn">Export</button>
+    <button class="btn" id="importBtn">Import</button>
+    <button class="btn danger" id="resetBtn">Reset</button>
+    <span class="foot-note">${S.editing ? 'Click any rung to edit it' : 'Click a rung to buy or sell it'}</span>
+  </div>`;
+}
+
+/* ---------- the two held directions ---------- */
+function viewStub(id){
+  const S1 = {
+    lok: {
+      eyebrow: 'Direction two · not built',
+      h: 'Legends of Kesmai',
+      lede: 'No classes, no trees, no points. You get good at a thing by doing that thing, and the only ceiling is the twenty every skill already has. Progression is knowledge, gear, and the map in your head — not a build.',
+      cards: [
+        ['What it keeps', 'Skill by use, exactly as sim/weapons.ts already does it. Death is expensive. A veteran is someone who knows where things are, not someone who allocated well.'],
+        ['What it costs', 'No build identity. Given enough hours every character converges on the same one — which is, per MAGIC-OPTIONS.md §5, where this game accidentally sits today.'],
+        ['The open question', 'If there is no build to plan, what is the character screen even for? This direction may not need a builder at all, which is a finding rather than a problem.'],
+        ['Nearest neighbour', 'The Trees & Budget tab with the budget removed and practice left as the only gate. Cheap to prototype from what is already here.'],
+      ],
+    },
+    cap: {
+      eyebrow: 'Direction three · not built',
+      h: 'Total Cap',
+      lede: 'Ultima Online’s answer. Every skill can reach twenty, but the sum of all your skills is capped. At the cap, gaining in one drains another — so respeccing happens through play rather than in a menu, and nobody ever has to reroll.',
+      cards: [
+        ['What it keeps', 'Skill by use stays the engine. The cap is a single number and three arrows of UI, and it applies identically to weapons and magic.'],
+        ['What it costs', 'Legibility. It takes explaining, and a player can drift out of a build they liked without noticing until the number moves.'],
+        ['Why it is here', 'MAGIC-OPTIONS.md §5 argues this is the smallest change from what the game already does, and the closest match to the commitment feel the funnel is reaching for.'],
+        ['Nearest neighbour', 'Trees & Budget, but the budget drains from lines you stop using instead of being granted by level.'],
+      ],
+    },
+  }[id];
+
+  return `<div class="stubwrap">
+    <p class="stub-eyebrow">${esc(S1.eyebrow)}</p>
+    <h1 class="stub-h">${esc(S1.h)}</h1>
+    <p class="stub-lede">${esc(S1.lede)}</p>
+    <div class="stub-grid">
+      ${S1.cards.map(([h, p]) => `<div class="stub-card"><h4>${esc(h)}</h4><p>${esc(p)}</p></div>`).join('')}
+    </div>
+    <div class="stub-status">Held on purpose. Say the word and this tab gets the same treatment as Trees &amp; Budget.</div>
+  </div>`;
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+const host = document.getElementById('modalHost');
+function closeModal(){ host.innerHTML = ''; }
+function modal(title, body, foot){
+  host.innerHTML = `
+    <div class="scrim" data-scrim>
+      <div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+        <div class="modal-head"><span class="modal-title">${esc(title)}</span>
+          <button class="x" data-close aria-label="Close">×</button></div>
+        <div class="modal-body">${body}</div>
+        <div class="modal-foot">${foot || '<button class="btn" data-close>Done</button>'}</div>
+      </div>
+    </div>`;
+  const f = host.querySelector('input,select,textarea,button');
+  if (f) f.focus();
+}
+
+function openNodeEditor(treeId, nodeId){
+  const t = treeById(treeId); if (!t) return;
+  const isNew = !nodeId;
+  const n = isNew
+    ? { id: treeId + '_' + (Date.now() % 100000), name: 'New rung', tier: t.nodes.length + 1,
+        reqSkill: LADDER[Math.min(t.nodes.length, LADDER.length - 1)],
+        cost: COSTS[Math.min(t.nodes.length, COSTS.length - 1)], requires: [], tags: [], text: '', draft: true }
+    : t.nodes.find(x => x.id === nodeId);
+  if (!n) return;
+
+  const owners = RS.classOrder.map(cid => `
+    <label><input type="checkbox" data-owner="${cid}" ${t.ownerClasses.includes(cid) ? 'checked' : ''}>${esc(RS.classes[cid].name)}</label>`).join('');
+
+  modal(isNew ? 'Add rung' : 'Edit rung', `
+    <div class="field"><label for="e_name">Name</label>
+      <input type="text" id="e_name" value="${esc(n.name)}"></div>
+    <div class="field-row">
+      <div class="field"><label for="e_req">Practice required</label>
+        <input type="number" id="e_req" min="1" max="20" value="${n.reqSkill}"></div>
+      <div class="field"><label for="e_cost">Budget cost</label>
+        <input type="number" id="e_cost" min="0" max="99" value="${n.cost}"></div>
+    </div>
+    <div class="field"><label for="e_text">What it does</label>
+      <textarea id="e_text">${esc(n.text)}</textarea></div>
+    <div class="field"><label for="e_tags">Tags — these drive the Shape bars</label>
+      <input type="text" id="e_tags" value="${esc(n.tags.join(' '))}"
+        placeholder="${esc(Object.keys(RS.tagWeights).slice(0, 6).join(' '))}"></div>
+    <div class="field"><label>Known tags</label>
+      <div class="tags">${Object.keys(RS.tagWeights).map(k => `<span class="tag">${esc(k)}</span>`).join('')}</div></div>
+    <div class="field"><label>Status</label>
+      <div class="checks"><label><input type="checkbox" id="e_draft" ${n.draft ? 'checked' : ''}>
+        Draft — invented scaffolding, not decided</label></div></div>
+    <div class="field"><label>This tree belongs to</label>
+      <div class="checks">${owners}</div></div>
+  `, `
+    ${isNew ? '' : '<button class="btn danger" data-delnode>Delete rung</button>'}
+    <button class="btn primary" data-savenode style="margin-left:auto">Save</button>
+    <button class="btn" data-close>Cancel</button>
+  `);
+
+  host.querySelector('[data-savenode]').onclick = () => {
+    n.name = host.querySelector('#e_name').value.trim() || 'Unnamed';
+    n.reqSkill = Math.max(1, Math.min(20, +host.querySelector('#e_req').value || 1));
+    n.cost = Math.max(0, +host.querySelector('#e_cost').value || 0);
+    n.text = host.querySelector('#e_text').value.trim();
+    n.tags = host.querySelector('#e_tags').value.split(/[\s,]+/).filter(Boolean);
+    n.draft = host.querySelector('#e_draft').checked;
+    t.ownerClasses = RS.classOrder.filter(cid => host.querySelector(`[data-owner="${cid}"]`).checked);
+    if (isNew) t.nodes.push(n);
+    t.nodes.sort((a, b) => a.reqSkill - b.reqSkill);
+    t.nodes.forEach((x, i) => x.tier = i + 1);
+    closeModal(); render();
+  };
+  const del = host.querySelector('[data-delnode]');
+  if (del) del.onclick = () => {
+    t.nodes = t.nodes.filter(x => x.id !== n.id);
+    t.nodes.forEach((x, i) => x.tier = i + 1);
+    S.owned = S.owned.filter(id => id !== n.id);
+    closeModal(); render();
+  };
+}
+
+function openTreeEditor(treeId){
+  const t = treeById(treeId); if (!t) return;
+  modal('Edit line', `
+    <div class="field"><label for="t_name">Line name</label>
+      <input type="text" id="t_name" value="${esc(t.name)}"></div>
+    <div class="field"><label for="t_blurb">What this line is for</label>
+      <textarea id="t_blurb">${esc(t.blurb)}</textarea></div>
+    <div class="field"><label>Belongs to</label>
+      <div class="checks">${RS.classOrder.map(cid => `
+        <label><input type="checkbox" data-owner="${cid}" ${t.ownerClasses.includes(cid) ? 'checked' : ''}>${esc(RS.classes[cid].name)}</label>`).join('')}</div></div>
+    <p style="font-size:11px;color:var(--parch-3);margin:0">Ticking a second class shares this line between them — that is the class-gated-branch idea, switched on.</p>
+  `, `<button class="btn primary" data-savetree style="margin-left:auto">Save</button>
+      <button class="btn" data-close>Cancel</button>`);
+
+  host.querySelector('[data-savetree]').onclick = () => {
+    t.name = host.querySelector('#t_name').value.trim() || t.name;
+    t.blurb = host.querySelector('#t_blurb').value.trim();
+    t.ownerClasses = RS.classOrder.filter(cid => host.querySelector(`[data-owner="${cid}"]`).checked);
+    closeModal(); render();
+  };
+}
+
+function openRules(){
+  const b = RS.budget;
+  const classRows = RS.classOrder.map(id => {
+    const c = RS.classes[id];
+    return `<tr data-cls="${id}">
+      <td style="padding:3px 6px;font-weight:600">${esc(c.name)}</td>
+      ${['hp','mana','stam','hpLv','manaLv','stamLv'].map(k =>
+        `<td style="padding:2px"><input type="number" step="0.1" data-cf="${k}" value="${c[k]}"
+          style="width:58px;background:#0c0e14;border:1px solid var(--line);border-radius:2px;padding:3px"></td>`).join('')}
+    </tr>`;
+  }).join('');
+
+  const raceRows = RS.raceOrder.map(id => {
+    const rr = RS.races[id];
+    return `<tr data-race="${id}">
+      <td style="padding:3px 6px;font-weight:600">${esc(rr.name)}</td>
+      ${['hpMult','manaMult','stamMult'].map(k =>
+        `<td style="padding:2px"><input type="number" step="0.05" data-rf="${k}" value="${rr[k]}"
+          style="width:58px;background:#0c0e14;border:1px solid var(--line);border-radius:2px;padding:3px"></td>`).join('')}
+      <td style="padding:2px">
+        <div class="checks">${RS.classOrder.map(cid => `
+          <label style="padding:2px 5px;font-size:10.5px"><input type="checkbox" data-allow="${cid}"
+            ${rr.allows.includes(cid) ? 'checked' : ''}>${esc(RS.classes[cid].name)}</label>`).join('')}</div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  const th = 'padding:3px 6px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--parch-3);text-align:left';
+
+  modal('Rules', `
+    <p class="legend">Budget curve</p>
+    <div class="field-row">
+      <div class="field"><label for="b_base">Points at level 1</label>
+        <input type="number" id="b_base" value="${b.base}"></div>
+      <div class="field"><label for="b_per">Points per level after</label>
+        <input type="number" id="b_per" step="0.1" value="${b.perLevel}"></div>
+    </div>
+    <div class="field"><label for="b_cap">Level cap</label>
+      <input type="number" id="b_cap" value="${b.levelCap}"></div>
+    <p style="font-size:11px;color:var(--parch-3);margin:-4px 0 0">
+      Maxing one line costs ${COSTS.reduce((a, c) => a + c, 0)}; all three costs ${COSTS.reduce((a, c) => a + c, 0) * 3}.
+      Set the curve so the second number is out of reach and the choice stays real.</p>
+
+    <p class="legend">Classes</p>
+    <div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;font-size:11px">
+      <tr><th style="${th}">Class</th><th style="${th}">HP</th><th style="${th}">Mana</th><th style="${th}">Stam</th>
+          <th style="${th}">HP/lv</th><th style="${th}">Mana/lv</th><th style="${th}">Stam/lv</th></tr>
+      ${classRows}
+    </table></div>
+
+    <p class="legend">Races</p>
+    <div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;font-size:11px">
+      <tr><th style="${th}">Race</th><th style="${th}">HP ×</th><th style="${th}">Mana ×</th>
+          <th style="${th}">Stam ×</th><th style="${th}">May play</th></tr>
+      ${raceRows}
+    </table></div>
+  `, `<button class="btn primary" data-saverules style="margin-left:auto">Save</button>
+      <button class="btn" data-close>Cancel</button>`);
+
+  host.querySelector('[data-saverules]').onclick = () => {
+    b.base = +host.querySelector('#b_base').value || 0;
+    b.perLevel = +host.querySelector('#b_per').value || 0;
+    b.levelCap = Math.max(1, +host.querySelector('#b_cap').value || 50);
+    host.querySelectorAll('[data-cls]').forEach(tr => {
+      const c = RS.classes[tr.dataset.cls];
+      tr.querySelectorAll('[data-cf]').forEach(i => c[i.dataset.cf] = +i.value || 0);
+    });
+    host.querySelectorAll('[data-race]').forEach(tr => {
+      const rr = RS.races[tr.dataset.race];
+      tr.querySelectorAll('[data-rf]').forEach(i => rr[i.dataset.rf] = +i.value || 0);
+      rr.allows = RS.classOrder.filter(cid => tr.querySelector(`[data-allow="${cid}"]`).checked);
+    });
+    closeModal(); render();
+  };
+}
+
+/* ---------- export / import ---------- */
+function buildMarkdown(){
+  const c = RS.classes[S.cls], race = RS.races[S.race], st = stats(), sh = shape();
+  const owned = ownedNodes();
+  const total = budgetTotal(), sp = spent();
+  const byTree = {};
+  owned.forEach(({ tree, node }) => (byTree[tree.name] ||= []).push(node));
+
+  const diffs = [];
+  const D = DEFAULT_RULESET;
+  if (JSON.stringify(RS.budget) !== JSON.stringify(D.budget))
+    diffs.push(`- Budget curve changed to base ${RS.budget.base}, +${RS.budget.perLevel}/level, cap ${RS.budget.levelCap} (was ${D.budget.base}/+${D.budget.perLevel}/${D.budget.levelCap}).`);
+  RS.trees.forEach(t => {
+    const d = D.trees.find(x => x.id === t.id);
+    if (!d) return void diffs.push(`- New line **${t.name}**.`);
+    if (d.nodes.length !== t.nodes.length) diffs.push(`- **${t.name}** now has ${t.nodes.length} rungs (was ${d.nodes.length}).`);
+    t.nodes.forEach(n => {
+      const dn = d.nodes.find(x => x.id === n.id);
+      if (!dn) return void diffs.push(`- **${t.name}** — new rung *${n.name}*.`);
+      const ch = [];
+      if (dn.name !== n.name) ch.push(`renamed from *${dn.name}*`);
+      if (dn.cost !== n.cost) ch.push(`cost ${dn.cost}→${n.cost}`);
+      if (dn.reqSkill !== n.reqSkill) ch.push(`practice ${dn.reqSkill}→${n.reqSkill}`);
+      if (dn.text !== n.text) ch.push('text rewritten');
+      if (dn.tags.join(' ') !== n.tags.join(' ')) ch.push(`tags → ${n.tags.join(' ') || '(none)'}`);
+      if (ch.length) diffs.push(`- **${t.name}** — *${n.name}*: ${ch.join(', ')}.`);
+    });
+    if (d.ownerClasses.join() !== t.ownerClasses.join())
+      diffs.push(`- **${t.name}** now belongs to ${t.ownerClasses.map(x => RS.classes[x].name).join(', ') || '(nobody)'}.`);
+  });
+  RS.classOrder.forEach(id => {
+    const c1 = RS.classes[id], c0 = D.classes[id];
+    if (c0 && JSON.stringify(c1) !== JSON.stringify(c0)) diffs.push(`- Class **${c1.name}** stats or lines changed.`);
+  });
+  RS.raceOrder.forEach(id => {
+    const r1 = RS.races[id], r0 = D.races[id];
+    if (r0 && JSON.stringify(r1) !== JSON.stringify(r0)) diffs.push(`- Race **${r1.name}** changed (multipliers or class gating).`);
+  });
+
+  return `# Character Builder export — ${S.name}
+
+**Direction:** Trees & Budget (DAoC)
+**Build:** ${race.name} ${c.name} · ${RS.archetypes[c.archetype].name} · level ${S.level}
+**Budget:** ${sp} of ${total} spent
+**Stats:** ${st.hp} HP · ${st.mana} mana · ${st.stam} stamina
+
+## Notes
+
+${S.notes.trim() || '_(none)_'}
+
+## Practice
+
+${c.trees.map(id => { const t = treeById(id); return `- ${t ? t.name : id}: ${practiceOf(id)}`; }).join('\n')}
+
+## Bought
+
+${Object.keys(byTree).length
+  ? Object.entries(byTree).map(([tn, ns]) =>
+      `**${tn}**\n${ns.sort((a, b) => a.tier - b.tier).map(n =>
+        `- t${n.tier} (practice ${n.reqSkill}, cost ${n.cost}) **${n.name}**${n.draft ? ' _[draft]_' : ''} — ${n.text}`).join('\n')}`).join('\n\n')
+  : '_(nothing bought)_'}
+
+## Shape
+
+${RS.shapeAxes.map(a => `- ${a}: ${sh.axes[a] || 0}`).join('\n')}
+
+## Changed from defaults
+
+${diffs.length ? diffs.join('\n') : '_(nothing — this is the shipped ruleset)_'}
+
+## Full ruleset
+
+\`\`\`json
+${JSON.stringify(RS, null, 1)}
+\`\`\`
+`;
+}
+
+function openExport(){
+  modal('Export', `
+    <div class="field"><label for="x_notes">Notes — what you want changed, in your words</label>
+      <textarea id="x_notes" style="min-height:90px"
+        placeholder="e.g. Fire feels 2 points too cheap at the top. Ninja and Rogue still overlap. Budget at 50 is too generous.">${esc(S.notes)}</textarea></div>
+    <p style="font-size:11px;color:var(--parch-3);margin:0 0 10px">
+      One markdown file: your notes, this build, a plain-English list of everything you changed, and the whole ruleset as JSON. Paste it straight back into the chat.</p>
+    <pre class="dump" id="x_dump"></pre>
+  `, `<button class="btn" data-download>Download .md</button>
+      <button class="btn primary" data-copy style="margin-left:auto">Copy to clipboard</button>
+      <button class="btn" data-close>Close</button>`);
+
+  const notes = host.querySelector('#x_notes');
+  const dump = host.querySelector('#x_dump');
+  const refresh = () => { S.notes = notes.value; dump.textContent = buildMarkdown(); save(); };
+  notes.addEventListener('input', refresh);
+  refresh();
+
+  host.querySelector('[data-copy]').onclick = async (e) => {
+    try { await navigator.clipboard.writeText(buildMarkdown()); e.target.textContent = 'Copied'; }
+    catch { e.target.textContent = 'Select the text below and copy'; }
+  };
+  host.querySelector('[data-download]').onclick = () => {
+    const blob = new Blob([buildMarkdown()], { type: 'text/markdown' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `isles-charbuilder-${S.name.replace(/\W+/g, '-').toLowerCase()}.md`;
+    a.click(); URL.revokeObjectURL(a.href);
+  };
+}
+
+function openImport(){
+  modal('Import', `
+    <div class="field"><label for="i_text">Paste an exported file, or just its JSON block</label>
+      <textarea id="i_text" style="min-height:180px" spellcheck="false"
+        placeholder="Paste here…"></textarea></div>
+    <p style="font-size:11px;color:var(--parch-3);margin:0">This replaces the whole ruleset. Your current build selection is kept where it still makes sense.</p>
+  `, `<button class="btn primary" data-doimport style="margin-left:auto">Import</button>
+      <button class="btn" data-close>Cancel</button>`);
+
+  host.querySelector('[data-doimport]').onclick = () => {
+    const raw = host.querySelector('#i_text').value;
+    const fence = raw.match(/```json\s*([\s\S]*?)```/);
+    const body = fence ? fence[1] : raw;
+    let parsed;
+    try { parsed = JSON.parse(body); }
+    catch { return void alert('That did not parse as JSON. Paste the whole exported file, or just the block between the ```json fences.'); }
+    if (!parsed || !Array.isArray(parsed.trees) || !parsed.classes)
+      return void alert('That JSON is missing `trees` or `classes`, so it is not a ruleset.');
+    RS = parsed;
+    S.owned = []; S.practice = {};
+    closeModal(); render();
+  };
+}
+
+/* ============================================================
+   EVENTS — one delegated listener for the whole page
+   ============================================================ */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-pick],[data-node],[data-pracmax],[data-addnode],[data-edittree],#editToggle,#rulesBtn,#exportBtn,#importBtn,#resetBtn,[data-close],[data-scrim]');
+  if (!t) return;
+
+  if (t.hasAttribute('data-scrim') && e.target !== t) return;
+  if (t.hasAttribute('data-close') || t.hasAttribute('data-scrim')) return void closeModal();
+
+  if (t.dataset.tab)      { S.tab = t.dataset.tab; return void render(); }
+  if (t.dataset.pracmax)  { S.practice[t.dataset.pracmax] = 20; return void render(); }
+  if (t.dataset.addnode)  return void openNodeEditor(t.dataset.addnode, null);
+  if (t.dataset.edittree) return void openTreeEditor(t.dataset.edittree);
+
+  if (t.dataset.pick){
+    const id = t.dataset.id;
+    if (t.dataset.pick === 'race'){
+      S.race = id;
+      const archs = archetypesFor(id);
+      if (!archs.includes(S.archetype)) S.archetype = archs[0];
+      const cls = classesFor(id, S.archetype);
+      if (!cls.includes(S.cls)) setClass(cls[0]);
+    }
+    if (t.dataset.pick === 'arch'){
+      S.archetype = id;
+      const cls = classesFor(S.race, id);
+      if (!cls.includes(S.cls)) setClass(cls[0]);
+    }
+    if (t.dataset.pick === 'cls') setClass(id);
+    return void render();
+  }
+
+  if (t.dataset.node){
+    if (S.editing) return void openNodeEditor(t.dataset.tree, t.dataset.node);
+    const found = nodeById(t.dataset.node); if (!found) return;
+    const { node } = found;
+    const own = ownedSet();
+    if (own.has(node.id)){
+      S.owned = S.owned.filter(x => x !== node.id);           // sell it back
+    } else {
+      if (node.reqSkill > practiceOf(t.dataset.tree)) return; // above the waterline
+      if ((+node.cost || 0) > budgetTotal() - spent()) return; // no budget for it
+      S.owned = S.owned.concat(node.id);
+    }
+    return void render();
+  }
+
+  if (t.id === 'editToggle'){ S.editing = !S.editing; return void render(); }
+  if (t.id === 'rulesBtn')   return void openRules();
+  if (t.id === 'exportBtn')  return void openExport();
+  if (t.id === 'importBtn')  return void openImport();
+  if (t.id === 'resetBtn'){
+    if (!confirm('Reset the ruleset and this build back to the shipped defaults? Everything you have edited is lost.')) return;
+    RS = structuredClone(DEFAULT_RULESET);
+    S = { tab: 'trees', name: 'Unnamed', race: 'human', archetype: 'innate', cls: 'mage',
+          level: 10, practice: {}, owned: [], editing: false, notes: '' };
+    return void render();
+  }
+});
+
+/* Sliders get a targeted update rather than a full re-render: replacing the
+   page mid-drag would destroy the very element being dragged and the drag
+   would die after one step. Everything a slider affects is repainted here,
+   and nothing that holds focus is touched. */
+function liveUpdate(){
+  const lvn = document.querySelector('.lvnum');
+  if (lvn) lvn.innerHTML = `${S.level}<small> / ${RS.budget.levelCap}</small>`;
+
+  const beam = document.querySelector('.beam');
+  if (beam) beam.outerHTML = viewBeam();
+
+  const remaining = budgetTotal() - spent();
+  const ids = ownedSet();
+  for (const t of classTrees()){
+    const sec = document.querySelector(`.tree[data-treeid="${t.id}"]`);
+    if (!sec) continue;
+    sec.querySelector('.rungs').innerHTML = rungsHtml(t, remaining, ids);
+    sec.querySelector('.practice-val').textContent = practiceOf(t.id);
+    sec.querySelector('.tree-spent').innerHTML = treeSpentHtml(t);
+  }
+
+  const sheet = document.querySelector('.col-sheet');
+  if (sheet) sheet.outerHTML = viewSheet();
+
+  save();
+}
+
+document.addEventListener('input', e => {
+  if (e.target.id === 'lv'){ S.level = +e.target.value; return void liveUpdate(); }
+  if (e.target.dataset.prac){ S.practice[e.target.dataset.prac] = +e.target.value; return void liveUpdate(); }
+  if (e.target.id === 'charname'){ S.name = e.target.value; save(); }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && host.innerHTML) closeModal();
+});
+
+render();
+</script>
+</body>
+</html>
