@@ -79,7 +79,9 @@ input,select,textarea{font-family:inherit;font-size:inherit;color:inherit;}
 }
 .wordmark .the{color:var(--parch-3);}
 .wordmark .cb{color:var(--brass);}
-.tabs{display:flex;align-items:flex-end;margin-left:auto;}
+/* Wraps: there are nine directions now, and at anything under a wide desktop a
+   single row clips the last few off the right edge entirely. */
+.tabs{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:flex-end;margin-left:auto;}
 .tab{
   background:none;border:0;border-bottom:2px solid transparent;
   padding:14px 16px 11px;
@@ -498,8 +500,13 @@ body.editing .tnode.locked,body.editing .tnode.needs-parent{opacity:.6;cursor:co
 @media (max-width:820px){
   .masthead{position:static;padding:0 12px;gap:0;}
   .wordmark{font-size:16px;padding:11px 0 8px;}
-  .tabs{margin-left:0;width:100%;overflow-x:auto;}
-  .tab{padding:9px 12px;font-size:11px;white-space:nowrap;}
+  /* Nine tabs wrap to four rows on a phone and eat a third of the screen, so
+     here they stay on one line and scroll sideways. The wrap is right on a
+     desktop, where there is room for it. */
+  .tabs{margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;
+        scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{padding:9px 12px;font-size:11px;white-space:nowrap;flex:none;}
   .beam{top:0;padding:7px 12px 9px;gap:10px;}
   .beam-note{display:none;}       /* it reappears on the build sheet instead */
   .beam-label{font-size:10px;}
@@ -1156,10 +1163,26 @@ function setClass(id, quiet){
    ============================================================ */
 const app = document.getElementById('app');
 const tabsEl = document.getElementById('tabs');
+/**
+ * Nine directions, numbered so they can be argued about by name.
+ *
+ * One to three are the original set. Four to nine were added to widen the field
+ * before anything gets committed, and they are deliberately spread across the
+ * two axes that actually differ — WHERE the build lives (on the character, on
+ * the gear, on the bar, out in the world) and WHAT pays for it (points, use,
+ * deeds, nothing at all). Two directions that share both answers are the same
+ * direction with different words, and are not worth a tab.
+ */
 const TABS = [
   { id: 'trees', label: 'Trees & Budget', stub: false },
   { id: 'lok',   label: 'Legends of Kesmai', stub: true },
   { id: 'cap',   label: 'Total Cap', stub: true },
+  { id: 'gear',  label: '4 · Gear-Bound', stub: true },
+  { id: 'eight', label: '5 · The Eight', stub: true },
+  { id: 'deeds', label: '6 · Deeds', stub: true },
+  { id: 'ledge', label: '7 · Two Ledgers', stub: true },
+  { id: 'board', label: '8 · One Board', stub: true },
+  { id: 'mast',  label: '9 · Masters', stub: true },
 ];
 
 function renderTabs(){
@@ -1457,6 +1480,74 @@ function viewStub(id){
         ['Nearest neighbour', 'Trees & Budget, but the budget drains from lines you stop using instead of being granted by level.'],
       ],
     },
+
+    /* ---- four to nine: added to widen the field ------------------------- */
+
+    gear: {
+      eyebrow: 'Direction four · not built', h: 'The Weapon Is the Build',
+      lede: 'Abilities do not live on the character. They live on the sword, the shield, the coat. Change what you carry and you change what you can do — the build is a loadout of objects, and the loot table is the skill tree.',
+      cards: [
+        ['What it keeps', 'The rule the game already runs on. sim/weapons.ts makes the weapon your moveset today — a mace in hand gives you the mace’s verbs whatever your class is. This is that rule followed to its end rather than a new idea bolted beside it.'],
+        ['What it costs', 'Your build becomes a loot problem. If the sword you want will not drop you cannot make the choice, and a bad week of drops is a bad character — which feels very different from a bad decision.'],
+        ['Why it might fit', 'No new currency, no tree, no respec and nothing to explain. It also gives gear somewhere to go beyond +power, and hands the pawnbroker and the tanner a reason to exist.'],
+        ['Nearest neighbour', 'Monster Hunter, where the armour carries the skills and the build IS the set you assembled. Or Trees & Budget with the tree attached to the sword instead of the character.'],
+      ],
+    },
+
+    eight: {
+      eyebrow: 'Direction five · not built', h: 'The Eight',
+      lede: 'You own everything you have earned. You may carry only a little of it. A short bar, set outside combat and free to change — so a build is not what your character IS, it is what you brought today.',
+      cards: [
+        ['What it keeps', 'Everything earned stays earned, and nothing is ever wasted or regretted. The Skills panel is already a shelf and the bar is already twelve slots, so this is a rule change rather than a system.'],
+        ['What it costs', 'It needs a big library before the choice bites. With 32 styles across four lines most characters would carry most of what they own — the constraint only gets interesting at three or four times that.'],
+        ['Why it might fit', 'It is the one model where a player can never build themselves into a corner. That matters most in a game with an expensive death and no respec, and it turns preparation into the skill.'],
+        ['Nearest neighbour', 'Guild Wars 1 — eight skills chosen from hundreds, widely held to be the deepest build system the genre has produced. The constraint was always the bar, never the ownership.'],
+      ],
+    },
+
+    deeds: {
+      eyebrow: 'Direction six · not built', h: 'Deeds, Not Points',
+      lede: 'No points and no purchase. An ability arrives when you have done the thing that would teach it — two hundred blows turned aside on a shield opens Shield Wall, a boss put down with a halberd opens Reap. The world hands you your build in exchange for how you played.',
+      cards: [
+        ['What it keeps', 'Skill-by-use is already the engine; this extends it from a number into a verb. No currency, no tree, no respec — and a character sheet becomes a record of what you actually did.'],
+        ['What it costs', 'Opaque without a journal. Worse, it invites the ugliest kind of grinding: a player who wants Shield Wall will go and stand in front of things to be hit on purpose, which is the mechanic teaching precisely the wrong lesson.'],
+        ['Why it might fit', 'It is the only direction here where the BUILD and the STORY are the same object. It also suits a game with no multiplayer yet, because every unlock is something you can go and do alone.'],
+        ['Nearest neighbour', 'Morrowind and the SaGa games, where using the skill is the progression. RuneScape’s diaries for the explicit named-deed version.'],
+      ],
+    },
+
+    ledge: {
+      eyebrow: 'Direction seven · not built', h: 'Two Ledgers',
+      lede: 'Two currencies that can never buy one another. LEVEL pays for who you are — health, class abilities, the promotion at five. PRACTICE pays for what your hands can do — weapon styles, gated on that line’s own one to twenty. Neither converts into the other, ever.',
+      cards: [
+        ['What it keeps', 'This is very nearly what the game does TODAY, which is exactly why it is on the page: training.ts gates class abilities on LEVEL while weapon skill grows by swinging. Naming it turns an accident into a decision.'],
+        ['What it costs', 'Two progress bars to explain and two ways to feel behind. A character who levelled without practising is tough and cannot fight, which reads as a bug until somebody explains that it is not.'],
+        ['Why it might fit', 'It answers the levelling-or-skill question by refusing to pick, and it protects the thing that makes this game feel old: a sword gets better because you swung it, not because you dinged.'],
+        ['Nearest neighbour', 'Trees & Budget with the budget granted by level and the waterline earned by use — which is, near enough, what that tab already models once its two gates are pulled apart.'],
+      ],
+    },
+
+    board: {
+      eyebrow: 'Direction eight · not built', h: 'One Board',
+      lede: 'One shared board for every character in the game. Race and class do not decide what you may reach — they decide where you START. Anything can be reached from anywhere if you are willing to walk, and the distance is the cost.',
+      cards: [
+        ['What it keeps', 'Nothing is ever off-limits, so a build becomes an argument about routes rather than a menu of permissions. It also rhymes with the game itself: a grid character sheet for a game played on a grid.'],
+        ['What it costs', 'Content, enormously. Path of Exile’s board runs past a thousand nodes because a small one is just a tree drawn sideways. At 198 abilities this would be a tree in a costume.'],
+        ['Why it might fit', 'It is the strongest possible answer to “I do not want to be locked out of anything”, and the only direction where two characters of the same class can be genuinely unlike each other.'],
+        ['Nearest neighbour', 'Path of Exile’s passive tree, itself openly descended from Final Fantasy X’s Sphere Grid — whose expert board hid the routes behind keys you had to go and find.'],
+      ],
+    },
+
+    mast: {
+      eyebrow: 'Direction nine · not built', h: 'Masters and Debts',
+      lede: 'No tree and no budget. Every ability in the game exists on a PERSON, somewhere. You have to find them, satisfy whatever they ask, and pay them. Your build is the sum of who you have met.',
+      cards: [
+        ['What it keeps', 'The game already has half of this: four weapon trainers standing in town, a 1.5x price curve deliberately written as a savings goal, and a gold economy with almost nothing to spend on. This is the smallest change on the page.'],
+        ['What it costs', 'A wiki solves it permanently. Once the locations are known the discovery is gone for everyone forever, and what is left is an errand list.'],
+        ['Why it might fit', 'It puts progression back in the WORLD instead of on a menu, which is what the games this one is drawn from actually did. It also gives the map a reason to be worth walking after the monsters stop being frightening.'],
+        ['Nearest neighbour', 'Morrowind, where the master trainers are hidden out in the world and the ordinary ones take your gold and your hours. Ultima Online’s trainers for the undiluted version.'],
+      ],
+    },
   }[id];
   return `<div class="stubwrap">
     <p class="stub-eyebrow">${esc(D.eyebrow)}</p>
@@ -1464,7 +1555,7 @@ function viewStub(id){
     <p class="stub-lede">${esc(D.lede)}</p>
     <div class="stub-grid">${D.cards.map(([h, p]) =>
       `<div class="stub-card"><h4>${esc(h)}</h4><p>${esc(p)}</p></div>`).join('')}</div>
-    <div class="stub-status">Held on purpose. Say the word and this tab gets the same treatment as Trees &amp; Budget.</div>
+    <div class="stub-status">One of nine directions, eight of them written pitches. Held on purpose — say the word and this tab gets the same treatment as Trees &amp; Budget.</div>
   </div>`;
 }
 
