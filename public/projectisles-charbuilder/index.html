@@ -323,7 +323,20 @@ input[type=range]::-moz-range-thumb{
   margin-top:6px;padding-top:5px;border-top:1px solid var(--line);
   font-size:10.5px;color:var(--rust);
 }
-#tip .tags{margin-top:5px;}
+#tip .tags{margin-top:6px;}
+/* An effect the ability puts on the board, spelled out. Red bar for hostile,
+   green for one you get to keep. */
+#tip .t-eff{
+  margin-top:6px;padding:5px 7px;border-left:2px solid var(--rust);
+  background:#12151d;border-radius:0 var(--r) var(--r) 0;
+}
+#tip .t-eff.friendly{border-left-color:var(--innate);}
+#tip .t-eff-h{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--parch);display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;
+}
+#tip .t-eff-m{letter-spacing:.04em;text-transform:none;color:var(--parch-3);font-size:9px;}
+#tip .t-eff-t{font-size:11px;line-height:1.4;color:var(--parch-2);margin-top:2px;}
 
 .tags{display:flex;flex-wrap:wrap;gap:3px;}
 .tag{
@@ -539,8 +552,12 @@ body.editing .tnode.locked,body.editing .tnode.needs-parent{opacity:.6;cursor:co
 
 /* Six tiers deep. Practice required, and budget cost, per tier. Deeper is
    both harder to reach and more expensive to hold, which is what makes
-   "how far do I go into this line" the actual decision. */
-const ROWS     = [1, 3, 6, 10, 14, 20];
+   "how far do I go into this line" the actual decision.
+
+   Every practice value here is a real rung of the game's own ladder
+   (1/3/5/7/10/13/16/20, src/sim/styles.ts) — six of its eight — so a tier in
+   this tool always means something the game already recognises. */
+const ROWS     = [1, 3, 5, 10, 16, 20];
 const ROWCOST  = [2, 3, 4,  6,  8, 11];
 
 /* Spine alone: 34. Both branches too: 78. All three lines, spine only: 102 —
@@ -592,6 +609,58 @@ const DEFAULT_RULESET = {
   meta: { name: 'Trees & Budget', version: 2, notes: '' },
 
   budget: { base: 5, perLevel: 2, levelCap: 50 },
+
+  /* ---- effects glossary ----------------------------------------------------
+     "Adds 2 burning" says nothing unless you know what burning does, so every
+     effect an ability mentions is spelled out on its hover card.
+
+     `grounded` here means the effect is REAL — it exists in src/sim/effects.ts
+     and the game already runs it. The rest are proposed by MAGIC-DESIGN.md and
+     do not exist yet; the card says so. `match` is the words in an ability's
+     text that pull the effect onto its card. */
+  effects: {
+    // --- live in the game today (src/sim/effects.ts) ---
+    bleed:      { label: 'Bleeding',   hostile: 1, maxStacks: 3, grounded: 1, match: ['bleed','bleeding'],
+                  text: 'Losing blood each round — 3 damage per stack. Stacks up to three.' },
+    sunder:     { label: 'Sundered',   hostile: 1, maxStacks: 3, grounded: 1, match: ['sunder','sundered'],
+                  text: 'Armour broken — 2 less per stack, for everyone hitting it.' },
+    exposed:    { label: 'Exposed',    hostile: 1, maxStacks: 1, grounded: 1, match: ['exposed'],
+                  text: 'The next hit from any source lands for half again.' },
+    concussed:  { label: 'Concussed',  hostile: 1, maxStacks: 1, grounded: 1, match: ['concussed'],
+                  text: 'Head still ringing. The mace line builds on this.' },
+    dazed:      { label: 'Dazed',      hostile: 1, maxStacks: 1, grounded: 1, match: ['daze','dazed','go wide','blind'],
+                  text: 'Its next swing is likely to go wide.' },
+    stunned:    { label: 'Stunned',    hostile: 1, maxStacks: 1, grounded: 1, match: ['stun','stunned','stagger','staggers','knocked down','does not get a turn','loses its next action','lose their next action','loses a round'],
+                  text: 'Loses its turn entirely.' },
+    rooted:     { label: 'Rooted',     hostile: 1, maxStacks: 1, grounded: 1, match: ['root','roots','rooted'],
+                  text: 'Cannot move. Can still swing at what is next to it.' },
+    slowed:     { label: 'Slowed',     hostile: 1, maxStacks: 1, grounded: 1, match: ['slow','slowed','slows'],
+                  text: 'Acts at half pace.' },
+    braced:     { label: 'Braced',     hostile: 0, maxStacks: 1, grounded: 1, match: ['braced'],
+                  text: 'Blocking far more — but planted where you stand.' },
+    shieldwall: { label: 'Shield Wall',hostile: 0, maxStacks: 1, grounded: 1, match: ['shield wall'],
+                  text: 'Your shield’s armour counts twice.' },
+    overlap:    { label: 'Overlap',    hostile: 0, maxStacks: 1, grounded: 1, match: ['overlap'],
+                  text: 'The next blow against you is blocked, guaranteed.' },
+    immovable:  { label: 'Immovable',  hostile: 0, maxStacks: 1, grounded: 1, match: ['immovable'],
+                  text: 'Cannot be moved, stunned or staggered. Blocks bite back.' },
+    setspear:   { label: 'Set',        hostile: 0, maxStacks: 1, grounded: 1, match: ['set against'],
+                  text: 'Braced for a charge — the first thing to close takes a free hit.' },
+    reaping:    { label: 'Reaping',    hostile: 0, maxStacks: 5, grounded: 1, match: ['reaping','momentum of the last sweep'],
+                  text: 'Your last sweep caught this many. The halberd’s finishers hit +35% per stack and spend the lot.' },
+
+    // --- proposed in MAGIC-DESIGN.md, not built ---
+    burning:    { label: 'Burning',    hostile: 1, maxStacks: 3, match: ['burning'],
+                  text: 'Fire damage each round, stacking to three. Fire’s spenders cash the whole stack in at once.' },
+    chilled:    { label: 'Chilled',    hostile: 1, maxStacks: 3, match: ['chilled','chills'],
+                  text: 'Acts more slowly, stacking to three. Ice’s spenders cash the whole stack in at once.' },
+    withering:  { label: 'Withering',  hostile: 1, maxStacks: 3, match: ['withering'],
+                  text: 'Damage each round AND the target cannot heal or regenerate while it holds. That second half is what makes it worth casting in a fight too short for a DOT.' },
+    enfeebled:  { label: 'Enfeebled',  hostile: 1, maxStacks: 1, match: ['enfeeble','enfeebled'],
+                  text: 'Deals a quarter less damage.' },
+    poisoned:   { label: 'Poisoned',   hostile: 1, maxStacks: 3, match: ['poison','poisoned','venom'],
+                  text: 'Damage each round, and it ticks harder for every round it has already held.' },
+  },
 
   shapeAxes: ['burst', 'sustain', 'survive', 'control', 'mobility', 'support'],
   tagWeights: {
@@ -763,18 +832,23 @@ const DEFAULT_RULESET = {
         n('Soul Tether','summon leech','Damage dealt to your summons heals you instead of being wasted.') ]),
 
     /* ================= PALLY ================= */
-    tree('weapons_pally','Weapons','pally','Sword, mace and halberd. Reads the fight rather than remembering a sequence.',
-      [ n('Quick Cut','sustain','Sword. The most reliable hit in the game, and it opens a bleed.',1),
-        n('Rend','sustain dot','Sword. Heavy, and adds 2 bleed.',1),
-        n('Crush','armor-ignore','Mace. Lands whole whatever the target is wearing, and leaves it sundered.',1),
-        n('Ward Breaker','interrupt control','Mace. Pushes any action back a round and breaks boss wind-ups.',1),
-        n('Crimson Arc','burst','Sword. Spends every stack of bleed on the target at once.',1),
-        n('Executioner','burst','Needs a wounded target. The largest single blow a fighter can throw.',1) ],
-      [ n('Riposte','burst positional','Reacts to a parry. Free damage for standing your ground.',1),
-        n('Parry Stance','defense','You may parry while attacking, at the cost of some of your own damage.'),
-        n('Iron Guard','defense burst','Every blow you parry is answered immediately, whatever weapon you hold.') ],
-      [ n('Sweep','area reach','Halberd. Hits everything within reach 2 at half again the cost.',1),
-        n('Reaping Arc','area reach','Halberd. Everything within reach 2, twice, at three rounds of wind-up.') ]),
+    /* This line is the one place the tool touches abilities the game has already
+       shipped, so every node here is a real style from src/sim/styles.ts at its
+       real reqSkill: the sword ladder down the spine, mace down the left branch
+       and halberd down the right — which is exactly the "SWORD/MACE/HALBERD"
+       the archetype diagram gives the Pally. */
+    tree('weapons_pally','Weapons','pally','Sword down the spine, mace and halberd off it. Every ability here already exists in the game.',
+      [ n('Quick Cut','sustain bleed','Sword. A short, certain cut that leaves them bleeding. Cheap, quick to come back, one stack at a time.',1),
+        n('Cross-Guard','defense control','Sword. Catch the blade and turn it aside. They fight at half pace for two rounds.',1),
+        n('Rend','sustain bleed','Sword. Open the wound properly. Heavier than a cut, and worth two stacks of bleed at once.',1),
+        n('Sever','sustain bleed','Sword. A heavy, honest cut that keeps an existing bleed running — sustain without starting over.',1),
+        n('Feint','debuff support','Sword. Almost no damage. Sells a strike they have to answer, and the answer leaves them open — the next hit from anyone lands for half again.',1),
+        n('Coup de Grâce','burst','Sword. It lights up when they are nearly finished. It does not deal damage — it ends them.',1) ],
+      [ n('Skullring','debuff control','Mace. Rattles whatever is inside the helmet. Its next swings are likely to go wide.',1),
+        n('Bell Toll','burst sunder','Mace. Strike the bell again while it is still humming. Heavy, and the ringing carries on — which is what keeps the capstone open.',1),
+        n('Silence the Bell','control','Mace. The blow that stops the ringing. Two full rounds where it simply does not get a turn.',1) ],
+      [ n('Reap','area reach reaping','Halberd. Bring it back the other way, spending the momentum of the last sweep. The more that one caught, the harder this lands.',1),
+        n('The Long Harvest','area reach reaping','Halberd. Everything within two tiles, and every kill pays for the next one. Wants a real crowd — three or more on you.',1) ]),
 
     tree('auras','Auras','pally','Everything here works on the people standing next to you, and stops when they leave.',
       [ n('Vigil','buff defense','Allies adjacent to you take less damage.'),
@@ -931,7 +1005,18 @@ const DEFAULT_RULESET = {
 const LS_RULES = 'isles.charbuilder.ruleset.v2';
 const LS_STATE = 'isles.charbuilder.state.v2';
 
-let RS = load(LS_RULES) || structuredClone(DEFAULT_RULESET);
+/* A ruleset saved by an older build is missing whatever has been added since —
+   `effects` was added after the first release, and a stored copy without it
+   would silently drop the glossary. Fill in any top-level key the saved copy
+   has never heard of, while leaving everything it DOES have alone, because
+   those are the edits we are trying to preserve. */
+function migrate(saved){
+  if (!saved) return structuredClone(DEFAULT_RULESET);
+  for (const [k, v] of Object.entries(DEFAULT_RULESET))
+    if (saved[k] === undefined) saved[k] = structuredClone(v);
+  return saved;
+}
+let RS = migrate(load(LS_RULES));
 let S  = load(LS_STATE) || {
   tab: 'trees', name: 'Unnamed', race: 'human', archetype: 'innate', cls: 'mage',
   level: 10, practice: {}, owned: [], editing: false, notes: '',
@@ -1013,6 +1098,24 @@ function whyBlocked(t, node, state){
   if (state === 'unaffordable') return `Costs ${node.cost}. You have ${budgetTotal() - spent()} left.`;
   return '';
 }
+/* Which effects an ability puts on the board. Derived by scanning its own
+   text for the effect's `match` words rather than hand-tagged on 198 nodes —
+   and an explicit `node.effects` array overrides the scan when the wording
+   does not give it away. */
+function effectsFor(node){
+  if (Array.isArray(node.effects)) return node.effects.filter(id => RS.effects[id]);
+  /* Name and tags count as well as the prose: "Enfeeble" and a `bleed` tag both
+     mean the effect without the description ever spelling it out. */
+  const hay = ' ' + [node.name, node.text, (node.tags || []).join(' ')].join(' ').toLowerCase() + ' ';
+  const hit = [];
+  for (const [id, def] of Object.entries(RS.effects || {})){
+    const words = def.match || [id];
+    if (words.some(w => new RegExp('\\b' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(hay)))
+      hit.push(id);
+  }
+  return hit;
+}
+
 /* Selling a node has to take everything hanging off it too, or the tree
    would be left with orphans that were never legally reachable. */
 function descendantsOf(t, id){
@@ -1383,6 +1486,14 @@ function showTip(t, node, state, x, y){
     <div class="t-name">${esc(node.name)}</div>
     <div class="t-meta">practice ${node.reqSkill} · costs ${node.cost}${parent ? ' · after ' + esc(parent) : ' · start of the line'}${node.draft ? ' · draft' : ''}</div>
     <div class="t-text">${esc(node.text)}</div>
+    ${effectsFor(node).map(id => {
+      const ef = RS.effects[id];
+      return `<div class="t-eff${ef.hostile ? '' : ' friendly'}">
+        <div class="t-eff-h">${esc(ef.label)}
+          <span class="t-eff-m">${ef.maxStacks > 1 ? 'stacks to ' + ef.maxStacks : 'no stacks'}${ef.grounded ? '' : ' · not built yet'}</span>
+        </div>
+        <div class="t-eff-t">${esc(ef.text)}</div></div>`;
+    }).join('')}
     ${node.tags.length ? `<div class="tags">${node.tags.map(g => `<span class="tag">${esc(g)}</span>`).join('')}</div>` : ''}
     ${why ? `<div class="t-why">${esc(why)}</div>`
           : NO_HOVER ? `<div class="t-why" style="color:var(--parch-3)">Tap again to ${state === 'owned' ? 'sell it back' : 'take it'}.</div>` : ''}`;
@@ -1707,7 +1818,7 @@ function openImport(){
     catch { return void alert('That did not parse as JSON. Paste the whole exported file, or just the block between the ```json fences.'); }
     if (!parsed || !Array.isArray(parsed.trees) || !parsed.classes)
       return void alert('That JSON is missing `trees` or `classes`, so it is not a ruleset.');
-    RS = parsed; S.owned = []; S.practice = {};
+    RS = migrate(parsed); S.owned = []; S.practice = {};
     closeModal(); render();
   };
 }
