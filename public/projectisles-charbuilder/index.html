@@ -468,6 +468,8 @@ body.editing .tnode.locked,body.editing .tnode.needs-parent{opacity:.6;cursor:co
 .stub-status{border:1px dashed var(--line-hi);border-radius:var(--r);padding:16px;text-align:center;color:var(--parch-3);font-size:12.5px;}
 
 :focus-visible{outline:2px solid var(--brass);outline-offset:1px;}
+/* Tapped once on a touch screen: the card is showing, a second tap buys. */
+.tnode.tapped{outline:2px solid var(--brass);outline-offset:1px;}
 
 @media (max-width:1240px){
   .frame{grid-template-columns:1fr;}
@@ -476,6 +478,43 @@ body.editing .tnode.locked,body.editing .tnode.needs-parent{opacity:.6;cursor:co
   .trees{grid-template-columns:1fr;}
   .stub-grid{grid-template-columns:1fr;}
 }
+
+/* ---------- narrow screens ----------
+   Two things dominate a phone: sticky chrome eating the viewport, and the
+   funnel's blurbs pushing the trees a full screen down. Both go. */
+@media (max-width:820px){
+  .masthead{position:static;padding:0 12px;gap:0;}
+  .wordmark{font-size:16px;padding:11px 0 8px;}
+  .tabs{margin-left:0;width:100%;overflow-x:auto;}
+  .tab{padding:9px 12px;font-size:11px;white-space:nowrap;}
+  .beam{top:0;padding:7px 12px 9px;gap:10px;}
+  .beam-note{display:none;}       /* it reappears on the build sheet instead */
+  .beam-label{font-size:10px;}
+  .col{padding:12px;}
+  .pick-blurb{display:none;}      /* one line per option instead of three */
+  .pick{padding:8px 9px;}
+  .pick-name{font-size:13px;}
+  .footbar{padding:7px 12px;gap:6px;}
+  .btn{padding:7px 10px;}
+  .foot-note{display:none;}
+  .stub-h{font-size:28px;}
+  .stubwrap{padding:28px 16px 48px;}
+  .col-funnel{padding:10px 12px;}
+}
+.funnel-sum{display:flex;align-items:center;gap:12px;}
+.funnel-sum-who{
+  font-family:var(--display);font-size:16px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;line-height:1.1;
+}
+.funnel-sum-sub{font-family:var(--mono);font-size:10.5px;color:var(--parch-3);}
+.funnel-sum .btn{margin-left:auto;flex:none;}
+
+/* With no hover to rely on, the ability card becomes a sheet pinned to the
+   bottom of the screen and driven by tapping. */
+@media (hover:none),(max-width:820px){
+  #tip{left:8px !important;right:8px !important;top:auto !important;bottom:8px !important;max-width:none;}
+}
+
 @media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
 </head>
@@ -1053,7 +1092,26 @@ function viewBeam(){
   </div>`;
 }
 
+/* On a phone the funnel is fifteen rows plus a slider, which pushes the trees
+   clean off the bottom of the screen. Collapsed to a summary you tap to open. */
+let funnelOpen = false;
+
+function viewFunnelSummary(){
+  const race = RS.races[S.race], c = RS.classes[S.cls];
+  return `
+  <div class="col col-funnel">
+    <div class="funnel-sum">
+      <div>
+        <div class="funnel-sum-who">${esc(race.name)} ${esc(c ? c.name : '—')}</div>
+        <div class="funnel-sum-sub">${esc(c ? RS.archetypes[c.archetype].name : '')} · level ${S.level}</div>
+      </div>
+      <button class="btn" id="funnelToggle">Change</button>
+    </div>
+  </div>`;
+}
+
 function viewFunnel(){
+  if (NO_HOVER && !funnelOpen) return viewFunnelSummary();
   const race = RS.races[S.race];
   const archs = archetypesFor(S.race), cls = classesFor(S.race, S.archetype);
 
@@ -1088,7 +1146,7 @@ function viewFunnel(){
 
   return `
   <div class="col col-funnel">
-    <p class="legend">The funnel</p>
+    <p class="legend">The funnel${NO_HOVER ? ' <button class="btn" id="funnelToggle" style="margin-left:auto">Done</button>' : ''}</p>
     <div class="step">
       <div class="step-head"><span class="step-rank">1</span><span class="step-name">Race</span>
         <span class="step-lv">at creation</span></div>
@@ -1252,6 +1310,10 @@ function viewSheet(){
       ${sp > total ? `<span class="warn">Over budget by ${sp - total}.</span><br>`
                    : `<b>${total - sp}</b> points still to spend.<br>`}
       Spine ends reached: <b>${capstones}</b> of ${classTrees().length}.<br>
+      At level <b>${RS.budget.levelCap}</b> you could own <b>${(() => {
+        const cc = classTrees().reduce((a, t) => a + treeCost(t), 0);
+        return cc ? Math.round(budgetTotal(RS.budget.levelCap) / cc * 100) : 0;
+      })()}%</b> of this class.<br>
       ${drafts ? `<b>${drafts}</b> of these are draft content — treat the names as placeholders.<br>` : ''}
       Practice sets how deep you may reach, the path sets what you may reach it through, and the budget sets how much you may hold.
     </div>
@@ -1303,9 +1365,17 @@ function viewStub(id){
   </div>`;
 }
 
-/* ---------- hover card ---------- */
+/* ---------- ability card ----------
+   On a pointer it follows the cursor. On a touch screen there is no hover at
+   all, so it is pinned to the bottom of the screen and driven by tapping. */
 const tipEl = document.getElementById('tip');
-function hideTip(){ tipEl.classList.remove('on'); }
+const NO_HOVER = window.matchMedia('(hover:none)').matches || window.innerWidth <= 820;
+let tapped = null;
+function hideTip(){
+  tipEl.classList.remove('on');
+  tapped = null;
+  document.querySelectorAll('.tnode.tapped').forEach(el => el.classList.remove('tapped'));
+}
 function showTip(t, node, state, x, y){
   const why = whyBlocked(t, node, state);
   const parent = node.requires.map(r => (nodeInTree(t, r) || {}).name).filter(Boolean).join(', ');
@@ -1314,7 +1384,8 @@ function showTip(t, node, state, x, y){
     <div class="t-meta">practice ${node.reqSkill} · costs ${node.cost}${parent ? ' · after ' + esc(parent) : ' · start of the line'}${node.draft ? ' · draft' : ''}</div>
     <div class="t-text">${esc(node.text)}</div>
     ${node.tags.length ? `<div class="tags">${node.tags.map(g => `<span class="tag">${esc(g)}</span>`).join('')}</div>` : ''}
-    ${why ? `<div class="t-why">${esc(why)}</div>` : ''}`;
+    ${why ? `<div class="t-why">${esc(why)}</div>`
+          : NO_HOVER ? `<div class="t-why" style="color:var(--parch-3)">Tap again to ${state === 'owned' ? 'sell it back' : 'take it'}.</div>` : ''}`;
   tipEl.classList.add('on');
   const r = tipEl.getBoundingClientRect();
   const left = Math.min(x + 14, window.innerWidth - r.width - 10);
@@ -1645,11 +1716,14 @@ function openImport(){
    EVENTS
    ============================================================ */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-tab],[data-pick],[data-node],[data-pracmax],[data-addnode],[data-edittree],#editToggle,#rulesBtn,#exportBtn,#importBtn,#resetBtn,[data-close],[data-scrim]');
+  const t = e.target.closest('[data-tab],[data-pick],[data-node],[data-pracmax],[data-addnode],[data-edittree],#funnelToggle,#editToggle,#rulesBtn,#exportBtn,#importBtn,#resetBtn,[data-close],[data-scrim]');
+  /* Tapping anywhere off an ability dismisses its card. */
+  if (!t || !t.dataset.node) hideTip();
   if (!t) return;
   if (t.hasAttribute('data-scrim') && e.target !== t) return;
   if (t.hasAttribute('data-close') || t.hasAttribute('data-scrim')) return void closeModal();
 
+  if (t.id === 'funnelToggle'){ funnelOpen = !funnelOpen; return void render(); }
   if (t.dataset.tab)      { S.tab = t.dataset.tab; return void render(); }
   if (t.dataset.pracmax)  { S.practice[t.dataset.pracmax] = 20; return void render(); }
   if (t.dataset.addnode)  return void openNodeEditor(t.dataset.addnode, null, t.dataset.lane);
@@ -1678,6 +1752,19 @@ document.addEventListener('click', e => {
     if (S.editing) return void openNodeEditor(tree.id, t.dataset.node);
     const node = nodeInTree(tree, t.dataset.node); if (!node) return;
     const ids = ownedSet();
+
+    /* Without hover, a first tap has to be allowed to mean "what is this?"
+       — otherwise the descriptions are unreachable on a phone. Second tap on
+       the same ability commits. */
+    if (NO_HOVER && tapped !== node.id){
+      tapped = node.id;
+      document.querySelectorAll('.tnode.tapped').forEach(el => el.classList.remove('tapped'));
+      t.classList.add('tapped');
+      const r = t.getBoundingClientRect();
+      showTip(tree, node, nodeState(tree, node, ids, budgetTotal() - spent()), r.left, r.bottom);
+      return;
+    }
+    tapped = null;
     if (ids.has(node.id)){
       /* Sell it, and everything that hangs off it — otherwise the tree keeps
          abilities you could never have reached. */
@@ -1730,20 +1817,23 @@ document.addEventListener('input', e => {
   if (e.target.id === 'charname'){ S.name = e.target.value; save(); }
 });
 
+/* Pointer-driven card. Skipped entirely on touch, where the card is pinned
+   and controlled by tapping instead. */
 document.addEventListener('mouseover', e => {
+  if (NO_HOVER) return;
   const el = e.target.closest('.tnode'); if (!el) return;
   const tree = treeById(el.dataset.tree); if (!tree) return;
   const node = nodeInTree(tree, el.dataset.node); if (!node) return;
   showTip(tree, node, nodeState(tree, node, ownedSet(), budgetTotal() - spent()), e.clientX, e.clientY);
 });
 document.addEventListener('mousemove', e => {
-  if (!tipEl.classList.contains('on')) return;
+  if (NO_HOVER || !tipEl.classList.contains('on')) return;
   if (!e.target.closest('.tnode')) return void hideTip();
   const r = tipEl.getBoundingClientRect();
   tipEl.style.left = Math.max(8, Math.min(e.clientX + 14, window.innerWidth - r.width - 10)) + 'px';
   tipEl.style.top = Math.max(8, Math.min(e.clientY + 14, window.innerHeight - r.height - 10)) + 'px';
 });
-document.addEventListener('mouseout', e => { if (e.target.closest('.tnode')) hideTip(); });
+document.addEventListener('mouseout', e => { if (!NO_HOVER && e.target.closest('.tnode')) hideTip(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeModal(); hideTip(); } });
 
 render();
