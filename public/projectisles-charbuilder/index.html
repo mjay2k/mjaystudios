@@ -536,12 +536,15 @@ body.editing .tnode.locked,body.editing .tnode.needs-parent{opacity:.6;cursor:co
 
 /* the target box, laid over the palette while a run is going */
 .target{
-  position:absolute;inset:0;z-index:5;
+  position:absolute;inset:0;z-index:5;overflow:hidden;
   background:#0c0e14;border:1px solid var(--line-hi);border-radius:var(--r);
   display:grid;grid-template-columns:minmax(0,1fr) 300px;overflow:hidden;
 }
 .tg-left{padding:12px 14px;display:flex;flex-direction:column;min-width:0;}
-.tg-right{border-left:1px solid var(--line);display:flex;flex-direction:column;min-width:0;background:#0a0c11;}
+/* min-height:0 on both, or the log grows to fit its content and pushes out of
+   the box instead of scrolling inside it — flexbox defaults to min-content. */
+.tg-right{border-left:1px solid var(--line);display:flex;flex-direction:column;
+  min-width:0;min-height:0;background:#0a0c11;}
 .tg-h{
   font-family:var(--display);font-size:13px;letter-spacing:.15em;text-transform:uppercase;
   font-weight:700;display:flex;align-items:baseline;gap:10px;margin-bottom:8px;
@@ -576,7 +579,7 @@ body.editing .tnode.locked,body.editing .tnode.needs-parent{opacity:.6;cursor:co
   font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
   color:var(--parch-3);padding:8px 10px 6px;border-bottom:1px solid var(--line);
 }
-.simlog{flex:1;overflow-y:auto;padding:4px 10px 10px;font-family:var(--mono);font-size:10.5px;line-height:1.5;}
+.simlog{flex:1;min-height:0;overflow-y:auto;padding:4px 10px 10px;font-family:var(--mono);font-size:10.5px;line-height:1.5;}
 .lg{display:flex;gap:7px;padding:1px 0;}
 .lg-t{color:var(--parch-3);flex:none;font-variant-numeric:tabular-nums;}
 .lg-m{min-width:0;}
@@ -626,6 +629,40 @@ body.editing .tnode.locked,body.editing .tnode.needs-parent{opacity:.6;cursor:co
 .slot.ready:hover{border-color:var(--brass);}
 .slot.fired{animation:fire .28s ease-out;}
 @keyframes fire{0%{box-shadow:0 0 0 0 var(--brass);}100%{box-shadow:0 0 0 9px transparent;}}
+
+/* resource pools — the third pressure, alongside cooldown and action time */
+.pools{display:flex;gap:14px;margin-bottom:8px;flex-wrap:wrap;}
+.pool{display:flex;align-items:center;gap:7px;flex:1;min-width:200px;}
+.pool-k{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--parch-3);width:38px;flex:none;}
+.pool-bar{flex:1;height:9px;background:#07080c;border:1px solid var(--line);position:relative;overflow:hidden;}
+.pool-fill{position:absolute;inset:0 auto 0 0;transition:width .12s linear;}
+.pool-fill.mana{background:linear-gradient(180deg,#4a7fd4,#2c4d86);}
+.pool-fill.stam{background:linear-gradient(180deg,#3f9c46,#25612b);}
+.pool-v{font-family:var(--mono);font-size:10px;color:var(--parch-2);min-width:74px;
+  text-align:right;flex:none;font-variant-numeric:tabular-nums;}
+
+.selfbuffs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;min-height:26px;}
+.selfbuffs .pool-k{width:auto;}
+.sb-none{font-family:var(--mono);font-size:9.5px;color:var(--parch-3);}
+
+.simlevel{display:flex;align-items:center;gap:9px;margin:8px 0 0;flex-wrap:wrap;}
+.simlevel input[type=range]{width:180px;flex:none;}
+.simlv-n{font-family:var(--display);font-size:18px;font-weight:700;color:var(--brass);
+  font-variant-numeric:tabular-nums;min-width:26px;}
+
+.lg-cost{color:#5f8fd0;}
+
+/* the combat half of an ability card */
+#tip .t-sim{
+  margin-top:7px;padding:6px 8px;background:#12151d;
+  border:1px solid var(--line);border-radius:var(--r);
+}
+#tip .t-sim-row{display:flex;align-items:baseline;gap:7px;font-size:10.5px;line-height:1.5;}
+#tip .t-sim-row span{font-family:var(--mono);font-size:9px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--parch-3);width:74px;flex:none;}
+#tip .t-sim-row b{color:var(--brass);font-family:var(--mono);font-size:11px;min-width:56px;flex:none;}
+#tip .t-sim-row i{color:var(--parch-3);font-style:normal;font-size:10px;min-width:0;}
 
 .actionbar{margin-top:8px;height:4px;background:#07080c;border:1px solid var(--line);position:relative;overflow:hidden;}
 .actionfill{position:absolute;inset:0 auto 0 0;background:var(--brass);width:0;}
@@ -869,6 +906,13 @@ const DEFAULT_RULESET = {
     actionByTier:   [1,  1,  1.5, 2,  2.5, 3],
     cooldownByTier: [0,  4,  6,   10, 15,  22],
     powerByTier:    [12, 22, 36,  58, 92,  150],
+    costByTier:     [4,  8,  14,  22, 34,  52],
+    /* Which pool an ability draws on is a fact about the CLASS, not the
+       ability — whichever of mana or stamina that class actually has. Regen is
+       per round, and it is the third pressure on a rotation after cooldown and
+       action time: the one that stops "always press the biggest button". */
+    manaRegen: 4,
+    stamRegen: 6,
     /* What the ability's tags do to its power. A control or defensive ability
        deals nothing and is worth taking anyway — that is the point of showing
        idle time next to damage. */
@@ -1850,9 +1894,37 @@ function simStats(node){
          : kind === 'heal' ? Math.round(raw * C.kindMult.heal) : raw,
     actionTime: C.actionByTier[tier] ?? 1,
     cooldown:   C.cooldownByTier[tier] ?? 0,
+    cost:       C.costByTier[tier] ?? 0,
+    resource:   classResource(node),
     dot: t.includes('dot'),
   };
   return { ...base, ...(node.sim || {}) };
+}
+
+/* Mana or stamina — decided by whichever pool the owning class actually has.
+   A Pally swings on stamina, a Mage casts on mana, and a Warlock is a Vagabond
+   who nonetheless runs on mana, which the pools already say. */
+function classResource(node){
+  const owner = (node.id || '').split('_')[0];
+  const cls = RS.classOrder.find(id => (RS.classes[id].trees || []).some(tid => {
+    const t = treeById(tid); return t && t.nodes.some(n => n.id === node.id);
+  }));
+  const c = RS.classes[cls] || RS.classes[S.sim?.cls] || {};
+  void owner;
+  return (c.mana || 0) >= (c.stam || 0) ? 'mana' : 'stam';
+}
+
+/* The pools the simulated character actually has, at the simulated level.
+   No race here on purpose — the sim is about the loadout, and adding a race
+   picker would only move numbers the tree tab already lets you argue with. */
+function simPools(){
+  const c = RS.classes[S.sim.cls];
+  if (!c) return { mana: 0, stam: 0 };
+  const lv = Math.max(0, (S.sim.level || RS.budget.levelCap) - 1);
+  return {
+    mana: Math.round(c.mana + c.manaLv * lv),
+    stam: Math.round(c.stam + c.stamLv * lv),
+  };
 }
 
 /* Every ability the chosen class has concepts for — all three of its lines,
@@ -1876,10 +1948,12 @@ let simTimer = null;
 function simStart(){
   const bar = S.sim.bar.filter(Boolean);
   if (!bar.length) return;
+  const pools = simPools();
   SIM = {
     t: 0, lockUntil: 0, cd: {}, log: [],
-    dmg: 0, heal: 0, casts: 0, blocked: 0, busy: 0,
-    hp: RS.sim.targetHp, debuffs: [], lastRound: 0,
+    dmg: 0, heal: 0, casts: 0, blocked: 0, busy: 0, starved: 0,
+    hp: RS.sim.targetHp, debuffs: [], buffs: [], lastRound: 0,
+    mana: pools.mana, stam: pools.stam, maxMana: pools.mana, maxStam: pools.stam,
   };
   SIM.wall = performance.now();
   simLog(0, 'Simulation started. Round is ' + RS.sim.roundMs + 'ms.', 'tick');
@@ -1918,7 +1992,11 @@ function simTick(){
   const roundLen = RS.sim.roundMs / 1000;
   const round = Math.floor(SIM.t / roundLen);
   if (round > SIM.lastRound){
+    const rounds = round - SIM.lastRound;
     SIM.lastRound = round;
+    /* Resources come back on the round, like everything else on the clock. */
+    SIM.mana = Math.min(SIM.maxMana, SIM.mana + RS.sim.manaRegen * rounds);
+    SIM.stam = Math.min(SIM.maxStam, SIM.stam + RS.sim.stamRegen * rounds);
     /* Damage-over-time lands on the round boundary, like everything else. */
     for (const d of SIM.debuffs){
       if (d.perTick > 0 && SIM.hp > 0){
@@ -1929,11 +2007,13 @@ function simTick(){
       }
     }
   }
-  SIM.debuffs = SIM.debuffs.filter(d => {
+  const expire = (list, where) => list.filter(d => {
     if (SIM.t < d.until) return true;
-    simLog(SIM.t, `${d.label} wears off`, 'effect');
+    simLog(SIM.t, `${d.label} wears off${where}`, 'effect');
     return false;
   });
+  SIM.debuffs = expire(SIM.debuffs, ' on the target');
+  SIM.buffs   = expire(SIM.buffs, ' on you');
   if (SIM.hp <= 0 && !SIM.done){
     SIM.done = true;
     simLog(SIM.t, `Target down at ${SIM.t.toFixed(1)}s.`, 'dmg');
@@ -1963,29 +2043,43 @@ function simFire(slotIndex){
     simLog(SIM.t, `${node.name} refused — ${(until - SIM.t).toFixed(1)}s of cooldown left`, 'blocked');
     return paintSim();
   }
+  /* Third gate. A rotation that never runs dry is a rotation with no resource
+     decisions in it, which is worth being able to see. */
+  const pool = st.resource === 'mana' ? SIM.mana : SIM.stam;
+  const poolName = st.resource === 'mana' ? 'mana' : 'stamina';
+  if (st.cost > pool){
+    SIM.blocked++; SIM.starved++;
+    simLog(SIM.t, `${node.name} refused — needs ${st.cost} ${poolName}, you have ${Math.floor(pool)}`, 'blocked');
+    return paintSim();
+  }
+  if (st.resource === 'mana') SIM.mana -= st.cost; else SIM.stam -= st.cost;
 
   SIM.casts++;
   SIM.lockUntil = SIM.t + st.actionTime;
   SIM.lockTotal = st.actionTime;   // needed to draw the action bar draining
   if (st.cooldown > 0) SIM.cd[id] = SIM.t + st.cooldown;
 
+  const paid = st.cost ? ` <span class="lg-cost">−${st.cost} ${st.resource === 'mana' ? 'mana' : 'stam'}</span>` : '';
   if (st.kind === 'heal' && st.power){
     SIM.heal += st.power;
-    simLog(SIM.t, `${node.name} heals for <b>${st.power}</b>`, 'dmg');
+    simLog(SIM.t, `${node.name} heals for <b>${st.power}</b>${paid}`, 'dmg');
   } else if (st.power){
     const dealt = st.dot ? Math.round(st.power * 0.35) : st.power;
     SIM.hp = Math.max(0, SIM.hp - dealt);
     SIM.dmg += dealt;
-    simLog(SIM.t, `${node.name} hits for <b>${dealt}</b>`, 'dmg');
+    simLog(SIM.t, `${node.name} hits for <b>${dealt}</b>${paid}`, 'dmg');
   } else {
-    simLog(SIM.t, `${node.name} — ${st.kind}, no direct damage`, '');
+    simLog(SIM.t, `${node.name} — ${st.kind}, no direct damage${paid}`, '');
   }
 
-  /* Anything the ability puts on the board shows up on the dummy. */
+  /* An effect lands on whoever it is FOR. A hostile one goes on the dummy; a
+     friendly one is a buff on you, and needs its own duration on screen — you
+     cannot plan around a shield whose remaining time you cannot see. */
   for (const eid of effectsFor(node)){
     const ef = RS.effects[eid]; if (!ef) continue;
     const dur = RS.sim.dotRounds * (RS.sim.roundMs / 1000);
-    const existing = SIM.debuffs.find(d => d.id === eid);
+    const list = ef.hostile ? SIM.debuffs : SIM.buffs;
+    const existing = list.find(d => d.id === eid);
     if (existing){
       existing.stacks = Math.min(ef.maxStacks || 1, existing.stacks + 1);
       existing.until = SIM.t + dur; existing.dur = dur;
@@ -1993,13 +2087,13 @@ function simFire(slotIndex){
          real damage-over-time ability already set on it. */
       if (st.dot) existing.perTick = Math.max(existing.perTick, Math.round(st.power * RS.sim.dotPerTick));
     } else {
-      SIM.debuffs.push({
+      list.push({
         id: eid, label: ef.label, hostile: !!ef.hostile, stacks: 1,
         until: SIM.t + dur, dur,
-        perTick: st.dot ? Math.round(st.power * RS.sim.dotPerTick) : 0,
+        perTick: (ef.hostile && st.dot) ? Math.round(st.power * RS.sim.dotPerTick) : 0,
       });
     }
-    simLog(SIM.t, `→ ${ef.label} applied`, 'effect');
+    simLog(SIM.t, ef.hostile ? `→ ${ef.label} on target` : `→ ${ef.label} on you`, 'effect');
   }
 
   const el = document.querySelector(`.slot[data-slot="${slotIndex}"]`);
@@ -2022,18 +2116,30 @@ function paintSim(){
   const set = (id, v) => { const e = q(id); if (e) e.textContent = v; };
   set('#ssDmg', SIM.dmg.toLocaleString());
   set('#ssDps', dps.toFixed(1));
-  set('#ssCasts', SIM.casts + (SIM.blocked ? ' / ' + SIM.blocked + ' refused' : ''));
+  set('#ssCasts', SIM.casts + (SIM.blocked ? ' / ' + SIM.blocked + ' refused' : '')
+                            + (SIM.starved ? ' (' + SIM.starved + ' dry)' : ''));
   const idleEl = q('#ssIdle');
   if (idleEl){ idleEl.textContent = idle.toFixed(0) + '%'; idleEl.classList.toggle('warn', idle > 25); }
 
-  const db = q('#debuffs');
-  if (db) db.innerHTML = SIM.debuffs.map(d => {
+  const mf = q('#manaFill'), sf = q('#stamFill');
+  if (mf) mf.style.width = (SIM.maxMana ? (SIM.mana / SIM.maxMana) * 100 : 0) + '%';
+  if (sf) sf.style.width = (SIM.maxStam ? (SIM.stam / SIM.maxStam) * 100 : 0) + '%';
+  set('#manaNum', Math.floor(SIM.mana) + ' / ' + SIM.maxMana);
+  set('#stamNum', Math.floor(SIM.stam) + ' / ' + SIM.maxStam);
+
+  const chip = d => {
     const left = Math.max(0, d.until - SIM.t);
     return `<div class="debuff${d.hostile ? '' : ' friendly'}">
       <div class="debuff-n">${esc(d.label)}${d.stacks > 1 ? ' ×' + d.stacks : ''}</div>
       <div class="debuff-t">${left.toFixed(1)}s</div>
       <div class="debuff-bar" style="width:${(left / d.dur) * 100}%"></div></div>`;
-  }).join('') || '<span style="font-family:var(--mono);font-size:10px;color:var(--parch-3)">no effects on the target</span>';
+  };
+  const db = q('#debuffs');
+  if (db) db.innerHTML = SIM.debuffs.map(chip).join('')
+    || '<span style="font-family:var(--mono);font-size:10px;color:var(--parch-3)">no effects on the target</span>';
+  const sb = q('#selfBuffs');
+  if (sb) sb.innerHTML = '<span class="pool-k">On you</span>' + (SIM.buffs.map(chip).join('')
+    || '<span class="sb-none">nothing active</span>');
 
   const acting = SIM.t < SIM.lockUntil;
   document.querySelectorAll('.slot[data-slot]').forEach(el => {
@@ -2068,9 +2174,12 @@ function paintSim(){
 
   const lg = q('#simLog');
   if (lg){
-    lg.innerHTML = SIM.log.slice(-120).map(l =>
+    /* Only chase the tail if the reader is already there — auto-scrolling on
+       top of someone reading back through the fight is maddening. */
+    const atBottom = lg.scrollHeight - lg.scrollTop - lg.clientHeight < 24;
+    lg.innerHTML = SIM.log.slice(-200).map(l =>
       `<div class="lg ${l.cls}"><span class="lg-t">${l.t.toFixed(1)}</span><span class="lg-m">${l.msg}</span></div>`).join('');
-    lg.scrollTop = lg.scrollHeight;
+    if (atBottom) lg.scrollTop = lg.scrollHeight;
   }
 }
 
@@ -2085,6 +2194,8 @@ function viewSim(){
   }
   const c = RS.classes[S.sim.cls];
   const inBar = new Set(S.sim.bar.filter(Boolean));
+  if (!S.sim.level) S.sim.level = RS.budget.levelCap;
+  const pools = simPools();
 
   const classBtns = RS.classOrder.map(id => {
     const cc = RS.classes[id];
@@ -2099,7 +2210,7 @@ function viewSim(){
         ${t.nodes.slice().sort((a,b)=>a.row-b.row).map(nd => {
           const st = simStats(nd);
           return `<button class="pal-item${inBar.has(nd.id) ? ' inbar' : ''}" draggable="true"
-                    data-pal="${nd.id}" title="${esc(nd.text)}">
+                    data-pal="${nd.id}">
             <span class="glyph" style="--gc:${KIND_COLOR[st.kind]}">${esc(glyphOf(nd))}</span>
             <span class="pal-n">${esc(nd.name)}</span>
             <span class="pal-m">${st.power ? st.power + ' pwr<br>' : ''}${st.cooldown ? st.cooldown + 's cd' : 'no cd'} · ${st.actionTime}s act</span>
@@ -2116,7 +2227,7 @@ function viewSim(){
         const found = id ? simNodeById(id) : null;
         if (!found) return `<div class="slot empty" data-slot="${idx}"><span class="slot-key">${idx + 1}</span>+</div>`;
         const st = simStats(found.node);
-        return `<button class="slot" data-slot="${idx}" title="${esc(found.node.name)} — ${esc(found.node.text)}">
+        return `<button class="slot" data-slot="${idx}">
           <span class="slot-key">${idx + 1}</span>
           <span class="glyph" style="--gc:${KIND_COLOR[st.kind]}">${esc(glyphOf(found.node))}</span>
           <span class="slot-n">${esc(found.node.name)}</span>
@@ -2133,6 +2244,13 @@ function viewSim(){
     <p class="sim-lede">Build a bar, then run it. The model on show is <b>not</b> what the game does today: every ability costs a <b>cooldown</b> before you may use that one again, <b>and</b> an <b>action time</b> during which you may use nothing at all. Watch the bar dim as a whole while you are acting, and each ability wipe down its own cooldown separately. If a rotation is a spam, the idle figure stays near zero and every button is always lit — if it has real decisions in it, you will feel the gaps.</p>
 
     <div class="classpick">${classBtns}</div>
+    <div class="simlevel">
+      <span class="pool-k">Level</span>
+      <input type="range" id="simLv" min="1" max="${RS.budget.levelCap}" value="${S.sim.level}"
+             aria-label="Simulated level" ${running ? 'disabled' : ''}>
+      <span class="simlv-n">${S.sim.level}</span>
+      <span class="run-note">${pools.mana} mana · ${pools.stam} stamina${running ? '' : ' — end-game by default, since that is the build worth testing'}</span>
+    </div>
 
     <div class="sim-top">
       <div class="palette">${palette}</div>
@@ -2166,6 +2284,15 @@ function viewSim(){
           <button class="btn" id="simClear">Clear</button>
         </div>
       </div>
+      <div class="selfbuffs" id="selfBuffs">${running ? '' : '<span class="pool-k">On you</span><span class="sb-none">nothing yet</span>'}</div>
+      <div class="pools">
+        ${pools.mana > 0 ? `<div class="pool"><span class="pool-k">Mana</span>
+          <div class="pool-bar"><div class="pool-fill mana" id="manaFill" style="width:100%"></div></div>
+          <span class="pool-v" id="manaNum">${pools.mana} / ${pools.mana}</span></div>` : ''}
+        ${pools.stam > 0 ? `<div class="pool"><span class="pool-k">Stam</span>
+          <div class="pool-bar"><div class="pool-fill stam" id="stamFill" style="width:100%"></div></div>
+          <span class="pool-v" id="stamNum">${pools.stam} / ${pools.stam}</span></div>` : ''}
+      </div>
       <div class="bar-rows">${rowsHtml}</div>
       <div class="actionbar"><div class="actionfill" id="actionFill"></div></div>
       <div class="actionlab" id="actionLab">${running ? '' : 'action timer'}</div>
@@ -2193,12 +2320,64 @@ function hideTip(){
   tapped = null;
   document.querySelectorAll('.tnode.tapped').forEach(el => el.classList.remove('tapped'));
 }
+/* One ability card, shared by the tree, the simulator palette and the bar.
+   `mode` decides which half matters: the tree cares about prerequisites and
+   budget, the simulator about power, cooldown, action time and resource. */
+function abilityCardHtml(t, node, mode, why){
+  const parent = node.requires.map(r => (nodeInTree(t, r) || {}).name).filter(Boolean).join(', ');
+  const st = simStats(node);
+  const meta = mode === 'sim'
+    ? `${esc(t.name)} · tier ${node.row + 1} · practice ${node.reqSkill}${node.draft ? ' · draft' : ''}`
+    : `practice ${node.reqSkill} · costs ${node.cost}${parent ? ' · after ' + esc(parent) : ' · start of the line'}${node.draft ? ' · draft' : ''}`;
+
+  const simBlock = mode === 'sim' ? `
+    <div class="t-sim">
+      <div class="t-sim-row"><span>Action time</span><b>${st.actionTime}s</b>
+        <i>nothing else usable for this long</i></div>
+      <div class="t-sim-row"><span>Cooldown</span><b>${st.cooldown ? st.cooldown + 's' : 'none'}</b>
+        <i>${st.cooldown ? 'before this one again' : 'spammable filler'}</i></div>
+      <div class="t-sim-row"><span>Cost</span><b>${st.cost} ${st.resource === 'mana' ? 'mana' : 'stam'}</b><i></i></div>
+      <div class="t-sim-row"><span>${st.kind === 'heal' ? 'Healing' : 'Power'}</span>
+        <b>${st.power || '—'}</b><i>${st.power ? (st.dot ? 'on impact, plus ticks' : 'on impact') : st.kind}</i></div>
+    </div>` : '';
+
+  return `
+    <div class="t-name">${esc(node.name)}</div>
+    <div class="t-meta">${meta}</div>
+    <div class="t-text">${esc(node.text)}</div>
+    ${simBlock}
+    ${effectsFor(node).map(id => {
+      const ef = RS.effects[id];
+      return `<div class="t-eff${ef.hostile ? '' : ' friendly'}">
+        <div class="t-eff-h">${esc(ef.label)}
+          <span class="t-eff-m">${ef.maxStacks > 1 ? 'stacks to ' + ef.maxStacks : 'no stacks'}${ef.grounded ? '' : ' · not built yet'}</span>
+        </div>
+        <div class="t-eff-t">${esc(ef.text)}</div></div>`;
+    }).join('')}
+    ${node.tags.length ? `<div class="tags">${node.tags.map(g => `<span class="tag">${esc(g)}</span>`).join('')}</div>` : ''}
+    ${why ? `<div class="t-why">${esc(why)}</div>` : ''}`;
+}
+
+function placeTip(x, y){
+  tipEl.classList.add('on');
+  const r = tipEl.getBoundingClientRect();
+  tipEl.style.left = Math.max(8, Math.min(x + 14, window.innerWidth - r.width - 10)) + 'px';
+  tipEl.style.top  = Math.max(8, Math.min(y + 14, window.innerHeight - r.height - 10)) + 'px';
+}
+
+/* The simulator's version: same card, combat half showing. */
+function showSimTip(t, node, x, y){
+  tipEl.innerHTML = abilityCardHtml(t, node, 'sim', '');
+  placeTip(x, y);
+}
+
 function showTip(t, node, state, x, y){
   const why = whyBlocked(t, node, state);
   const parent = node.requires.map(r => (nodeInTree(t, r) || {}).name).filter(Boolean).join(', ');
+  void parent;
   tipEl.innerHTML = `
     <div class="t-name">${esc(node.name)}</div>
-    <div class="t-meta">practice ${node.reqSkill} · costs ${node.cost}${parent ? ' · after ' + esc(parent) : ' · start of the line'}${node.draft ? ' · draft' : ''}</div>
+    <div class="t-meta">practice ${node.reqSkill} · costs ${node.cost}${node.requires.length ? ' · after ' + esc(node.requires.map(r => (nodeInTree(t, r) || {}).name).filter(Boolean).join(', ')) : ' · start of the line'}${node.draft ? ' · draft' : ''}</div>
     <div class="t-text">${esc(node.text)}</div>
     ${effectsFor(node).map(id => {
       const ef = RS.effects[id];
@@ -2664,6 +2843,14 @@ function liveUpdate(){
 }
 
 document.addEventListener('input', e => {
+  if (e.target.id === 'simLv'){
+    S.sim.level = +e.target.value;
+    const n = document.querySelector('.simlv-n'); if (n) n.textContent = S.sim.level;
+    const p = simPools();
+    const note = document.querySelector('.simlevel .run-note');
+    if (note) note.textContent = `${p.mana} mana · ${p.stam} stamina`;
+    save(); return;
+  }
   if (e.target.id === 'lv'){ S.level = +e.target.value; return void liveUpdate(); }
   if (e.target.dataset.prac){ S.practice[e.target.dataset.prac] = +e.target.value; return void liveUpdate(); }
   if (e.target.id === 'charname'){ S.name = e.target.value; save(); }
@@ -2671,21 +2858,32 @@ document.addEventListener('input', e => {
 
 /* Pointer-driven card. Skipped entirely on touch, where the card is pinned
    and controlled by tapping instead. */
+/* Anything that represents an ability gets the card: a tree node, a palette
+   entry, or a filled slot on the bar. Nobody has 198 abilities memorised. */
+const TIP_SEL = '.tnode, [data-pal], .slot[data-slot]';
+function tipTargetOf(el){
+  if (el.matches('.tnode')) {
+    const tree = treeById(el.dataset.tree);
+    const node = tree && nodeInTree(tree, el.dataset.node);
+    return node ? { tree, node, mode: 'tree' } : null;
+  }
+  const id = el.dataset.pal || S.sim.bar[+el.dataset.slot];
+  const found = id ? simNodeById(id) : null;
+  return found ? { tree: found.tree, node: found.node, mode: 'sim' } : null;
+}
 document.addEventListener('mouseover', e => {
   if (NO_HOVER) return;
-  const el = e.target.closest('.tnode'); if (!el) return;
-  const tree = treeById(el.dataset.tree); if (!tree) return;
-  const node = nodeInTree(tree, el.dataset.node); if (!node) return;
-  showTip(tree, node, nodeState(tree, node, ownedSet(), budgetTotal() - spent()), e.clientX, e.clientY);
+  const el = e.target.closest(TIP_SEL); if (!el) return;
+  const tgt = tipTargetOf(el); if (!tgt) return;
+  if (tgt.mode === 'sim') showSimTip(tgt.tree, tgt.node, e.clientX, e.clientY);
+  else showTip(tgt.tree, tgt.node, nodeState(tgt.tree, tgt.node, ownedSet(), budgetTotal() - spent()), e.clientX, e.clientY);
 });
 document.addEventListener('mousemove', e => {
   if (NO_HOVER || !tipEl.classList.contains('on')) return;
-  if (!e.target.closest('.tnode')) return void hideTip();
-  const r = tipEl.getBoundingClientRect();
-  tipEl.style.left = Math.max(8, Math.min(e.clientX + 14, window.innerWidth - r.width - 10)) + 'px';
-  tipEl.style.top = Math.max(8, Math.min(e.clientY + 14, window.innerHeight - r.height - 10)) + 'px';
+  if (!e.target.closest(TIP_SEL)) return void hideTip();
+  placeTip(e.clientX, e.clientY);
 });
-document.addEventListener('mouseout', e => { if (!NO_HOVER && e.target.closest('.tnode')) hideTip(); });
+document.addEventListener('mouseout', e => { if (!NO_HOVER && e.target.closest(TIP_SEL)) hideTip(); });
 /* A hidden tab gets its timers throttled, so rather than let the clock drift
    out of step with the cooldowns on screen, the run pauses and picks up where
    it left off. */
