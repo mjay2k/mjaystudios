@@ -482,9 +482,185 @@ body.editing .tnode.locked,body.editing .tnode.needs-parent{opacity:.6;cursor:co
 .stub-card p{margin:0;font-size:12px;line-height:1.5;color:var(--parch-2);}
 .stub-status{border:1px dashed var(--line-hi);border-radius:var(--r);padding:16px;text-align:center;color:var(--parch-3);font-size:12.5px;}
 
+/* ============================================================
+   LOADOUT SIMULATOR
+   The combat model being demonstrated: a round is one second, and every
+   ability costs TWO different things — a cooldown before you may use THAT
+   ability again, and an action time during which you may use NOTHING. The
+   second one is the point; it is what stops a bar from being spammed.
+   ============================================================ */
+.simwrap{max-width:1180px;margin:0 auto;padding:18px 18px 40px;}
+.sim-lede{font-size:13px;line-height:1.6;color:var(--parch-2);margin:0 0 16px;max-width:74ch;}
+.sim-lede b{color:var(--parch);}
+
+.classpick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.classpick .cp{
+  background:var(--ink-2);border:1px solid var(--line);border-radius:var(--r);
+  padding:7px 12px;display:flex;flex-direction:column;gap:1px;text-align:left;min-width:104px;
+}
+.classpick .cp:hover{border-color:var(--line-hi);}
+.classpick .cp[aria-pressed="true"]{
+  border-color:var(--pc);background:color-mix(in srgb,var(--pc) 16%,var(--ink-2));
+}
+.cp-n{font-family:var(--display);font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;}
+.cp-r{font-family:var(--mono);font-size:9px;color:var(--parch-3);}
+
+/* the top half: palette, or the target box overlaying it */
+.sim-top{position:relative;min-height:330px;margin:10px 0 12px;}
+
+.palette{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.pal-group{border:1px solid var(--line);border-radius:var(--r);background:var(--ink-2);padding:8px;}
+.pal-h{
+  font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tc,var(--parch-2));font-weight:700;margin:0 0 6px;
+}
+.pal-items{display:flex;flex-direction:column;gap:3px;}
+.pal-item{
+  display:flex;align-items:center;gap:7px;width:100%;text-align:left;
+  background:var(--ink-3);border:1px solid var(--line);border-radius:var(--r);
+  padding:4px 6px;cursor:grab;
+}
+.pal-item:hover{border-color:var(--line-hi);background:var(--ink-4);}
+.pal-item.inbar{opacity:.4;}
+.pal-item:active{cursor:grabbing;}
+.glyph{
+  width:26px;height:26px;flex:none;border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.04em;
+  background:color-mix(in srgb,var(--gc,#666) 34%,#0c0e14);
+  border:1px solid color-mix(in srgb,var(--gc,#666) 60%,transparent);
+  color:#f2efe6;
+}
+.pal-n{font-size:11px;font-weight:600;line-height:1.15;min-width:0;}
+.pal-m{margin-left:auto;font-family:var(--mono);font-size:8.5px;color:var(--parch-3);white-space:nowrap;text-align:right;}
+
+/* the target box, laid over the palette while a run is going */
+.target{
+  position:absolute;inset:0;z-index:5;
+  background:#0c0e14;border:1px solid var(--line-hi);border-radius:var(--r);
+  display:grid;grid-template-columns:minmax(0,1fr) 300px;overflow:hidden;
+}
+.tg-left{padding:12px 14px;display:flex;flex-direction:column;min-width:0;}
+.tg-right{border-left:1px solid var(--line);display:flex;flex-direction:column;min-width:0;background:#0a0c11;}
+.tg-h{
+  font-family:var(--display);font-size:13px;letter-spacing:.15em;text-transform:uppercase;
+  font-weight:700;display:flex;align-items:baseline;gap:10px;margin-bottom:8px;
+}
+.tg-clock{margin-left:auto;font-family:var(--mono);font-size:15px;color:var(--brass);font-variant-numeric:tabular-nums;letter-spacing:0;}
+.hpbar{height:20px;background:#07080c;border:1px solid var(--line);position:relative;overflow:hidden;}
+.hpfill{position:absolute;inset:0 auto 0 0;background:linear-gradient(180deg,#9a3b2a,#6d2618);transition:width .12s linear;}
+.hpnum{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 2px #000;
+}
+.debuffs{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;min-height:34px;}
+.debuff{
+  border:1px solid var(--rust);border-radius:var(--r);padding:3px 6px;min-width:76px;
+  background:color-mix(in srgb,var(--rust) 16%,#0c0e14);position:relative;overflow:hidden;
+}
+.debuff.friendly{border-color:var(--innate);background:color-mix(in srgb,var(--innate) 16%,#0c0e14);}
+.debuff-n{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;position:relative;z-index:1;}
+.debuff-t{font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums;position:relative;z-index:1;}
+.debuff-bar{position:absolute;inset:auto 0 0 0;height:2px;background:var(--rust);transition:width .12s linear;}
+.debuff.friendly .debuff-bar{background:var(--innate);}
+
+.simstats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-top:auto;}
+.ss{background:#0c0e14;padding:6px 8px;}
+.ss-k{font-family:var(--mono);font-size:8.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--parch-3);}
+.ss-v{font-family:var(--display);font-size:17px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums;}
+.ss-v.warn{color:var(--rust);}
+
+.log-h{
+  font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--parch-3);padding:8px 10px 6px;border-bottom:1px solid var(--line);
+}
+.simlog{flex:1;overflow-y:auto;padding:4px 10px 10px;font-family:var(--mono);font-size:10.5px;line-height:1.5;}
+.lg{display:flex;gap:7px;padding:1px 0;}
+.lg-t{color:var(--parch-3);flex:none;font-variant-numeric:tabular-nums;}
+.lg-m{min-width:0;}
+.lg.dmg .lg-m b{color:var(--brass);}
+.lg.blocked .lg-m{color:var(--rust);}
+.lg.tick .lg-m{color:var(--parch-3);}
+.lg.effect .lg-m{color:var(--innate);}
+
+/* the ability bar */
+.bar-wrap{border:1px solid var(--line);border-radius:var(--r);background:var(--ink-2);padding:10px;}
+.bar-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bar-title{font-family:var(--display);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--parch-3);}
+.rowtog{display:flex;gap:4px;margin-left:auto;}
+.rowtog .btn{padding:4px 9px;font-size:10px;}
+.bar-rows{display:flex;flex-direction:column;gap:5px;}
+.bar{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;}
+.slot{
+  position:relative;aspect-ratio:1;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--ink-3);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;padding:3px;overflow:hidden;min-width:0;
+}
+.slot.empty{border-style:dashed;color:var(--parch-3);}
+.slot.dragover{border-color:var(--brass);background:color-mix(in srgb,var(--brass) 18%,var(--ink-3));}
+.slot-key{
+  position:absolute;top:1px;left:3px;font-family:var(--mono);font-size:8px;color:var(--parch-3);z-index:3;
+}
+.slot-n{font-size:8.5px;line-height:1.1;text-align:center;color:var(--parch-2);z-index:2;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.slot .glyph{width:30px;height:30px;font-size:12px;z-index:2;}
+
+/* the two dimmings the whole demonstration is about */
+.slot-lock{           /* global action timer — every slot dims a little */
+  position:absolute;inset:0;background:#05060a;opacity:0;z-index:4;pointer-events:none;
+  transition:opacity .08s linear;
+}
+.slot.acting .slot-lock{opacity:.45;}
+.slot-cd{             /* this ability's own cooldown — darker, and it wipes down */
+  position:absolute;left:0;right:0;bottom:0;height:0%;
+  background:#05060acc;z-index:5;pointer-events:none;
+}
+.slot-cdnum{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:13px;font-weight:600;color:#fff;z-index:6;
+  text-shadow:0 1px 3px #000;pointer-events:none;
+}
+.slot.ready{cursor:pointer;}
+.slot.ready:hover{border-color:var(--brass);}
+.slot.fired{animation:fire .28s ease-out;}
+@keyframes fire{0%{box-shadow:0 0 0 0 var(--brass);}100%{box-shadow:0 0 0 9px transparent;}}
+
+.actionbar{margin-top:8px;height:4px;background:#07080c;border:1px solid var(--line);position:relative;overflow:hidden;}
+.actionfill{position:absolute;inset:0 auto 0 0;background:var(--brass);width:0;}
+.actionlab{font-family:var(--mono);font-size:9px;color:var(--parch-3);margin-top:3px;display:flex;gap:8px;}
+
+.runrow{display:flex;gap:10px;align-items:center;margin-top:12px;}
+.runbtn{
+  background:linear-gradient(180deg,#c8402a,#8e2718);border:1px solid #e05a40;border-radius:var(--r);
+  color:#fff;font-family:var(--display);font-size:16px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;padding:12px 30px;box-shadow:0 3px 0 #5e1a10;
+}
+.runbtn:hover{background:linear-gradient(180deg,#d84a32,#9e2d1c);}
+.runbtn:active{transform:translateY(2px);box-shadow:0 1px 0 #5e1a10;}
+.runbtn:disabled{opacity:.4;cursor:not-allowed;}
+.runbtn.stop{background:linear-gradient(180deg,#3a4152,#252b3b);border-color:var(--line-hi);box-shadow:0 3px 0 #14171f;}
+.run-note{font-family:var(--mono);font-size:10px;color:var(--parch-3);}
+
 :focus-visible{outline:2px solid var(--brass);outline-offset:1px;}
 /* Tapped once on a touch screen: the card is showing, a second tap buys. */
 .tnode.tapped{outline:2px solid var(--brass);outline-offset:1px;}
+
+/* directions page */
+.dir{border-top:1px solid var(--line);padding-top:20px;margin-top:24px;}
+.dir-h{font-family:var(--display);font-size:26px;font-weight:700;letter-spacing:.03em;
+  text-transform:uppercase;line-height:1;margin:0 0 10px;}
+.dir-lede{font-size:13px;line-height:1.6;color:var(--parch-2);margin:0 0 14px;max-width:70ch;}
+.dir-axes{border:1px solid var(--line);border-radius:var(--r);background:var(--ink-2);
+  padding:4px 10px 8px;margin-bottom:8px;overflow-x:auto;}
+.dir-axes table{border-collapse:collapse;width:100%;font-size:11.5px;}
+.dir-axes th{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--parch-3);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);}
+.dir-axes td{padding:5px 8px;border-bottom:1px solid var(--ink-3);color:var(--parch-2);vertical-align:top;}
+.dir-axes td:first-child{font-weight:600;color:var(--parch);white-space:nowrap;}
+.dir-axes a{color:var(--parch);text-decoration:none;border-bottom:1px dotted var(--parch-3);}
+.dir-axes a:hover{color:var(--brass);border-bottom-color:var(--brass);}
 
 @media (max-width:1240px){
   .frame{grid-template-columns:1fr;}
@@ -667,6 +843,36 @@ const DEFAULT_RULESET = {
                   text: 'Deals a quarter less damage.' },
     poisoned:   { label: 'Poisoned',   hostile: 1, maxStacks: 3, match: ['poison','poisoned','venom'],
                   text: 'Damage each round, and it ticks harder for every round it has already held.' },
+  },
+
+  /* ---- the combat model the Loadout Sim demonstrates ----------------------
+     NOT what the game does today. The game runs a 1-second round and one
+     attack per round, full stop. This is the proposed direction: every
+     ability costs two separate things.
+
+       cooldown   — rounds before you may use THAT ability again
+       actionTime — rounds before you may use ANY ability at all
+
+     The second is the one that changes the feel. A 3-round action time means
+     a big spell is three rounds of committing, which is what turns a bar from
+     something you spam into something you decide with.
+
+     Numbers are derived per tier rather than hand-set on 198 abilities, so
+     the curve can be retuned in one place. A node may carry its own `sim`
+     object to override any of it. */
+  sim: {
+    roundMs: 1000,          // one round = one second
+    targetHp: 6000,
+    dotRounds: 4,           // how long one application of a DOT keeps ticking
+    dotPerTick: 0.22,       // fraction of the ability's power, per round, per stack
+    // indexed by tier 0..5, matching ROWS
+    actionByTier:   [1,  1,  1.5, 2,  2.5, 3],
+    cooldownByTier: [0,  4,  6,   10, 15,  22],
+    powerByTier:    [12, 22, 36,  58, 92,  150],
+    /* What the ability's tags do to its power. A control or defensive ability
+       deals nothing and is worth taking anyway — that is the point of showing
+       idle time next to damage. */
+    kindMult: { burst: 1.35, area: 1.15, dot: 0.55, sustain: 0.95, heal: 1.0, leech: 0.9, other: 0.8 },
   },
 
   shapeAxes: ['burst', 'sustain', 'survive', 'control', 'mobility', 'support'],
@@ -1024,10 +1230,13 @@ function migrate(saved){
   return saved;
 }
 let RS = migrate(load(LS_RULES));
-let S  = load(LS_STATE) || {
+const FRESH_STATE = () => ({
   tab: 'trees', name: 'Unnamed', race: 'human', archetype: 'innate', cls: 'mage',
   level: 10, practice: {}, owned: [], editing: false, notes: '',
-};
+  sim: { cls: 'mage', bar: new Array(12).fill(null), rows: 1 },
+});
+let S = Object.assign(FRESH_STATE(), load(LS_STATE) || {});
+if (!S.sim || !Array.isArray(S.sim.bar)) S.sim = FRESH_STATE().sim;
 
 function load(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch { return null; } }
 function save(){
@@ -1174,15 +1383,9 @@ const tabsEl = document.getElementById('tabs');
  * direction with different words, and are not worth a tab.
  */
 const TABS = [
-  { id: 'trees', label: 'Trees & Budget', stub: false },
-  { id: 'lok',   label: 'Legends of Kesmai', stub: true },
-  { id: 'cap',   label: 'Total Cap', stub: true },
-  { id: 'gear',  label: '4 · Gear-Bound', stub: true },
-  { id: 'eight', label: '5 · The Eight', stub: true },
-  { id: 'deeds', label: '6 · Deeds', stub: true },
-  { id: 'ledge', label: '7 · Two Ledgers', stub: true },
-  { id: 'board', label: '8 · One Board', stub: true },
-  { id: 'mast',  label: '9 · Masters', stub: true },
+  { id: 'trees',      label: 'Trees & Budget', stub: false },
+  { id: 'sim',        label: 'Loadout Sim',    stub: false },
+  { id: 'directions', label: 'Directions',     stub: true  },
 ];
 
 function renderTabs(){
@@ -1194,7 +1397,13 @@ function render(){
   reconcile(); renderTabs();
   document.body.classList.toggle('editing', !!S.editing);
   hideTip();
-  app.innerHTML = S.tab === 'trees' ? viewTrees() : viewStub(S.tab);
+  /* Old saved state may still name a tab that no longer exists — the eight
+     direction tabs became one. */
+  if (!TABS.some(t => t.id === S.tab)) S.tab = 'trees';
+  app.innerHTML = S.tab === 'trees' ? viewTrees()
+                : S.tab === 'sim'   ? viewSim()
+                : viewDirections();
+  if (SIM) paintSim();   // a re-render mid-run rebuilds the slots; refill them
   save();
 }
 
@@ -1458,8 +1667,11 @@ function viewFoot(){
   </div>`;
 }
 
-function viewStub(id){
-  const D = {
+/* The eight directions that are pitches rather than builds. They used to be a
+   tab each, which made the tab bar the widest thing on the page and buried the
+   two tabs that actually do something. All eight now live on one page, which is
+   also the only way to compare them by reading across. */
+const DIRECTIONS = {
     lok: {
       eyebrow: 'Direction two · not built', h: 'Legends of Kesmai',
       lede: 'No classes, no trees, no points. You get good at a thing by doing that thing, and the only ceiling is the twenty every skill already has. Progression is knowledge, gear, and the map in your head — not a build.',
@@ -1548,14 +1760,425 @@ function viewStub(id){
         ['Nearest neighbour', 'Morrowind, where the master trainers are hidden out in the world and the ordinary ones take your gold and your hours. Ultima Online’s trainers for the undiluted version.'],
       ],
     },
-  }[id];
+};
+
+/* The two axes every direction actually differs on. Kept beside the pitches
+   rather than inside them, so the table reads as a comparison. */
+const DIR_AXES = {
+  lok:   ['nowhere — there is no build', 'use'],
+  cap:   ['on the character, drifting', 'use, against a total ceiling'],
+  gear:  ['on the sword and the coat', 'loot'],
+  eight: ['on the bar, re-chosen daily', 'nothing — you own it all'],
+  deeds: ['on the character', 'things you did'],
+  ledge: ['on the character, in two halves', 'level and practice, never interchangeable'],
+  board: ['on one shared map', 'points, but distance is the real cost'],
+  mast:  ['out in the world, on people', 'gold and travel'],
+};
+
+/* All eight, one page, in order. */
+function viewDirections(){
+  const order = ['lok','cap','gear','eight','deeds','ledge','board','mast'];
   return `<div class="stubwrap">
-    <p class="stub-eyebrow">${esc(D.eyebrow)}</p>
-    <h1 class="stub-h">${esc(D.h)}</h1>
-    <p class="stub-lede">${esc(D.lede)}</p>
-    <div class="stub-grid">${D.cards.map(([h, p]) =>
-      `<div class="stub-card"><h4>${esc(h)}</h4><p>${esc(p)}</p></div>`).join('')}</div>
-    <div class="stub-status">One of nine directions, eight of them written pitches. Held on purpose — say the word and this tab gets the same treatment as Trees &amp; Budget.</div>
+    <p class="stub-eyebrow">Eight directions · none of them built</p>
+    <h1 class="stub-h">Directions</h1>
+    <p class="stub-lede">Trees &amp; Budget is the one that is built. These are the alternatives, held on purpose so the field can be argued about before anything is committed. They are spread across the two axes that actually differ — <b>where the build lives</b> and <b>what pays for it</b>. Two directions that answer both the same way are the same direction in different words, and do not get an entry.</p>
+
+    <div class="dir-axes">
+      <table>
+        <tr><th></th><th>Where the build lives</th><th>What pays for it</th></tr>
+        ${order.map(id => {
+          const d = DIRECTIONS[id];
+          const [lives, pays] = DIR_AXES[id] || ['—','—'];
+          return `<tr><td><a href="#dir-${id}">${esc(d.h)}</a></td>
+                      <td>${esc(lives)}</td><td>${esc(pays)}</td></tr>`;
+        }).join('')}
+      </table>
+    </div>
+
+    ${order.map(id => {
+      const d = DIRECTIONS[id];
+      return `<section class="dir" id="dir-${id}">
+        <p class="stub-eyebrow">${esc(d.eyebrow.replace(' · not built',''))}</p>
+        <h2 class="dir-h">${esc(d.h)}</h2>
+        <p class="dir-lede">${esc(d.lede)}</p>
+        <div class="stub-grid">${d.cards.map(([h, p]) =>
+          `<div class="stub-card"><h4>${esc(h)}</h4><p>${esc(p)}</p></div>`).join('')}</div>
+      </section>`;
+    }).join('')}
+
+    <div class="stub-status">Say the word and any one of these gets the same treatment as Trees &amp; Budget.</div>
+  </div>`;
+}
+
+/* ============================================================
+   LOADOUT SIMULATOR
+   ============================================================ */
+const SLOTS_PER_ROW = 12;
+
+/* Which of the six colours a glyph gets, and its two initials. */
+function glyphOf(node){
+  const w = node.name.replace(/[^A-Za-z\s]/g, '').trim().split(/\s+/);
+  return (w.length > 1 ? w[0][0] + w[1][0] : node.name.slice(0, 2)).toUpperCase();
+}
+function kindOf(node){
+  const t = node.tags;
+  if (t.includes('heal')) return 'heal';
+  if (t.includes('defense') || t.includes('buff')) return 'defensive';
+  if (t.includes('control') || t.includes('root') || t.includes('debuff') || t.includes('taunt')) return 'control';
+  if (t.includes('mobility') || t.includes('stealth') || t.includes('utility') || t.includes('summon')) return 'utility';
+  return 'damage';
+}
+const KIND_COLOR = { damage:'#c0563a', heal:'#3f9c46', defensive:'#4a6fc4', control:'#a049b8', utility:'#8a8f9c' };
+
+/* An ability's combat numbers. Derived from its tier and tags unless the node
+   carries its own `sim` override. */
+function simStats(node){
+  const C = RS.sim;
+  const tier = Math.max(0, Math.min(5, node.row));
+  const kind = kindOf(node);
+  const t = node.tags;
+  const mult = t.includes('burst') ? C.kindMult.burst
+             : t.includes('area')  ? C.kindMult.area
+             : t.includes('dot')   ? C.kindMult.dot
+             : t.includes('leech') ? C.kindMult.leech
+             : t.includes('sustain') ? C.kindMult.sustain
+             : C.kindMult.other;
+  const raw = Math.round((C.powerByTier[tier] ?? 12) * mult);
+  const base = {
+    kind,
+    power: (kind === 'control' || kind === 'defensive' || kind === 'utility') ? 0
+         : kind === 'heal' ? Math.round(raw * C.kindMult.heal) : raw,
+    actionTime: C.actionByTier[tier] ?? 1,
+    cooldown:   C.cooldownByTier[tier] ?? 0,
+    dot: t.includes('dot'),
+  };
+  return { ...base, ...(node.sim || {}) };
+}
+
+/* Every ability the chosen class has concepts for — all three of its lines,
+   regardless of what any tree build bought. This tab is about the loadout,
+   not the progression. */
+function simAbilities(){
+  const c = RS.classes[S.sim.cls];
+  if (!c) return [];
+  return c.trees.map(treeById).filter(Boolean);
+}
+function simNodeById(id){
+  for (const t of simAbilities()){ const n = nodeInTree(t, id); if (n) return { tree: t, node: n }; }
+  return null;
+}
+
+/* ---------- runtime ----------
+   Deliberately NOT in S: a run is not something to persist. */
+let SIM = null;
+let simTimer = null;
+
+function simStart(){
+  const bar = S.sim.bar.filter(Boolean);
+  if (!bar.length) return;
+  SIM = {
+    t: 0, lockUntil: 0, cd: {}, log: [],
+    dmg: 0, heal: 0, casts: 0, blocked: 0, busy: 0,
+    hp: RS.sim.targetHp, debuffs: [], lastRound: 0,
+  };
+  SIM.wall = performance.now();
+  simLog(0, 'Simulation started. Round is ' + RS.sim.roundMs + 'ms.', 'tick');
+  simTimer = setInterval(simTick, 50);
+  render();
+}
+function simStop(){
+  if (simTimer) clearInterval(simTimer);
+  simTimer = null;
+  if (SIM) simLog(SIM.t, 'Stopped.', 'tick');
+  const keep = SIM;
+  SIM = null;
+  render();
+  return keep;
+}
+function simLog(t, msg, cls){
+  if (!SIM) return;
+  SIM.log.push({ t, msg, cls: cls || '' });
+  if (SIM.log.length > 400) SIM.log.shift();
+}
+
+/* One frame. The clock runs in seconds; a round is roundMs. */
+function simTick(){
+  if (!SIM) return;
+  /* Advance by REAL elapsed time, not by the interval's nominal 50ms — Chrome
+     throttles a background tab to roughly one tick a second, which would run
+     the whole simulation in slow motion and make every cooldown a lie.
+     Backgrounding is handled by pausing outright (see visibilitychange below)
+     rather than by capping the step, because a cap is just slow motion again. */
+  const now = performance.now();
+  const step = Math.max(0, (now - SIM.wall) / 1000);
+  SIM.wall = now;
+  SIM.t += step;
+  if (SIM.t < SIM.lockUntil) SIM.busy += step;
+
+  const roundLen = RS.sim.roundMs / 1000;
+  const round = Math.floor(SIM.t / roundLen);
+  if (round > SIM.lastRound){
+    SIM.lastRound = round;
+    /* Damage-over-time lands on the round boundary, like everything else. */
+    for (const d of SIM.debuffs){
+      if (d.perTick > 0 && SIM.hp > 0){
+        const tickDmg = Math.round(d.perTick * d.stacks);
+        SIM.hp = Math.max(0, SIM.hp - tickDmg);
+        SIM.dmg += tickDmg;
+        simLog(SIM.t, `${d.label} ticks for <b>${tickDmg}</b> (${d.stacks} stack${d.stacks>1?'s':''})`, 'tick');
+      }
+    }
+  }
+  SIM.debuffs = SIM.debuffs.filter(d => {
+    if (SIM.t < d.until) return true;
+    simLog(SIM.t, `${d.label} wears off`, 'effect');
+    return false;
+  });
+  if (SIM.hp <= 0 && !SIM.done){
+    SIM.done = true;
+    simLog(SIM.t, `Target down at ${SIM.t.toFixed(1)}s.`, 'dmg');
+  }
+  paintSim();
+}
+
+/* Fire one slot. Both gates are checked here, and a refusal is logged rather
+   than silently ignored — "why did nothing happen" is the question the whole
+   tab exists to answer. */
+function simFire(slotIndex){
+  if (!SIM) return;
+  const id = S.sim.bar[slotIndex];
+  if (!id) return;
+  const found = simNodeById(id); if (!found) return;
+  const { node } = found;
+  const st = simStats(node);
+
+  if (SIM.t < SIM.lockUntil){
+    SIM.blocked++;
+    simLog(SIM.t, `${node.name} refused — still acting for ${(SIM.lockUntil - SIM.t).toFixed(1)}s`, 'blocked');
+    return paintSim();
+  }
+  const until = SIM.cd[id] || 0;
+  if (SIM.t < until){
+    SIM.blocked++;
+    simLog(SIM.t, `${node.name} refused — ${(until - SIM.t).toFixed(1)}s of cooldown left`, 'blocked');
+    return paintSim();
+  }
+
+  SIM.casts++;
+  SIM.lockUntil = SIM.t + st.actionTime;
+  SIM.lockTotal = st.actionTime;   // needed to draw the action bar draining
+  if (st.cooldown > 0) SIM.cd[id] = SIM.t + st.cooldown;
+
+  if (st.kind === 'heal' && st.power){
+    SIM.heal += st.power;
+    simLog(SIM.t, `${node.name} heals for <b>${st.power}</b>`, 'dmg');
+  } else if (st.power){
+    const dealt = st.dot ? Math.round(st.power * 0.35) : st.power;
+    SIM.hp = Math.max(0, SIM.hp - dealt);
+    SIM.dmg += dealt;
+    simLog(SIM.t, `${node.name} hits for <b>${dealt}</b>`, 'dmg');
+  } else {
+    simLog(SIM.t, `${node.name} — ${st.kind}, no direct damage`, '');
+  }
+
+  /* Anything the ability puts on the board shows up on the dummy. */
+  for (const eid of effectsFor(node)){
+    const ef = RS.effects[eid]; if (!ef) continue;
+    const dur = RS.sim.dotRounds * (RS.sim.roundMs / 1000);
+    const existing = SIM.debuffs.find(d => d.id === eid);
+    if (existing){
+      existing.stacks = Math.min(ef.maxStacks || 1, existing.stacks + 1);
+      existing.until = SIM.t + dur; existing.dur = dur;
+      /* A burst that merely applies the effect must not erase the tick rate a
+         real damage-over-time ability already set on it. */
+      if (st.dot) existing.perTick = Math.max(existing.perTick, Math.round(st.power * RS.sim.dotPerTick));
+    } else {
+      SIM.debuffs.push({
+        id: eid, label: ef.label, hostile: !!ef.hostile, stacks: 1,
+        until: SIM.t + dur, dur,
+        perTick: st.dot ? Math.round(st.power * RS.sim.dotPerTick) : 0,
+      });
+    }
+    simLog(SIM.t, `→ ${ef.label} applied`, 'effect');
+  }
+
+  const el = document.querySelector(`.slot[data-slot="${slotIndex}"]`);
+  if (el){ el.classList.remove('fired'); void el.offsetWidth; el.classList.add('fired'); }
+  paintSim();
+}
+
+/* Repaint only what moves. A full render 20 times a second would fight the
+   drag handlers and lose the log's scroll position. */
+function paintSim(){
+  if (!SIM) return;
+  const q = s => document.querySelector(s);
+  const clock = q('#simClock'); if (clock) clock.textContent = SIM.t.toFixed(1) + 's';
+  const hpPct = (SIM.hp / RS.sim.targetHp) * 100;
+  const hf = q('#hpFill'); if (hf) hf.style.width = hpPct + '%';
+  const hn = q('#hpNum'); if (hn) hn.textContent = SIM.hp.toLocaleString() + ' / ' + RS.sim.targetHp.toLocaleString();
+
+  const dps = SIM.t > 0.2 ? SIM.dmg / SIM.t : 0;
+  const idle = SIM.t > 0 ? Math.max(0, 100 - (SIM.busy / SIM.t) * 100) : 0;
+  const set = (id, v) => { const e = q(id); if (e) e.textContent = v; };
+  set('#ssDmg', SIM.dmg.toLocaleString());
+  set('#ssDps', dps.toFixed(1));
+  set('#ssCasts', SIM.casts + (SIM.blocked ? ' / ' + SIM.blocked + ' refused' : ''));
+  const idleEl = q('#ssIdle');
+  if (idleEl){ idleEl.textContent = idle.toFixed(0) + '%'; idleEl.classList.toggle('warn', idle > 25); }
+
+  const db = q('#debuffs');
+  if (db) db.innerHTML = SIM.debuffs.map(d => {
+    const left = Math.max(0, d.until - SIM.t);
+    return `<div class="debuff${d.hostile ? '' : ' friendly'}">
+      <div class="debuff-n">${esc(d.label)}${d.stacks > 1 ? ' ×' + d.stacks : ''}</div>
+      <div class="debuff-t">${left.toFixed(1)}s</div>
+      <div class="debuff-bar" style="width:${(left / d.dur) * 100}%"></div></div>`;
+  }).join('') || '<span style="font-family:var(--mono);font-size:10px;color:var(--parch-3)">no effects on the target</span>';
+
+  const acting = SIM.t < SIM.lockUntil;
+  document.querySelectorAll('.slot[data-slot]').forEach(el => {
+    const i = +el.dataset.slot, id = S.sim.bar[i];
+    el.classList.toggle('acting', acting && !!id);
+    const cdEl = el.querySelector('.slot-cd'), numEl = el.querySelector('.slot-cdnum');
+    if (!id || !cdEl) return;
+    const until = SIM.cd[id] || 0, left = until - SIM.t;
+    const found = simNodeById(id);
+    const total = found ? simStats(found.node).cooldown : 0;
+    if (left > 0 && total > 0){
+      cdEl.style.height = (left / total) * 100 + '%';   // the darkness wipes down as it recovers
+      if (numEl) numEl.textContent = left.toFixed(1);
+      el.classList.remove('ready');
+    } else {
+      cdEl.style.height = '0%';
+      if (numEl) numEl.textContent = '';
+      el.classList.toggle('ready', !acting);
+    }
+  });
+
+  const af = q('#actionFill');
+  if (af){
+    const lockLeft = Math.max(0, SIM.lockUntil - SIM.t);
+    const total = SIM.lockTotal || 0;
+    af.style.width = (lockLeft > 0 && total > 0) ? (lockLeft / total) * 100 + '%' : '0%';
+  }
+  const al = q('#actionLab');
+  if (al) al.innerHTML = acting
+    ? `<span style="color:var(--rust)">ACTING — ${(SIM.lockUntil - SIM.t).toFixed(1)}s until you may act again</span>`
+    : `<span style="color:var(--innate)">READY</span>`;
+
+  const lg = q('#simLog');
+  if (lg){
+    lg.innerHTML = SIM.log.slice(-120).map(l =>
+      `<div class="lg ${l.cls}"><span class="lg-t">${l.t.toFixed(1)}</span><span class="lg-m">${l.msg}</span></div>`).join('');
+    lg.scrollTop = lg.scrollHeight;
+  }
+}
+
+/* ---------- the view ---------- */
+function viewSim(){
+  if (!S.sim) S.sim = { cls: 'mage', bar: new Array(SLOTS_PER_ROW).fill(null), rows: 1 };
+  const want = S.sim.rows * SLOTS_PER_ROW;
+  if (S.sim.bar.length !== want){
+    const b = S.sim.bar.slice(0, want);
+    while (b.length < want) b.push(null);
+    S.sim.bar = b;
+  }
+  const c = RS.classes[S.sim.cls];
+  const inBar = new Set(S.sim.bar.filter(Boolean));
+
+  const classBtns = RS.classOrder.map(id => {
+    const cc = RS.classes[id];
+    return `<button class="cp" data-simcls="${id}" style="--pc:${archColor(id)}" aria-pressed="${S.sim.cls === id}">
+      <span class="cp-n">${esc(cc.name)}</span><span class="cp-r">${esc(cc.role)}</span></button>`;
+  }).join('');
+
+  const palette = simAbilities().map(t => `
+    <div class="pal-group" style="--tc:${archColor(S.sim.cls)}">
+      <p class="pal-h">${esc(t.name)}</p>
+      <div class="pal-items">
+        ${t.nodes.slice().sort((a,b)=>a.row-b.row).map(nd => {
+          const st = simStats(nd);
+          return `<button class="pal-item${inBar.has(nd.id) ? ' inbar' : ''}" draggable="true"
+                    data-pal="${nd.id}" title="${esc(nd.text)}">
+            <span class="glyph" style="--gc:${KIND_COLOR[st.kind]}">${esc(glyphOf(nd))}</span>
+            <span class="pal-n">${esc(nd.name)}</span>
+            <span class="pal-m">${st.power ? st.power + ' pwr<br>' : ''}${st.cooldown ? st.cooldown + 's cd' : 'no cd'} · ${st.actionTime}s act</span>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+
+  const rowsHtml = Array.from({ length: S.sim.rows }, (_, r) => `
+    <div class="bar">
+      ${Array.from({ length: SLOTS_PER_ROW }, (_, i) => {
+        const idx = r * SLOTS_PER_ROW + i;
+        const id = S.sim.bar[idx];
+        const found = id ? simNodeById(id) : null;
+        if (!found) return `<div class="slot empty" data-slot="${idx}"><span class="slot-key">${idx + 1}</span>+</div>`;
+        const st = simStats(found.node);
+        return `<button class="slot" data-slot="${idx}" title="${esc(found.node.name)} — ${esc(found.node.text)}">
+          <span class="slot-key">${idx + 1}</span>
+          <span class="glyph" style="--gc:${KIND_COLOR[st.kind]}">${esc(glyphOf(found.node))}</span>
+          <span class="slot-n">${esc(found.node.name)}</span>
+          <span class="slot-lock"></span><span class="slot-cd"></span><span class="slot-cdnum"></span>
+        </button>`;
+      }).join('')}
+    </div>`).join('');
+
+  const running = !!SIM;
+
+  return `<div class="simwrap">
+    <p class="stub-eyebrow">Not progression — this is the build in motion</p>
+    <h1 class="stub-h">Loadout Simulator</h1>
+    <p class="sim-lede">Build a bar, then run it. The model on show is <b>not</b> what the game does today: every ability costs a <b>cooldown</b> before you may use that one again, <b>and</b> an <b>action time</b> during which you may use nothing at all. Watch the bar dim as a whole while you are acting, and each ability wipe down its own cooldown separately. If a rotation is a spam, the idle figure stays near zero and every button is always lit — if it has real decisions in it, you will feel the gaps.</p>
+
+    <div class="classpick">${classBtns}</div>
+
+    <div class="sim-top">
+      <div class="palette">${palette}</div>
+      ${running ? `
+      <div class="target">
+        <div class="tg-left">
+          <div class="tg-h">Target dummy <span class="tg-clock" id="simClock">0.0s</span></div>
+          <div class="hpbar"><div class="hpfill" id="hpFill" style="width:100%"></div>
+            <div class="hpnum" id="hpNum"></div></div>
+          <div class="debuffs" id="debuffs"></div>
+          <div class="simstats">
+            <div class="ss"><div class="ss-k">damage</div><div class="ss-v" id="ssDmg">0</div></div>
+            <div class="ss"><div class="ss-k">dps</div><div class="ss-v" id="ssDps">0</div></div>
+            <div class="ss"><div class="ss-k">casts</div><div class="ss-v" id="ssCasts">0</div></div>
+            <div class="ss"><div class="ss-k">idle</div><div class="ss-v" id="ssIdle">0%</div></div>
+          </div>
+        </div>
+        <div class="tg-right">
+          <div class="log-h">Combat log</div>
+          <div class="simlog" id="simLog"></div>
+        </div>
+      </div>` : ''}
+    </div>
+
+    <div class="bar-wrap">
+      <div class="bar-head">
+        <span class="bar-title">Ability bar${running ? '' : ' — drag from above, or click to add'}</span>
+        <div class="rowtog">
+          <button class="btn" data-simrows="1" aria-pressed="${S.sim.rows === 1}">1 row</button>
+          <button class="btn" data-simrows="2" aria-pressed="${S.sim.rows === 2}">2 rows</button>
+          <button class="btn" id="simClear">Clear</button>
+        </div>
+      </div>
+      <div class="bar-rows">${rowsHtml}</div>
+      <div class="actionbar"><div class="actionfill" id="actionFill"></div></div>
+      <div class="actionlab" id="actionLab">${running ? '' : 'action timer'}</div>
+    </div>
+
+    <div class="runrow">
+      ${running
+        ? `<button class="runbtn stop" id="simStop">Stop</button>`
+        : `<button class="runbtn" id="simRun" ${S.sim.bar.some(Boolean) ? '' : 'disabled'}>Run simulation</button>`}
+      <span class="run-note">${running
+        ? 'Click any ability on the bar to use it. Refusals are logged.'
+        : S.sim.bar.some(Boolean) ? 'Then click abilities on the bar to fire them.' : 'Put at least one ability on the bar first.'}</span>
+    </div>
   </div>`;
 }
 
@@ -1918,12 +2541,39 @@ function openImport(){
    EVENTS
    ============================================================ */
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-tab],[data-pick],[data-node],[data-pracmax],[data-addnode],[data-edittree],#funnelToggle,#editToggle,#rulesBtn,#exportBtn,#importBtn,#resetBtn,[data-close],[data-scrim]');
+  const t = e.target.closest('[data-tab],[data-pick],[data-node],[data-pracmax],[data-addnode],[data-edittree],[data-simcls],[data-pal],[data-slot],[data-simrows],#simRun,#simStop,#simClear,#funnelToggle,#editToggle,#rulesBtn,#exportBtn,#importBtn,#resetBtn,[data-close],[data-scrim]');
   /* Tapping anywhere off an ability dismisses its card. */
   if (!t || !t.dataset.node) hideTip();
   if (!t) return;
   if (t.hasAttribute('data-scrim') && e.target !== t) return;
   if (t.hasAttribute('data-close') || t.hasAttribute('data-scrim')) return void closeModal();
+
+  /* ---- loadout simulator ---- */
+  if (t.dataset.simcls){
+    if (SIM) simStop();
+    S.sim.cls = t.dataset.simcls;
+    S.sim.bar = S.sim.bar.map(() => null);   // a different class has different abilities
+    return void render();
+  }
+  if (t.dataset.simrows){
+    S.sim.rows = +t.dataset.simrows;
+    return void render();
+  }
+  if (t.id === 'simClear'){ S.sim.bar = S.sim.bar.map(() => null); return void render(); }
+  if (t.id === 'simRun')   return void simStart();
+  if (t.id === 'simStop')  return void simStop();
+  if (t.dataset.pal){
+    if (SIM) return;                          // no editing the bar mid-run
+    const i = S.sim.bar.indexOf(null);
+    if (i >= 0){ S.sim.bar[i] = t.dataset.pal; render(); }
+    return;
+  }
+  if (t.dataset.slot !== undefined){
+    const i = +t.dataset.slot;
+    if (SIM) return void simFire(i);          // during a run, a slot is a button
+    S.sim.bar[i] = null;                      // otherwise clicking clears it
+    return void render();
+  }
 
   if (t.id === 'funnelToggle'){ funnelOpen = !funnelOpen; return void render(); }
   if (t.dataset.tab)      { S.tab = t.dataset.tab; return void render(); }
@@ -1985,9 +2635,9 @@ document.addEventListener('click', e => {
   if (t.id === 'importBtn')  return void openImport();
   if (t.id === 'resetBtn'){
     if (!confirm('Reset the ruleset and this build back to the shipped defaults? Everything you have edited is lost.')) return;
+    if (SIM) simStop();
     RS = structuredClone(DEFAULT_RULESET);
-    S = { tab: 'trees', name: 'Unnamed', race: 'human', archetype: 'innate', cls: 'mage',
-          level: 10, practice: {}, owned: [], editing: false, notes: '' };
+    S = FRESH_STATE();
     return void render();
   }
 });
@@ -2036,7 +2686,67 @@ document.addEventListener('mousemove', e => {
   tipEl.style.top = Math.max(8, Math.min(e.clientY + 14, window.innerHeight - r.height - 10)) + 'px';
 });
 document.addEventListener('mouseout', e => { if (!NO_HOVER && e.target.closest('.tnode')) hideTip(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape'){ closeModal(); hideTip(); } });
+/* A hidden tab gets its timers throttled, so rather than let the clock drift
+   out of step with the cooldowns on screen, the run pauses and picks up where
+   it left off. */
+document.addEventListener('visibilitychange', () => {
+  if (!SIM) return;
+  if (document.hidden){
+    if (simTimer){ clearInterval(simTimer); simTimer = null; }
+    SIM.paused = true;
+    simLog(SIM.t, 'Paused — tab hidden.', 'tick');
+  } else if (SIM.paused){
+    SIM.paused = false;
+    SIM.wall = performance.now();
+    simTimer = setInterval(simTick, 50);
+    simLog(SIM.t, 'Resumed.', 'tick');
+  }
+});
+
+/* ---------- dragging abilities onto the bar ---------- */
+let dragId = null;
+document.addEventListener('dragstart', e => {
+  const p = e.target.closest('[data-pal]');
+  if (!p || SIM) return;
+  dragId = p.dataset.pal;
+  e.dataTransfer.effectAllowed = 'copy';
+  try { e.dataTransfer.setData('text/plain', dragId); } catch { /* Safari */ }
+});
+document.addEventListener('dragend', () => {
+  dragId = null;
+  document.querySelectorAll('.slot.dragover').forEach(el => el.classList.remove('dragover'));
+});
+document.addEventListener('dragover', e => {
+  const s = e.target.closest('[data-slot]');
+  if (!s || !dragId) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  s.classList.add('dragover');
+});
+document.addEventListener('dragleave', e => {
+  const s = e.target.closest('[data-slot]');
+  if (s) s.classList.remove('dragover');
+});
+document.addEventListener('drop', e => {
+  const s = e.target.closest('[data-slot]');
+  if (!s || SIM) return;
+  e.preventDefault();
+  const id = dragId || (() => { try { return e.dataTransfer.getData('text/plain'); } catch { return null; } })();
+  if (!id || !simNodeById(id)) return;
+  S.sim.bar[+s.dataset.slot] = id;
+  dragId = null;
+  render();
+});
+
+/* Number keys fire bar slots during a run — the whole point is rhythm, and
+   reaching for a mouse is not rhythm. */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape'){ closeModal(); hideTip(); return; }
+  if (!SIM || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) return;
+  const n = e.key === '0' ? 10 : /^[1-9]$/.test(e.key) ? +e.key : null;
+  if (n !== null){ e.preventDefault(); simFire(n - 1); }
+});
 
 render();
 </script>
