@@ -27,7 +27,7 @@ export default async function BlogIndex() {
 
       {/* top bar */}
       <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <Link href="/jaministries/the-evangelist" aria-label="Jesus Anoints Ministries home">
+        <Link href="/jaministries" aria-label="Jesus Anoints Ministries home">
           <Image
             src={site.brand.logoHorizontalRev}
             alt="Jesus Anoints Ministries"

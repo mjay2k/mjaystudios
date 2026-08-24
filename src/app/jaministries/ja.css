@@ -1,34 +1,40 @@
 /* Jesus Anoints Ministries — brand tokens, scoped to .ja so nothing leaks into the portfolio.
-   Palette from the 2026 brand system: gold-gradient dove + slate (#3c4459) surface.
-   Gold gradient stops + slate are taken directly from the supplied brand SVGs. */
+   Palette from the 2026-08 logo: royal-blue script wordmark + gold dove wrapping the globe,
+   on a white ground. Token NAMES from the previous slate brand are kept so shared pages
+   (blog) inherit the new palette without edits — only the values changed. */
 
 .ja {
-  /* Brand gold (2026 dove gradient) */
-  --ja-gold-1: #bf9e63;
-  --ja-gold-2: #e4c86c;
-  --ja-gold-3: #ecdd98;
-  --ja-gold-deep: #a8854a;
-  --ja-gold-grad: linear-gradient(120deg, #bf9e63 0%, #e4c86c 55%, #ecdd98 100%);
-  /* warmer "tile" gradient used behind the dove icon */
-  --ja-gold-tile: linear-gradient(150deg, #d9b977 0%, #e4c86c 45%, #f0e3a6 100%);
+  /* Brand gold (dove / "MINISTRIES" letterform gradient, sampled from the logo) */
+  --ja-gold-1: #b98a1e;
+  --ja-gold-2: #d9ad3c;
+  --ja-gold-3: #edcb6d;
+  --ja-gold-deep: #8f6a14;
+  --ja-gold-grad: linear-gradient(120deg, #a3781a 0%, #d9ad3c 55%, #edcb6d 100%);
+  /* warmer "tile" gradient used behind icons / badges */
+  --ja-gold-tile: linear-gradient(150deg, #c1912a 0%, #d9ad3c 45%, #f0dda0 100%);
 
-  /* Slate / ink — #3c4459 is the canonical brand surface */
-  --ja-slate: #3c4459;
-  --ja-slate-deep: #2c333f;
-  --ja-ink: #20262f;
-  --ja-ink-900: #161b22;
-  /* slight gradient on the slate fill (brand guide invites this) */
-  --ja-slate-grad: linear-gradient(160deg, #424b62 0%, #3c4459 50%, #2f3645 100%);
-  --ja-slate-grad-soft: linear-gradient(165deg, #3c4459 0%, #343c4f 100%);
+  /* Royal blue — the script wordmark; navy — "TOUCHING THE WORLD" letterspacing */
+  --ja-royal: #24418c;
+  --ja-royal-bright: #2f56b5;
+  --ja-azure: #2f6fd0; /* globe ocean accent, use sparingly */
+  --ja-slate: #1d3157; /* legacy name → now deep royal navy */
+  --ja-slate-deep: #142343;
+  --ja-ink: #0e1a33;
+  --ja-ink-900: #0a1326;
+  /* primary dark surface: a rich royal gradient (replaces the old slate fill) */
+  --ja-slate-grad: linear-gradient(160deg, #24418c 0%, #1d3157 55%, #142343 100%);
+  --ja-slate-grad-soft: linear-gradient(165deg, #1d3157 0%, #16294f 100%);
 
-  /* Paper / light */
-  --ja-cream: #f7f2e8;
-  --ja-paper: #fffdf8;
-  --ja-sand: #efe7d6;
+  /* Paper / light — the logo lives on white */
+  --ja-cream: #faf7ef;
+  --ja-paper: #ffffff;
+  --ja-sand: #f1ead9;
 
   /* Typography (loaded by the layout) */
   --ja-serif: var(--font-ja-serif), 'Baskerville', Georgia, serif;
   --ja-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --ja-script: var(--font-ja-script), 'Snell Roundhand', cursive;
+  --ja-display: var(--font-ja-display), 'Arial Narrow', ui-sans-serif, sans-serif;
 
   font-family: var(--ja-sans);
   -webkit-font-smoothing: antialiased;
@@ -38,6 +44,8 @@
 /* Reusable brand primitives */
 .ja-serif { font-family: var(--ja-serif); }
 .ja-sans { font-family: var(--ja-sans); }
+.ja-script { font-family: var(--ja-script); }
+.ja-display { font-family: var(--ja-display); }
 
 /* Typographic polish — kill orphans/widows. `balance` evens out short
    headings/quotes; `pretty` prevents a lone last word on body copy. */
@@ -89,22 +97,31 @@
 }
 .ja-fade { animation: ja-fade 1.2s ease both; }
 
+@media (prefers-reduced-motion: reduce) {
+  .ja-rise,
+  .ja-fade {
+    animation: none;
+  }
+}
+
 /* Smooth anchored scrolling within the preview */
 .ja { scroll-behavior: smooth; }
 
 /* Recolor the brand SVG logo to relevant tones where needed via filter (used on dark heroes) */
 .ja-logo-light { filter: brightness(0) invert(1); }
 
-/* ── 2026 brand surfaces ─────────────────────────────────────────────
-   Slate is the primary brand fill; the guide invites a slight gradient.
-   Use .ja-slate-fill for panels/heroes; .ja-slate-fill-soft for cards.  */
+/* The 2026 logo PNG carries a near-white background; multiply melts it into
+   any white/ivory surface so the mark sits directly on the page. */
+.ja-logo-blend { mix-blend-mode: multiply; }
+
+/* ── Brand surfaces ───────────────────────────────────────────────────
+   Royal navy is the primary dark fill; white/ivory the primary light. */
 .ja-slate-fill { background: var(--ja-slate-grad); }
 .ja-slate-fill-soft { background: var(--ja-slate-grad-soft); }
 .ja-gold-fill { background: var(--ja-gold-grad); }
 .ja-tile-fill { background: var(--ja-gold-tile); }
 
-/* Faint upward-dove watermark for dark slate sections (uses the Rev icon).
-   Apply to a positioned container; it lays a large, low-opacity dove behind. */
+/* Faint upward-dove watermark for dark sections (uses the ghost icon). */
 .ja-dove-watermark {
   position: relative;
 }
@@ -120,9 +137,8 @@
   opacity: 0.5; /* the ghost icon is already low-opacity white */
 }
 
-/* Animated nav link — a gold underline draws in from the left on hover and
-   retracts to the right on leave, with a hairline lift. Pair with a Tailwind
-   `hover:text-…` for the colour shift (this rule supplies the transition). */
+/* Animated nav link — an underline draws in from the left on hover and
+   retracts to the right on leave. Pair with a Tailwind `hover:text-…`. */
 .ja-navlink {
   position: relative;
   display: inline-block;
@@ -163,8 +179,29 @@
   border-radius: 2px;
 }
 
-/* Soft gold glow used behind dove icons / hero focal points. */
+/* Soft gold glow used behind icons / hero focal points. */
 .ja-gold-glow {
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--ja-gold-2) 30%, transparent),
     0 18px 60px -20px color-mix(in srgb, var(--ja-gold-2) 45%, transparent);
+}
+
+/* ── "MINISTRIES" eyebrow — letterspaced smallcaps between gold dashes,
+   mirroring the logo lockup. Used as the section label device. ─────── */
+.ja-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9em;
+  font-family: var(--ja-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+}
+.ja-eyebrow::before,
+.ja-eyebrow::after {
+  content: '';
+  height: 1px;
+  width: 2.4em;
+  background: var(--ja-gold-1);
+  flex: none;
 }

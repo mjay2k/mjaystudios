@@ -125,7 +125,11 @@ export const site = {
   },
 
   brand: {
-    // 2026 brand system. *Rev variants are for dark (#3c4459 slate) surfaces;
+    // 2026-08 client logo: royal-blue script + gold dove wrapping the globe, on white.
+    // This is the canonical mark for the new directions (raster, white ground —
+    // place it on light surfaces or inside a white plate).
+    logo2026: '/jaministries/brand/logo-2026.png',
+    // Earlier 2026 system. *Rev variants are for dark surfaces;
     // the plain variants are for light. iconGhost is a faint watermark dove.
     logoHorizontal: '/jaministries/brand/logo-horizontal.svg',
     logoHorizontalRev: '/jaministries/brand/logo-horizontal-rev.svg',
