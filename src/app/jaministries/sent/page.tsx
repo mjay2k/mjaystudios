@@ -41,16 +41,28 @@ function Brush({ className = '' }: { className?: string }) {
   );
 }
 
-/* Sweeping curved seam between two color blocks (Crossroads-style arc). */
-function Curve({ fill, flip = false }: { fill: string; flip?: boolean }) {
+/* Sweeping curved seam between two color blocks (Crossroads-style arc).
+   The boundary always crests in the middle. Two ways to draw the same seam:
+   - default: the NEXT section's color as an arc — place at the END of the
+     previous section (works when the next section is a flat color);
+   - invert: the PREVIOUS section's color above the arc — place at the TOP
+     of the next section (use when the next section has a gradient). */
+function Curve({ fill, invert = false }: { fill: string; invert?: boolean }) {
   return (
     <svg
       viewBox="0 0 1440 90"
       preserveAspectRatio="none"
       aria-hidden
-      className={`block h-[7vw] max-h-24 min-h-10 w-full ${flip ? 'rotate-180' : ''}`}
+      className="block h-[7vw] max-h-24 min-h-10 w-full"
     >
-      <path d="M0,90 C420,8 1020,8 1440,90 L1440,90 L0,90 Z" fill={fill} />
+      <path
+        d={
+          invert
+            ? 'M0,0 L1440,0 L1440,90 C1020,8 420,8 0,90 Z'
+            : 'M0,90 C420,8 1020,8 1440,90 L1440,90 L0,90 Z'
+        }
+        fill={fill}
+      />
     </svg>
   );
 }
@@ -162,8 +174,9 @@ export default async function SentPage() {
       </section>
 
       {/* ── Three pillars, each planted in Scripture ───────────────────── */}
+      <Curve fill="#faf7ef" />
       <section className="relative" style={{ background: 'var(--ja-cream)' }}>
-        <div className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
+        <div className="mx-auto max-w-6xl px-4 pb-16 pt-4 md:px-6 md:pb-24 md:pt-6">
           <div className="grid gap-6 md:grid-cols-3">
             {(
               [
@@ -192,6 +205,7 @@ export default async function SentPage() {
             ))}
           </div>
         </div>
+        <Curve fill="#ffffff" />
       </section>
 
       {/* ── What we do — photo split rows ──────────────────────────────── */}
@@ -270,7 +284,7 @@ export default async function SentPage() {
 
       {/* ── Testimony band — the evangelist's story ────────────────────── */}
       <section id="testimony" className="relative scroll-mt-24">
-        <Curve fill="#faf7ef" flip />
+        <Curve fill="#faf7ef" />
         <div style={{ background: 'var(--ja-cream)' }}>
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:grid-cols-[4fr_8fr] md:gap-16 md:px-6 md:py-20">
             <figure className="relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-lg md:max-w-none">
@@ -307,7 +321,8 @@ export default async function SentPage() {
 
       {/* ── CTA quad — gold band ───────────────────────────────────────── */}
       <section id="give" className="relative scroll-mt-24" style={{ background: 'var(--ja-gold-grad)' }}>
-        <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+        <Curve fill="#faf7ef" invert />
+        <div className="mx-auto max-w-6xl px-4 pb-14 pt-6 md:px-6 md:pb-20 md:pt-8">
           <h2 className="ja-display text-center text-3xl font-black uppercase tracking-tight md:text-5xl" style={{ color: 'var(--ja-ink-900)' }}>
             Take your place in the harvest
           </h2>
@@ -352,6 +367,7 @@ export default async function SentPage() {
             )}
           </div>
         </div>
+        <Curve fill="#ffffff" />
       </section>
 
       {/* ── Journal — latest posts ─────────────────────────────────────── */}
@@ -412,7 +428,8 @@ export default async function SentPage() {
 
       {/* ── Footer — navy, the script line sent off with the swash ─────── */}
       <footer className="ja-dove-watermark relative overflow-hidden" style={{ background: 'var(--ja-slate-grad)' }}>
-        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-16 text-center md:px-6 md:pt-20">
+        <Curve fill="#ffffff" invert />
+        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-8 text-center md:px-6 md:pt-12">
           <p className="ja-script text-4xl md:text-6xl" style={{ color: 'var(--ja-gold-2)' }}>
             Touching the world, one soul at a time.
           </p>
