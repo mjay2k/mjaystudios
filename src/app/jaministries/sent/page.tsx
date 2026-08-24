@@ -75,15 +75,25 @@ export default async function SentPage() {
       {/* ── Top bar — white, logo on its native ground ─────────────────── */}
       <header className="sticky top-0 z-40 border-b border-black/5 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <Link href="/jaministries/sent" aria-label="Jesus Anoints Ministries home" className="shrink-0">
+          <Link
+            href="/jaministries/sent"
+            aria-label="Jesus Anoints Ministries home"
+            className="flex shrink-0 items-center gap-2.5"
+          >
             <Image
-              src={site.brand.logo2026}
-              alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
-              width={2115}
-              height={744}
+              src={site.brand.icon2026}
+              alt=""
+              width={420}
+              height={322}
               priority
-              className="ja-logo-blend h-12 w-auto md:h-14"
+              className="ja-logo-blend h-10 w-auto"
             />
+            <span className="ja-display text-lg font-black uppercase leading-none tracking-tight" style={{ color: 'var(--ja-royal)' }}>
+              Jesus Anoints{' '}
+              <span className="block text-[10px] font-extrabold tracking-[0.3em]" style={{ color: 'var(--ja-gold-1)' }}>
+                Ministries
+              </span>
+            </span>
           </Link>
           <nav className="hidden items-center gap-7 lg:flex">
             {NAV.map((n) => (
@@ -106,23 +116,39 @@ export default async function SentPage() {
         </div>
       </header>
 
+      {/* ── Masthead — the logo gets its hero space on white before the
+             statement block takes over ─────────────────────────────────── */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-4xl px-4 pb-10 pt-10 text-center md:pb-14 md:pt-14">
+          <Image
+            src={site.brand.logo2026}
+            alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
+            width={2115}
+            height={744}
+            priority
+            className="ja-logo-blend ja-rise mx-auto w-full max-w-2xl"
+          />
+        </div>
+      </section>
+
       {/* ── Hero — statement type on royal blue ────────────────────────── */}
       <section className="ja-dove-watermark relative overflow-hidden" style={{ background: 'var(--ja-slate-grad)' }}>
-        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-24 pt-16 text-center md:px-6 md:pb-36 md:pt-28">
+        <Curve fill="#ffffff" invert />
+        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-24 pt-8 text-center md:px-6 md:pb-36 md:pt-12">
           <p className="ja-display ja-rise text-[13px] font-bold uppercase tracking-[0.35em]" style={{ color: 'var(--ja-gold-2)' }}>
-            {site.pillars}
+            A global gospel movement
           </p>
           <h1
             className="ja-display ja-rise mx-auto mt-6 max-w-5xl text-[13vw] font-black uppercase leading-[0.95] tracking-tight text-white sm:text-7xl md:text-[6.2rem]"
             style={{ animationDelay: '0.08s' }}
           >
-            Touching
+            Equipping.
             <br />
-            the world
+            Empowering.
           </h1>
           <div className="ja-rise relative mx-auto mt-4 w-fit md:mt-6" style={{ animationDelay: '0.16s' }}>
             <span className="ja-script block px-4 text-5xl leading-tight sm:text-6xl md:text-8xl" style={{ color: 'var(--ja-gold-2)' }}>
-              one soul at a time
+              enriching lives
             </span>
             <Brush className="mx-auto mt-1 h-4 w-3/4 md:h-6" />
           </div>

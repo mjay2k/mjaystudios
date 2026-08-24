@@ -27,15 +27,23 @@ export default async function BlogIndex() {
 
       {/* top bar */}
       <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <Link href="/jaministries" aria-label="Jesus Anoints Ministries home">
-          <Image
-            src={site.brand.logoHorizontalRev}
-            alt="Jesus Anoints Ministries"
-            width={154}
-            height={37}
-            className="h-11 w-auto md:h-16"
-            priority
-          />
+        <Link href="/jaministries" aria-label="Jesus Anoints Ministries home" className="flex items-center gap-3">
+          <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-white md:h-12 md:w-12">
+            <Image
+              src={site.brand.icon2026}
+              alt=""
+              width={420}
+              height={322}
+              className="h-8 w-auto md:h-9"
+              priority
+            />
+          </span>
+          <span className="leading-tight">
+            <span className="ja-serif block text-xl font-semibold text-white">Jesus Anoints</span>
+            <span className="ja-sans block text-[9px] font-bold uppercase tracking-[0.4em]" style={{ color: 'var(--ja-gold-2)' }}>
+              Ministries
+            </span>
+          </span>
         </Link>
         <Link
           href="/jaministries"

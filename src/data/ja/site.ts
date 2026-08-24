@@ -129,6 +129,9 @@ export const site = {
     // This is the canonical mark for the new directions (raster, white ground —
     // place it on light surfaces or inside a white plate).
     logo2026: '/jaministries/brand/logo-2026.png',
+    // Globe-and-dove mark cropped from the 2026 logo — for headers/favicons
+    // where the full lockup is too detailed to shrink.
+    icon2026: '/jaministries/brand/icon-2026.png',
     // Earlier 2026 system. *Rev variants are for dark surfaces;
     // the plain variants are for light. iconGhost is a faint watermark dove.
     logoHorizontal: '/jaministries/brand/logo-horizontal.svg',

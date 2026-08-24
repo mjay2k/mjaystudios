@@ -39,15 +39,30 @@ export default async function RadiancePage() {
       {/* ── Header — white, the logo on its native ground ─────────────── */}
       <header className="sticky top-0 z-40 border-b border-[color:var(--ja-sand)] bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <Link href="/jaministries/radiance" aria-label="Jesus Anoints Ministries home" className="shrink-0">
+          <Link
+            href="/jaministries/radiance"
+            aria-label="Jesus Anoints Ministries home"
+            className="flex shrink-0 items-center gap-3"
+          >
             <Image
-              src={site.brand.logo2026}
-              alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
-              width={2115}
-              height={744}
+              src={site.brand.icon2026}
+              alt=""
+              width={420}
+              height={322}
               priority
-              className="ja-logo-blend h-12 w-auto md:h-16"
+              className="ja-logo-blend h-10 w-auto md:h-11"
             />
+            <span className="leading-tight">
+              <span className="ja-serif block text-xl font-semibold" style={{ color: 'var(--ja-royal)' }}>
+                Jesus Anoints
+              </span>
+              <span
+                className="ja-sans block text-[9px] font-bold uppercase tracking-[0.4em]"
+                style={{ color: 'var(--ja-gold-1)' }}
+              >
+                Ministries
+              </span>
+            </span>
           </Link>
           <nav className="hidden items-center gap-7 lg:flex">
             {NAV.map((n) => (
@@ -83,19 +98,17 @@ export default async function RadiancePage() {
         <div className="relative mx-auto max-w-4xl px-4 py-20 text-center md:px-6 md:py-32">
           <Eyebrow className="ja-rise">A Global Gospel Ministry</Eyebrow>
 
-          <h1 className="ja-rise mt-8" style={{ animationDelay: '0.08s' }}>
-            <span
-              className="ja-script block text-6xl leading-[1.05] md:text-[6.5rem]"
-              style={{ color: 'var(--ja-royal)' }}
-            >
-              Touching the world,
-            </span>
-            <span
-              className="ja-serif mt-4 block text-2xl font-medium uppercase tracking-[0.38em] md:mt-6 md:text-4xl"
-              style={{ color: 'var(--ja-ink)' }}
-            >
-              One soul at a time
-            </span>
+          {/* The logo IS the hero — full lockup at reading size, on its native
+              light ground, with room to breathe. */}
+          <h1 className="ja-rise mt-10" style={{ animationDelay: '0.08s' }}>
+            <Image
+              src={site.brand.logo2026}
+              alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
+              width={2115}
+              height={744}
+              priority
+              className="ja-logo-blend mx-auto w-full max-w-3xl"
+            />
           </h1>
 
           <div className="ja-gold-rule ja-rise mx-auto mt-10 w-56" style={{ animationDelay: '0.16s' }} />
