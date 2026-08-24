@@ -47,10 +47,10 @@ export default async function RadiancePage() {
             <Image
               src={site.brand.icon2026}
               alt=""
-              width={420}
-              height={322}
+              width={347}
+              height={304}
               priority
-              className="ja-logo-blend h-10 w-auto md:h-11"
+              className="h-10 w-auto md:h-11"
             />
             <span className="leading-tight">
               <span className="ja-serif block text-xl font-semibold" style={{ color: 'var(--ja-royal)' }}>
@@ -104,10 +104,10 @@ export default async function RadiancePage() {
             <Image
               src={site.brand.logo2026}
               alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
-              width={2115}
-              height={744}
+              width={1146}
+              height={711}
               priority
-              className="ja-logo-blend mx-auto w-full max-w-3xl"
+              className="mx-auto w-full max-w-3xl"
             />
           </h1>
 
@@ -386,9 +386,9 @@ export default async function RadiancePage() {
           <Image
             src={site.brand.logo2026}
             alt="Jesus Anoints Ministries"
-            width={2115}
-            height={744}
-            className="ja-logo-blend mx-auto h-16 w-auto md:h-20"
+            width={1146}
+            height={711}
+            className="mx-auto h-16 w-auto md:h-20"
           />
           <nav className="ja-sans mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[color:var(--ja-ink)]/60">
             {NAV.map((n) => (

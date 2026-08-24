@@ -32,8 +32,8 @@ export default async function BlogIndex() {
             <Image
               src={site.brand.icon2026}
               alt=""
-              width={420}
-              height={322}
+              width={347}
+              height={304}
               className="h-8 w-auto md:h-9"
               priority
             />

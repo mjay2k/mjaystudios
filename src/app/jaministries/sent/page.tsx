@@ -83,10 +83,10 @@ export default async function SentPage() {
             <Image
               src={site.brand.icon2026}
               alt=""
-              width={420}
-              height={322}
+              width={347}
+              height={304}
               priority
-              className="ja-logo-blend h-10 w-auto"
+              className="h-10 w-auto"
             />
             <span className="ja-display text-lg font-black uppercase leading-none tracking-tight" style={{ color: 'var(--ja-royal)' }}>
               Jesus Anoints{' '}
@@ -123,10 +123,10 @@ export default async function SentPage() {
           <Image
             src={site.brand.logo2026}
             alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
-            width={2115}
-            height={744}
+            width={1146}
+            height={711}
             priority
-            className="ja-logo-blend ja-rise mx-auto w-full max-w-2xl"
+            className="ja-rise mx-auto w-full max-w-2xl"
           />
         </div>
       </section>

@@ -54,10 +54,10 @@ export default function ChooserPage() {
         <Image
           src={site.brand.logo2026}
           alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
-          width={2115}
-          height={744}
+          width={1146}
+          height={711}
           priority
-          className="ja-rise ja-logo-blend mx-auto h-auto w-full max-w-xl"
+          className="ja-rise mx-auto h-auto w-full max-w-xl"
         />
         <p
           className="ja-eyebrow ja-rise mt-10 justify-center"
