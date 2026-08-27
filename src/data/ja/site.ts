@@ -40,6 +40,63 @@ export const site = {
     { label: 'Give', href: '#give' },
   ],
 
+  // Every section from the jesusanoints.com tab bar, grouped for the
+  // "Explore" dropdown so nothing from the old site's IA is lost.
+  explore: [
+    {
+      group: 'The Ministry',
+      items: [
+        { label: 'Welcome', href: '#mission', note: 'Who we are and why we exist' },
+        { label: 'About', href: '#testimony', note: 'Evangelist Samuel Meesala' },
+        { label: 'Beliefs', href: '#beliefs', note: 'The nine convictions we hold' },
+        { label: 'Staff', href: '#staff', note: 'The family serving this work' },
+      ],
+    },
+    {
+      group: 'Ministry Life',
+      items: [
+        { label: 'Gallery', href: '#gallery', note: 'Crusades, gatherings, and travels' },
+        { label: 'Books', href: '#books', note: 'Titles by Samuel Meesala' },
+        { label: 'Prophecy Records', href: '/jaministries/blog', note: 'Teachings and the public record' },
+      ],
+    },
+    {
+      group: 'Trust & Contact',
+      items: [
+        { label: 'Platinum Seal', href: '#seal', note: 'Candid transparency certification' },
+        { label: 'Credentials', href: '#credentials', note: 'Ministry credentialing' },
+        { label: 'Contact', href: '#contact', note: 'Reach the ministry' },
+        { label: 'Give', href: '#give', note: 'Partner with the ministry' },
+      ],
+    },
+  ],
+
+  credentials:
+    'As part of our ministry order and spiritual accountability, Jesus Anoints Ministries recognizes and issues ministry credentials for qualified servants of God, anointed in the Holy Spirit, who have demonstrated faithfulness, sound doctrine, spiritual maturity, and a sincere calling to serve Jesus Christ and His people.',
+
+  staff: [
+    {
+      name: 'Evangelist Samuel Meesala',
+      role: 'Founder · Evangelist · Christian Author · Chaplain',
+      body: 'Leads the ministry in preaching, teaching, and prophetic ministry, reaching believers worldwide.',
+    },
+    {
+      name: 'Tiffany Meesala',
+      role: 'Ministry Partner',
+      body: 'A fellow graduate in Religious Studies who shares a deep passion for the Word of God and Christian ministry.',
+    },
+    {
+      name: 'Joshua Meesala',
+      role: 'Family',
+      body: 'Son of Samuel and Tiffany, currently pursuing his studies toward becoming a physician assistant.',
+    },
+  ],
+
+  gallery: {
+    heading: 'Twenty years of ministry',
+    body: 'Crusades, gatherings, prayer, and travels — moments from the work God has done through this ministry across the nations.',
+  },
+
   welcome: {
     heading: 'Welcome',
     lead: 'We are a non-denominational, Holy Spirit–filled Christian ministry, founded on the unchanging, inerrant Word of God.',

@@ -185,6 +185,33 @@
     0 18px 60px -20px color-mix(in srgb, var(--ja-gold-2) 45%, transparent);
 }
 
+/* ── Gallery ribbons — two strips drifting in opposite directions.
+   The strip contains the images twice, so translating by exactly -50%
+   loops seamlessly. Hovering the ribbon pauses it. ─────────────────── */
+@keyframes ja-ribbon-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ja-ribbon {
+  /* ~4.5s per image keeps the drift readable regardless of strip length */
+  animation: ja-ribbon-drift calc(var(--ja-ribbon-count, 20) * 4.5s) linear infinite;
+}
+.ja-ribbon-rev {
+  animation-direction: reverse;
+}
+.ja-ribbon:hover,
+.ja-ribbon:focus-within {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ja-ribbon { animation: none; }
+}
+/* Feather the ribbon edges so photos fade out instead of hard-cropping. */
+.ja-ribbon-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
 /* ── "MINISTRIES" eyebrow — letterspaced smallcaps between gold dashes,
    mirroring the logo lockup. Used as the section label device. ─────── */
 .ja-eyebrow {
