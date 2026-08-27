@@ -46,27 +46,28 @@ export const site = {
     {
       group: 'The Ministry',
       items: [
-        { label: 'Welcome', href: '#mission', note: 'Who we are and why we exist' },
-        { label: 'About', href: '#testimony', note: 'Evangelist Samuel Meesala' },
-        { label: 'Beliefs', href: '#beliefs', note: 'The nine convictions we hold' },
-        { label: 'Staff', href: '#staff', note: 'The family serving this work' },
+        { label: 'Welcome', href: '/jaministries#mission', note: 'Who we are and why we exist' },
+        { label: 'About', href: '/jaministries#testimony', note: 'Evangelist Samuel Meesala' },
+        { label: 'Beliefs', href: '/jaministries/beliefs', note: 'Fourteen convictions, in full' },
+        { label: 'Staff', href: '/jaministries#staff', note: 'The family serving this work' },
       ],
     },
     {
       group: 'Ministry Life',
       items: [
-        { label: 'Gallery', href: '#gallery', note: 'Crusades, gatherings, and travels' },
-        { label: 'Books', href: '#books', note: 'Titles by Samuel Meesala' },
-        { label: 'Prophecy Records', href: '/jaministries/blog', note: 'Teachings and the public record' },
+        { label: 'Gallery', href: '/jaministries#gallery', note: 'Crusades, gatherings, and travels' },
+        { label: 'Books', href: '/jaministries#books', note: 'Titles by Samuel Meesala' },
+        { label: 'Prophecy Records', href: '/jaministries/prophecy-records', note: 'The dated public record' },
+        { label: 'Journal', href: '/jaministries/blog', note: 'Teachings and recent posts' },
       ],
     },
     {
       group: 'Trust & Contact',
       items: [
-        { label: 'Platinum Seal', href: '#seal', note: 'Candid transparency certification' },
-        { label: 'Credentials', href: '#credentials', note: 'Ministry credentialing' },
-        { label: 'Contact', href: '#contact', note: 'Reach the ministry' },
-        { label: 'Give', href: '#give', note: 'Partner with the ministry' },
+        { label: 'Platinum Seal', href: '/jaministries#seal', note: 'Candid transparency certification' },
+        { label: 'Credentials', href: '/jaministries#credentials', note: 'Ministry credentialing' },
+        { label: 'Pray & Contact', href: '/jaministries/pray', note: 'Prayer requests and how to reach us' },
+        { label: 'Give', href: '/jaministries/give', note: 'Partner with the ministry' },
       ],
     },
   ],
@@ -170,6 +171,21 @@ export const site = {
     heading: 'Partner With the Ministry',
     body: 'Your generosity helps us proclaim the gospel, teach the Word, and reach believers around the world. Jesus Anoints Ministries is a registered 501(c)(3) non-profit, certified with the Candid Platinum Transparency Seal.',
     cta: 'Give Now',
+
+  },
+
+  // Pray / Contact — details as published on jesusanoints.com/pray
+  contact: {
+    heading: 'Pray With Us',
+    lead: 'Whatever you are facing, you do not have to face it alone. Send us your prayer request, or reach out with any question — we read every message, and we pray.',
+    emails: ['Jesusanoints@aol.com', 'Samueltiffany7@gmail.com'],
+    phone: '1-573-987-9297',
+    address: '2519 Travelers Way, Jackson, Missouri 63755',
+    hours: [
+      { days: 'Tuesday & Thursday', time: '8:00 AM – 4:30 PM' },
+      { days: 'Saturday', time: '8:30 AM – 4:30 PM' },
+      { days: 'Sun · Mon · Wed · Fri', time: 'Closed' },
+    ],
   },
 
   // Curated imagery (scraped + cropped). Note: source photos are modest resolution;

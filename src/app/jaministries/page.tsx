@@ -3,7 +3,9 @@ import Image from 'next/image';
 import { site } from '@/data/ja/site';
 import { getAllPosts, formatPostDate } from '@/lib/ja/posts';
 import Gallery from './Gallery';
-import ExploreNav from './ExploreNav';
+import SiteHeader from './SiteHeader';
+import SiteFooter from './SiteFooter';
+import { Brush, Curve } from './brand';
 
 export const metadata = {
   title: 'Jesus Anoints Ministries — Touching the world, one soul at a time',
@@ -17,109 +19,12 @@ export const metadata = {
    brush swash as a living underline, sweeping curved section breaks,
    and direct calls to action. */
 
-const NAV = [
-  { label: 'Our Mission', href: '#mission' },
-  { label: 'What We Do', href: '#work' },
-  { label: 'The Evangelist', href: '#testimony' },
-  { label: 'Journal', href: '/jaministries/blog' },
-];
-
-/* The gold brush swash from the logo, redrawn as a tapered stroke. */
-function Brush({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 320 26" className={className} aria-hidden preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="jam-brush" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#a3781a" />
-          <stop offset="0.55" stopColor="#d9ad3c" />
-          <stop offset="1" stopColor="#edcb6d" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M8 16 C 90 6, 230 3, 312 9 C 250 11, 120 14, 40 21 C 30 22, 12 20, 8 16 Z"
-        fill="url(#jam-brush)"
-      />
-    </svg>
-  );
-}
-
-/* Sweeping curved seam between two color blocks (Crossroads-style arc).
-   The boundary always crests in the middle. Two ways to draw the same seam:
-   - default: the NEXT section's color as an arc — place at the END of the
-     previous section (works when the next section is a flat color);
-   - invert: the PREVIOUS section's color above the arc — place at the TOP
-     of the next section (use when the next section has a gradient). */
-function Curve({ fill, invert = false }: { fill: string; invert?: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 1440 90"
-      preserveAspectRatio="none"
-      aria-hidden
-      className="block h-[7vw] max-h-24 min-h-10 w-full"
-    >
-      <path
-        d={
-          invert
-            ? 'M0,0 L1440,0 L1440,90 C1020,8 420,8 0,90 Z'
-            : 'M0,90 C420,8 1020,8 1440,90 L1440,90 L0,90 Z'
-        }
-        fill={fill}
-      />
-    </svg>
-  );
-}
-
 export default async function SentPage() {
   const posts = (await getAllPosts()).slice(0, 3);
 
   return (
     <main className="relative min-h-screen bg-white" style={{ color: 'var(--ja-ink)' }}>
-      {/* ── Top bar — white, logo on its native ground ─────────────────── */}
-      <header className="sticky top-0 z-40 border-b border-black/5 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <Link
-            href="/jaministries"
-            aria-label="Jesus Anoints Ministries home"
-            className="flex shrink-0 items-center gap-2.5"
-          >
-            <Image
-              src={site.brand.icon2026}
-              alt=""
-              width={347}
-              height={304}
-              priority
-              className="h-10 w-auto"
-            />
-            <span className="ja-display text-lg font-black uppercase leading-none tracking-tight" style={{ color: 'var(--ja-royal)' }}>
-              Jesus Anoints{' '}
-              <span className="block text-[10px] font-extrabold tracking-[0.3em]" style={{ color: 'var(--ja-gold-1)' }}>
-                Ministries
-              </span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-3 md:gap-5">
-            <nav className="hidden items-center gap-6 xl:flex">
-              {NAV.map((n) => (
-                <Link
-                  key={n.label}
-                  href={n.href}
-                  className="ja-navlink ja-display text-[13px] font-bold uppercase tracking-[0.08em] text-[color:var(--ja-ink)]/75 hover:text-[color:var(--ja-royal)]"
-                >
-                  {n.label}
-                </Link>
-              ))}
-            </nav>
-            <ExploreNav />
-            <Link
-              href="#give"
-              className="ja-display hidden rounded-md px-5 py-2.5 text-[13px] font-extrabold uppercase tracking-[0.08em] text-[color:var(--ja-ink-900)] transition-transform hover:-translate-y-0.5 sm:block"
-              style={{ background: 'var(--ja-gold-grad)' }}
-            >
-              Give
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader homeAnchors />
 
       {/* ── Masthead — the logo gets its hero space on white before the
              statement block takes over ─────────────────────────────────── */}
@@ -400,6 +305,15 @@ export default async function SentPage() {
               </li>
             ))}
           </ol>
+          <div className="mt-12 text-center">
+            <Link
+              href="/jaministries/beliefs"
+              className="ja-display inline-block rounded-md px-8 py-4 text-[14px] font-extrabold uppercase tracking-[0.08em] text-white transition-transform hover:-translate-y-0.5"
+              style={{ background: 'var(--ja-royal)' }}
+            >
+              Read the full statement of faith →
+            </Link>
+          </div>
         </div>
         <Curve fill="#ffffff" />
       </section>
@@ -446,10 +360,10 @@ export default async function SentPage() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {(
               [
-                { label: 'Pray with us', sub: 'Stand with the ministry in prayer', href: '#give', external: false },
+                { label: 'Pray with us', sub: 'Send a prayer request', href: '/jaministries/pray', external: false },
                 { label: 'Watch & listen', sub: 'Broadcasts on YouTube & Facebook', href: site.social.youtube, external: true },
-                { label: 'Read the journal', sub: 'Teachings & the prophetic record', href: '/jaministries/blog', external: false },
-                { label: 'Give', sub: site.transparency, href: '#give', external: false },
+                { label: 'Prophecy records', sub: 'The dated public record', href: '/jaministries/prophecy-records', external: false },
+                { label: 'Give', sub: 'Partner with the ministry', href: '/jaministries/give', external: false },
               ] as const
             ).map((t) =>
               t.external ? (
@@ -619,35 +533,15 @@ export default async function SentPage() {
               <a href={site.social.youtube} target="_blank" rel="noreferrer" className="ja-display text-[12px] font-extrabold uppercase tracking-[0.1em]" style={{ color: 'var(--ja-gold-2)' }}>
                 YouTube →
               </a>
+              <Link href="/jaministries/pray" className="ja-display text-[12px] font-extrabold uppercase tracking-[0.1em]" style={{ color: 'var(--ja-gold-2)' }}>
+                Prayer &amp; contact →
+              </Link>
             </div>
           </article>
         </div>
       </section>
 
-      {/* ── Footer — navy, the script line sent off with the swash ─────── */}
-      <footer className="ja-dove-watermark relative overflow-hidden" style={{ background: 'var(--ja-slate-grad)' }}>
-        <Curve fill="#ffffff" invert />
-        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-12 pt-8 text-center md:px-6 md:pt-12">
-          <p className="ja-script text-4xl md:text-6xl" style={{ color: 'var(--ja-gold-2)' }}>
-            Touching the world, one soul at a time.
-          </p>
-          <Brush className="mx-auto mt-2 h-4 w-64 md:w-96" />
-          <nav className="ja-display mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[12px] font-bold uppercase tracking-[0.1em] text-white/70">
-            {NAV.map((n) => (
-              <Link key={n.label} href={n.href} className="hover:text-white">
-                {n.label}
-              </Link>
-            ))}
-            <a href={site.social.facebook} target="_blank" rel="noreferrer" className="hover:text-white">
-              Facebook
-            </a>
-            <a href={site.social.youtube} target="_blank" rel="noreferrer" className="hover:text-white">
-              YouTube
-            </a>
-          </nav>
-          <p className="ja-sans mt-8 text-[10px] uppercase tracking-[0.3em] text-white/40">{site.transparency}</p>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
