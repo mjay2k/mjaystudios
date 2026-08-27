@@ -6,9 +6,9 @@ import { Brush, Curve } from '../brand';
 import RecordList from './RecordList';
 
 export const metadata = {
-  title: 'Prophecy Records & Fulfillments — Jesus Anoints Ministries',
+  title: 'Prophecy Records & Fulfillments | Jesus Anoints Ministries',
   description:
-    'A dated, public record of prophetic words released before the events they describe — offered so that God alone receives the glory.',
+    'A dated, public record of prophetic words released before the events they describe, offered so that God alone receives the glory.',
 };
 
 export default function ProphecyRecordsPage() {

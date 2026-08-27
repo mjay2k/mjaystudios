@@ -6,9 +6,9 @@ import SiteFooter from '../SiteFooter';
 import { Brush, Curve } from '../brand';
 
 export const metadata = {
-  title: 'Give — Jesus Anoints Ministries',
+  title: 'Give | Jesus Anoints Ministries',
   description:
-    'Partner with Jesus Anoints Ministries. Give online, by Zelle, or by bank transfer — every gift sends the gospel further.',
+    'Partner with Jesus Anoints Ministries. Give online, by Zelle, or by bank transfer. Every gift sends the gospel further.',
 };
 
 export default function GivePage() {
@@ -146,7 +146,7 @@ export default function GivePage() {
             </h3>
             <p className="ja-sans mt-4 text-sm leading-[1.85] text-white/70">
               Jesus Anoints Ministries is a registered 501(c)(3) non-profit, certified with the
-              Candid Platinum Transparency Seal — the highest level of transparency Candid awards.
+              Candid Platinum Transparency Seal, the highest level of transparency Candid awards.
             </p>
             <Link
               href="/jaministries#seal"
@@ -168,7 +168,7 @@ export default function GivePage() {
           </h2>
           <p className="ja-sans mx-auto mt-5 max-w-xl text-base leading-relaxed" style={{ color: 'var(--ja-ink-900)', opacity: 0.75 }}>
             Prayer carries this ministry as surely as provision does. If you cannot give today,
-            stand with us in prayer — it is no lesser partnership.
+            stand with us in prayer. It is no lesser partnership.
           </p>
           <Link
             href="/jaministries/pray"

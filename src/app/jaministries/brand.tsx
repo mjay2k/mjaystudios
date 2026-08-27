@@ -1,5 +1,5 @@
 /* Shared brand primitives for the Jesus Anoints Ministries site.
-   Pure presentational SVG — safe to use from server components. */
+   Pure presentational SVG, safe to use from server components. */
 
 /* The gold brush swash from the logo, redrawn as a tapered stroke.
    Used as a hand-drawn underline marking the words that matter. */
@@ -23,9 +23,9 @@ export function Brush({ className = '' }: { className?: string }) {
 
 /* Sweeping curved seam between two color blocks. The boundary always crests
    in the middle. Two ways to draw the same seam:
-   - default: the NEXT section's color as an arc — place at the END of the
+   - default: the NEXT section's color as an arc, placed at the END of the
      previous section (works when the next section is a flat color);
-   - invert: the PREVIOUS section's color above the arc — place at the TOP
+   - invert: the PREVIOUS section's color above the arc, placed at the TOP
      of the next section (use when the next section has a gradient). */
 export function Curve({ fill, invert = false }: { fill: string; invert?: boolean }) {
   return (

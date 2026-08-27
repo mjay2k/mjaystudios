@@ -1,7 +1,7 @@
 /* Jesus Anoints Ministries — brand tokens, scoped to .ja so nothing leaks into the portfolio.
    Palette from the 2026-08 logo: royal-blue script wordmark + gold dove wrapping the globe,
    on a white ground. Token NAMES from the previous slate brand are kept so shared pages
-   (blog) inherit the new palette without edits — only the values changed. */
+   (blog) inherit the new palette without edits; only the values changed. */
 
 .ja {
   /* Brand gold (dove / "MINISTRIES" letterform gradient, sampled from the logo) */

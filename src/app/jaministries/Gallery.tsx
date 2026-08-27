@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { gallery } from '@/data/ja/gallery';
 
 /* Ministry photo gallery.
-   Two ribbons of photos drift in opposite directions — motion that suits a
-   sending ministry — and expand into a full mosaic. Any photo opens a
+   Two ribbons of photos drift in opposite directions, motion that suits a
+   sending ministry, and expand into a full mosaic. Any photo opens a
    lightbox with keyboard navigation. */
 
 const ROW_A = gallery.filter((_, i) => i % 2 === 0);

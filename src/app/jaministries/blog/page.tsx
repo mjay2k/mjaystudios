@@ -4,7 +4,7 @@ import { site } from '@/data/ja/site';
 import { getAllPosts, formatPostDate } from '@/lib/ja/posts';
 
 export const metadata = {
-  title: 'Teachings & Prophecies — Jesus Anoints Ministries',
+  title: 'Teachings & Prophecies | Jesus Anoints Ministries',
   description:
     'Spirit-led teaching, prophetic insight, and a public record of revelation given and fulfilled.',
 };
@@ -67,7 +67,7 @@ export default async function BlogIndex() {
           </h1>
           <p className="ja-sans mt-5 max-w-xl text-base leading-relaxed text-white/65">
             Spirit-led teaching, prophetic insight, and a public record of revelation
-            given and fulfilled — that God alone may be glorified.
+            given and fulfilled, that God alone may be glorified.
           </p>
           <div className="ja-gold-rule mt-9 w-44" />
         </div>

@@ -36,7 +36,7 @@ const PLACEHOLDER_POSTS: Post[] = [
     slug: 'iran-war-prophecies-fulfilled',
     title: 'Iran War Prophecies Fulfilled',
     excerpt:
-      'A public record of what was spoken before it happened — and the call to pray for the nations in a season of shaking.',
+      'A public record of what was spoken before it happened, and the call to pray for the nations in a season of shaking.',
     date: '2026-06-14',
     author: 'Evangelist Samuel Meesala',
     tag: 'Public Record',
@@ -45,7 +45,7 @@ const PLACEHOLDER_POSTS: Post[] = [
     body: [
       {
         kind: 'p',
-        text: 'There are seasons when the Lord makes known the end from the beginning, not to satisfy curiosity, but to turn hearts to Himself. What follows is offered as a public record — written plainly, dated, and held up to the light of Scripture — so that God alone receives the glory.',
+        text: 'There are seasons when the Lord makes known the end from the beginning, not to satisfy curiosity, but to turn hearts to Himself. What follows is offered as a public record, written plainly, dated, and held up to the light of Scripture, so that God alone receives the glory.',
       },
       {
         kind: 'quote',
@@ -55,7 +55,7 @@ const PLACEHOLDER_POSTS: Post[] = [
       { kind: 'h2', text: 'A word given in advance' },
       {
         kind: 'p',
-        text: 'Long before the headlines, the burden came to pray for the nations — that conflict would be contained and not escalate, that leadership would be hemmed in, and that the Lord would move toward an end of hostility rather than years of ruin. We do not rejoice over judgment; we plead for mercy and for the gospel to go forward in the midst of it.',
+        text: 'Long before the headlines, the burden came to pray for the nations: that conflict would be contained and not escalate, that leadership would be hemmed in, and that the Lord would move toward an end of hostility rather than years of ruin. We do not rejoice over judgment; we plead for mercy and for the gospel to go forward in the midst of it.',
       },
       { kind: 'h2', text: 'Why we keep a public record' },
       {
@@ -64,7 +64,7 @@ const PLACEHOLDER_POSTS: Post[] = [
       },
       {
         kind: 'p',
-        text: 'Pray for the nations of this world — for peace, for justice, and for many to come to the knowledge of Jesus Christ while it is still called today.',
+        text: 'Pray for the nations of this world, for peace, for justice, and for many to come to the knowledge of Jesus Christ while it is still called today.',
       },
     ],
   },
@@ -81,7 +81,7 @@ const PLACEHOLDER_POSTS: Post[] = [
     body: [
       {
         kind: 'p',
-        text: 'The Holy Spirit gives leaders to the Church as a gift — to feed, to guard, and to build up. But there is a counterfeit that wears the same clothing. It says, “Follow the Spirit,” while resisting the Spirit whenever He moves through someone it cannot control.',
+        text: 'The Holy Spirit gives leaders to the Church as a gift, to feed, to guard, and to build up. But there is a counterfeit that wears the same clothing. It says, “Follow the Spirit,” while resisting the Spirit whenever He moves through someone it cannot control.',
       },
       { kind: 'h2', text: 'Order is not the same as control' },
       {
@@ -96,7 +96,7 @@ const PLACEHOLDER_POSTS: Post[] = [
       { kind: 'h2', text: 'The marks of Spirit-led leadership' },
       {
         kind: 'p',
-        text: 'True spiritual leadership releases rather than restrains. It equips the saints for the work of ministry instead of hoarding it. It honors what God is doing in others — even when it did not originate the work — because it fears God more than it fears losing influence.',
+        text: 'True spiritual leadership releases rather than restrains. It equips the saints for the work of ministry instead of hoarding it. It honors what God is doing in others, even when it did not originate the work, because it fears God more than it fears losing influence.',
       },
       {
         kind: 'p',
@@ -108,7 +108,7 @@ const PLACEHOLDER_POSTS: Post[] = [
     slug: 'the-exodus-reveals-christ',
     title: 'The Exodus Reveals Christ',
     excerpt:
-      'From bondage to inheritance — the journey out of Egypt is a portrait of redemption, holiness, and the One who leads us home.',
+      'From bondage to inheritance: the journey out of Egypt is a portrait of redemption, holiness, and the One who leads us home.',
     date: '2026-05-09',
     author: 'Evangelist Samuel Meesala',
     tag: 'Teaching',
@@ -117,7 +117,7 @@ const PLACEHOLDER_POSTS: Post[] = [
     body: [
       {
         kind: 'p',
-        text: 'The exodus is not merely Israel’s history; it is the gospel told in advance. A people in bondage, a lamb whose blood shelters them, a sea opened by the hand of God, a wilderness that tests and forms — every scene leans forward to Christ.',
+        text: 'The exodus is not merely Israel’s history; it is the gospel told in advance. A people in bondage, a lamb whose blood shelters them, a sea opened by the hand of God, a wilderness that tests and forms. Every scene leans forward to Christ.',
       },
       { kind: 'h2', text: 'From bondage to the blood of the Lamb' },
       {
@@ -132,7 +132,7 @@ const PLACEHOLDER_POSTS: Post[] = [
       { kind: 'h2', text: 'From wilderness to inheritance' },
       {
         kind: 'p',
-        text: 'The wilderness was never the destination. It was the school of dependence — where manna taught daily trust and the pillar of fire taught daily obedience — preparing a people to receive an inheritance they could never have seized on their own.',
+        text: 'The wilderness was never the destination. It was the school of dependence, where manna taught daily trust and the pillar of fire taught daily obedience, preparing a people to receive an inheritance they could never have seized on their own.',
       },
       {
         kind: 'p',

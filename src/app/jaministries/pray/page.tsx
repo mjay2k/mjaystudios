@@ -5,7 +5,7 @@ import SiteFooter from '../SiteFooter';
 import { Brush, Curve } from '../brand';
 
 export const metadata = {
-  title: 'Pray With Us — Jesus Anoints Ministries',
+  title: 'Pray With Us | Jesus Anoints Ministries',
   description:
     'Send a prayer request or reach the ministry. Email, phone, and office hours for Jesus Anoints Ministries in Jackson, Missouri.',
 };
@@ -149,7 +149,7 @@ export default function PrayPage() {
             ))}
           </dl>
           <p className="ja-sans mt-6 text-center text-xs leading-relaxed text-[color:var(--ja-ink)]/55">
-            Outside these hours, email is the fastest way to reach us — write to{' '}
+            Outside these hours, email is the fastest way to reach us. Write to{' '}
             <a href={`mailto:${primaryEmail}`} className="font-semibold hover:underline" style={{ color: 'var(--ja-royal)' }}>
               {primaryEmail}
             </a>
@@ -174,7 +174,7 @@ export default function PrayPage() {
             Follow the ministry
           </h2>
           <p className="ja-sans mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[color:var(--ja-ink)]/70">
-            Broadcasts, teaching, and prophetic messages go out regularly — join us there between
+            Broadcasts, teaching, and prophetic messages go out regularly. Join us there between
             gatherings.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">

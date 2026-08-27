@@ -21,7 +21,7 @@ export const beliefs: Belief[] = [
   {
     n: '01',
     title: 'The One True God',
-    body: 'There exists only one true and living God, eternal and unchanging, who reveals Himself as Father, Son, and Holy Spirit. He is perfect in all His ways — Creator, Redeemer, and Sustainer.',
+    body: 'There exists only one true and living God, eternal and unchanging, who reveals Himself as Father, Son, and Holy Spirit. He is perfect in all His ways: Creator, Redeemer, and Sustainer.',
     scripture: 'Deuteronomy 6:4; Isaiah 43:10–11; Matthew 28:19; Luke 3:22',
   },
   {
@@ -33,13 +33,13 @@ export const beliefs: Belief[] = [
   {
     n: '03',
     title: 'Every Believer Has God-Given Ministry',
-    body: 'Each believer possesses a unique ministry and calling from God — a distinct purpose. As members of the Body of Christ, believers teach, exhort, encourage, and admonish one another, facilitating spiritual maturity and the fulfilment of divine purpose.',
+    body: 'Each believer possesses a unique ministry and calling from God, a distinct purpose. As members of the Body of Christ, believers teach, exhort, encourage, and admonish one another, facilitating spiritual maturity and the fulfilment of divine purpose.',
     scripture: 'Colossians 3:16; 1 Thessalonians 5:14; Colossians 1:28',
   },
   {
     n: '04',
     title: 'Water Baptism By Immersion',
-    body: 'Water baptism through total immersion is Scripturally mandated. This act symbolizes the believer’s death with Christ and resurrection into new life — lived for God, freed from the unregenerated self and sinful nature. Baptism is an outward testimony to inward transformation and a public declaration of union with Christ.',
+    body: 'Water baptism through total immersion is Scripturally mandated. This act symbolizes the believer’s death with Christ and resurrection into new life, lived for God, freed from the unregenerated self and sinful nature. Baptism is an outward testimony to inward transformation and a public declaration of union with Christ.',
     scripture: 'Romans 6:4; Colossians 2:11–12',
   },
   {
@@ -64,7 +64,7 @@ export const beliefs: Belief[] = [
   {
     n: '08',
     title: 'A Life Of Faith And Obedience',
-    body: 'Christians maintain right standing with God through faith in Jesus Christ. This faith produces visible, Spirit-empowered fruit in personal, family, and church life. Genuine faith demonstrates itself through actions and character flowing from the indwelling Holy Spirit. True love for the Lord manifests in keeping and obeying His Word — an expression of love rather than burden.',
+    body: 'Christians maintain right standing with God through faith in Jesus Christ. This faith produces visible, Spirit-empowered fruit in personal, family, and church life. Genuine faith demonstrates itself through actions and character flowing from the indwelling Holy Spirit. True love for the Lord manifests in keeping and obeying His Word, an expression of love rather than burden.',
     scripture: 'Matthew 7:16–20; Romans 3:22; Galatians 2:16',
   },
   {
@@ -76,7 +76,7 @@ export const beliefs: Belief[] = [
   {
     n: '10',
     title: 'The Threefold Witness In The Life Of A Believer',
-    body: 'Every believer must align personally with the Blood of Jesus, the Word of Jesus, and the Spirit of Jesus — these three bear witness and affirm the believer’s standing in Christ before the Father on judgment day.',
+    body: 'Every believer must align personally with the Blood of Jesus, the Word of Jesus, and the Spirit of Jesus. These three bear witness and affirm the believer’s standing in Christ before the Father on judgment day.',
     scripture:
       '1 John 5:8; Ephesians 1:7; Hebrews 9:14; Revelation 12:1; John 17:17; Hebrews 4:12; James 1:21; Romans 8:16; John 14:26; Ephesians 1:13–14',
   },
@@ -89,7 +89,7 @@ export const beliefs: Belief[] = [
   {
     n: '12',
     title: 'The Unity And Equality Of All Believers In Jesus Christ',
-    body: 'All humanity comprises one race before God. In Christ there exists no discrimination based on age, sex, or color — Christ is the focus, dwells in all believers, and can use anyone willing and obedient.',
+    body: 'All humanity comprises one race before God. In Christ there exists no discrimination based on age, sex, or color. Christ is the focus, dwells in all believers, and can use anyone willing and obedient.',
     scripture:
       'Colossians 3:11; Galatians 3:28; Romans 2:11; Acts 17:26; Genesis 1:27; 1 Samuel 16:7; Acts 2:17–18; Acts 10:34–35',
   },

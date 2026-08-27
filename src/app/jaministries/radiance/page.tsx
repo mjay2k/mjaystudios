@@ -4,15 +4,15 @@ import { site } from '@/data/ja/site';
 import { getAllPosts, formatPostDate } from '@/lib/ja/posts';
 
 export const metadata = {
-  title: 'Radiance — Jesus Anoints Ministries',
+  title: 'Radiance | Jesus Anoints Ministries',
   description:
-    'A non-denominational, Holy Spirit–filled Christian ministry — touching the world, one soul at a time.',
+    'A non-denominational, Holy Spirit–filled Christian ministry touching the world, one soul at a time.',
 };
 
 /* Direction A — "Radiance"
    Born directly from the 2026-08 logo: white ground, royal-blue script,
    letterspaced navy smallcaps, gold hairlines. Set like an heirloom
-   Bible — symmetric, luminous, unhurried. */
+   Bible: symmetric, luminous, unhurried. */
 
 const NAV = [
   { label: 'Welcome', href: '#welcome' },
@@ -98,12 +98,12 @@ export default async function RadiancePage() {
         <div className="relative mx-auto max-w-4xl px-4 py-20 text-center md:px-6 md:py-32">
           <Eyebrow className="ja-rise">A Global Gospel Ministry</Eyebrow>
 
-          {/* The logo IS the hero — full lockup at reading size, on its native
+          {/* The logo IS the hero: full lockup at reading size, on its native
               light ground, with room to breathe. */}
           <h1 className="ja-rise mt-10" style={{ animationDelay: '0.08s' }}>
             <Image
               src={site.brand.logo2026}
-              alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
+              alt="Jesus Anoints Ministries: Touching the world, one soul at a time"
               width={1146}
               height={711}
               priority
@@ -188,7 +188,7 @@ export default async function RadiancePage() {
             {site.scriptures[0].text}
           </blockquote>
           <p className="ja-sans mt-8 text-[11px] font-bold uppercase tracking-[0.4em]" style={{ color: 'var(--ja-gold-2)' }}>
-            — {site.scriptures[0].ref} —
+            {site.scriptures[0].ref}
           </p>
         </div>
       </section>
@@ -227,7 +227,7 @@ export default async function RadiancePage() {
       <section id="about" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-20 md:px-6 md:py-28">
         <div className="grid items-center gap-12 md:grid-cols-[5fr_7fr] md:gap-16">
           <figure className="relative mx-auto w-full max-w-md">
-            {/* offset gold frame — the "plate" */}
+            {/* offset gold frame, the "plate" */}
             <div
               className="absolute -inset-0 translate-x-3 translate-y-3 border"
               style={{ borderColor: 'var(--ja-gold-1)' }}

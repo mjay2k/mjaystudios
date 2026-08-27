@@ -8,9 +8,9 @@ import SiteFooter from './SiteFooter';
 import { Brush, Curve } from './brand';
 
 export const metadata = {
-  title: 'Jesus Anoints Ministries — Touching the world, one soul at a time',
+  title: 'Jesus Anoints Ministries | Touching the world, one soul at a time',
   description:
-    'A Holy Spirit–filled gospel movement — touching the world, one soul at a time.',
+    'A Holy Spirit–filled gospel movement touching the world, one soul at a time.',
 };
 
 /* Direction B — "Sent"
@@ -32,7 +32,7 @@ export default async function SentPage() {
         <div className="mx-auto max-w-4xl px-4 pb-10 pt-10 text-center md:pb-14 md:pt-14">
           <Image
             src={site.brand.logo2026}
-            alt="Jesus Anoints Ministries — Touching the world, one soul at a time"
+            alt="Jesus Anoints Ministries: Touching the world, one soul at a time"
             width={1146}
             height={711}
             priority
@@ -102,7 +102,7 @@ export default async function SentPage() {
             exhort, edify, and comfort
             <Brush className="absolute -bottom-2 left-0 h-3 w-full md:-bottom-3 md:h-4" />
           </span>{' '}
-          the Body of Christ — through Spirit-led teaching, gatherings, and evangelistic crusades.
+          the Body of Christ through Spirit-led teaching, gatherings, and evangelistic crusades.
         </h2>
         <p className="ja-sans mx-auto mt-8 max-w-2xl text-base leading-[1.9] text-[color:var(--ja-ink)]/70 md:text-lg">
           {site.welcome.body[1]}
@@ -117,7 +117,7 @@ export default async function SentPage() {
             {(
               [
                 { word: 'Equipping', line: 'believers to walk in salvation, righteousness, and purpose.', s: site.scriptures[1] },
-                { word: 'Empowering', line: 'the Church by the Spirit — not by might, nor by power.', s: site.scriptures[0] },
+                { word: 'Empowering', line: 'the Church by the Spirit, not by might, nor by power.', s: site.scriptures[0] },
                 { word: 'Enriching', line: 'lives with the liberty found where the Spirit of the Lord is.', s: site.scriptures[2] },
               ] as const
             ).map((p, i) => (
@@ -499,7 +499,7 @@ export default async function SentPage() {
             </h3>
             <p className="ja-sans mt-3 text-sm leading-relaxed text-[color:var(--ja-ink)]/70">
               Jesus Anoints Ministries is a registered 501(c)(3) non-profit, certified with the
-              Candid Platinum Transparency Seal — the highest level of transparency Candid awards.
+              Candid Platinum Transparency Seal, the highest level of transparency Candid awards.
             </p>
           </article>
 
@@ -523,7 +523,7 @@ export default async function SentPage() {
               Reach the ministry
             </h3>
             <p className="ja-sans mt-3 text-sm leading-relaxed text-white/65">
-              For prayer, speaking invitations, or partnership — connect with us on any of these
+              For prayer, speaking invitations, or partnership, reach us on any of these
               channels and we will respond.
             </p>
             <div className="mt-5 flex flex-wrap gap-4">

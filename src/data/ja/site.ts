@@ -10,7 +10,7 @@ export const site = {
   established: '501(c)(3) non-profit ministry',
 
   verse: {
-    text: 'And you will be a fruitful tree planted and fed by the streams of water — the Word of God.',
+    text: 'And you will be a fruitful tree planted and fed by the streams of water, the Word of God.',
     ref: 'Psalm 1:3',
   },
 
@@ -95,7 +95,7 @@ export const site = {
 
   gallery: {
     heading: 'Twenty years of ministry',
-    body: 'Crusades, gatherings, prayer, and travels — moments from the work God has done through this ministry across the nations.',
+    body: 'Crusades, gatherings, prayer, and travels: moments from the work God has done through this ministry across the nations.',
   },
 
   welcome: {
@@ -128,7 +128,7 @@ export const site = {
     { n: '03', title: 'Every Believer Has God-Given Ministry', body: 'Each one is gifted and called to serve the Body of Christ.' },
     { n: '04', title: 'Water Baptism by Immersion', body: 'An outward witness of an inward transformation in Christ.' },
     { n: '05', title: 'The Authority of the Holy Scriptures', body: 'The inerrant, inspired, and unchanging Word of God.' },
-    { n: '06', title: 'The Lord Jesus Christ', body: 'Fully God and fully man — our Savior, life, and source of strength.' },
+    { n: '06', title: 'The Lord Jesus Christ', body: 'Fully God and fully man, our Savior, life, and source of strength.' },
     { n: '07', title: 'The Holy Spirit and His Baptism', body: 'The empowering presence of God for life and ministry.' },
     { n: '08', title: 'A Life of Faith and Obedience', body: 'Walking by faith, in holiness, and in glad obedience to God.' },
     { n: '09', title: 'The Ministry and Work of the Holy Spirit', body: 'Teaching, guiding, and bearing fruit through every believer.' },
@@ -148,8 +148,8 @@ export const site = {
     { date: '', title: 'When Spiritual Leadership Becomes Control', tag: 'Teaching' },
     { date: '', title: 'The Exodus Reveals Christ: From Bondage to Eternal Inheritance', tag: 'Teaching' },
     { date: '', title: '4 Major Prophecies Fulfilled: A Public Record', tag: 'Public Record' },
-    { date: '', title: 'Trump Coming to Power in 2024 — Prophecy Released 2020, 2022 & 2024', tag: 'Public Record' },
-    { date: '', title: 'FCRA Bill 2026 — Persecution of Minorities Prophecy Fulfilled in India', tag: 'Public Record' },
+    { date: '', title: 'Trump Coming to Power in 2024: Prophecy Released 2020, 2022 & 2024', tag: 'Public Record' },
+    { date: '', title: 'FCRA Bill 2026: Persecution of Minorities Prophecy Fulfilled in India', tag: 'Public Record' },
   ],
 
   books: [
@@ -177,7 +177,7 @@ export const site = {
   // Pray / Contact — details as published on jesusanoints.com/pray
   contact: {
     heading: 'Pray With Us',
-    lead: 'Whatever you are facing, you do not have to face it alone. Send us your prayer request, or reach out with any question — we read every message, and we pray.',
+    lead: 'Whatever you are facing, you do not have to face it alone. Send us your prayer request, or reach out with any question. We read every message, and we pray.',
     emails: ['Jesusanoints@aol.com', 'Samueltiffany7@gmail.com'],
     phone: '1-573-987-9297',
     address: '2519 Travelers Way, Jackson, Missouri 63755',

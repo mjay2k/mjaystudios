@@ -21,9 +21,9 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  if (!post) return { title: 'Post not found — Jesus Anoints Ministries' };
+  if (!post) return { title: 'Post not found | Jesus Anoints Ministries' };
   return {
-    title: `${post.title} — Jesus Anoints Ministries`,
+    title: `${post.title} | Jesus Anoints Ministries`,
     description: post.excerpt,
   };
 }

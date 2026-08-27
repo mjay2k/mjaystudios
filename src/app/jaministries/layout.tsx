@@ -30,7 +30,7 @@ const jaDisplay = Archivo({
 export const metadata: Metadata = {
   title: 'Jesus Anoints Ministries',
   description:
-    'A non-denominational, Holy Spirit–filled Christian ministry — touching the world, one soul at a time.',
+    'A non-denominational, Holy Spirit–filled Christian ministry touching the world, one soul at a time.',
   icons: {
     icon: '/jaministries/brand/icon-2026.png',
   },

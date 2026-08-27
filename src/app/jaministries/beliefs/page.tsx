@@ -6,9 +6,9 @@ import SiteFooter from '../SiteFooter';
 import { Brush, Curve } from '../brand';
 
 export const metadata = {
-  title: 'What We Believe — Jesus Anoints Ministries',
+  title: 'What We Believe | Jesus Anoints Ministries',
   description:
-    'The statement of faith of Jesus Anoints Ministries — fourteen convictions, each grounded in Scripture.',
+    'The statement of faith of Jesus Anoints Ministries: fourteen convictions, each grounded in Scripture.',
 };
 
 export default function BeliefsPage() {
