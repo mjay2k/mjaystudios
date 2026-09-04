@@ -1,0 +1,186 @@
+/* Kentucky Dom — brand tokens, scoped to .kyd so nothing leaks into the portfolio.
+   Base palette is shared by the inner pages (music, store, about, book). Each
+   direction home page layers its own accents on top of these. */
+
+.kyd {
+  /* Ground */
+  --kyd-black: #0b0a09;
+  --kyd-ink: #161412;
+  --kyd-ink-2: #221f1b;
+  --kyd-ink-3: #2e2a25;
+  --kyd-cream: #f3ead8;
+  --kyd-paper: #faf6ee;
+  --kyd-sand: #e5d8bf;
+  --kyd-mute: #a89f8f;
+
+  /* Accents */
+  --kyd-red: #b3261e;
+  --kyd-red-bright: #d8362b;
+  --kyd-red-deep: #7d1812;
+  --kyd-gold: #c9a24a;
+  --kyd-gold-bright: #e6c26a;
+  --kyd-gold-grad: linear-gradient(120deg, #a5822f 0%, #c9a24a 50%, #e6c26a 100%);
+  --kyd-denim: #2d4a6b;
+  --kyd-denim-deep: #1c3049;
+  --kyd-tobacco: #6b4a2b;
+  --kyd-navy: #14213a;
+  --kyd-flag-blue: #1f2f5c;
+
+  /* Type */
+  --kyd-display: var(--font-kyd-display), 'Impact', 'Arial Narrow', sans-serif;
+  --kyd-sans: var(--font-kyd-sans), ui-sans-serif, system-ui, sans-serif;
+  --kyd-condensed: var(--font-kyd-condensed), 'Arial Narrow', sans-serif;
+  --kyd-serif: var(--font-editorial), 'Iowan Old Style', Georgia, serif;
+  --kyd-serif-display: var(--font-playfair), 'Iowan Old Style', Georgia, serif;
+
+  font-family: var(--kyd-sans);
+  color: var(--kyd-cream);
+  background: var(--kyd-black);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.kyd-display { font-family: var(--kyd-display); }
+.kyd-sans { font-family: var(--kyd-sans); }
+.kyd-condensed { font-family: var(--kyd-condensed); }
+.kyd-serif { font-family: var(--kyd-serif); }
+.kyd-serif-display { font-family: var(--kyd-serif-display); }
+
+.kyd h1, .kyd h2, .kyd h3, .kyd blockquote { text-wrap: balance; }
+.kyd p, .kyd li { text-wrap: pretty; }
+
+/* Eyebrow label: small, tracked, condensed */
+.kyd-eyebrow {
+  font-family: var(--kyd-condensed);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Buttons. Layered under `components` so Tailwind utilities (hidden, sm:inline-flex, !px-4) still win. */
+@layer components {
+  .kyd-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--kyd-condensed);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.5rem;
+    border: 1.5px solid transparent;
+    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .kyd-btn:hover { transform: translateY(-1px); }
+  .kyd-btn:active { transform: translateY(0); }
+  .kyd-btn-red { background: var(--kyd-red); color: #fff; }
+  .kyd-btn-red:hover { background: var(--kyd-red-bright); }
+  .kyd-btn-cream { background: var(--kyd-cream); color: var(--kyd-black); }
+  .kyd-btn-cream:hover { background: #fff; }
+  .kyd-btn-ghost { border-color: rgba(243, 234, 216, 0.35); color: var(--kyd-cream); }
+  .kyd-btn-ghost:hover { border-color: var(--kyd-cream); }
+  .kyd-btn-ghost-dark { border-color: rgba(11, 10, 9, 0.35); color: var(--kyd-black); }
+  .kyd-btn-ghost-dark:hover { border-color: var(--kyd-black); }
+  .kyd-btn-gold { background: var(--kyd-gold-grad); color: var(--kyd-black); }
+}
+
+.kyd-gold-text {
+  background: var(--kyd-gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Textures */
+.kyd-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+}
+.kyd-halftone {
+  background-image: radial-gradient(currentColor 1px, transparent 1.5px);
+  background-size: 6px 6px;
+}
+.kyd-stripes {
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--kyd-red) 0 14px,
+    var(--kyd-cream) 14px 28px
+  );
+}
+.kyd-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  opacity: 0.35;
+}
+
+/* Marquee */
+@keyframes kyd-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.kyd-marquee {
+  display: flex;
+  width: max-content;
+  animation: kyd-marquee 40s linear infinite;
+}
+.kyd-marquee:hover { animation-play-state: paused; }
+
+/* Entrances */
+@keyframes kyd-rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.kyd-rise { animation: kyd-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.kyd-rise-2 { animation-delay: 0.12s; }
+.kyd-rise-3 { animation-delay: 0.24s; }
+.kyd-rise-4 { animation-delay: 0.36s; }
+
+@keyframes kyd-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.kyd-fade { animation: kyd-fade 1.1s ease both; }
+
+/* Drawer */
+@keyframes kyd-slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.kyd-slide-in { animation: kyd-slide-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+.kyd-navlink {
+  position: relative;
+  transition: color 0.15s ease;
+}
+.kyd-navlink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: var(--kyd-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+.kyd-navlink:hover::after { transform: scaleX(1); }
+
+/* Hide scrollbar on horizontal rails */
+.kyd-rail { scrollbar-width: none; }
+.kyd-rail::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kyd-rise, .kyd-fade, .kyd-slide-in { animation: none; }
+  .kyd-marquee { animation: none; }
+}

@@ -18,6 +18,7 @@ const jakarta = Plus_Jakarta_Sans({
 // Expressive editorial serif — used by the Monograph version
 const fraunces = Fraunces({
   subsets: ['latin'],
+  style: ['normal', 'italic'],
   variable: '--font-editorial',
   display: 'swap',
   axes: ['opsz', 'SOFT', 'WONK'],

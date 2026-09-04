@@ -1,0 +1,320 @@
+/* Direction 01: Unapologetic. Rally poster. Every rule scoped under .kyd-unap. */
+
+.kyd-unap {
+  --u-red: var(--kyd-red);
+  --u-cream: var(--kyd-cream);
+  --u-black: var(--kyd-black);
+  --u-blue: var(--kyd-flag-blue);
+  background: var(--u-black);
+  color: var(--u-cream);
+  overflow-x: clip;
+}
+
+/* ---------- Header ---------- */
+.kyd-unap-header {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  color: var(--u-cream);
+  background: linear-gradient(180deg, rgba(11, 10, 9, 0.75), rgba(11, 10, 9, 0));
+}
+
+/* ---------- Hero ---------- */
+.kyd-unap-hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  isolation: isolate;
+  overflow: hidden;
+}
+.kyd-unap-hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+}
+.kyd-unap-hero-photo img {
+  object-fit: cover;
+  object-position: 50% 10%;
+  filter: grayscale(1) contrast(1.2) brightness(1.08);
+}
+/* Red/black duotone: multiply a red-to-black ramp over the greyscale photo,
+   then lift the highlights with a screened cream. */
+.kyd-unap-hero-duo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(180deg, #e04a3c 0%, #b3261e 40%, #4a100c 80%, var(--u-black) 100%);
+  mix-blend-mode: multiply;
+}
+.kyd-unap-hero-lift {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: linear-gradient(180deg, rgba(243, 234, 216, 0.32), rgba(243, 234, 216, 0) 60%);
+  mix-blend-mode: screen;
+}
+.kyd-unap-hero-dots {
+  position: absolute;
+  right: -10%;
+  top: 0;
+  width: 60%;
+  height: 100%;
+  z-index: -1;
+  color: var(--u-red);
+  opacity: 0.35;
+  -webkit-mask-image: linear-gradient(200deg, #000 20%, transparent 70%);
+  mask-image: linear-gradient(200deg, #000 20%, transparent 70%);
+  pointer-events: none;
+}
+.kyd-unap-hero-shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(11, 10, 9, 0) 45%, rgba(11, 10, 9, 0.85) 82%, var(--u-black) 100%);
+}
+
+/* Stacked lockup. Anton caps average ~0.46em wide, so the line sizes are
+   tuned to fill the width at 390 and cap on wide screens. */
+.kyd-unap-h1 {
+  font-family: var(--kyd-display);
+  text-transform: uppercase;
+  line-height: 0.86;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+.kyd-unap-h1 .l1 {
+  display: block;
+  font-size: clamp(44px, 12.3vw, 176px);
+}
+.kyd-unap-h1 .l2 {
+  display: block;
+  color: var(--u-red);
+  font-size: clamp(88px, 24.6vw, 352px);
+  -webkit-text-stroke: 0;
+  text-shadow: 0.03em 0.03em 0 var(--u-cream);
+}
+@media (min-width: 768px) {
+  .kyd-unap-h1 .l2 { text-shadow: 0.02em 0.02em 0 var(--u-cream); }
+}
+
+/* ---------- Stamp ---------- */
+.kyd-unap-stamp {
+  display: inline-grid;
+  place-items: center;
+  text-align: center;
+  font-family: var(--kyd-condensed);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 0.65em 0.9em;
+  border: 3px solid currentColor;
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  transform: rotate(-7deg);
+  transform-origin: center;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3.2 -0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3.2 -0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.kyd-unap-stamp-red { color: var(--u-red); }
+.kyd-unap-stamp-cream { color: var(--u-cream); }
+.kyd-unap-stamp-blue { color: var(--u-blue); }
+.kyd-unap-stamp small {
+  display: block;
+  font-size: 0.55em;
+  letter-spacing: 0.22em;
+  margin-bottom: 0.35em;
+}
+.kyd-unap-stamp b {
+  display: block;
+  font-weight: 900;
+}
+
+/* ---------- Bars and seams ---------- */
+.kyd-unap-bar {
+  height: 10px;
+  background-image: repeating-linear-gradient(90deg, var(--u-red) 0 28px, var(--u-cream) 28px 56px);
+}
+.kyd-unap-bar-blue {
+  background-image: repeating-linear-gradient(90deg, var(--u-blue) 0 28px, var(--u-cream) 28px 56px);
+}
+/* Hard diagonal seam: the cream section cuts into the black one above it. */
+.kyd-unap-seam-top {
+  clip-path: polygon(0 0, 100% 4vw, 100% 100%, 0 100%);
+  margin-top: -4vw;
+  padding-top: 4vw;
+}
+.kyd-unap-seam-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 4vw));
+  padding-bottom: 4vw;
+}
+
+/* ---------- Marquee band ---------- */
+.kyd-unap-band {
+  background: var(--u-red);
+  color: var(--u-cream);
+  overflow: hidden;
+  border-top: 3px solid var(--u-cream);
+  border-bottom: 3px solid var(--u-cream);
+}
+.kyd-unap-band .kyd-marquee { animation-duration: 55s; }
+.kyd-unap-band span {
+  font-family: var(--kyd-display);
+  text-transform: uppercase;
+  font-size: clamp(30px, 4.2vw, 60px);
+  line-height: 1;
+  padding: 0.28em 0.5em;
+  white-space: nowrap;
+}
+.kyd-unap-band span::after {
+  content: '\2605';
+  font-size: 0.55em;
+  vertical-align: 0.2em;
+  margin-left: 1em;
+  color: var(--u-black);
+}
+
+/* ---------- Section titles ---------- */
+.kyd-unap-title {
+  font-family: var(--kyd-display);
+  text-transform: uppercase;
+  line-height: 0.88;
+  font-size: clamp(56px, 10vw, 148px);
+  letter-spacing: -0.005em;
+}
+.kyd-unap-kicker {
+  font-family: var(--kyd-condensed);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 13px;
+}
+
+/* ---------- Platform (pillars) ---------- */
+.kyd-unap-pillar {
+  border-top: 4px solid var(--u-red);
+  padding-top: 1rem;
+}
+.kyd-unap-pillar .num {
+  font-family: var(--kyd-display);
+  font-size: 15px;
+  color: var(--u-red);
+  letter-spacing: 0.1em;
+}
+.kyd-unap-pillar h3 {
+  font-family: var(--kyd-display);
+  text-transform: uppercase;
+  font-size: clamp(64px, 8vw, 120px);
+  line-height: 0.9;
+  margin-top: 0.25rem;
+}
+
+/* ---------- Featured single ---------- */
+.kyd-unap-quote {
+  font-family: var(--kyd-display);
+  text-transform: uppercase;
+  line-height: 0.95;
+  font-size: clamp(30px, 4.6vw, 64px);
+}
+.kyd-unap-quote .last { color: var(--u-red); }
+.kyd-unap-art {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  outline: 4px solid var(--u-cream);
+  outline-offset: -4px;
+  box-shadow: 14px 14px 0 var(--u-red);
+}
+@media (min-width: 768px) {
+  .kyd-unap-art { box-shadow: 22px 22px 0 var(--u-red); }
+}
+
+/* ---------- Merch flyer ---------- */
+.kyd-unap-flyer {
+  background: var(--u-cream);
+  color: var(--u-black);
+  position: relative;
+}
+.kyd-unap-flyer-row {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 2px solid var(--u-black);
+  text-decoration: none;
+  color: inherit;
+}
+.kyd-unap-flyer-row:last-of-type { border-bottom: 2px solid var(--u-black); }
+.kyd-unap-flyer-row .thumb {
+  position: relative;
+  width: 96px;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  overflow: hidden;
+}
+.kyd-unap-flyer-row .name {
+  font-family: var(--kyd-display);
+  text-transform: uppercase;
+  font-size: clamp(26px, 3.4vw, 44px);
+  line-height: 0.95;
+}
+.kyd-unap-flyer-row .price {
+  font-family: var(--kyd-condensed);
+  font-weight: 900;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 1;
+  color: var(--u-red);
+  letter-spacing: -0.02em;
+}
+.kyd-unap-flyer-row:hover .name { color: var(--u-red); }
+@media (min-width: 768px) {
+  .kyd-unap-flyer-row { grid-template-columns: 140px 1fr auto; gap: 1.5rem; padding: 1.25rem 0; }
+  .kyd-unap-flyer-row .thumb { width: 140px; }
+}
+
+/* ---------- About ---------- */
+.kyd-unap-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  outline: 4px solid var(--u-red);
+  outline-offset: -4px;
+}
+.kyd-unap-photo img { object-fit: cover; }
+.kyd-unap-photo-stamp {
+  position: absolute;
+  right: 12px;
+  bottom: 20px;
+  z-index: 1;
+}
+@media (min-width: 768px) {
+  .kyd-unap-photo-stamp { right: -18px; bottom: 28px; }
+}
+
+/* ---------- Book ---------- */
+.kyd-unap-book {
+  background: var(--u-red);
+  color: var(--u-cream);
+}
+.kyd-unap-book .mail {
+  font-family: var(--kyd-condensed);
+  font-weight: 800;
+  font-size: clamp(22px, 3.6vw, 44px);
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+  overflow-wrap: anywhere;
+}
+
+/* Focus */
+.kyd-unap a:focus-visible,
+.kyd-unap button:focus-visible {
+  outline: 3px solid var(--u-cream);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kyd-unap .kyd-rise { animation: none; }
+}

@@ -1,0 +1,342 @@
+/* Direction 03: Nashville Black. Label-grade artist site. Every rule scoped to .kyd-nb. */
+
+.kyd-nb {
+  --nb-gold: var(--kyd-gold);
+  --nb-gold-bright: var(--kyd-gold-bright);
+  --nb-hair: rgba(201, 162, 74, 0.35);
+  --nb-line: rgba(243, 234, 216, 0.1);
+  background: var(--kyd-black);
+  color: var(--kyd-cream);
+  overflow-x: clip;
+}
+
+/* Display sizing: Anton, refined rather than poster loud */
+.kyd-nb .nb-h1 {
+  font-family: var(--kyd-display);
+  font-size: clamp(3.4rem, 9.5vw, 7.25rem);
+  line-height: 0.9;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+.kyd-nb .nb-h2 {
+  font-family: var(--kyd-display);
+  font-size: clamp(2.1rem, 4.6vw, 3.75rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+.kyd-nb .nb-h3 {
+  font-family: var(--kyd-display);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.kyd-nb .nb-meta {
+  font-family: var(--kyd-condensed);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-gold);
+}
+.kyd-nb .nb-hairline {
+  height: 1px;
+  background: linear-gradient(90deg, var(--nb-gold), rgba(201, 162, 74, 0.05));
+}
+
+/* Header floats over the hero */
+.kyd-nb .nb-header {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  background: linear-gradient(180deg, rgba(11, 10, 9, 0.75), rgba(11, 10, 9, 0));
+}
+.kyd-nb .nb-listen {
+  border-color: var(--nb-gold);
+  color: var(--nb-gold-bright);
+}
+.kyd-nb .nb-listen:hover {
+  background: var(--nb-gold);
+  color: var(--kyd-black);
+}
+
+/* Hero */
+.kyd-nb .nb-hero {
+  position: relative;
+  isolation: isolate;
+}
+.kyd-nb .nb-hero-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  z-index: -1;
+}
+.kyd-nb .nb-hero-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(11, 10, 9, 0.55) 0%, rgba(11, 10, 9, 0.08) 30%, rgba(11, 10, 9, 0.55) 68%, var(--kyd-black) 100%);
+}
+.kyd-nb .nb-hero-body {
+  display: flex;
+  flex-direction: column;
+}
+.kyd-nb .nb-hero-art {
+  position: relative;
+  width: 62%;
+  max-width: 380px;
+  margin: -38% auto 0;
+  box-shadow:
+    0 0 0 1px rgba(201, 162, 74, 0.45),
+    0 0 70px rgba(201, 162, 74, 0.32),
+    0 40px 70px rgba(0, 0, 0, 0.7);
+}
+.kyd-nb .nb-stamp {
+  position: absolute;
+  right: -14px;
+  top: -14px;
+  transform: rotate(-8deg);
+  font-family: var(--kyd-condensed);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--nb-gold-bright);
+  padding: 6px 10px 6px 12px;
+  border: 1px solid var(--nb-gold-bright);
+  outline: 1px solid var(--nb-gold-bright);
+  outline-offset: 2px;
+  background: rgba(11, 10, 9, 0.85);
+}
+
+@media (min-width: 1024px) {
+  .kyd-nb .nb-hero {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+  .kyd-nb .nb-hero-photo {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    aspect-ratio: auto;
+    z-index: -1;
+  }
+  .kyd-nb .nb-hero-photo::after {
+    background:
+      linear-gradient(90deg, var(--kyd-black) 0%, rgba(11, 10, 9, 0.7) 20%, rgba(11, 10, 9, 0.1) 55%, rgba(11, 10, 9, 0.2) 100%),
+      linear-gradient(180deg, rgba(11, 10, 9, 0.6) 0%, rgba(11, 10, 9, 0.05) 32%, rgba(11, 10, 9, 0.1) 60%, var(--kyd-black) 100%);
+  }
+  .kyd-nb .nb-hero-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px minmax(0, 0.55fr);
+    gap: 3rem;
+    align-items: center;
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 8rem 1.5rem 4rem;
+    min-height: 100svh;
+  }
+  .kyd-nb .nb-hero-art {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    align-self: end;
+  }
+}
+
+/* Spotify panel */
+.kyd-nb .nb-spotify {
+  background: var(--kyd-ink);
+  border-top: 1px solid var(--nb-line);
+  border-bottom: 1px solid var(--nb-line);
+}
+
+/* Discography ledger */
+.kyd-nb .nb-ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--nb-hair);
+}
+.kyd-nb .nb-row {
+  display: grid;
+  grid-template-columns: 1.5rem 48px minmax(0, 1fr) 5.75rem;
+  gap: 0.75rem 0.9rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--nb-line);
+  transition: background 0.15s ease;
+}
+.kyd-nb .nb-row:hover {
+  background: rgba(243, 234, 216, 0.045);
+}
+.kyd-nb .nb-row:hover .nb-num {
+  color: var(--nb-gold-bright);
+}
+.kyd-nb .nb-num {
+  font-family: var(--kyd-condensed);
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(243, 234, 216, 0.4);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.15s ease;
+}
+.kyd-nb .nb-thumb {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  background: var(--kyd-ink-2);
+}
+.kyd-nb .nb-title {
+  font-family: var(--kyd-condensed);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.kyd-nb .nb-title:hover {
+  color: var(--nb-gold-bright);
+}
+.kyd-nb .nb-sub {
+  font-family: var(--kyd-condensed);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: rgba(243, 234, 216, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kyd-nb .nb-year,
+.kyd-nb .nb-label {
+  display: none;
+  font-family: var(--kyd-condensed);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: rgba(243, 234, 216, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+.kyd-nb .nb-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.15rem;
+}
+.kyd-nb .nb-links a {
+  display: inline-flex;
+  padding: 0.35rem;
+  color: rgba(243, 234, 216, 0.55);
+  transition: color 0.15s ease;
+}
+.kyd-nb .nb-links a:hover {
+  color: var(--nb-gold-bright);
+}
+.kyd-nb .nb-ep {
+  display: inline-block;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  padding: 2px 6px;
+  border: 1px solid var(--nb-hair);
+  color: var(--nb-gold);
+}
+@media (min-width: 640px) {
+  .kyd-nb .nb-row {
+    grid-template-columns: 2.25rem 48px minmax(0, 1fr) 4rem 7.5rem;
+    padding: 0.85rem 1.25rem;
+  }
+  .kyd-nb .nb-year {
+    display: block;
+  }
+  .kyd-nb .nb-title {
+    white-space: nowrap;
+    display: block;
+  }
+  .kyd-nb .nb-links {
+    gap: 0.25rem;
+  }
+}
+@media (min-width: 1280px) {
+  .kyd-nb .nb-row {
+    grid-template-columns: 2.5rem 48px minmax(0, 1fr) 4rem 13rem 7.5rem;
+  }
+  .kyd-nb .nb-sub-label {
+    display: none;
+  }
+  .kyd-nb .nb-label {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.kyd-nb .nb-sticky {
+  position: sticky;
+  top: 5rem;
+}
+
+/* Photo panels */
+.kyd-nb .nb-photo-dim::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 10, 9, 0) 40%, rgba(11, 10, 9, 0.85) 100%);
+}
+.kyd-nb .nb-vrule {
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(180deg, transparent, var(--nb-gold) 30%, var(--nb-gold) 70%, transparent);
+}
+
+/* Merch */
+.kyd-nb .nb-product {
+  display: block;
+  border: 1px solid var(--nb-line);
+  transition: border-color 0.15s ease;
+}
+.kyd-nb .nb-product:hover {
+  border-color: var(--nb-hair);
+}
+.kyd-nb .nb-price {
+  font-family: var(--kyd-condensed);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  color: var(--nb-gold-bright);
+}
+
+/* Booking */
+.kyd-nb .nb-book::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(11, 10, 9, 0.96) 0%, rgba(11, 10, 9, 0.82) 50%, rgba(11, 10, 9, 0.55) 100%);
+}
+
+.kyd-nb a:focus-visible,
+.kyd-nb button:focus-visible {
+  outline: 2px solid var(--nb-gold-bright);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kyd-nb .nb-row,
+  .kyd-nb .nb-product,
+  .kyd-nb .nb-links a {
+    transition: none;
+  }
+}

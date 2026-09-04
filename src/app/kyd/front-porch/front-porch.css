@@ -1,0 +1,226 @@
+/* Front Porch: Kentucky documentary. Paper ground, denim and tobacco accents,
+   Fraunces headlines. Everything scoped under .kyd-fp. */
+
+.kyd-fp {
+  background: var(--kyd-paper);
+  color: var(--kyd-black);
+  --fp-hair: rgba(11, 10, 9, 0.16);
+  --fp-hair-strong: rgba(11, 10, 9, 0.5);
+  --fp-body: rgba(11, 10, 9, 0.78);
+  --fp-quiet: rgba(11, 10, 9, 0.5);
+}
+
+/* Fraunces at its editorial settings: high optical size, a touch of softness. */
+.kyd-fp .fp-head {
+  font-family: var(--kyd-serif);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+}
+.kyd-fp .fp-head-wonk {
+  font-variation-settings: 'opsz' 144, 'SOFT' 40, 'WONK' 1;
+}
+.kyd-fp .fp-ital {
+  font-family: var(--kyd-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 96, 'SOFT' 50, 'WONK' 1;
+}
+
+/* Small-caps captions and datelines: condensed, tracked, denim. */
+.kyd-fp .fp-cap {
+  font-family: var(--kyd-condensed);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--kyd-denim);
+}
+
+/* Section opener: rule, dateline row, rule. */
+.kyd-fp .fp-dateline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--fp-hair-strong);
+  border-bottom: 1px solid var(--fp-hair);
+}
+
+/* Body copy in the story column. */
+.kyd-fp .fp-prose p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--fp-body);
+}
+.kyd-fp .fp-prose p + p {
+  margin-top: 1.25rem;
+}
+@media (min-width: 768px) {
+  .kyd-fp .fp-prose p {
+    font-size: 1.125rem;
+  }
+}
+
+/* Drop cap on the first paragraph of a story block. */
+.kyd-fp .fp-dropcap::first-letter {
+  font-family: var(--kyd-serif);
+  font-weight: 600;
+  font-variation-settings: 'opsz' 144, 'SOFT' 20, 'WONK' 1;
+  float: left;
+  font-size: 4.6em;
+  line-height: 0.78;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--kyd-tobacco);
+}
+
+/* Pull quote: big italic serif, tobacco hairline at the left. */
+.kyd-fp .fp-pull {
+  border-left: 2px solid var(--kyd-tobacco);
+  padding-left: 1.25rem;
+}
+.kyd-fp .fp-pull p {
+  font-family: var(--kyd-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 96, 'SOFT' 50, 'WONK' 1;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 1024px) {
+  .kyd-fp .fp-pull p {
+    font-size: 1.75rem;
+  }
+}
+
+/* Ledger: the three pillars as a hymnal list with roman numerals. */
+.kyd-fp .fp-ledger li {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr;
+  gap: 0.5rem 1rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--fp-hair);
+  align-items: baseline;
+}
+.kyd-fp .fp-ledger li:last-child {
+  border-bottom: 1px solid var(--fp-hair-strong);
+}
+.kyd-fp .fp-ledger li > p:last-child {
+  grid-column: 2;
+}
+.kyd-fp .fp-numeral {
+  font-family: var(--kyd-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 96, 'SOFT' 50, 'WONK' 1;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--kyd-tobacco);
+}
+@media (min-width: 768px) {
+  .kyd-fp .fp-ledger li {
+    grid-template-columns: 4.5rem 12rem 1fr;
+    padding: 2rem 0;
+  }
+  .kyd-fp .fp-ledger li > p:last-child {
+    grid-column: 3;
+  }
+  .kyd-fp .fp-numeral {
+    font-size: 2.25rem;
+  }
+}
+
+/* Listen interlude: ink ground, cream text. */
+.kyd-fp .fp-ink {
+  background: var(--kyd-ink);
+  color: var(--kyd-cream);
+}
+.kyd-fp .fp-lyric {
+  font-family: var(--kyd-serif);
+  font-style: italic;
+  font-weight: 300;
+  font-variation-settings: 'opsz' 144, 'SOFT' 60, 'WONK' 1;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+/* Photo rail: horizontal, snapping, one tall row of prints. */
+.kyd-fp .fp-rail {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0 1rem 1rem;
+  scroll-padding: 1rem;
+}
+.kyd-fp .fp-rail > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+.kyd-fp .fp-rail img {
+  height: 300px;
+  width: auto;
+  display: block;
+}
+@media (min-width: 768px) {
+  .kyd-fp .fp-rail {
+    gap: 1rem;
+    padding: 0 1.5rem 1.5rem;
+    scroll-padding: 1.5rem;
+  }
+  .kyd-fp .fp-rail img {
+    height: 440px;
+  }
+}
+
+/* General store strip: products separated by hairlines, no cards. */
+.kyd-fp .fp-store {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--fp-hair-strong);
+  border-bottom: 1px solid var(--fp-hair-strong);
+}
+.kyd-fp .fp-store > a {
+  padding: 1rem;
+  border-bottom: 1px solid var(--fp-hair);
+}
+.kyd-fp .fp-store > a:nth-child(odd) {
+  border-right: 1px solid var(--fp-hair);
+}
+.kyd-fp .fp-store > a:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+@media (min-width: 768px) {
+  .kyd-fp .fp-store {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .kyd-fp .fp-store > a {
+    padding: 1.5rem;
+    border-bottom: 0;
+    border-right: 1px solid var(--fp-hair);
+  }
+  .kyd-fp .fp-store > a:last-child {
+    border-right: 0;
+  }
+}
+
+/* Text links: denim, hairline underline that thickens on hover. */
+.kyd-fp .fp-link {
+  color: var(--kyd-denim);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-thickness 0.15s ease;
+}
+.kyd-fp .fp-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.kyd-fp a:focus-visible,
+.kyd-fp button:focus-visible {
+  outline: 2px solid var(--kyd-denim);
+  outline-offset: 3px;
+}
