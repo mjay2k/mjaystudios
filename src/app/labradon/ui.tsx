@@ -21,7 +21,7 @@ function Header({ direction, onInquiry, work = false }: { direction: Direction; 
   const [menu, setMenu] = useState(false);
   const root = direction === 'partner' ? '/labradon/partner' : '/labradon';
   return <header className={`ld-header ${direction === 'partner' ? 'ld-header-dark' : ''}`}>
-    <Link href={root} aria-label="LabraDon Properties home" className="ld-brand"><Image src={image('Black-and-white-logo')} alt="LabraDon Properties LLC — Labrador and house logo" width={94} height={87} priority /><span>PROPERTY SERVICES<br /><small>HAMPTON ROADS, VIRGINIA</small></span></Link>
+    <Link href={root} aria-label="LabraDon Properties home" className="ld-brand"><Image src={image('LabraDon-horizontal-logo')} alt="LabraDon Properties LLC — Labrador and house logo" width={676} height={160} sizes="(max-width: 800px) 230px, 280px" priority /></Link>
     <button className="ld-menu-toggle" aria-expanded={menu} aria-controls="ld-main-nav" onClick={() => setMenu(!menu)}>{menu ? 'Close' : 'Menu'} <Plus minus={menu} /></button>
     <nav id="ld-main-nav" className={menu ? 'is-open' : ''} aria-label="Main navigation" onKeyDown={e => { if (e.key === 'Escape') setMenu(false); }}>
       <Link href={work ? `${root}#services` : '#services'} onClick={() => setMenu(false)}>What we do</Link>
@@ -110,7 +110,7 @@ function FAQ() {
 }
 
 function Footer({ onInquiry }: { onInquiry: (v?: Inquiry) => void }) {
-  return <footer className="ld-footer"><div className="ld-footer-top"><div><p className="ld-eyebrow">YOUR NEXT CHAPTER STARTS HERE</p><h2>Let’s put your<br /><em>property in good hands.</em></h2></div><div className="ld-footer-contact"><button className="ld-button ld-button-white" onClick={() => onInquiry()}>Tell us what you have in mind</button><a href={phoneHref}>{phone}</a><a href={`mailto:${email}`}>{email}</a></div></div><div className="ld-footer-bottom"><Link href="/labradon" aria-label="LabraDon home"><Image src={image('Black-and-white-logo')} alt="LabraDon Properties LLC" width={92} height={85}/></Link><p>VETERAN-OWNED PROPERTY SERVICES<br /><span>{cities.join(' · ')}</span></p><div><span>© {new Date().getFullYear()} LabraDon Properties LLC</span><span>Design preview by MJay Studios</span></div></div></footer>;
+  return <footer className="ld-footer"><div className="ld-footer-top"><div><p className="ld-eyebrow">YOUR NEXT CHAPTER STARTS HERE</p><h2>Let’s put your<br /><em>property in good hands.</em></h2></div><div className="ld-footer-contact"><button className="ld-button ld-button-white" onClick={() => onInquiry()}>Tell us what you have in mind</button><a href={phoneHref}>{phone}</a><a href={`mailto:${email}`}>{email}</a></div></div><div className="ld-footer-bottom"><Link href="/labradon" aria-label="LabraDon home"><Image src={image('LabraDon-horizontal-logo')} alt="LabraDon Properties LLC" width={676} height={160} sizes="(max-width: 800px) 230px, 260px"/></Link><p>VETERAN-OWNED PROPERTY SERVICES<br /><span>{cities.join(' · ')}</span></p><div><span>© {new Date().getFullYear()} LabraDon Properties LLC</span><span>Design preview by MJay Studios</span></div></div></footer>;
 }
 
 function Modal({ children, onClose, label, className = '' }: { children: React.ReactNode; onClose: () => void; label: string; className?: string }) {
