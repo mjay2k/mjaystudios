@@ -1,0 +1,15 @@
+export const image = (file: string) => `/labradon/images/${file}.webp`;
+export const phone = '(757) 276-1715';
+export const phoneHref = 'tel:+17572761715';
+export const email = 'support@labradonproperties.com';
+export const cities = ['Norfolk', 'Virginia Beach', 'Chesapeake', 'Portsmouth', 'Suffolk', 'Hampton', 'Newport News'];
+export const services = [
+  { id: 'turnovers', number: '01', title: 'Unit turnovers', line: 'From move-out to move-in.', text: 'Cleaning, make-ready repairs, paint and finishing details, coordinated around your next tenant.', items: ['Move-out & deep cleaning', 'Paint, flooring & make-ready repairs', 'Final detailing & quality check', 'Single units & rental portfolios'] },
+  { id: 'renovations', number: '02', title: 'Repairs & renovations', line: 'Better spaces. Lasting value.', text: 'Practical improvements for the spaces you live in, lease out or prepare to sell.', items: ['Interior & exterior painting', 'Drywall, trim & light carpentry', 'Flooring, doors & fixture updates', 'Punch lists & pre-listing preparation'] },
+  { id: 'cleaning', number: '03', title: 'Cleaning & cleanouts', line: 'A clean slate for what’s next.', text: 'From the final construction clean to a difficult move-out, we help put your property back in order.', items: ['Residential & commercial cleaning', 'Post-construction final cleans', 'Furniture, appliance & debris removal', 'Condition-based deep cleaning'] },
+  { id: 'property-care', number: '04', title: 'Ongoing property care', line: 'One dependable local partner.', text: 'Maintenance, exterior care and vendor coordination for owners who have more than one thing to manage.', items: ['Owner & property-manager support', 'Lawn care & property cleanups', 'Seasonal & storm cleanup', 'Vendor coordination & oversight'] },
+];
+export const projects = [
+  { title: 'A fresh start in Chesapeake.', category: 'Residential turnover', tag: 'Chesapeake, Virginia', before: 'IMG_7734', after: 'IMG_9813-1024x768', alt: 'Finished Chesapeake living room with fresh gray paint, white trim and new wood-look flooring', summary: 'Fresh paint and trim, updated flooring, and finishing details brought this home back to a clean, cohesive condition.', facts: ['Paint & trim throughout', 'New flooring', 'Updated fixtures & final clean'], gallery: ['IMG_9813-1024x768', 'IMG_9808-768x1024', 'IMG_9807-768x1024', 'IMG_9812-768x1024'], source: 'https://labradonllc.com/project-gallery/' },
+  { title: 'Five days. A new beginning.', category: 'Apartment turnover', tag: 'Completed project · 5 days', before: 'Better-Entrance-After-2', after: 'IMG_9568-rotated', alt: 'Apartment living area after turnover with fresh paint and new flooring', summary: 'A documented five-day apartment turnover: refreshed cabinets and countertops, new flooring, fresh paint, and a deep clean.', facts: ['Cabinets & countertops refreshed', 'Fresh paint & new flooring', 'Deep cleaning'], gallery: ['IMG_9568-rotated', 'IMG_9581', 'IMG_9584-1', 'IMG_9572-rotated'], source: 'https://labradonllc.com/project-gallery/' },
+];
