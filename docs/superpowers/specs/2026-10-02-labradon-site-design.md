@@ -1,6 +1,6 @@
 # LabraDon Properties site preview (/labradon), design
 
-Date: 2026-10-02. Status: design approved in chat; spec awaiting review.
+Date: 2026-10-02. Status: built (see "As built" at the end).
 
 ## Goal
 Pitch LabraDon Properties LLC (Seth French, USMC veteran, Hampton Roads VA) a
@@ -178,3 +178,13 @@ Real form delivery, CMS, reviews integration, city/service SEO pages (roadmap).
 
 ## Deploy
 Push to `main` deploys via the existing Vercel project. Pages stay noindex.
+
+## As built (2026-10-02)
+- Slider pairs use solved per-layer CSS transforms (landmark-based) instead of
+  object-position/scale; bathroom, red-carpet bedroom and all apartment pairs
+  are diptychs because the shots cannot be aligned.
+- The Pexels "Hampton Roads" waterfront appears to be Halifax, NS; The Finish
+  ends with a typographic city list instead of a photo.
+- The Finish header keeps the logo left (wordmark) rather than centered.
+- Hub thumbnails live in `public/labradon/hub/` (regenerate after visual changes).
+- Logo SVGs come from `scripts/trace-labradon-logo.py`.

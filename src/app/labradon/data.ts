@@ -1,4 +1,15 @@
-export const image = (file: string) => `/labradon/images/${file}.webp`;
+// Hi-res builds (scripts/prepare-labradon-photos.mjs) replace the 640px gallery copies where they exist.
+const hires: Record<string, string> = {
+  'IMG_9813-1024x768': 'chesapeake-living-after',
+  'IMG_9808-768x1024': 'chesapeake-bed1-after',
+  'IMG_9796-768x1024': 'chesapeake-bed2-after',
+  'IMG_9812-768x1024': 'chesapeake-bed3-after',
+  'IMG_9807-768x1024': 'chesapeake-bath-after',
+  'IMG_9814-768x1024': 'chesapeake-hall-after',
+  'IMG_9574-1-rotated': 'apt-bath-after',
+  IMG_3871: 'seth-donnie-beach',
+};
+export const image = (file: string) => (hires[file] ? `/labradon/photos/${hires[file]}.webp` : `/labradon/images/${file}.webp`);
 export const phone = '(757) 276-1715';
 export const phoneHref = 'tel:+17572761715';
 export const email = 'support@labradonproperties.com';
@@ -10,6 +21,6 @@ export const services = [
   { id: 'property-care', number: '04', title: 'Ongoing property care', line: 'One dependable local partner.', text: 'Maintenance, exterior care and vendor coordination for owners who have more than one thing to manage.', items: ['Owner & property-manager support', 'Lawn care & property cleanups', 'Seasonal & storm cleanup', 'Vendor coordination & oversight'] },
 ];
 export const projects = [
-  { title: 'A fresh start in Chesapeake.', category: 'Residential turnover', tag: 'Chesapeake, Virginia', before: 'IMG_7734', after: 'IMG_9813-1024x768', alt: 'Finished Chesapeake living room with fresh gray paint, white trim and new wood-look flooring', summary: 'Fresh paint and trim, updated flooring, and finishing details brought this home back to a clean, cohesive condition.', facts: ['Paint & trim throughout', 'New flooring', 'Updated fixtures & final clean'], gallery: ['IMG_9813-1024x768', 'IMG_9808-768x1024', 'IMG_9807-768x1024', 'IMG_9812-768x1024'], source: 'https://labradonllc.com/project-gallery/' },
-  { title: 'Five days. A new beginning.', category: 'Apartment turnover', tag: 'Completed project · 5 days', before: 'Better-Entrance-After-2', after: 'IMG_9568-rotated', alt: 'Apartment living area after turnover with fresh paint and new flooring', summary: 'A documented five-day apartment turnover: refreshed cabinets and countertops, new flooring, fresh paint, and a deep clean.', facts: ['Cabinets & countertops refreshed', 'Fresh paint & new flooring', 'Deep cleaning'], gallery: ['IMG_9568-rotated', 'IMG_9581', 'IMG_9584-1', 'IMG_9572-rotated'], source: 'https://labradonllc.com/project-gallery/' },
+  { title: 'A fresh start in Chesapeake.', category: 'Residential turnover', tag: 'Chesapeake, Virginia', before: 'IMG_7734', after: 'IMG_9813-1024x768', alt: 'Finished Chesapeake living room with fresh gray paint, white trim and new wood-look flooring', summary: 'Fresh paint and trim, updated flooring, and finishing details brought this home back to a clean, cohesive condition.', facts: ['Paint & trim throughout', 'New flooring', 'Updated fixtures & final clean'], gallery: ['IMG_9813-1024x768', 'IMG_9808-768x1024', 'IMG_9796-768x1024', 'IMG_9812-768x1024', 'IMG_9807-768x1024', 'IMG_9814-768x1024'], source: 'https://labradonllc.com/project-gallery/' },
+  { title: 'Five days. A new beginning.', category: 'Apartment turnover', tag: 'Completed project · 5 days', before: 'Better-Entrance-After-2', after: 'IMG_9568-rotated', alt: 'Apartment living area after turnover with fresh paint and new flooring', summary: 'A documented five-day apartment turnover: refreshed cabinets and countertops, new flooring, fresh paint, and a deep clean.', facts: ['Cabinets & countertops refreshed', 'Fresh paint & new flooring', 'Deep cleaning'], gallery: ['IMG_9568-rotated', 'IMG_9581', 'IMG_9584-1', 'IMG_9572-rotated', 'IMG_9574-1-rotated'], source: 'https://labradonllc.com/project-gallery/' },
 ];

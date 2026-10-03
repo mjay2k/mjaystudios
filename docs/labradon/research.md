@@ -92,3 +92,25 @@ Preview routes are noindex to avoid duplicating the client's production search p
 - Responsive checks at 390px and 320px, no horizontal overflow; desktop checked at the browser's normal 1280px viewport.
 - Sticky header was corrected by isolating the preview from the portfolio shell's overflow behavior.
 - Production deployment uses the repository's already configured GitHub → Vercel connection.
+
+## Round two (Claude, October 2, 2026): sources behind the new directions
+
+Market and buyer research used by the Rent-Ready and The Finish directions. Every number shown on the site lives in `src/data/labradon/facts.ts` with its source.
+
+- HUD Comprehensive Housing Market Analysis, Virginia Beach-Norfolk-Newport News (Nov 2024): about 41% renter households, renters growing 1.7%/yr vs owners 0.3%, apartment rent $1,519, 9 major installations. https://www.huduser.gov/portal/publications/pdf/VirginiaBeachNorfolkNewportNewsVA-NC-CHMA-24.pdf
+- RealPage: 34.4 average vacant days, move-out to move-in. https://www.realpage.com/analytics/vacant-days-climbs/
+- Zego survey via Multifamily Dive: $3,872 average all-in turnover cost. https://www.multifamilydive.com/news/turnover-costs-4000-apartment-multifamily/696298/
+- GAO-20-295: about 40% of DoD household-goods moves fall in peak season (about May 15 to Aug 31). https://www.gao.gov/products/gao-20-295
+- Va. Code 55.1-1235: servicemembers with PCS orders may end a lease early. https://law.lis.virginia.gov/vacode/title55.1/chapter12/section55.1-1235/
+- BLS QCEW 2024: 366 residential property-manager establishments in the metro.
+- NAA, Lula, Docutrax: what managers require from turnover vendors (COI with additional insured, W-9, response SLA, photo documentation, work-order numbers on invoices).
+- NN/g and BrightLocal: show the phone number, keep forms to 3 to 5 fields, state reply expectations, show pricing guidance and reviews.
+- Google autocomplete: "move out cleaning [city] va", junk and trash-out terms have demand; "make ready [city]" does not. Rent Ready (national) owns "rent ready" searches.
+
+Also found:
+
+- His WordPress media library has higher-resolution originals (1200 to 4032px) of the gallery photos, plus unused shots (Donnie, crew painting). The originals are in `public/labradon/assets/`; web builds come from `scripts/prepare-labradon-photos.mjs`.
+- The capability statement (image-only PDF) lists CAGE 18Y06, UEI DN7PKFKLV4W1, NAICS 561720 and phone (812) 470-6195. The Claude draft lists UEI DN3EKPKLV4W1 and NAICS 236118. Only CAGE is shown. The statement also names a third-party project reference with personal contact details; never publish it.
+- The "Hampton Roads" waterfront banner on his current site (pexels-alex-tapia, HR-header*) appears to show Halifax, Nova Scotia (Queen's Marque and the Halterm cranes). It is not used.
+- Several library images are AI-generated (flyers, dog in tactical gear, "sold" families). None are used.
+- Before/after pairs: three can be aligned with solved CSS transforms (Chesapeake living room, bedrooms one and three). The rest were shot from different positions and are shown side by side.
